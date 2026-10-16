@@ -1,0 +1,3 @@
+设计一款基于LoRa的无线通信装置工程，采用ESP32-WROOM-32E（Xtensa LX6双核处理器，240MHz，8MB SPI Flash，支持Wi-Fi 4和蓝牙4.2+BLE）作为主控，搭配E32-433T30D LoRa扩频无线串口模块（基于SX1278芯片，433MHz频段，最大30dBm发射功率，空中速率0.3~19.2kbps，理论通信距离8km）实现远距离数据传输，由TP4056X线性锂电池充电管理芯片（最大1A充电电流）和SX1308 boost升压芯片（2A开关电流，最高28V输出）组成电源系统，板载约82个元器件，集成3个外设接口，支持433MHz LoRa远距离扩频透明传输、WiFi+蓝牙双模本地无线网关桥接、IP3005A集成电量计（4段LED电量指示）、SPX3819超低噪声LDO稳压（3.3V输出）、S8050和AO3401A MOSFET开关控制、IPEX天线接口、USB-C充电/通信二合一接口和18650锂电池座供电功能。
+
+开源项目：https://oshwhub.com/robba/wireless-communication-device-based-on-lora

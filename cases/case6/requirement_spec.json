@@ -1,0 +1,638 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-case6-v1",
+  "project": {
+    "name": "case6（由历史选型产物转换）",
+    "summary": "来源 /share/home/zhengzhiqi/workspace/web/output/case6/console/stages/03_device_selection__67ef723d.json"
+  },
+  "global_constraints": {
+    "budget_total_cny": null,
+    "currency": "CNY",
+    "note": "预算取自历史产物，仅供参考"
+  },
+  "selection_items": [
+    {
+      "id": "M-SW-001",
+      "module_name": "PCIe Switch Core",
+      "module_type": "IC",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_smart_card_interface",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "package",
+          "op": "is",
+          "value": "BGA",
+          "reason": "模块 notes 明确指出 'BGA封装'，且 PEX8796 作为高密度交换芯片，其标准封装为 BGA，直接影响 PCB 叠层、过孔设计及组装工艺。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档 Ch3.2.1 规定工作温度 0~70°C。作为服务器/数据中心应用，器件必须为 Industrial Grade 以确保在高温下的长期稳定性。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            11.4,
+            13.2
+          ],
+          "unit": "V",
+          "reason": "虽然 PEX8796 不直接接 12V，但其依赖的电源模块 (M-PWR-001/002) 输入范围为 11.4-13.2V。此参数用于约束上游电源模块，间接确保 Switch 供电稳定性。此处列为 important 是因为它定义了 Switch 所在子系统的电源边界。",
+          "source_parameter": "input_voltage_range"
+        }
+      ],
+      "keywords": [
+        "PCIe Switch",
+        "PCIe Switch IC",
+        "PCIe 交换机",
+        "PCIe Switch Chip",
+        "Broadcom PEX8796"
+      ],
+      "specified_device": {
+        "model": "PEX8796_AAAB",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-PWR-001",
+      "module_name": "Core Power Controller",
+      "module_type": "IC",
+      "category": "电源管理 IC",
+      "leaf_code": "l_smart_card_interface",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            11.4,
+            13.2
+          ],
+          "unit": "V",
+          "reason": "系统电源轨为12V DC，容差±10% (11.4V~13.2V)。控制器必须在整个输入范围内稳定工作。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "output_voltage_range",
+          "op": "cover",
+          "value": [
+            0.8,
+            1.2
+          ],
+          "unit": "V",
+          "reason": "目标输出P0V9为0.9V。控制器必须具备将电压精确调节至0.9V的能力，并留有微调裕量以补偿负载线调整(Load Line Regulation)。",
+          "source_parameter": "output_voltage_range"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -24.0,
+            -24.0
+          ],
+          "unit": "package",
+          "reason": "Module notes明确指定'QFN-24封装'。这是机械装配和PCB布局的硬性约束。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "switching_frequency",
+          "op": "cover",
+          "value": [
+            300000.0,
+            1000000.0
+          ],
+          "unit": "Hz",
+          "reason": "工程建议：对于60A应用，开关频率通常在300kHz-1MHz之间。频率越高，所需电感和电容越小，但开关损耗增加。需根据PCB空间及效率要求折中。",
+          "source_parameter": "switching_frequency"
+        },
+        {
+          "field": "control_interface",
+          "op": "cover",
+          "value": [
+            2.0,
+            2.0
+          ],
+          "unit": "interface",
+          "reason": "虽然模块描述未强制数字控制，但作为高端评估板，通常需要通过Host读取电源状态或通过固件调节电压，因此支持I2C/SMBus的数字控制器更具优势。若仅为纯模拟控制器，则需确认外部反馈网络精度。",
+          "source_parameter": "control_interface"
+        }
+      ],
+      "keywords": [
+        "Dual Sync Buck Controller",
+        "同步降压控制器",
+        "多相电源管理IC",
+        "PWM Controller",
+        "Core Power IC"
+      ]
+    },
+    {
+      "id": "M-PWR-002",
+      "module_name": "Auxiliary Regulator P1V8",
+      "module_type": "IC",
+      "category": "电源管理 IC",
+      "leaf_code": "l_smart_card_interface",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 1.8,
+          "unit": "V",
+          "reason": "模块描述明确指定生成 1.8V 逻辑/I/O 电压，且下游时钟缓冲器（M-CLK-001）及 PCIe Switch I/O 域通常依赖此电压。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            11.4,
+            13.2
+          ],
+          "unit": "V",
+          "reason": "系统主输入为 12V DC，容差 ±10% (Ch3.1.1)，LDO 的输入耐压和启动电压需覆盖此范围以确保在电源波动时正常工作。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -16.0,
+            -16.0
+          ],
+          "reason": "模块 notes 中明确指定了 TQFN-16 封装，这是 PCB 布局的物理约束。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "服务器/数据中心标准环境要求（Ch3.2.1），器件必须在整个范围内保证电气参数稳定。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "quiescent_current",
+          "op": "<=",
+          "value": 0.001,
+          "unit": "A",
+          "reason": "作为辅助电源，虽然主要功耗来自负载，但在待机或轻载下，低静态电流有助于降低整体系统待机电流并减少不必要的发热。",
+          "source_parameter": "quiescent_current"
+        }
+      ],
+      "keywords": [
+        "LDO",
+        "Linear Regulator",
+        "低压差稳压器",
+        "1.8V LDO",
+        "Voltage Regulator"
+      ]
+    },
+    {
+      "id": "M-PWR-003",
+      "module_name": "Auxiliary Regulator P5V",
+      "module_type": "IC",
+      "category": "电源管理 IC",
+      "leaf_code": "l_smart_card_interface",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "V",
+          "reason": "模块描述明确指定生成 5.0V I/O 接口电压；需求文档第 2.1.1 节 F-04 规定 P5V 精度为 ±5%。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "input_voltage_min",
+          "op": ">=",
+          "value": 11.4,
+          "unit": "V",
+          "reason": "系统输入电源为 12V DC，容差 ±10%，最低电压为 10.8V？不，需求文档 3.1.1 节明确定义输入电压范围为 11.4 V ～ 13.2 V。LDO 的 Vin 必须能在此范围内稳定输出 5V。",
+          "source_parameter": "input_voltage_min"
+        },
+        {
+          "field": "input_voltage_max",
+          "op": ">=",
+          "value": 13.2,
+          "unit": "V",
+          "reason": "同上，系统最高输入电压为 13.2 V。LDO 的绝对最大额定值 (Absolute Maximum Rating) 必须高于此值。",
+          "source_parameter": "input_voltage_max"
+        },
+        {
+          "field": "dropout_voltage",
+          "op": "<=",
+          "value": 6.2,
+          "unit": "V",
+          "reason": "LDO 必须在最恶劣工况下（Vin=11.4V, Vout=5.0V）保持线性调节能力。所需最小压差 = 11.4 - 5.0 = 6.4 V。若 LDO 压差 > 6.4V，则输出将跌落至低于 5V，导致 I/O 接口失效。",
+          "source_parameter": "dropout_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档第 3.2.1 节规定服务器/数据中心标准工作温度为 0°C ～ 70°C。器件必须在此范围内满足电气规格。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -23.0,
+            -23.0
+          ],
+          "unit": "package",
+          "reason": "模块 notes 字段明确指定使用 SOT-23-6 封装。这是 PCB 布局和装配的物理约束。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "LDO",
+        "Linear Regulator",
+        "Low Dropout Regulator",
+        "5V LDO",
+        "正电压稳压器"
+      ]
+    },
+    {
+      "id": "M-CLK-001",
+      "module_name": "Clock Buffer Array",
+      "module_type": "IC",
+      "category": "时钟器件",
+      "leaf_code": "l_smart_card_interface",
+      "quantity": 3,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            1.71,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "必须与系统电源轨兼容。若器件仅支持 3.3V 而系统提供 1.8V，则无法工作；反之若仅支持 1.8V 而接入 3.3V 可能损坏器件。考虑到 SRIS 架构对抖动敏感，通常使用低噪声 LDO 供电的 3.3V 或 1.8V 轨。此处要求器件具备宽电压输入或明确匹配 1.8V/3.3V 选项。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -40.0,
+            -40.0
+          ],
+          "unit": "package",
+          "reason": "PCB 布局已根据 QFN-40 规划。更换封装将导致 PCB 重新设计，属于硬性机械约束。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "服务器环境要求工业级温度范围。虽然工作区间是 0-70°C，但元器件选型通常遵循 Industrial Grade (-40 to 85) 以确保余量和可靠性。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "load_capacitance",
+          "op": ">=",
+          "value": 5e-12,
+          "unit": "F",
+          "reason": "时钟输出驱动能力受限于负载电容。过大的负载电容会导致信号边沿变缓、增加抖动甚至振荡。器件应能驱动至少 5 pF 的容性负载而不显著恶化性能。",
+          "source_parameter": "load_capacitance"
+        }
+      ],
+      "keywords": [
+        "Clock Buffer",
+        "Clock Distributor",
+        "Low Jitter Clock IC",
+        "PCIe Refclk Generator",
+        "SRIS Architecture",
+        "Fanout Buffer"
+      ]
+    },
+    {
+      "id": "M-CONN-001",
+      "module_name": "Upstream Gold Finger",
+      "module_type": "Connector",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 16.0,
+          "unit": "Lane(s)",
+          "reason": "模块分类及描述均明确指出为 x16 宽度。PEX8796 上游端口为 x16，需要完整的 16 对差分信号线及对应的参考地/电源引脚。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.02,
+          "unit": "Ω",
+          "reason": "高速数字信号传输需要低接触电阻以减少信号反射和损耗。PCIe 标准通常要求金手指接触电阻远低于此值以确保链路训练成功。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档 1.3 节规定工作温度为 0°C ～ 70°C。连接器必须在整个温度范围内保持机械强度和电气性能稳定。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "Card Edge Connector",
+        "CEM",
+        "金手指",
+        "SFF-T-8009",
+        "16 Pin",
+        "Edge Card"
+      ]
+    },
+    {
+      "id": "M-CONN-002",
+      "module_name": "Downstream SlimSAS Connectors",
+      "module_type": "Connector",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 10,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档第 3.2.1 节明确规定工作温度为 0°C ~ 70°C。连接器必须在整个温度范围内保持电气性能和机械稳定性。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_material",
+          "op": "is",
+          "value": "['Gold Plated Phosphor Bronze', 'Gold Plated Beryllium Copper']",
+          "reason": "作为服务器/数据中心级评估板，为保证长期插拔可靠性和低接触电阻，触点材料通常为镀金磷青铜或铍铜。这是高速连接器的行业通用关键参数。",
+          "source_parameter": "contact_material"
+        },
+        {
+          "field": "shielding",
+          "op": "is",
+          "value": "是",
+          "reason": "为满足 FCC Class A EMC 发射要求 (Ch3.2.4) 并减少 x16 高速差分线之间的串扰，SlimSAS 连接器通常具备金属外壳屏蔽结构。",
+          "source_parameter": "shielding"
+        }
+      ],
+      "keywords": [
+        "SlimSAS Connector",
+        "SFF-8654",
+        "PCIe Gen5 Connector",
+        "U.3 Connector",
+        "SFF-TA-1001"
+      ],
+      "specified_device": {
+        "model": "U10A474240T",
+        "intent": "reference"
+      },
+      "note": "可选参数（未进条件）：isolation_voltage"
+    },
+    {
+      "id": "M-CTL-001",
+      "module_name": "PERST Reset Buffers",
+      "module_type": "IC",
+      "category": "逻辑器件",
+      "leaf_code": "l_smart_card_interface",
+      "quantity": 4,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            1.7,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "复位缓冲器需连接至 Switch I/O 域 (P1V8) 和 Host 侧 (P5V/P3V3)。为兼容不同端口的供电轨（通常 PCIe 逻辑域为 1.8V，Host 接口可能为 3.3V），器件输入电压范围必须至少覆盖 1.8V 至 3.3V。参考同级器件（如 SN74LVC1G126 或类似总线收发器）的标准供电范围，设定 1.7V-3.6V 以确保在 P1V8 纹波波动下仍能正常工作，并支",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "ch",
+          "reason": "模块描述指出“将单路SYS_PERST扇出”，且数量为 4 颗 TSSOP-14 器件。TSSOP-14 封装通常容纳 1 个四路缓冲器（如 74LVC1G125 是单路，SN74LVTH16245 是总线，这里更可能是单通道高性能缓冲器如 SN74LVC1G04/126 系列，或者用户意指使用 4 颗单路器件来冗余或隔离不同的扇出组）。根据“4x TSSOP-14”和“单路输入”，推断每颗器件应",
+          "source_parameter": "channel_count"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -14.0,
+            -14.0
+          ],
+          "reason": "模块 notes 明确指定封装为 TSSOP-14。这是机械装配的关键约束。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统环境约束要求工作温度 0°C ～ 70°C。虽然工业级 (-40~85) 更佳，但最低要求必须满足数据中心标准。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "Reset Buffer",
+        "Fan-out Driver",
+        "Signal Buffer",
+        "Logic Buffer",
+        "Bus Transceiver",
+        "PERST Driver"
+      ]
+    },
+    {
+      "id": "M-CTL-002",
+      "module_name": "Level Translator",
+      "module_type": "IC",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_smart_card_interface",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "directionality",
+          "op": "is",
+          "value": "['bidirectional_i2c_smbus', 'unidirectional_spi']",
+          "reason": "需求文档 F-06 要求支持 SMBus/I2C 和 SPI。I2C/SMBus 本质为开漏双向协议，SPI 通常为全双工但控制信号可能单向。器件需具备混合方向配置能力或至少支持 I2C 双向转换。",
+          "source_parameter": "directionality"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            1.65,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "器件需要在 1.8V 和 3.3V 两个不同的逻辑电源轨之间工作。大多数此类电平转换器允许 Va 和 Vb 独立供电，只要都在其绝对最大额定值范围内（通常 1.65V-5.5V 或 1.1V-3.6V）。",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -8.0,
+            -8.0
+          ],
+          "unit": "package",
+          "reason": "模块 notes 明确要求 TSSOP-8 封装。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 4.0,
+          "unit": "ch",
+          "reason": "封装约束为 TSSOP-8。标准四通道双向电平转换器（如 TXS0108, SN74LVC8T245 等）占用 8 引脚。考虑到 PCIe Switch 可能有多个管理端口或需要冗余/多路信号（如 Alert#, INT#, SDA, SCL），4 通道是 TSSOP-8 下的最优解。若仅单路 I2C，2 通道亦可，但 4 通道更具通用性且符合常见选型习惯。",
+          "source_parameter": "channel_count"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统环境约束要求工作温度 0°C ~ 70°C。虽然 Commercial Grade (0-70) 满足最低要求，但考虑到服务器环境的稳定性及与其他工业级器件的一致性，Industrial Grade 更佳，但若仅为满足功能，Commercial 也可接受。此处标记为 important 因为它是可选的余量，非绝对故障点（除非超出范围）。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "Level Translator",
+        "Level Shifter",
+        "I2C Level Shifter",
+        "SMBus Level Shifter",
+        "Bidirectional Voltage Translator",
+        "1.8V to 3.3V Converter"
+      ]
+    },
+    {
+      "id": "M-HMI-001",
+      "module_name": "Port Status Indicators",
+      "module_type": "Passive/Discrete",
+      "category": "分立半导体",
+      "leaf_code": "l_darlington_transistor_array",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -363.0,
+            -363.0
+          ],
+          "reason": "模块描述及 notes 明确指定使用 SOT-363 封装的晶体管阵列。该封装尺寸直接决定 PCB 布局空间，若不匹配将无法装配或导致电气连接错误。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 2.0,
+          "unit": "channels",
+          "reason": "根据系统分解图 (SS-HMI-001) 及功能需求 F-07，需要为每个下游端口组（共5组）提供状态指示。通常每组包含 Power Good 信号驱动。虽然 SOT-363 通常为双 NPN/NPN 结构，但需确认器件内部拓扑是否支持独立控制所需的两个逻辑通道（例如两个独立的集电极开路输出用于拉低/拉高或驱动 LED 基极）。若单组仅需一个 PG 信号，则 2 通道足够覆盖一组；若需多路复用或独",
+          "source_parameter": "channel_count"
+        },
+        {
+          "field": "voltage_rating",
+          "op": ">=",
+          "value": 30.0,
+          "unit": "V",
+          "reason": "晶体管将切换 P1V8 或 P5V 或 P0V9 相关的 PG 信号电平？通常 PG 信号来自电源监控 IC，其输出电压可能与逻辑电平一致（如 3.3V 或 1.8V），或者晶体管直接串联在 LED 回路中。若 LED 接在 P5V 或 P1V8 上，晶体管耐压需高于该电压。P5V 为最高辅助电压，故耐压至少 >5V。为安全起见，工业级小信号晶体管通常选用 30V 或 50V 耐压。",
+          "source_parameter": "voltage_rating"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统环境约束规定工作温度为 0°C ～ 70°C。所有分立器件必须在此范围内正常工作。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "transistor_type",
+          "op": "is",
+          "value": "['NPN', 'Dual']",
+          "reason": "LED 指示通常由 NPN 晶体管的集电极开路输出驱动（Low-side switching），以便在 PG 信号有效时导通点亮 LED。SOT-363 常见配置为 Dual NPN。PNP 虽也可用，但 NPN 更符合常规低侧驱动习惯。",
+          "source_parameter": "transistor_type"
+        }
+      ],
+      "keywords": [
+        "Transistor Array",
+        "晶体管阵列",
+        "Dual/NPN Transistor",
+        "SOT-363",
+        "Switching Transistor"
+      ]
+    }
+  ]
+}

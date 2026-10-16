@@ -1,0 +1,997 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-case29-v1",
+  "project": {
+    "name": "case29（由历史选型产物转换）",
+    "summary": "来源 /share/home/zhengzhiqi/workspace/web/output/case29/console/stages/03_device_selection__11928441.json"
+  },
+  "global_constraints": {
+    "budget_total_cny": 50.0,
+    "currency": "CNY",
+    "note": "预算取自历史产物，仅供参考"
+  },
+  "selection_items": [
+    {
+      "id": "M-PWR-CHG-001",
+      "module_name": "TP4056X",
+      "module_type": "线性充电管理芯片",
+      "category": "电源管理 IC",
+      "leaf_code": "l_battery_management",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "<=",
+          "value": 5.5,
+          "unit": "V",
+          "reason": "TP4056X 必须能够承受来自 USB-C 母座的 5V VBUS 输入电压。若耐压不足，器件将立即损坏。",
+          "source_parameter": "input_voltage_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -23.0,
+            -23.0
+          ],
+          "unit": "Package",
+          "reason": "PCB 布局已按 SOT-23-5 封装设计。替换器件需保持引脚兼容或提供明确的 Pin-to-Pin 替代方案。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "Linear Charger",
+        "Li-Ion Charger",
+        "TP4056",
+        "SOT-23-5",
+        "1A Charging",
+        "热调节充电"
+      ],
+      "specified_device": {
+        "model": "TP4056X",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-PWR-BST-001",
+      "module_name": "SX1308",
+      "module_type": "DC-DC升压转换器",
+      "category": "电源管理 IC",
+      "leaf_code": "l_step_up_buck_boost_converter",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "topology",
+          "op": "is",
+          "value": "Synchronous Boost",
+          "reason": "模块描述明确指定为“同步整流Boost”，且需处理2A开关电流，异步方案效率低且续流二极管压降大，难以满足85%效率及热设计要求。证据：module description, category_mapping.",
+          "source_parameter": "topology"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            3.0,
+            4.2
+          ],
+          "unit": "V",
+          "reason": "系统由单节18650锂电池供电，放电截止电压约3.0V，充满4.2V。器件必须在整个电池电压范围内维持稳压输出。证据：需求文档 2.2.3 节, module description.",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "V",
+          "reason": "系统定义5.0V为主电源总线，供给LoRa模块及LDO输入。固定输出5V型号可简化设计，若可调需确保设置精确。证据：需求文档 2.2.3 节, module description.",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "环境约束明确工作温度为-10°C ~ +50°C。器件必须在整个范围内正常工作。考虑到PCB铜厚2oz和封闭空间，高温端需特别注意结温余量。证据：需求文档 1.3 节。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "switching_frequency",
+          "op": "cover",
+          "value": [
+            500000.0,
+            2000000.0
+          ],
+          "unit": "Hz",
+          "reason": "虽然未指定确切频率，但为了在紧凑PCB（~82元件）上使用小型电感和电容，同时保持<50mVpp的5V纹波，通常选择较高频率（如1MHz左右）。若频率过低，电感体积会过大；过高则效率下降。证据：工程经验推导，module critical_passives.",
+          "source_parameter": "switching_frequency"
+        },
+        {
+          "field": "efficiency",
+          "op": ">=",
+          "value": 0.85,
+          "unit": "%",
+          "reason": "需求文档明确要求Boost模式效率≥85%。高效率对于电池供电设备至关重要，减少发热并延长续航。证据：需求文档 3.1.1 节。",
+          "source_parameter": "efficiency"
+        },
+        {
+          "field": "package",
+          "op": "is",
+          "value": "['SOT-23-6', 'QFN']",
+          "reason": "category_mapping 指出目标为 SOT-23-6 或 QFN。这些是小尺寸封装，适合高密度PCB。DIP或其他大封装不符合紧凑型集成目标。证据：category_mapping.",
+          "source_parameter": "package"
+        }
+      ],
+      "keywords": [
+        "同步升压",
+        "Boost Converter",
+        "DC-DC Step-Up",
+        "SX1308",
+        "SOT-23-6",
+        "QFN"
+      ],
+      "specified_device": {
+        "model": "SX1308",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-PWR-LDO-001",
+      "module_name": "SPX3819",
+      "module_type": "超低噪声LDO稳压器",
+      "category": "电源管理 IC",
+      "leaf_code": "l_linear_regulator_ldo",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.5,
+            6.0
+          ],
+          "unit": "V",
+          "reason": "LDO直接连接至SX1308升压后的5V主母线。电池经升压后稳定在5.0V，USB输入也是5V。需覆盖5V标称值及可能的波动（如USB 5.25V或升压过冲），同时低于SPX3819的绝对最大输入电压（通常6V）。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "为ESP32及敏感数字逻辑供电，标准逻辑电平为3.3V。若偏差过大可能导致MCU复位或通信错误。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "output_current",
+          "op": ">=",
+          "value": 1.5,
+          "unit": "A",
+          "reason": "需求文档 Ch2.2.3 明确指出 '3.3V 轨：负载能力 ≥ 1.5 A'，以支撑 ESP32 + LoRa 峰值。器件额定电流必须大于此值以防止过热或保护关机。",
+          "source_parameter": "output_current"
+        },
+        {
+          "field": "dropout_voltage",
+          "op": "cover",
+          "value": [
+            0.2,
+            0.2
+          ],
+          "unit": "V",
+          "reason": "虽然输入是5V，输出3.3V，压差较大(1.7V)，但在高负载瞬态下，输入母线可能会有跌落。低Dropout特性有助于维持稳压效果，尽管在此拓扑中主要依赖上游Boost提供足够裕量。作为'Low Dropout Regulator'，此参数是其固有属性。",
+          "source_parameter": "dropout_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "is",
+          "value": "['SOT-23-5', 'SOT-89']",
+          "reason": "分类结果中明确提及 'SOT-23-5' 和 'SOT-89'。SPX3819常见封装为这两种。需根据PCB空间选择，SOT-89散热更好但尺寸大，SOT-23-5更紧凑。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "LDO",
+        "Low Dropout Regulator",
+        "线性稳压器",
+        "SPX3819",
+        "超低噪声",
+        "SOT-23-5"
+      ],
+      "specified_device": {
+        "model": "SPX3819",
+        "intent": "reference"
+      },
+      "note": "可选参数（未进条件）：quiescent_current"
+    },
+    {
+      "id": "M-PWR-SW-001",
+      "module_name": "AO3401A",
+      "module_type": "N沟道MOSFET",
+      "category": "分立半导体",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "continuous_drain_current",
+          "op": ">=",
+          "value": 3.0,
+          "unit": "A",
+          "reason": "系统峰值负载电流为1.2A。作为电源通路开关，器件需在满载下安全工作。根据功率器件降额规范（通常建议留50%-100%余量），额定电流应至少为负载峰值的2倍，即2.4A以上。取整至3.0A以确保热稳定性。",
+          "source_parameter": "continuous_drain_current"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -23.0,
+            -23.0
+          ],
+          "reason": "模块分类及confirmed_device明确指定为SOT-23封装。PCB布局已按此封装预留焊盘。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "power_dissipation",
+          "op": ">=",
+          "value": 0.3,
+          "unit": "W",
+          "reason": "估算导通功耗：P = I^2 * Rds_on = 1.2^2 * 0.03 = 0.0432W。考虑PCB散热能力有限（SOT-23封装热阻较大），器件本身的PD rating需提供足够余量以防过热失效。0.3W是SOT-23 MOSFET的常见可靠等级。",
+          "source_parameter": "power_dissipation"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            125.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度-10~50°C。选用工业级/宽温器件（-40~125°C）可提供设计余量，防止高温环境下Rds_on增大导致的热失控，并符合RoHS及一般电子产品的可靠性预期。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "keywords": [
+        "N沟道MOSFET",
+        "N-Channel MOSFET",
+        "增强型MOSFET",
+        "负载开关",
+        "Power Switch",
+        "SOT-23"
+      ],
+      "specified_device": {
+        "model": "AO3401A",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-CTRL-MCU-001",
+      "module_name": "ESP32-WROOM-32E",
+      "module_type": "Wi-Fi/BLE SoC模组",
+      "category": "无线通信模组",
+      "leaf_code": "l_wifi_module",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            3.0,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "ESP32-WROOM-32E 模组由 SPX3819 LDO 供电，LDO 输出为稳定的 3.3V。ESP32 核心逻辑电压通常为 3.3V，绝对最大额定值通常为 3.6V。输入电压必须严格限制在此范围内，否则会导致器件损坏或工作异常。",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "Requirement Doc Ch 3.2.1 specifies working temperature -10°C ~ +50°C. The device must operate reliably within this range. Engineering assumption suggests industrial grade (-40~85) is preferred for mar",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -32.0,
+            -32.0
+          ],
+          "unit": "E",
+          "reason": "The PCB layout is constrained to ~60x30mm with high density. The WROOM-32E is a standardized module package (QFN-based) that ensures mechanical compatibility and antenna placement rules are met. Using",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "Wi-Fi MCU",
+        "ESP32",
+        "BLE Module",
+        "Wireless SoC",
+        "IoT Controller",
+        "QFN Package"
+      ],
+      "specified_device": {
+        "model": "ESP32-WROOM-32E",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-COMM-LORA-001",
+      "module_name": "E32-433T30D",
+      "module_type": "LoRa透传串口模块",
+      "category": "无线通信模块",
+      "leaf_code": "l_lora_module",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "transmit_power",
+          "op": "cover",
+          "value": [
+            30.0,
+            30.0
+          ],
+          "unit": "dBm",
+          "reason": "需求文档明确标注“最大30dBm发射功率”及“LoRa 30dBm发射瞬间”。若器件不支持此功率，将无法达到标称的 8km 传输距离要求。注意：实际应用中可能需通过固件限制以满足法规限值，但硬件能力必须覆盖。",
+          "source_parameter": "transmit_power_max"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            3.3,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "电源拓扑设计中，LoRa 模块由 5.0V 主总线直接供电。器件必须能在 5V 输入下正常工作，同时考虑到 LDO 前级可能的波动，需具备足够的耐压余量。若仅支持 3.3V 供电，则需增加降压电路，违背当前简化设计。",
+          "source_parameter": "supply_voltage_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            50.0
+          ],
+          "unit": "degC",
+          "reason": "需求文档 Ch1.3 和 Ch3.2.1 规定工作温度为 -10°C ~ +50°C。若模块仅支持商业级 (0~70°C)，则在低温环境下可能无法启动或性能下降，需确认是否满足最低温要求。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "LoRa Module",
+        "Wireless Transceiver Module",
+        "SX1278",
+        "433MHz",
+        "UART to LoRa",
+        "Serial Wireless"
+      ],
+      "specified_device": {
+        "model": "E32-433T30D",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-COMM-ANT-001",
+      "module_name": "IPEX LoRa天线座",
+      "module_type": "射频同轴连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "impedance",
+          "op": ">=",
+          "value": 50.0,
+          "unit": "Ω",
+          "reason": "射频系统标准阻抗为 50Ω。若阻抗失配会导致 VSWR 升高，反射功率可能损坏 SX1278 PA 或显著降低发射效率/接收灵敏度。",
+          "source_parameter": "impedance"
+        },
+        {
+          "field": "frequency_range",
+          "op": "cover",
+          "value": [
+            0.0,
+            6000000000.0
+          ],
+          "unit": "Hz",
+          "reason": "LoRa 工作频段为 433 MHz。虽然本模块仅用于 LoRa，但考虑到 PCB 上同时存在 WiFi/BLE (2.4GHz) 天线座 (M-COMM-ANT-002)，建议选用宽带射频连接器以简化 BOM 并避免互调干扰风险，至少需保证在 433 MHz 处性能优异。最低频率应接近 DC 以支持良好的低频响应。",
+          "source_parameter": "frequency_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "insertion_loss",
+          "op": "<=",
+          "value": 0.5,
+          "unit": "dB",
+          "reason": "LoRa 通信距离依赖链路预算。过高的插入损耗会直接抵消发射功率优势。U.FL 连接器在 433 MHz 的典型插入损耗应极低。",
+          "source_parameter": "insertion_loss"
+        },
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.02,
+          "unit": "Ω",
+          "reason": "低接触电阻减少信号衰减和发热，保证长期连接的可靠性。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "用户要求工作温度 -10°C ~ +50°C。工程建议选用工业级 (-40~85°C) 器件以提供设计余量，防止低温下塑料件脆裂或高温下接触不良。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "射频连接器",
+        "IPEX",
+        "U.FL",
+        "SMA转接座",
+        "同轴连接器",
+        "50欧姆"
+      ],
+      "note": "可选参数（未进条件）：shielding"
+    },
+    {
+      "id": "M-COMM-ANT-002",
+      "module_name": "IPEX WiFi/BLE天线座",
+      "module_type": "射频同轴连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "impedance",
+          "op": ">=",
+          "value": 50.0,
+          "unit": "Ω",
+          "reason": "射频链路阻抗匹配至关重要。任何偏离 50Ω 的连接器会导致信号反射，降低发射功率并恶化接收灵敏度，直接影响 LoRa 和 Wi-Fi 的通信距离与稳定性。",
+          "source_parameter": "impedance"
+        },
+        {
+          "field": "frequency_range",
+          "op": "cover",
+          "value": [
+            0.0,
+            6000000000.0
+          ],
+          "unit": "Hz",
+          "reason": "该连接器需同时服务于 433 MHz (LoRa) 和 2.4 GHz (Wi-Fi/BLE) 频段。器件的频率响应范围必须覆盖至少 2.4 GHz，且在此频率下保持低插入损耗和高隔离度。建议规格覆盖至 6 GHz 以确保余量。",
+          "source_parameter": "frequency_range"
+        },
+        {
+          "field": "voltage_rating",
+          "op": "<=",
+          "value": 50.0,
+          "unit": "V",
+          "reason": "射频连接器通常用于传输高频小信号，其电压额定值主要考虑击穿风险。50V DC 是此类微型连接器的常见工业标准，远高于系统 3.3V/5V 供电电平，确保电气安全。",
+          "source_parameter": "voltage_rating"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "PCB Surface Mount (SMD)",
+          "reason": "系统要求 SMT 全贴片工艺以减小体积。因此连接器必须是表面贴装型（如直插式 SMD U.FL），而非通孔焊接。",
+          "source_parameter": "mounting_style"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "虽然应用环境为 -10~50°C，但为了符合系统的工业级组件要求和长期可靠性（MTBF），连接器材料（介电体和金属）必须在更宽的温度范围内保持稳定，避免热胀冷缩导致接触不良或开裂。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "insertion_loss",
+          "op": "<=",
+          "value": 0.5,
+          "unit": "dB",
+          "reason": "虽然需求未直接给出插入损耗指标，但作为射频前端关键无源器件，高插入损耗会直接转化为有效辐射功率(EIRP)的损失。对于 30dBm 发射功率，每 0.5 dB 损耗都不可忽略。",
+          "source_parameter": "insertion_loss"
+        },
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.025,
+          "unit": "Ω",
+          "reason": "接触电阻影响信号传输效率和发热。虽然对射频性能影响小于阻抗失配，但过高的接触电阻可能导致信号衰减或可靠性问题。",
+          "source_parameter": "contact_resistance"
+        }
+      ],
+      "keywords": [
+        "射频连接器",
+        "IPEX",
+        "U.FL",
+        "IPX",
+        "SMA转接",
+        "50欧姆"
+      ]
+    },
+    {
+      "id": "M-SENS-BAT-001",
+      "module_name": "IP3005A",
+      "module_type": "电池电量计",
+      "category": "电源管理 IC",
+      "leaf_code": "l_battery_management",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            2.0,
+            4.2
+          ],
+          "unit": "V",
+          "reason": "模块直接采样锂电池电压。输入范围需覆盖18650电池的正常工作及截止电压，确保在低电量时仍能准确指示最后一段LED状态。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            2.5,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "模块依赖'M-PWR-LDO-001'提供的3.3V供电。器件额定电压必须包含3.3V，且考虑到LDO纹波和瞬态跌落，耐压上限应高于3.3V+容差。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "系统环境约束明确规定工作温度为-10°C ~ +50°C。器件必须在整个温度范围内保持比较器阈值稳定，避免低温下启动失败或高温下漂移。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "Battery Fuel Gauge",
+        "电量计",
+        "电量指示IC",
+        "锂电池监测",
+        "模拟比较器",
+        "LED驱动"
+      ],
+      "specified_device": {
+        "model": "IP3005A",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-SENS-LED-001",
+      "module_name": "电量指示LED",
+      "module_type": "发光二极管",
+      "category": "分立半导体",
+      "leaf_code": "l_rgb_led_with_built_in_ic",
+      "quantity": 4,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "forward_voltage",
+          "op": "cover",
+          "value": [
+            1.8,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "IP3005A为模拟比较器驱动，其输出端直接连接LED。若LED正向压降过高超过IP3005A的驱动能力或供电轨，LED将无法点亮；若过低可能导致电流过大损坏器件（需配合限流电阻）。考虑到通用指示灯，红光/绿光最常见，但需覆盖可能的蓝光/白光选项范围。",
+          "source_parameter": "forward_voltage"
+        },
+        {
+          "field": "reverse_voltage",
+          "op": "cover",
+          "value": [
+            5.0,
+            5.0
+          ],
+          "unit": "V",
+          "reason": "LED反向击穿电压通常较低（约5V）。虽然IP3005A是单向驱动，但在上电瞬间或异常情况下，若存在反向感应电压，低耐压LED可能损坏。标准LED反向耐压通常为5V，需确保不低于此值。",
+          "source_parameter": "reverse_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "forward_current",
+          "op": "cover",
+          "value": [
+            0.002,
+            0.02
+          ],
+          "unit": "A",
+          "reason": "IP3005A作为模拟驱动芯片，其单路输出电流能力有限（通常为几mA到十几mA）。过大的电流会导致LED过热或IP3005A过热。对于室内/半户外网关，2-10mA足以提供清晰的视觉指示。",
+          "source_parameter": "forward_current"
+        }
+      ],
+      "keywords": [
+        "LED",
+        "发光二极管",
+        "指示灯 LED",
+        "0402 LED",
+        "0603 LED",
+        "SMD LED"
+      ]
+    },
+    {
+      "id": "M-HMI-SW-001",
+      "module_name": "按键组",
+      "module_type": "轻触开关",
+      "category": "开关",
+      "leaf_code": "l_signal_switch_codec_multiplexer",
+      "quantity": 2,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "用户需求要求工作温度 -10~50°C。考虑到户外环境和存储条件，选用工业级温度等级可提供足够的可靠性余量，防止低温下塑料变脆或高温下触点氧化加速。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "Surface Mount (SMD)",
+          "reason": "PCB组装工艺为SMT全贴片（Ch4.1.3），且追求小型化。通孔插件会增加高度和成本，不符合设计规范。",
+          "source_parameter": "mounting_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": ">=",
+          "value": 0.1,
+          "unit": "Ω",
+          "reason": "低接触电阻确保GPIO读取高/低电平时信号稳定，减少噪声干扰导致的误判。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 0.1,
+          "unit": "Ω",
+          "reason": "保证按键未按下时与地/电源之间的良好绝缘，防止漏电流影响低功耗待机或GPIO状态。",
+          "source_parameter": "insulation_resistance"
+        }
+      ],
+      "keywords": [
+        "轻触开关",
+        "Tactile Switch",
+        "Push Button",
+        "6x6mm",
+        "SW_RST",
+        "SW_BOOT"
+      ]
+    },
+    {
+      "id": "M-EXT-CONN-001",
+      "module_name": "外设排针接口",
+      "module_type": "排针/连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 3,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 2.54,
+          "unit": "mm",
+          "reason": "模块描述与分类明确指定为“2.54mm间距”排针，这是机械兼容性的硬性约束。",
+          "source_parameter": "pitch"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "current_rating",
+          "op": "cover",
+          "value": [
+            3.0,
+            5.0
+          ],
+          "unit": "A",
+          "reason": "工程建议：虽然外设GPIO驱动电流有限（<12mA），但连接器需承载3.3V电源轨电流。考虑到系统峰值负载及可能的多路并联或短时过载，标准2.54mm排针通常额定3A-5A，低于此值可能导致接触电阻发热过大。",
+          "source_parameter": "current_rating"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "['Through-Hole (THT)', 'SMD (Surface Mount)']",
+          "reason": "模块类型标注为“直插排针”，暗示THT，但现代高密度PCB也可能使用SMD排针。需支持两种工艺候选，最终由PCB布局决定。",
+          "source_parameter": "mounting_type"
+        },
+        {
+          "field": "contact_material",
+          "op": "is",
+          "value": "['Phosphor Bronze', 'Brass']",
+          "reason": "工程建议：磷青铜或黄铜是2.54mm排针常用材料，保证低接触电阻和足够的插拔力保持性。",
+          "source_parameter": "contact_material"
+        }
+      ],
+      "keywords": [
+        "排针",
+        "Pin Header",
+        "2.54mm间距",
+        "PCB连接器",
+        "单排针",
+        "直插排针"
+      ]
+    },
+    {
+      "id": "M-EXT-SW-002",
+      "module_name": "S8050",
+      "module_type": "NPN三极管",
+      "category": "分立半导体",
+      "leaf_code": "l_bipolar_junction_transistor_bjt",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "transistor_type",
+          "op": "is",
+          "value": "NPN",
+          "reason": "模块描述明确指定为 NPN 双极性晶体管，用于开关控制。若使用 PNP 将导致逻辑反相及无法正确驱动负载。",
+          "source_parameter": "transistor_type"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -23.0,
+            -23.0
+          ],
+          "reason": "分类结果明确指出封装为 SOT-23，且用户输入中提及 S8050（典型 SOT-23 封装）。PCB 布局已预留该封装 footprint。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "power_dissipation",
+          "op": ">=",
+          "value": 0.3,
+          "unit": "W",
+          "reason": "SOT-23 封装典型功率耗散约为 200-300mW。在 0.5A 饱和导通时，若 Vce(sat) 较高（如 0.3-0.4V），功耗可达 150-200mW，接近 SOT-23 极限。需选择低 Vce(sat) 的型号或确保良好的 PCB 散热。",
+          "source_parameter": "power_dissipation"
+        }
+      ],
+      "keywords": [
+        "NPN BJT",
+        "NPN Transistor",
+        "SOT-23",
+        "小功率三极管",
+        "开关管",
+        "S8050"
+      ],
+      "specified_device": {
+        "model": "S8050",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-PROT-TVS-001",
+      "module_name": "USB TVS阵列",
+      "module_type": "静电放电保护器件",
+      "category": "保护器件",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "clamping_voltage_max",
+          "op": ">=",
+          "value": 12.0,
+          "unit": "V",
+          "reason": "需求文档第5章明确指定钳位电压 <12V。USB端口连接至ESP32原生USB控制器，其I/O引脚绝对最大额定值通常为5.5V或6V（取决于具体封装版本），若TVS在ESD事件下钳位电压过高，将导致MCU引脚击穿损坏。",
+          "source_parameter": "clamping_voltage_max"
+        },
+        {
+          "field": "number_of_channels",
+          "op": ">=",
+          "value": 2.0,
+          "unit": "ch",
+          "reason": "USB 2.0通信需要分别保护D+和D-差分信号线。TVS阵列必须具备独立的通道以分别抑制两条数据线对地的静电放电。",
+          "source_parameter": "number_of_channels"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "虽然系统工作温度定义为-10~50°C，但PCB设计要求采用工业级器件以提供设计余量（见Ch 4.1.2）。TVS作为保护器件，需在极端温度下保持电气特性稳定。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "keywords": [
+        "TVS Array",
+        "ESD Protection",
+        "静电保护",
+        "瞬态抑制二极管",
+        "低电容",
+        "USB防护"
+      ]
+    },
+    {
+      "id": "M-PROT-FUSE-001",
+      "module_name": "自恢复保险丝/熔断器",
+      "module_type": "过流保护器件",
+      "category": "保护器件",
+      "leaf_code": "l_self_resetting_fuse",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "rated_current",
+          "op": "cover",
+          "value": [
+            1.0,
+            2.0
+          ],
+          "unit": "A",
+          "reason": "需求文档 M-PROT-FUSE-001 明确指定额定电流范围 1A-2A。作为 USB 输入端的过流保护，In 需足够大以承载系统正常工作电流及瞬态波动，同时小于下游器件或线缆的极限耐受值。",
+          "source_parameter": "rated_current"
+        },
+        {
+          "field": "voltage_rating",
+          "op": ">=",
+          "value": 6.0,
+          "unit": "V",
+          "reason": "系统由 USB-C 供电，标准 VBUS 为 5V。考虑到 USB 规范允许一定波动以及可能的浪涌，器件耐压至少应覆盖 5V，通常选择 6V、8V 或更高规格以确保安全裕度。若选用 PPTC，其断开后的维持电压也必须高于线路电压。",
+          "source_parameter": "voltage_rating"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档 Ch3.2.1 规定工作温度为 -10°C ~ +50°C。保护器件在该温度范围内必须保持电气性能稳定，特别是在高温下，PPTC 的电阻会变化，需确保不会因环境温度升高而提前误动作。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "is",
+          "value": "['Radial Leaded', 'SMD (e.g., 1206, 1812, 2920)']",
+          "reason": "模块描述提及“自恢复保险丝 (PPTC) 或 一次性熔断器”。两者物理形态不同。SMD 封装更利于自动化生产和小尺寸设计；径向插件适合高浪涌或特定机械固定。需根据 PCB 空间约束（60mm x 30mm）决定，但必须支持所选类型。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "resistance",
+          "op": "<=",
+          "value": 0.1,
+          "unit": "Ω",
+          "reason": "过流保护器件串联在电源路径中。高内阻会导致不必要的电压降（影响 ESP32/Lora 供电稳定性）和发热。虽然需求未明确上限，但一般 USB 保护器件 Ri 应在几十毫欧级别。",
+          "source_parameter": "resistance_max"
+        }
+      ],
+      "keywords": [
+        "自恢复保险丝",
+        "PPTC",
+        "一次性熔断器",
+        "Fuse",
+        "Polyfuse",
+        "过流保护"
+      ]
+    },
+    {
+      "id": "M-DBG-USB-001",
+      "module_name": "USB-C连接器",
+      "module_type": "Type-C母座",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 24.0,
+          "reason": "模块描述明确指定为 '24-pin USB-C'。USB Type-C 标准母座通常为 16-pin (无屏蔽壳) 或 24-pin (含屏蔽壳接地引脚)。由于系统包含 USB 2.0 数据通信且 ESP32 原生 USB 需要 D+/D- 连接，必须使用支持全信号线的 24-pin 封装以提供完整的屏蔽接地和信号完整性。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "Receptacle (Socket)",
+          "reason": "该器件用于接收外部 USB-C 线缆或充电头，属于物理接口输入端，必须为母座结构。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "shielding",
+          "op": "is",
+          "value": "是",
+          "reason": "USB 2.0 高速差分信号对电磁干扰敏感，且 IEC 61000-4-2 Level 4 ESD 要求接口处有低阻抗泄放路径。24-pin 连接器通常自带屏蔽壳，需确保 PCB 上有大面积铺铜连接到屏蔽脚以降低阻抗和噪声。",
+          "source_parameter": "shielding"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "SMD / Surface Mount",
+          "reason": "生产章节 4.1.3 明确要求 'SMT全贴片'，且 PCBAgent 角色倾向于自动化生产。USB-C 母座常见有 SMD 和 THT，此处必须选 SMD 以符合工艺约束。",
+          "source_parameter": "mounting_style"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "虽然系统工作温度定义为 -10°C ~ +50°C，但生产章节 4.1.2 建议选用 '工业级 (-40℃ ～ +85℃)' 器件以提供设计余量。连接器作为被动机械件，高温焊接耐受性至关重要，且低温下塑料件脆化风险需考虑。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "contact_material",
+          "op": "is",
+          "value": "Gold Plated",
+          "reason": "USB 2.0 信号引脚需要低接触电阻和耐腐蚀性。镀金是标准做法。对于经常插拔的 VBUS 引脚，较厚的镀层有助于延长寿命。",
+          "source_parameter": "contact_material"
+        }
+      ],
+      "keywords": [
+        "USB Type-C Receptacle",
+        "USB-C Connector",
+        "Type-C 母座",
+        "24-pin USB-C",
+        "USB 2.0 Connector",
+        "CC1 CC2"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1304 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-case9-v1",
+  "project": {
+    "name": "case9（由历史选型产物转换）",
+    "summary": "来源 /share/home/zhengzhiqi/workspace/web/output/case9/console/stages/03_device_selection__d671bc95.json"
+  },
+  "global_constraints": {
+    "budget_total_cny": null,
+    "currency": "CNY",
+    "note": "预算取自历史产物，仅供参考"
+  },
+  "selection_items": [
+    {
+      "id": "M-PWR-DCDC-001",
+      "module_name": "主DC-DC转换器",
+      "module_type": "电源芯片",
+      "category": "电源管理 IC",
+      "leaf_code": "l_professional_power_management_pmic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            9.0,
+            36.0
+          ],
+          "unit": "V",
+          "reason": "需求文档第3章明确指定输入电压范围为 9.0 V ～ 36 V。器件必须在整个范围内稳定工作，且耐压需留有安全余量以防浪涌。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "output_current",
+          "op": "cover",
+          "value": [
+            2.0,
+            5.0
+          ],
+          "unit": "A",
+          "reason": "系统包含STM32、FPGA、ADC/DAC、显示驱动及模拟前端。虽然单路电流不大，但作为“主DC-DC”，它可能需要承担除数控电源（独立MOSFET调整管）之外的所有数字/模拟逻辑负载。工程估算总静态+动态负载可能在2-4A左右（取决于FPGA型号AGM6014A的具体功耗及外设数量）。需确保能提供足够的电流给LDO(LR7533, 1.5A)及FPGA辅助电源。",
+          "source_parameter": "continuous_output_current"
+        },
+        {
+          "field": "efficiency",
+          "op": ">=",
+          "value": 85.0,
+          "unit": "%",
+          "reason": "需求文档第2.1.2节明确规定电源网络效率≥85%，以控制整机功耗(<5W)和发热。",
+          "source_parameter": "efficiency"
+        },
+        {
+          "field": "ripple_noise",
+          "op": "<=",
+          "value": 50.0,
+          "unit": "mV_pp",
+          "reason": "需求文档第3.1.1节明确指定纹波噪声≤50 mV pp。这对后续的LDO(LR7533)输入稳定性及模拟前端(AFE)的信噪比至关重要。",
+          "source_parameter": "ripple_noise"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            105.0
+          ],
+          "unit": "°C",
+          "reason": "生产章节4.1.2规定关键器件采用工业级温度范围。系统工作温度0-45°C，老化测试50°C，器件需有足够余量。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "switching_frequency",
+          "op": "cover",
+          "value": [
+            100000.0,
+            1000000.0
+          ],
+          "unit": "Hz",
+          "reason": "作为主电源轨转换器，开关频率需在效率（高频导致损耗增加）和元件尺寸（低频导致电感/电容体积增大）之间折中。对于桌面仪器，100kHz-1MHz是常见且平衡的选择。",
+          "source_parameter": "switching_frequency"
+        }
+      ],
+      "keywords": [
+        "同步降压转换器",
+        "Buck Converter",
+        "DC-DC Step-Down",
+        "宽压输入",
+        "Wide Input Range",
+        "电源管理芯片"
+      ]
+    },
+    {
+      "id": "M-PWR-LDO-001",
+      "module_name": "模拟/逻辑LDO",
+      "module_type": "电源芯片",
+      "category": "电源管理 IC",
+      "leaf_code": "l_linear_regulator_ldo",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "需求文档明确指定 LDO 输出为纯净的 3.3 V，供给 MCU (STM32F407)、模拟前端及数字逻辑。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.5,
+            36.0
+          ],
+          "unit": "V",
+          "reason": "系统主 DC-DC 将 9-36 V 输入转换为中间母线（如 12 V 或 5 V）。LDO 输入接自该母线。考虑到 DC-DC 效率波动及负载瞬态，输入电压可能接近上游母线最大值。同时需满足 LDO 的 dropout 电压要求（典型 400 mV），因此最低输入电压需高于 3.3 V + Dropout。LR7533 规格书通常支持宽压输入，需确认其耐压是否覆盖 36 V（若上游母线为 36 ",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "output_current",
+          "op": ">=",
+          "value": 1.5,
+          "unit": "A",
+          "reason": "需求文档在 5.2.2 节明确指出 LR7533 的输出电流为 1.5 A，且需为模拟前端、MCU 及部分数字逻辑供电。MCU (STM32F407) 满载约 100-200 mA，模拟前端（运放、MUX、ADC/DAC 参考源等）若包含多个通道可能消耗数百 mA，总计 1.5 A 是合理的工程估算值，也是选型硬约束。",
+          "source_parameter": "output_current"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "生产章节 4.1.2 明确要求元器件采用工业级 (-40℃ ～ +85℃)，且老化测试在 50℃ 进行。器件必须在整个预期环境范围内可靠工作。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "dropout_voltage",
+          "op": "<=",
+          "value": 0.4,
+          "unit": "V",
+          "reason": "低噪声 LDO 通常具有低压差特性。若上游 DCDC 输出为 5 V，压差 0.4 V 可提供足够的裕量（4.9 V - 3.3 V = 1.6 V > 0.4 V）。若上游为 3.7-4.5 V（较少见），则需更低压差。0.4 V 是典型低压差 LDO 的性能指标，有助于提高整体电源效率并减少热耗散。",
+          "source_parameter": "dropout_voltage"
+        }
+      ],
+      "keywords": [
+        "LDO",
+        "Low Dropout Regulator",
+        "低压差线性稳压器",
+        "3.3V LDO",
+        "低噪声 LDO",
+        "线性稳压IC"
+      ],
+      "specified_device": {
+        "model": "LR7533",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-PWR-MOSFET-001",
+      "module_name": "数控电源调整管",
+      "module_type": "功率器件",
+      "category": "分立半导体",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "continuous_drain_current_id",
+          "op": ">=",
+          "value": 15.0,
+          "unit": "A",
+          "reason": "电源最大输出电流为 5 A。然而，在低压输入（如 9 V）下输出大电流时，MOSFET 工作在线性区（Linear Mode），需耗散极大功率。文档明确指出“供电峰值电流...严禁误解为全量程最大输入”，且强调线性区工作。为满足 5 A 输出且在低压差下不烧毁，器件必须具备远高于负载电流的脉冲/线性电流承受能力。参考常见高压大功率线性应用选型，15 A 是支持此类高压降线性工作的典型下限规格。",
+          "source_parameter": "continuous_drain_current_ID"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "N-MOSFET",
+        "Power MOSFET",
+        "N沟道MOS管",
+        "高压MOSFET",
+        "大功率开关管",
+        "Linear Mode MOSFET"
+      ],
+      "specified_device": {
+        "model": "AGM15P13E",
+        "intent": "reference"
+      },
+      "note": "可选参数（未进条件）：gate_charge_qg"
+    },
+    {
+      "id": "M-PWR-GDRV-001",
+      "module_name": "MOSFET栅极驱动器",
+      "module_type": "驱动芯片",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_brushless_dc_bldc_motor_drive_chip",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            3.0,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "驱动芯片由 MCU (STM32F407) 控制，MCU 供电为 3.3V (M-PWR-LDO-001)。栅极驱动器通常由独立的 VCC 引脚供电以提供足够的灌/拉电流。考虑到系统电源轨主要为 3.3V 和 5V（来自 DC-DC），器件需支持至少 3.3V 至 5.5V 的宽范围输入，以便灵活选择供电来源。",
+          "source_parameter": "supply_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "isolation_voltage",
+          "op": ">=",
+          "value": 50.0,
+          "unit": "V",
+          "reason": "如果 AGM15P13E 用作高侧开关，其源极电压会随输出变化。驱动器必须具备相应的浮动电源能力（Bootstrap）或隔离能力。此处暂定为非隔离半桥驱动器，关键参数是 $V_{DD}$ 与 $V_{SS}$ (Source) 之间的耐压。对于 30V 输出系统，50V 余量是基础。",
+          "source_parameter": "isolation_voltage"
+        }
+      ],
+      "keywords": [
+        "Gate Driver",
+        "MOSFET Driver",
+        "栅极驱动",
+        "功率开关驱动",
+        "半桥驱动",
+        "全桥驱动"
+      ]
+    },
+    {
+      "id": "M-MCU-001",
+      "module_name": "主控MCU",
+      "module_type": "微控制器",
+      "category": "微控制器",
+      "leaf_code": "l_microcontroller_mcu_mpu_soc",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度为0°C～45°C（Section 3.2.1）。工业级仪器通常选用-40°C～+85°C工业级器件以确保可靠性和寿命余量。若仅选商业级(0-70°C)，在高温环境下风险较高。",
+          "source_parameter": "operating_temperature_range"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            100.0,
+            100.0
+          ],
+          "unit": "package",
+          "reason": "型号STM32F407VET6的标准封装为LQFP100。PCB布局设计基于此封装尺寸。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "MCU",
+        "ARM Cortex-M4",
+        "32-bit MCU",
+        "STM32F4",
+        "microcontroller",
+        "Cortex-M4"
+      ],
+      "specified_device": {
+        "model": "STM32F407VET6",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-MCU-FLASH-001",
+      "module_name": "SPI Flash存储器",
+      "module_type": "存储器",
+      "category": "存储器",
+      "leaf_code": "l_nor_flash",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "storage_capacity",
+          "op": ">=",
+          "value": 32.0,
+          "unit": "Mb",
+          "reason": "需求文档明确指定 W25Q256JVEIQ (32Mb/4MB) 用于存储固件、波形数据及配置参数，且要求满足长时间数据记录。容量不足将导致功能失败。",
+          "source_parameter": "storage_capacity"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "虽然工作环境温度为 0~45°C，但生产规范第4.1.2节要求关键器件采用工业级 (-40℃ ～ +85℃)。老化测试温度高达 50℃，且考虑到 PCB 局部温升，工业级是必须的。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "clock_frequency",
+          "op": "cover",
+          "value": [
+            104000000.0,
+            133000000.0
+          ],
+          "unit": "Hz",
+          "reason": "W25Q256 系列典型最大时钟频率为 133 MHz。STM32F407 SPI 主模式最高可达 42 MHz (APB2)，但 Quad SPI 模式下可更高。器件需至少支持 104 MHz 以上频率以匹配常见 SPI Flash 的高速规范，确保数据传输速率满足 ≥50 Mbps 的数据吞吐率需求（考虑协议开销）。",
+          "source_parameter": "max_clock_frequency"
+        }
+      ],
+      "keywords": [
+        "NOR Flash",
+        "SPI Flash",
+        "Non-volatile Memory",
+        "固件存储",
+        "W25Q系列"
+      ],
+      "specified_device": {
+        "model": "W25Q256JVEIQ",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-FPGA-001",
+      "module_name": "FPGA协处理器",
+      "module_type": "可编程逻辑器件",
+      "category": "可编程逻辑器件",
+      "leaf_code": "l_programmable_logic_device_cpld_fpga",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "文档第4.1.2节明确要求关键数字芯片采用 '工业级 (-40℃ ～ +85℃)'。虽然工作温度定义为 0~45°C，但工业级器件提供必要的安全裕度以应对老化测试（50°C）及环境波动。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "is",
+          "value": "BGA",
+          "reason": "文档第4.1.2节提到 'AGM6014A 视具体型号可能为 BGA' 且第4.1.3节警告 '若为 BGA 封装...防止虚焊'。考虑到 14k LEs 的引脚密度及高速信号完整性需求，BGA 是最可能的封装形式。需确认具体 Pin Count 以布局 PCB。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "power_consumption",
+          "op": "<=",
+          "value": 1.5,
+          "unit": "W",
+          "reason": "系统总工作功耗 < 5 W。FPGA 作为协处理器，其功耗需控制在合理范围内以确保剩余功率预算给 MCU、模拟前端及显示驱动。1.5 W 是此类轻量级 FPGA 的典型峰值功耗估算，需确保电源轨能提供足够电流。",
+          "source_parameter": "power_consumption"
+        }
+      ],
+      "keywords": [
+        "FPGA",
+        "Field-Programmable Gate Array",
+        "轻量级FPGA",
+        "14k LEs",
+        "DSP协处理器",
+        "视频输出FPGA"
+      ],
+      "specified_device": {
+        "model": "AGM6014A",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-FPGA-ADC-001",
+      "module_name": "高速ADC采样芯片",
+      "module_type": "模数转换器",
+      "category": "数据转换器",
+      "leaf_code": "l_isolated_adc_with_power_supply",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "sampling_rate",
+          "op": ">=",
+          "value": 100.0,
+          "unit": "MSa/s",
+          "reason": "系统核心功能为便携式示波器，STM32内置ADC无法满足性能，必须引入外部高速ADC。为满足双通道同时以100 MSPS采样的需求，器件必须具备至少双通道或极高的单通道吞吐能力，且接口带宽需支持该速率。",
+          "source_parameter": "sampling_rate"
+        },
+        {
+          "field": "resolution",
+          "op": ">=",
+          "value": 8.0,
+          "unit": "bit",
+          "reason": "示波器垂直分辨率要求≥8-bit。考虑到高频下的噪声和失真，实际选型应确保在100 MSPS及更高频率下，有效分辨率不低于8-bit，否则无法准确还原波形幅度。",
+          "source_parameter": "resolution"
+        },
+        {
+          "field": "interface_type",
+          "op": "is",
+          "value": "['Parallel LVDS', 'High-Speed SPI (≥50 MHz)']",
+          "reason": "ADC需将数据送入FPGA。并行LVDS是高速ADC的主流接口，能轻松应对100+ MSPS数据率；若选SPI接口，时钟频率需极高（通常>50MHz），对PCB走线和FPGAIO速度要求苛刻。无论哪种，必须与FPGA引脚定义匹配。",
+          "source_parameter": "interface_type"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            -0.3,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "系统模拟电源轨为3.3V，AFE输出通常为轨到轨或接近轨到轨。ADC输入范围需覆盖AFE输出摆幅（通常0-3.3V或±1.65V等）。若ADC仅支持单极性0-3.3V，则AFE需偏置；若支持差分，需匹配电平。绝对最大额定值需高于3.3V以防过压损坏。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "虽然工作环境为0-45°C，但为确保长期可靠性和符合工业仪器标准，关键信号链器件应选用工业级温度等级。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "ADC",
+        "模数转换器",
+        "高速ADC",
+        "Parallel ADC",
+        "SPI ADC",
+        "High Speed ADC"
+      ]
+    },
+    {
+      "id": "M-FPGA-DAC-001",
+      "module_name": "DDS波形DAC芯片",
+      "module_type": "数模转换器",
+      "category": "数据转换器",
+      "leaf_code": "l_direct_digital_frequency_synthesis_dds",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "sampling_frequency",
+          "op": "cover",
+          "value": [
+            10000000.0,
+            500000000.0
+          ],
+          "unit": "SPS",
+          "reason": "需求要求DDS信号源频率范围1 Hz ~ 1 MHz。根据奈奎斯特采样定理，DAC采样率至少为2 MHz。考虑到重构滤波器（Reconstruction Filter）的过渡带设计余量及谐波抑制，工程上通常选择10x~20x的信号带宽，即10 MSPS起步。由于系统中有100 MSPS ADC用于示波器，选用同等级别的高速DAC有利于PCB布局统一和FPGA资源复用。",
+          "source_parameter": "sampling_frequency"
+        },
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            2.3,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "FPGA IO Bank配置为1.8V或3.3V，模拟前端由3.3V LDO供电。高速DAC通常支持单电源3.3V或双电源±2.5V/±5V。考虑到系统集成度和LDO输出，单电源3.3V是最优解。",
+          "source_parameter": "supply_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "resolution",
+          "op": "cover",
+          "value": [
+            8.0,
+            14.0
+          ],
+          "unit": "bit",
+          "reason": "需求未明确指定幅度精度百分比，但THD < 1%是硬性指标。对于正弦波，8-bit DAC的理论SNR约为50dB，THD主要由量化噪声决定，可能接近或略高于1%。10-bit及以上能更好地保证THD < 1%及幅度线性度。鉴于成本约束待定，最低接受8-bit，推荐10-12-bit。",
+          "source_parameter": "resolution"
+        }
+      ],
+      "keywords": [
+        "高速DAC",
+        "数模转换器",
+        "DDS",
+        "Direct Digital Synthesis",
+        "High Speed DAC",
+        "Video DAC"
+      ]
+    },
+    {
+      "id": "M-FPGA-LS-001",
+      "module_name": "双向电平转换器",
+      "module_type": "逻辑芯片",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_converter_level_shifter",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 8.0,
+          "unit": "ch",
+          "reason": "模块描述明确指出用于MCU与FPGA之间的并行总线双向电平转换，且用户指定型号TXB0108为8位转换器。若通道数不足，无法连接完整的并行数据总线及控制信号。",
+          "source_parameter": "channel_count"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "data_rate",
+          "op": "cover",
+          "value": [
+            200.0,
+            300.0
+          ],
+          "unit": "Mbps",
+          "reason": "系统要求MCU与FPGA间数据吞吐率≥50 Mbps。考虑到并行总线的时钟频率可能较高（如50-100MHz）以及建立/保持时间余量，电平转换器应具有足够的带宽（通常TXB0108典型值为300Mbps）。工程假设最低需要支持至少200Mbps以保证高速信号完整性。",
+          "source_parameter": "data_rate"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度为 0°C ～ 45°C，但生产规范（4.1.2）要求关键数字芯片采用工业级 (-40℃ ～ +85℃)。为确保在老化测试（50°C）及极端环境下的可靠性，器件温度等级应至少覆盖此范围。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "keywords": [
+        "电平转换器",
+        "Voltage Level Translator",
+        "Level Shifter",
+        "TXB0108",
+        "双向转换",
+        "3.3V to 1.8V"
+      ]
+    },
+    {
+      "id": "M-AFE-MUX-001",
+      "module_name": "模拟多路开关",
+      "module_type": "模拟开关",
+      "category": "模拟开关",
+      "leaf_code": "l_ideal_diode_oring_controller",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            2.7,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "模块描述指出用于万用表量程切换及示波器通道选择，系统由 LDO LR7533 提供 3.3V 电源（见 M-PWR-LDO-001）。MX5050T 作为模拟开关，其 VDD 需兼容 3.3V。考虑到工业级应用及可能的电压波动，器件额定电压应覆盖 3.3V 并留有余量，典型模拟开关支持 2.7V-5.5V 或单电源 3.3V/5V。若使用单电源供电，最小电压需低于 3.3V 以保证开启，最大电压需",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "on_resistance_ron",
+          "op": "cover",
+          "value": [
+            2.0,
+            2.0
+          ],
+          "unit": "Ω",
+          "reason": "模块分类明确标注 'Low Ron'，且用户指定型号 MX5050T 的参数表中 $R_{on}$ < 2Ω。在万用表和示波器应用中，过高的导通电阻会引入测量误差（分压效应）和自热漂移，直接影响精度指标（DCV精度 ±0.05%）。因此低导通电阻是关键性能约束。",
+          "source_parameter": "on_resistance_ron"
+        },
+        {
+          "field": "channel_count",
+          "op": "cover",
+          "value": [
+            4.0,
+            8.0
+          ],
+          "unit": "ch",
+          "reason": "系统包含四通道示波器（需切换 4 个 BNC 输入）及万用表多量程切换（通常涉及多个电阻档位或功能选择）。虽然具体拓扑未完全展开，但 'Multiplexer' 和 'MUX' 关键词暗示多路选择。MX5050T 常见为 4:1 或 8:1 结构。为满足四通道示波器和万用表的多路信号路由需求，器件必须具备足够的通道数或内部集成足够的 SPDT/SPST 开关单元。",
+          "source_parameter": "channel_count"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "leakage_current",
+          "op": "cover",
+          "value": [
+            1e-09,
+            1e-09
+          ],
+          "unit": "A",
+          "reason": "应用于高精度万用表（DCV精度 ±0.05%）和示波器输入端。高漏电流会导致直流测量偏差和高阻抗信号源（如探头）的负载效应。MX5050T 参数表指出漏电流 <1nA。对于精密测量，低漏电是保证精度的重要因素。",
+          "source_parameter": "leakage_current"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "degC",
+          "reason": "虽然系统工作温度为 0°C~45°C，但生产与测试考虑中建议采用工业级器件以符合仪器通用标准并预留余量。此外，PCB 局部温升可能超过环境温度。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "模拟开关",
+        "Analog Switch",
+        "Multiplexer",
+        "MUX",
+        "Low Ron",
+        "SPDT"
+      ],
+      "specified_device": {
+        "model": "MX5050T",
+        "intent": "reference"
+      },
+      "note": "可选参数（未进条件）：package"
+    },
+    {
+      "id": "M-AFE-OPA-001",
+      "module_name": "信号缓冲运放",
+      "module_type": "运算放大器",
+      "category": "模拟集成电路",
+      "leaf_code": "l_operational_amplifier",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            2.7,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "LMV321 为轨到轨运放，需直接由模拟电源轨（M-PWR-LDO-001 输出 3.3V）供电。输入范围必须包含 3.3V，且下限需留有余量以应对 LDO 压差或瞬态跌落；上限受器件绝对最大额定值限制。",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "虽然系统工作温度为 0~45°C，但工业仪器通常要求器件具备工业级温度等级 (-40~85°C) 以保证长期可靠性和余量。生产与测试考虑中明确要求关键器件采用工业级。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "gain_bandwidth_product",
+          "op": ">=",
+          "value": 1100000.0,
+          "unit": "Hz",
+          "reason": "LMV321 GBW 典型值 1.1 MHz。考虑到闭环增益配置及相位裕度，该带宽足以满足低频信号缓冲（如音频、低速传感器）及部分中频调理需求。对于 20 MHz 示波器前端，它主要作为后级缓冲或低通滤波的一部分，而非主放大级。",
+          "source_parameter": "gain_bandwidth_product"
+        }
+      ],
+      "keywords": [
+        "运放",
+        "Op-Amp",
+        "Operational Amplifier",
+        "Rail-to-Rail",
+        "轨到轨",
+        "LMV321"
+      ],
+      "specified_device": {
+        "model": "LMV321",
+        "intent": "reference"
+      },
+      "note": "可选参数（未进条件）：package"
+    },
+    {
+      "id": "M-AFE-OPA-002",
+      "module_name": "高精度调理运放",
+      "module_type": "运算放大器",
+      "category": "运算放大器",
+      "leaf_code": "l_fet_input_operational_amplifier",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            3.0,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "运放需由纯净的 3.3V LDO 供电以驱动示波器/万用表输入级，且需兼容单电源或双极性信号调理（如虚拟地）。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "input_offset_voltage",
+          "op": "<=",
+          "value": 5e-05,
+          "unit": "V",
+          "reason": "万用表直流电压测量精度要求极高 (±0.05%)，若运放失调电压过大，将直接引入不可接受的静态误差，导致无法通过校准消除的高阶非线性或增益误差。",
+          "source_parameter": "input_offset_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "必须满足系统工作温度范围，并符合工业级可靠性标准。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "Precision Op Amp",
+        "Low Noise Operational Amplifier",
+        "High Precision OpAmp",
+        "仪表级运放",
+        "低失调运放"
+      ]
+    },
+    {
+      "id": "M-AFE-CS-001",
+      "module_name": "电流检测放大器",
+      "module_type": "运算放大器",
+      "category": "信号链 IC",
+      "leaf_code": "l_fet_input_operational_amplifier",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            2.7,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "The module is powered by the system's 3.3V analog rail. The device must operate correctly within this supply range, potentially allowing for single-supply operation or dual-supply if internal rails ar",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "output_voltage_range",
+          "op": "cover",
+          "value": [
+            0.0,
+            3.3
+          ],
+          "unit": "V",
+          "reason": "The output signal must be compatible with the downstream ADC/MCU input range (typically 0-3.3V or 0-1.8V). It must be able to swing from near 0V (for low current resolution) to a defined max voltage c",
+          "source_parameter": "output_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "Industrial instrumentation requires stable performance over a wider temperature range than consumer goods. Drift specifications must be met over the industrial range.",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "bandwidth",
+          "op": ">=",
+          "value": 100000.0,
+          "unit": "Hz",
+          "reason": "To support fast load transient recovery (<100us), the CSA bandwidth should be sufficient to pass relevant frequency components. Typically > 100 kHz to 1 MHz is required for switching power supplies or",
+          "source_parameter": "bandwidth"
+        }
+      ],
+      "keywords": [
+        "电流检测放大器",
+        "Current Sense Amplifier",
+        "CSA",
+        "差分放大器",
+        "精密运放",
+        "高精度运放"
+      ],
+      "note": "可选参数（未进条件）：interface_type"
+    },
+    {
+      "id": "M-HMI-FPC-001",
+      "module_name": "FPC显示屏连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 40.0,
+          "unit": "pins",
+          "reason": "模块描述明确指定为 '40Pin FPC插座'，且用于连接 LCD 显示屏。引脚数不足会导致物理无法插合或信号缺失。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 0.5,
+          "unit": "mm",
+          "reason": "分类关键词中明确包含 '0.5mm FPC'。FPC 连接器间距错误将导致无法与屏幕模组 FPC 线缆对准及焊接。",
+          "source_parameter": "pitch"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档第 4.1.2 节规定关键器件温度等级为 '工业级 (-40℃ ～ +85℃)'。工作环境温度要求为 0°C～45°C，预留余量需满足工业级标准以确保长期可靠性。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "FPC连接器",
+        "柔性印刷电路板插座",
+        "ZIF connector",
+        "0.5mm FPC",
+        "LCD Connector",
+        "40Pin"
+      ],
+      "note": "可选参数（未进条件）：shielding"
+    },
+    {
+      "id": "M-HMI-ENC-001",
+      "module_name": "旋转编码器",
+      "module_type": "机械开关",
+      "category": "机械开关",
+      "leaf_code": "l_rotary_encoder",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "Panel Mount",
+          "reason": "作为人机交互界面（HMI）的一部分，该模块必须安装在仪器外壳上，而非仅焊接在PCB边缘。PCB Mount类型无法实现物理交互功能。",
+          "source_parameter": "mounting_style"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "旋转编码器",
+        " Rotary Encoder",
+        "增量式编码器",
+        "Incremental Encoder",
+        "带按键编码器",
+        "EC11"
+      ]
+    },
+    {
+      "id": "M-INTF-USB-001",
+      "module_name": "USB高速PHY芯片",
+      "module_type": "通信接口",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_telecommunication_interface_ic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "data_rate_max",
+          "op": ">=",
+          "value": 480.0,
+          "unit": "Mbps",
+          "reason": "USB 2.0 High Speed 标准速率。若器件不支持 HS 模式，无法满足系统对固件升级、SCPI 远程控制和波形数据传输的带宽需求。",
+          "source_parameter": "data_rate_max"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "is",
+          "value": "QFN",
+          "reason": "USB HS PHY 需要良好的高频接地和低寄生电感以维持信号完整性。QFN 封装相比 SOP 具有更好的高频性能和更小的占用面积，适合高密度 PCBA。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度 0~45°C，但为了可靠性和供应链通用性，关键数字/混合信号器件通常选用工业级。若仅限商业级 (0~70°C) 也可满足，但工业级更具鲁棒性。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "USB PHY",
+        "USB High Speed",
+        "USB HS PHY",
+        "USB Transceiver",
+        "USB 2.0 PHY",
+        "PHY Controller"
+      ],
+      "note": "可选参数（未进条件）：quiescent_current"
+    },
+    {
+      "id": "M-INTF-USBC-001",
+      "module_name": "USB-C连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 16.0,
+          "unit": "count",
+          "reason": "标准USB Type-C连接器具有16个引脚，用于支持VBUS、GND、CC1/2及DP/DN差分对。若引脚数不足将无法实现PD协商或高速数据传输。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "器件必须在系统工作温度范围内可靠运行。工业级规格提供了足够的余量以应对老化测试（50℃）和环境波动。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "shielding",
+          "op": "is",
+          "value": "是",
+          "reason": "USB High Speed (480 Mbps)产生高频噪声，且设备需通过Class B EMC发射限值。连接器必须提供完整的360度金属屏蔽外壳，并良好接地，以抑制辐射发射并保护信号完整性。",
+          "source_parameter": "shielding"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "['Surface Mount (SMD)', 'Through Hole (DIP)']",
+          "reason": "虽然插件式也存在，但在高密度PCB（6层板）和现代电子设备中，SMD Type-C连接器更常见且能提供更好的焊接可靠性（带焊盘加固）。若选DIP需确认PCB布局是否允许通孔。此处建议SMD作为首选约束。",
+          "source_parameter": "mounting_style"
+        },
+        {
+          "field": "contact_material",
+          "op": "is",
+          "value": "Gold-plated contacts",
+          "reason": "为满足IEC 61000-4-2 Level 4 ESD防护及长期插拔可靠性，接触端子通常镀金（Gold Plating）。沉金工艺（ENIG）主要指PCB焊盘，但连接器本身也需耐腐蚀和高导电性接触面。",
+          "source_parameter": "contact_material"
+        }
+      ],
+      "keywords": [
+        "USB Type-C Connector",
+        "USB-C母座",
+        "Type-C Receptacle",
+        "16 Pin",
+        "PD Charging",
+        "USB 3.0/3.1"
+      ]
+    },
+    {
+      "id": "M-INTF-BNC-001",
+      "module_name": "BNC信号连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 2,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "impedance",
+          "op": ">=",
+          "value": 50.0,
+          "unit": "Ω",
+          "reason": "模块描述明确指定为“50Ω BNC”，且系统需求中定义特性阻抗为 50Ω。示波器输入和信号发生器输出均基于 50Ω 终端匹配标准，若阻抗不匹配将导致严重的信号反射，破坏高频信号完整性及测量精度。",
+          "source_parameter": "impedance"
+        },
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "['BNC', 'Jack (Female)']",
+          "reason": "模块名称及分类明确为 BNC 母座。这是物理互连的唯一形态，错误类型无法装配或电气连接。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "['Panel Mount', 'Chassis Mount']",
+          "reason": "BNC 接口位于仪器外部（SS-INTF-001），用于连接外部探头或线缆。必须采用面板安装方式，并具备机械锁紧能力以防止意外脱落。",
+          "source_parameter": "mounting_style"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -55.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作环境温度为 0~50°C，存储温度 -20~70°C。连接器材料（塑料/金属）需在更宽的温度范围内保持机械性能和电气稳定性，以应对可能的极端环境或焊接热应力。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "quantity",
+          "op": ">=",
+          "value": 2.0,
+          "unit": "pcs",
+          "reason": "模块 notes 明确指出数量依据：示波器输入+信号源输出，共两个独立通道。",
+          "source_parameter": "quantity"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_material",
+          "op": "is",
+          "value": "['Gold Plated Brass', 'Gold Plated Phosphor Bronze']",
+          "reason": "为确保低噪声和高可靠性连接，特别是对于高精度示波器和信号源，触点应采用镀金材质以抗氧化并降低接触电阻。",
+          "source_parameter": "contact_material"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "Ω",
+          "reason": "虽然主要应用为 50Ω 射频信号，但作为测试仪器接口，需具备一定的绝缘耐压能力以防短路或漏电，符合通用连接器安全规范。",
+          "source_parameter": "insulation_resistance"
+        }
+      ],
+      "keywords": [
+        "BNC connector",
+        "BNC母座",
+        "50Ω BNC",
+        "Coaxial connector",
+        "射频连接器"
+      ]
+    },
+    {
+      "id": "M-INTF-BANANA-001",
+      "module_name": "香蕉头测量接口",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 2,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "voltage_rating",
+          "op": ">=",
+          "value": 500.0,
+          "unit": "V",
+          "reason": "数控电源最大输出电压为 30 V，但作为测试接口（特别是万用表输入），需承受潜在的高压测试场景或隔离耐压要求。参考需求文档中 BNC/连接器参数表提到的“绝缘耐压 >500V”以及 IEC 61010 安全标准对测量仪器的要求，选择 500V 额定值可提供足够的安全余量并符合工业级仪器规范。",
+          "source_parameter": "voltage_rating"
+        },
+        {
+          "field": "current_rating",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "A",
+          "reason": "数控电源模块的最大输出电流定义为 5 A。香蕉插座直接串联在电源输出路径上，其接触电阻和导体截面积必须支持 5 A 的连续电流而不发生过热或压降过大。",
+          "source_parameter": "current_rating"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "为满足 IEC 61010 安全标准及防止高压漏电影响精密测量（万用表/示波器），绝缘电阻需达到工业仪器常规高标准。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "['panel_mount', 'pcb_mount_with_flange']",
+          "reason": "作为外部用户交互接口（万用表输入/电源输出），通常需要固定在机箱面板上以便插拔。若采用纯 PCB 焊接式，必须具备坚固的机械固定结构（如法兰、卡扣）以防止线缆拉扯导致 PCB 断裂。",
+          "source_parameter": "mounting_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": "cover",
+          "value": [
+            0.0,
+            0.001
+          ],
+          "unit": "Ω",
+          "reason": "低接触电阻对于 5 A 大电流应用至关重要，以减少功率损耗（$P=I^2R$）和自热。同时，对于万用表电压测量功能，低接触电阻有助于提高测量精度，减少引线误差。",
+          "source_parameter": "contact_resistance"
+        }
+      ],
+      "keywords": [
+        "香蕉插座",
+        "4mm banana jack",
+        "banana connector",
+        "测试接口",
+        "万用表接口"
+      ],
+      "note": "可选参数（未进条件）：quantity"
+    },
+    {
+      "id": "M-INTF-ESD-001",
+      "module_name": "ESD保护阵列",
+      "module_type": "保护器件",
+      "category": "保护器件",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "clamping_voltage_max",
+          "op": "<=",
+          "value": 6.0,
+          "unit": "V",
+          "reason": "To protect sensitive downstream interfaces (USB HS PHY, FPGA I/Os) from ESD damage while meeting Level 4 compliance, the clamping voltage at peak pulse current must be below the absolute maximum ratin",
+          "source_parameter": "clamping_voltage_max"
+        },
+        {
+          "field": "breakdown_voltage_min",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "V",
+          "reason": "The TVS array must not conduct during normal operation. With a 3.3V supply and potential transients on the bus, the breakdown voltage (V_BR) must be higher than the maximum operating voltage plus marg",
+          "source_parameter": "breakdown_voltage_min"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "number_of_channels",
+          "op": ">=",
+          "value": 4.0,
+          "unit": "count",
+          "reason": "The module needs to protect multiple distinct interface lines. USB-C requires protection for D+, D- (and optionally CC lines if integrated). BNC connectors (2 units) require individual protection. A m",
+          "source_parameter": "number_of_channels"
+        },
+        {
+          "field": "package",
+          "op": "is",
+          "value": "['UFBGA', 'SOT-143']",
+          "reason": "Low capacitance TVS arrays for high-speed interfaces are commonly available in small surface-mount packages like UFBGA, WLCSP, or SOT-143. Given the need for low parasitics and space efficiency, a sma",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "While the operational environment is 0-45°C, industrial-grade components are required for reliability and storage temperature range (-20°C to 70°C). Selecting an industrial-rated part ensures robustne",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "keywords": [
+        "TVS Array",
+        "ESD Protection",
+        "Transient Voltage Suppressor",
+        "低电容TVS",
+        "静电放电保护",
+        "接口保护"
+      ]
+    },
+    {
+      "id": "M-PROT-TEMP-001",
+      "module_name": "数字温度传感器",
+      "module_type": "传感器",
+      "category": "传感器",
+      "leaf_code": "l_temperature_sensor",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            2.7,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "器件必须能在系统提供的3.3V逻辑电平下可靠工作，且供电范围需覆盖该电压以确保正常通信和测量。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "传感器需在整个预期环境范围内保持校准和电气性能，特别是在高温老化测试(50℃)及极端环境下不能失效。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "resolution",
+          "op": ">=",
+          "value": 12.0,
+          "unit": "bit",
+          "reason": "较低的分辨率（如9位，0.5℃/LSB）会限制对微小温度变化的捕捉能力，可能影响热管理的精细度。12位分辨率（0.0625℃/LSB）是此类应用的行业标准。",
+          "source_parameter": "resolution"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -23.0,
+            -23.0
+          ],
+          "reason": "受限于PCB布局空间（约385个元器件规模），需要小型化封装以节省面积并靠近热源放置以提高响应速度。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "数字温度传感器",
+        "Temperature Sensor",
+        "I2C Temp Sensor",
+        "TMP102",
+        "高精度温度传感",
+        "SOT-23-4"
+      ],
+      "specified_device": {
+        "model": "TMP102",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-PROT-FUSE-001",
+      "module_name": "过流保护保险丝",
+      "module_type": "保护器件",
+      "category": "保护器件",
+      "leaf_code": "l_ptc_thermistor",
+      "quantity": 2,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "voltage_rating",
+          "op": "cover",
+          "value": [
+            6.0,
+            36.0
+          ],
+          "unit": "V",
+          "reason": "系统输入电压范围为9V-36V。保险丝串联在电源路径中，当断开时必须承受母线电压。因此，Voltage Rating至少需要覆盖36V。考虑到工业级应用的耐压余量，通常选择4V、6V、8V、12V、24V、30V、60V等规格。30V可能略低于36V峰值，故推荐60V或至少30V以上（若严格匹配36V，需选60V以确保安全裕度）。",
+          "source_parameter": "voltage_rating"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度为0-45°C。PTC的特性受温度影响极大（环境温度越高，动作电流越低）。为确保在最恶劣工况下仍能提供预期的保护特性，器件本身的工业级温度范围（-40°C ~ +85°C或更高）是必须的。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "自恢复保险丝",
+        "PTC",
+        "Polyfuse",
+        "PPTC",
+        "过流保护",
+        "Resettable Fuse"
+      ],
+      "note": "可选参数（未进条件）：package"
+    }
+  ]
+}

@@ -1,0 +1,768 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-case13-v1",
+  "project": {
+    "name": "case13（由历史选型产物转换）",
+    "summary": "来源 /share/home/zhengzhiqi/workspace/web/output/case13/console/stages/03_device_selection__b0052c97.json"
+  },
+  "global_constraints": {
+    "budget_total_cny": 250.0,
+    "currency": "CNY",
+    "note": "预算取自历史产物，仅供参考"
+  },
+  "selection_items": [
+    {
+      "id": "M-PWR-DCDC-001",
+      "module_name": "DC-DC Buck转换器",
+      "module_type": "电源芯片",
+      "category": "电源管理 IC",
+      "leaf_code": "l_step_down_dc_dc_converter",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "topology",
+          "op": "is",
+          "value": "Synchronous Buck",
+          "reason": "需求文档第1章明确“无需升压功能”，且输入5V降至3.3V，属于典型降压场景。模块分类也确认为同步降压。",
+          "source_parameter": "topology"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.75,
+            5.25
+          ],
+          "unit": "V",
+          "reason": "USB-C BC1.2标准定义5V容差为±5%，即4.75V-5.25V。器件需在此范围内稳定工作。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "模块描述明确指出“将5V输入降压至3.3V”，为MCU及逻辑电路供电。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "output_current",
+          "op": ">=",
+          "value": 0.8,
+          "unit": "A",
+          "reason": "需求文档Ch3.1.1规定工作电流≤800mA。考虑到LDO前级效率及后续LDO的静态电流，Buck芯片需提供足够的持续电流能力，且需满足峰值瞬态需求。",
+          "source_parameter": "continuous_output_current"
+        },
+        {
+          "field": "efficiency",
+          "op": ">=",
+          "value": 85.0,
+          "unit": "%",
+          "reason": "需求文档Ch2.1.1 (F-05) 及 Ch3.1.1 明确要求DC-DC部分效率≥85%，以满足整机功耗<2W及待机功耗限制。",
+          "source_parameter": "efficiency"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档Ch3.2.1规定工作温度0~50°C。器件本身需在此范围内正常工作。考虑到老化测试温度55°C及散热裕量，建议选用更高温度等级的器件。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "Buck Converter",
+        "同步降压",
+        "Step-down",
+        "DC-DC 转换器",
+        "电源管理芯片",
+        "PMIC"
+      ],
+      "specified_device": {
+        "model": "LP3220",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-PWR-LDO-001",
+      "module_name": "3.3V LDO稳压器",
+      "module_type": "电源芯片",
+      "category": "电源管理 IC",
+      "leaf_code": "l_linear_regulator_ldo",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "模块名称及描述明确指出为“3.3V LDO稳压器”，且下游负载（HDMI Switch、USB Mux）均为 3.3V 逻辑器件。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.75,
+            5.25
+          ],
+          "unit": "V",
+          "reason": "LDO 的输入来自 M-PWR-DCDC-001 (LP3220)，其目标是将 5V 输入稳压至 3.3V。根据需求文档第 3.1.1 节，系统输入为 USB-C 5V (4.75V~5.25V)。考虑到 DC-DC 转换效率及负载调整率，LDO 输入端实际电压可能在 3.6V~5.0V 之间波动。LDO 必须支持此范围内的最低输入电压而不进入dropout状态，同时能承受最高输入电压。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档第 3.2.1 节规定工作温度为 0°C ~ 50°C。根据生产规范 4.1.2 节，元器件应选用商业级 (Commercial, 0°C ~ +70°C) 以满足要求并留有裕量。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "dropout_voltage",
+          "op": "<=",
+          "value": 0.3,
+          "unit": "V",
+          "reason": "LDO 输入来自 Buck 转换器（输出约 3.3V-3.6V），输出为 3.3V。为了保持较高的整体电源效率并避免在输入电压偏低时进入线性区导致稳压失效，应选择低压差（Low Dropout）特性的 LDO。典型 LDO 在几百毫安负载下的压差通常在 200-300mV 左右。",
+          "source_parameter": "dropout_voltage"
+        },
+        {
+          "field": "quiescent_current",
+          "op": "<=",
+          "value": 0.0001,
+          "unit": "A",
+          "reason": "系统待机功耗要求 < 500 mW。虽然 LDO 主要给有源负载供电，但在轻载或待机模式下，LDO 自身的静态电流会影响整体能效。通常低噪声 LDO 的 IQ 在几十到一百微安级别。",
+          "source_parameter": "quiescent_current"
+        }
+      ],
+      "keywords": [
+        "LDO",
+        "Low Dropout Regulator",
+        "低压差线性稳压器",
+        "3.3V LDO",
+        "低噪声电源",
+        "PSRR"
+      ]
+    },
+    {
+      "id": "M-MCU-001",
+      "module_name": "主控制器",
+      "module_type": "MCU",
+      "category": "微控制器",
+      "leaf_code": "l_microcontroller_mcu_mpu_soc",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            1.8,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "系统电源网络由 LDO 提供稳定的 3.3V 给 MCU。器件额定电压必须覆盖此工作电压。",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "设备工作环境温度定义为 0°C ～ 50°C。为保证可靠性及余量，器件应至少支持商业级温度范围 (0~70°C)。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "flash_memory",
+          "op": ">=",
+          "value": 128.0,
+          "unit": "KB",
+          "reason": "需存储固件代码、EDID 缓存数据、简单的状态机逻辑及看门狗配置。STM32 主流型号起步通常为 128KB 以上，以满足代码大小及 EDID 数据存储需求。",
+          "source_parameter": "flash_memory"
+        }
+      ],
+      "keywords": [
+        "MCU",
+        "ARM Cortex-M",
+        "STM32",
+        "USB OTG",
+        "USB FS",
+        "32-bit MCU"
+      ]
+    },
+    {
+      "id": "M-MEM-001",
+      "module_name": "配置存储EEPROM",
+      "module_type": "存储器",
+      "category": "存储器",
+      "leaf_code": "l_eeprom",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "memory_capacity",
+          "op": ">=",
+          "value": 16.0,
+          "unit": "Kb",
+          "reason": "需求文档明确指定存储当前选中的KVM通道号（6路）、EDID偏好设置等参数，且模块描述中注明容量为16Kb。AT24C16D即为16Kb型号。若容量不足将无法存储所有必要配置数据。",
+          "source_parameter": "memory_capacity"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "EEPROM",
+        "I2C Memory",
+        "Serial EEPROM",
+        "AT24C16",
+        "非易失性存储器",
+        "配置存储"
+      ],
+      "specified_device": {
+        "model": "AT24C16D",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-CLK-001",
+      "module_name": "实时时钟晶振",
+      "module_type": "时钟源",
+      "category": "时钟器件",
+      "leaf_code": "l_real_time_clock_rtc",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "frequency",
+          "op": ">=",
+          "value": 32768.0,
+          "unit": "Hz",
+          "reason": "模块明确指定为实时时钟(RTC)基准频率。STM32 MCU的RTC模块依赖此频率进行时间计数，频率错误将导致时钟走时不准。",
+          "source_parameter": "frequency"
+        },
+        {
+          "field": "load_capacitance",
+          "op": "cover",
+          "value": [
+            6e-12,
+            1.3e-11
+          ],
+          "unit": "F",
+          "reason": "critical_passives 明确列出 '负载电容'。晶振的频率精度和起振稳定性高度依赖于负载电容(CL)的匹配。若CL不匹配，会导致频率偏移或无法起振。",
+          "source_parameter": "load_capacitance"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "requirement_docs Ch3.2.1 规定工作温度 0~50°C。虽然工业级(-40~85°C)更好，但成本约束下商业级足以覆盖并略有余量。若选型低于此范围（如仅-20~70C存储），则可能不满足长期可靠性或特定低温启动要求。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "esr",
+          "op": "<=",
+          "value": 50.0,
+          "unit": "Ω",
+          "reason": "虽然未直接给出数值，但作为MCU的RTC源，若ESR过高可能导致起振困难或需要更大的增益，增加功耗或不稳定。一般32.768kHz SMD晶振ESR在几十欧姆以下。",
+          "source_parameter": "esr_max"
+        }
+      ],
+      "keywords": [
+        "晶振",
+        "时钟源",
+        "32.768kHz",
+        "实时时钟",
+        "RTC Crystal",
+        "SMD Oscillator"
+      ],
+      "specified_device": {
+        "model": "FL26T2",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-HDMI-SW-001",
+      "module_name": "HDMI高速矩阵切换IC",
+      "module_type": "接口芯片",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_smart_card_interface",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            3.135,
+            3.465
+          ],
+          "unit": "V",
+          "reason": "系统电源网络由 LDO 提供 3.3V 给 HDMI Switch（见系统框图）。LDO 输入为 5V，输出通常有 ±3%~5% 容差。器件供电范围必须包含 3.3V 及其允许波动范围。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "工作环境温度 0°C ~ 50°C。选择商业级器件 (0~70°C) 可满足需求并留有裕量，同时符合成本约束（工业级更贵）。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "insertion_loss",
+          "op": "<=",
+          "value": 1.5,
+          "unit": "dB",
+          "reason": "为确保 4K@30Hz 信号完整性，开关内部的模拟通路插入损耗必须较低。参考同级别芯片（如 Panasonic AN5258）典型值，过高的插损会导致眼图闭合，引起黑屏或闪烁。",
+          "source_parameter": "insertion_loss"
+        },
+        {
+          "field": "package",
+          "op": "is",
+          "value": "QFN or BGA",
+          "reason": "PCB 设计为 4 层板，尺寸受限 (150x100mm)，且需容纳 6 路 HDMI 差分对及端接电路。QFN/BGA 封装有助于减小占用面积并改善高频信号性能。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "HDMI Switch",
+        "TMDS Switch",
+        "HDMI Matrix",
+        "EDID Pass-through",
+        "10.2Gbps HDMI",
+        "6x1 HDMI Switch"
+      ]
+    },
+    {
+      "id": "M-USB-MUX-001",
+      "module_name": "USB 2.0高速多路复用器",
+      "module_type": "接口芯片",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_smart_card_interface",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 6.0,
+          "unit": "channels",
+          "reason": "系统架构为 6 Host 到 1 Device 的 KVM 切换，器件必须提供至少 6 路独立的 Host 输入通道。",
+          "source_parameter": "channel_count"
+        },
+        {
+          "field": "data_rate",
+          "op": ">=",
+          "value": 480.0,
+          "unit": "Mbps",
+          "reason": "需求文档明确指定 USB 2.0 High Speed 切换，器件数据速率能力必须覆盖 480 Mbps。",
+          "source_parameter": "data_rate"
+        },
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            3.0,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "根据系统电源架构，USB MUX 由 LDO 网络提供的 3.3V 供电（见模块接口定义及系统框图）。器件 VCC 引脚额定电压需覆盖此范围。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "esd_protection",
+          "op": "cover",
+          "value": [
+            61000.0,
+            61000.0
+          ],
+          "reason": "需求文档 Ch 3.2.4 要求 EMC 抗扰度满足 IEC 61000-4-2 Level 4。USB 端口直接暴露，器件最好集成 ESD 保护，或者其外围保护电路设计需基于此等级进行选型配合。鉴于 critical_passives 中已列出 ESD 二极管，器件本身应具备一定鲁棒性或低电容特性以配合外部 TVS。",
+          "source_parameter": "esd_protection"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "control_interface",
+          "op": "is",
+          "value": "['GPIO', 'I2C']",
+          "reason": "MCU 通过 GPIO 或 I2C 控制切换状态。由于 MCU 是 STM32，具备丰富的 GPIO 资源，简单的 GPIO 控制即可实现多路复用器选通。I2C 并非强制，但若存在可简化布线则为优选项。此处列为重要参数，因为必须有一种明确的数字控制方式。",
+          "source_parameter": "control_interface"
+        }
+      ],
+      "keywords": [
+        "USB Multiplexer",
+        "USB Switch",
+        "USB MUX",
+        "USB Hub Controller",
+        "USB 2.0 Switch",
+        "Host-Device Switch"
+      ],
+      "note": "可选参数（未进条件）：package"
+    },
+    {
+      "id": "M-RELAY-AUD-001",
+      "module_name": "音频切换继电器阵列",
+      "module_type": "继电器",
+      "category": "继电器",
+      "leaf_code": "l_signal_relay",
+      "quantity": 6,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "contact_configuration",
+          "op": "is",
+          "value": "DPDT",
+          "reason": "模块描述明确指定为 G6S-2，且用于切换立体声左/右声道（L/R），需要两组独立的单刀双掷触点。若触点配置不符，无法实现音频通道切换功能。",
+          "source_parameter": "contact_configuration"
+        },
+        {
+          "field": "coil_voltage",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "V",
+          "reason": "系统电源网络提供 VCC_5V_SYS (直连 USB-C 5V)，且 G6S-2 标准型号通常为 5V 线圈驱动。若电压不匹配，继电器将无法吸合或线圈过热损坏。",
+          "source_parameter": "coil_voltage"
+        },
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 2.0,
+          "unit": "A",
+          "reason": "需求文档 2.2.3 节明确指出触点容量需满足 '2A/30VDC'。虽然音频信号电流很小，但此额定值是器件选型的基础电气约束，确保在短路或异常情况下不发生触点熔焊。",
+          "source_parameter": "contact_current_rating"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": ">=",
+          "value": 0.05,
+          "unit": "Ω",
+          "reason": "需求文档 2.2.3 节要求触点电阻 ≤ 50mΩ，以确保模拟音频信号的无损传输和低插入损耗。较高的接触电阻会导致信号衰减和热噪声增加。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度为 0°C ~ 50°C。为确保可靠性及应对老化测试（55°C）环境，器件等级应至少为商业级 (Commercial, 通常 0~70°C)。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "Signal Relay",
+        "DPDT Relay",
+        "双刀双掷继电器",
+        "低功率继电器",
+        "G6S-2",
+        "音频切换继电器"
+      ],
+      "specified_device": {
+        "model": "G6S-2",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-TRANS-NPN-001",
+      "module_name": "NPN驱动晶体管",
+      "module_type": "分立半导体",
+      "category": "分立半导体",
+      "leaf_code": "l_bipolar_junction_transistor_bjt",
+      "quantity": 6,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -55.0,
+            150.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作环境温度为 0°C ～ 50°C。半导体器件通常需要更宽的工作温度范围以应对存储、运输及局部温升。工业级或商业级通用晶体管通常覆盖 -55°C 至 150°C 结温，这确保了在极端边缘情况下的可靠性。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "power_dissipation",
+          "op": ">=",
+          "value": 0.225,
+          "unit": "W",
+          "reason": "继电器驱动电流约 30mA，饱和压降 $V_{CE(sat)}$ 约 0.2-0.3V，单管功耗约 6-9mW。225mW 的标准封装散热能力提供了极大的热安全裕度，确保在多路同时动作或高温环境下不会过热损坏。",
+          "source_parameter": "power_dissipation"
+        }
+      ],
+      "keywords": [
+        "NPN Transistor",
+        "NPN Bipolar Junction Transistor",
+        "通用NPN管",
+        "小信号开关晶体管",
+        "BJT NPN"
+      ],
+      "specified_device": {
+        "model": "MMBT3904",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-TRANS-PNP-001",
+      "module_name": "PNP驱动晶体管",
+      "module_type": "分立半导体",
+      "category": "分立半导体",
+      "leaf_code": "l_bipolar_junction_transistor_bjt",
+      "quantity": 6,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "transistor_type",
+          "op": "is",
+          "value": "PNP",
+          "reason": "模块明确指定为 S8550，用于高端开关或辅助驱动继电器线圈（与 NPN MMBT3904 配合构成推挽或特定逻辑驱动）。NPN 无法直接替代 PNP 在高端开关中的角色。",
+          "source_parameter": "transistor_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "is",
+          "value": "['SOT-23', 'SC-59']",
+          "reason": "S8550 最常见的贴片封装为 SOT-23 (或 SC-59)。系统其他元件如电阻电容采用 0402，PCB 密度较高，SOT-23 是标准的分立半导体小型封装，易于 SMT 贴装且节省空间。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "power_dissipation",
+          "op": ">=",
+          "value": 0.2,
+          "unit": "W",
+          "reason": "晶体管工作在开关模式，静态功耗极低。主要功耗来自开关瞬间及饱和导通时的 Vce(sat) * Ic。S8550 典型功率耗散为 0.5W (SOT-23)，足以应付 30-50mA 的继电器驱动电流，无需额外散热片。",
+          "source_parameter": "power_dissipation"
+        }
+      ],
+      "keywords": [
+        "PNP Transistor",
+        "双极性晶体管",
+        "BJT",
+        "S8550",
+        "通用开关管"
+      ],
+      "specified_device": {
+        "model": "S8550",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-OPTO-TX-001",
+      "module_name": "光纤发送模块",
+      "module_type": "光电器件",
+      "category": "光电器件",
+      "leaf_code": "l_fiber_optic_transceiver",
+      "quantity": 6,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            3.0,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "光模块由系统 3.3V LDO 供电。器件必须能在 3.3V 标称电压及纹波范围内正常工作，且耐压需覆盖输入波动（5V经DC-DC/LDO后的最大可能值，通常LDO输入为5V，输出3.3V，但考虑到瞬态或设计裕量，输入引脚耐压建议覆盖至5V或至少3.6V以上以防击穿）。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "data_rate",
+          "op": ">=",
+          "value": 3.0,
+          "unit": "Mbps",
+          "reason": "TOSLINK SPDIF 数字音频的标准传输速率为 3 Mbps (实际位率约为 2.8224 Mbps - 3.072 Mbps)。器件必须支持此速率以确保信号无误码传输。",
+          "source_parameter": "data_rate"
+        },
+        {
+          "field": "wavelength",
+          "op": ">=",
+          "value": 650.0,
+          "unit": "nm",
+          "reason": "TOSLINK 标准使用 650 nm 红光塑料光纤(POF)或玻璃光纤。发射器波长必须匹配接收端的光电二极管灵敏度峰值，通常为 620-680 nm。",
+          "source_parameter": "wavelength"
+        },
+        {
+          "field": "interface_type",
+          "op": "is",
+          "value": "['TOSLINK TX', 'SPDIF Optical Transmitter']",
+          "reason": "模块必须是 TOSLINK 标准的发送端，具备将电信号转换为红外/红光光信号的能力，并集成标准 TOSLINK 光纤接口或适配其封装。",
+          "source_parameter": "interface_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "设备需在办公环境 0-50°C 下工作。器件的工作温度范围必须完全覆盖此区间，通常选择 Commercial Grade (0-70°C) 即可满足。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "forward_current_if",
+          "op": ">=",
+          "value": 0.025,
+          "unit": "A",
+          "reason": "为了驱动内部发光二极管（LED）产生足够的光功率以通过 TOSLINK 接口传输，需要合适的正向电流。虽然具体数值取决于内部电路集成度，但外部限流电阻的设计依赖于该电流参数。一般 TOSLINK 发射管电流在 20-30 mA 左右。",
+          "source_parameter": "forward_current_if"
+        }
+      ],
+      "keywords": [
+        "TOSLINK Transmitter",
+        "Optical TX Module",
+        "光纤发送模块",
+        "TOSLINK TX",
+        "PLT133",
+        "光纤收发器"
+      ],
+      "specified_device": {
+        "model": "PLT133",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-OPTO-RX-001",
+      "module_name": "光纤接收模块",
+      "module_type": "光电器件",
+      "category": "光电器件",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            3.0,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "The PLT133/T10W module requires a stable digital supply voltage. Based on the system power architecture, it is connected to the 3.3V LDO output. The device must operate within the standard logic volta",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "data_rate",
+          "op": ">=",
+          "value": 3.0,
+          "unit": "Mbps",
+          "reason": "The SPDIF standard over TOSLINK operates at up to 3 Mbps. The receiver's bandwidth and internal clock recovery circuitry must support this bit rate to prevent data loss or jitter issues.",
+          "source_parameter": "data_rate"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "power_consumption",
+          "op": "cover",
+          "value": [
+            0.0,
+            0.02
+          ],
+          "unit": "A",
+          "reason": "While not explicitly specified per module, the total system power is constrained. A typical integrated optical receiver like PLT133 draws minimal current (typically < 10-20mA). Excessive draw would je",
+          "source_parameter": "power_consumption"
+        },
+        {
+          "field": "package",
+          "op": "is",
+          "value": "SMD_Module_or_IC",
+          "reason": "The model T10W usually refers to a specific form factor, often a small SMD package or a module with an integrated connector footprint. It must fit the PCB layout constraints (0402 passive density, com",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "光纤接收器",
+        "Optical Receiver",
+        "TOSLINK Receiver",
+        "SPDIF Optical RX",
+        "光电转换模块",
+        "PLT133"
+      ],
+      "specified_device": {
+        "model": "T10W",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-LED-001",
+      "module_name": "通道状态指示灯",
+      "module_type": "光电器件",
+      "category": "分立半导体",
+      "leaf_code": "l_rgb_led_with_built_in_ic",
+      "quantity": 6,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "degC",
+          "reason": "设备需在0°C～50°C环境下工作。LED在此温度范围内性能应稳定，无光衰异常或失效。商业级器件通常覆盖0~70°C，完全满足此要求。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            603.0,
+            805.0
+          ],
+          "unit": "code",
+          "reason": "PCB布局密度高，要求电阻电容使用0402封装。为了保持外观一致性和节省空间，LED也应选用小尺寸贴片封装，如0603或0805。0603 LED在亮度和尺寸间取得良好平衡，且易于SMT贴装。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "LED",
+        "发光二极管",
+        "Indicator LED",
+        "Standard Indicator LED",
+        "光电器件",
+        "指示灯"
+      ]
+    }
+  ]
+}

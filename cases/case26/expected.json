@@ -1,0 +1,181 @@
+{
+  "case": "case26",
+  "requirement_version": "req-case26-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-AUX-DCDC-001": {
+      "module_name": "同步降压转换器",
+      "historical_selection": [
+        {
+          "model": "LM5164",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "LM5164",
+      "evaluation_source": ""
+    },
+    "M-CHG-001": {
+      "module_name": "锂电充电控制器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CTRL-EGS002-001": {
+      "module_name": "正弦波驱动模块",
+      "historical_selection": [
+        {
+          "model": "EGS002",
+          "supplier_part": "",
+          "verification_status": "unknown"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "EGS002",
+      "evaluation_source": ""
+    },
+    "M-MCU-001": {
+      "module_name": "主控MCU",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PWM-001": {
+      "module_name": "PWM控制器",
+      "historical_selection": [
+        {
+          "model": "EG1163S",
+          "supplier_part": "",
+          "verification_status": "unknown"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "EG1163S",
+      "evaluation_source": ""
+    },
+    "M-DRV-001": {
+      "module_name": "高压半桥栅极驱动器",
+      "historical_selection": [
+        {
+          "model": "EG2132",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "EG2132",
+      "evaluation_source": ""
+    },
+    "M-MOS-INV-001": {
+      "module_name": "逆变主功率MOSFET",
+      "historical_selection": [
+        {
+          "model": "IRFP4568",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "IRFP4568",
+      "evaluation_source": ""
+    },
+    "M-RECT-SYNC-001": {
+      "module_name": "同步整流MOSFET",
+      "historical_selection": [
+        {
+          "model": "CRSS042N10N",
+          "supplier_part": "",
+          "verification_status": "unknown"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "CRSS042N10N",
+      "evaluation_source": ""
+    },
+    "M-DIODE-BRIDGE-001": {
+      "module_name": "工频整流二极管",
+      "historical_selection": [
+        {
+          "model": "MBR120150WT",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "MBR120150WT",
+      "evaluation_source": ""
+    },
+    "M-XFMR-001": {
+      "module_name": "工频隔离变压器",
+      "historical_selection": [
+        {
+          "model": "SLT130125T103MTB",
+          "supplier_part": "",
+          "verification_status": "unknown"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "SLT130125T103MTB",
+      "evaluation_source": ""
+    },
+    "M-FUSE-001": {
+      "module_name": "输入熔断器/断路器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-TERM-IN-001": {
+      "module_name": "大电流接线端子",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-ESD-001": {
+      "module_name": "ESD保护阵列",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-LED-001": {
+      "module_name": "LED状态指示灯",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-USB-001": {
+      "module_name": "USB-C通信接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-TERM-OUT-001": {
+      "module_name": "交流输出插座",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-TEMP-001": {
+      "module_name": "温度传感器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-SENSE-001": {
+      "module_name": "电流检测电阻",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

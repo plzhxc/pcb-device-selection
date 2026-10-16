@@ -1,0 +1,241 @@
+{
+  "case": "case4",
+  "requirement_version": "req-case4-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-VRM-001": {
+      "module_name": "CPU VRM PWM控制器",
+      "historical_selection": [
+        {
+          "model": "RT3628AEGQW",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "RT3628AEGQW",
+      "evaluation_source": ""
+    },
+    "M-PWR-DRIVER-001": {
+      "module_name": "CPU VRM DrMOS/栅极驱动",
+      "historical_selection": [
+        {
+          "model": "RT9624FGQW",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "RT9624FGQW",
+      "evaluation_source": ""
+    },
+    "M-PWR-STBY-001": {
+      "module_name": "待机LDO稳压器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CPU-SOCKET-001": {
+      "module_name": "CPU LGA1700插座",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-Z690-CHIP-001": {
+      "module_name": "Z690 芯片组",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-MEM-DIMM-001": {
+      "module_name": "DDR4 DIMM 插槽",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-STORE-M2-001": {
+      "module_name": "M.2 NVMe 插槽",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-STORE-SATA-001": {
+      "module_name": "SATA III 接口连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-NET-ETH-001": {
+      "module_name": "千兆以太网 PHY",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-USB-HUB-001": {
+      "module_name": "USB 3.0 集线器控制器",
+      "historical_selection": [
+        {
+          "model": "ASM1042",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        },
+        {
+          "model": "RL8211E",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PCIE-SW-001": {
+      "module_name": "PCIe 信号切换芯片",
+      "historical_selection": [
+        {
+          "model": "CBTL02043A",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "CBTL02043A",
+      "evaluation_source": ""
+    },
+    "M-AUDIO-CODEC-001": {
+      "module_name": "音频编解码器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-DEBUG-BIOS-001": {
+      "module_name": "BIOS SPI Flash",
+      "historical_selection": [
+        {
+          "model": "W25Q64JVSIQ",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-DEBUG-RTC-001": {
+      "module_name": "实时时钟 (RTC)",
+      "historical_selection": [
+        {
+          "model": "RX-8025SA",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        },
+        {
+          "model": "Si5340",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-DEBUG-LED-001": {
+      "module_name": "Debug LED/POST Code 驱动器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-ATX-001": {
+      "module_name": "ATX 24Pin 电源接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-CPU-001": {
+      "module_name": "ATX 12V 2x4Pin CPU供电接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-PCIE16-001": {
+      "module_name": "PCIe x16 显卡插槽",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-PCIE1-001": {
+      "module_name": "PCIe x1 扩展插槽",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-RJ45-001": {
+      "module_name": "RJ45 以太网接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-HDMI-001": {
+      "module_name": "HDMI 视频接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-DP-001": {
+      "module_name": "DisplayPort 视频接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-USB-001": {
+      "module_name": "USB Type-A 接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-ESD-001": {
+      "module_name": "高速数据线 ESD 保护阵列",
+      "historical_selection": [
+        {
+          "model": "ESD9B5.0ST5G",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-FAN-HEADER-001": {
+      "module_name": "风扇控制接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-F_PANEL-001": {
+      "module_name": "前置面板跳线排针",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

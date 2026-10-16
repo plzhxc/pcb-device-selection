@@ -1,0 +1,743 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-case10-re-v1",
+  "project": {
+    "name": "case10_re（由历史选型产物转换）",
+    "summary": "来源 /share/home/zhengzhiqi/workspace/web/output/case10_re/console/stages/03_device_selection__63906200.json"
+  },
+  "global_constraints": {
+    "budget_total_cny": null,
+    "currency": "CNY",
+    "note": "预算取自历史产物，仅供参考"
+  },
+  "selection_items": [
+    {
+      "id": "M-PWR-HV-001",
+      "module_name": "高压侧LDO (ME6211C25)",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_linear_regulator_ldo",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 2.5,
+          "unit": "V",
+          "reason": "模块名称及描述明确指定为提供 2.5 V 稳定电源，用于高压侧信号调理链路（VPS8702, BL1551B）及 TL432 基准源。这是硬性功能需求。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.4,
+            5.25
+          ],
+          "unit": "V",
+          "reason": "系统由 USB-C 供电，文档定义输入电压范围为 4.4 V ～ 5.25 V。LDO 必须能在此全范围内正常工作且不损坏。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "dropout_voltage",
+          "op": "<=",
+          "value": 0.5,
+          "unit": "V",
+          "reason": "当 USB 输入最低至 4.4 V 时，输出需维持 2.5 V，此时压差为 1.9 V。若器件压差 > 1.9 V，输出电压将跌落，导致高压侧运放工作异常。虽然 ME6211 典型压差较低，但目标器件必须满足此极端条件下的稳定性。",
+          "source_parameter": "dropout_voltage"
+        },
+        {
+          "field": "output_current",
+          "op": ">=",
+          "value": 0.15,
+          "unit": "A",
+          "reason": "系统总工作电流 120 mA，峰值 300 mA。虽然 SGM2209 承担低压侧负载，但 ME6211 为高压侧核心供电。考虑到高压侧运放 VPS8702 的高频驱动能力及可能的瞬态峰值，以及预留的安全裕量，建议 LDO 具备至少 150-300 mA 的输出能力以应对瞬态负载调整率要求 (<100 μs 恢复)。",
+          "source_parameter": "max_output_current"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            40.0
+          ],
+          "unit": "°C",
+          "reason": "用户硬约束的工作温度环境。器件需在 0-40°C 下稳定工作。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "LDO",
+        "Low Dropout Regulator",
+        "低压差线性稳压器",
+        "固定输出",
+        "2.5V LDO",
+        "ME6211"
+      ],
+      "specified_device": {
+        "model": "ME6211C25",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-PWR-LV-001",
+      "module_name": "低压侧LDO (SGM2209-ADJ)",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_linear_regulator_ldo",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.4,
+            5.25
+          ],
+          "unit": "V",
+          "reason": "系统通过 USB-C 供电，需求文档规定输入电压为 4.75 V ～ 5.25 V (USB标准)，工程假设放宽至 4.4 V 以涵盖低端波动。LDO 必须在此范围内正常工作。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "模块描述指出该 LDO 为低压侧逻辑电路（JC3H7C接收端、LED指示、BNC输出驱动）供电。通常数字逻辑和光耦接收端采用 3.3 V 或 5 V 电平。鉴于 SGM2209-ADJ 为可调型，且低压侧负载较轻，3.3 V 是标准的逻辑电平选择，需通过反馈电阻设定。若系统确认为 5 V 逻辑，则需调整为 5 V，但 3.3 V 更符合现代低功耗设计。此处按典型 3.3 V 估算。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "dropout_voltage",
+          "op": "<=",
+          "value": 0.6,
+          "unit": "V",
+          "reason": "输入电压最低 4.4 V，若输出 3.3 V，理论压差为 1.1 V。但 LDO 数据手册通常给出特定电流下的 Dropout Voltage。为了确保在 4.4 V 输入时稳定输出 3.3 V，LDO 在对应负载电流下的压差应尽可能小。SGM2209 典型压差较低，但作为约束，必须保证 Vin - Vout >= Vdrop。此处要求器件具备低dropout特性以适应 USB 供电波动。",
+          "source_parameter": "dropout_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "output_current",
+          "op": ">=",
+          "value": 0.05,
+          "unit": "A",
+          "reason": "低压侧主要负载为 JC3H7C 光耦接收端（通常 10-20 mA）、LED 指示灯（约 10 mA）及可能的 BNC 驱动前端。虽然 SGM2209 支持 300 mA，但器件选型只需满足实际负载需求即可。考虑到启动瞬态和余量，50 mA 的额定能力足以覆盖所有低压侧负载，且符合 notes 中“远小于 300 mA”的描述。",
+          "source_parameter": "max_output_current"
+        }
+      ],
+      "keywords": [
+        "LDO",
+        "低压差线性稳压器",
+        "Linear Regulator",
+        "Voltage Regulator",
+        "SGM2209",
+        "Fixed Output LDO"
+      ],
+      "specified_device": {
+        "model": "SGM2209-ADJ",
+        "intent": "reference"
+      },
+      "note": "可选参数（未进条件）：quiescent_current"
+    },
+    {
+      "id": "M-PWR-REF-001",
+      "module_name": "精密电压基准 (TL432)",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_voltage_reference_chip",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "temperature_coefficient",
+          "op": ">=",
+          "value": 100.0,
+          "unit": "ppm/°C",
+          "reason": "用户硬性约束，低温漂是保证全温度范围内测量精度的关键。",
+          "source_parameter": "temperature_coefficient"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            2.5,
+            36.0
+          ],
+          "unit": "V",
+          "reason": "该基准源由高压侧LDO (ME6211C25) 供电，LDO输入来自USB-C (5V)。虽然典型供电为5V，但并联式基准需要一定的阴极-阳极电压(Vka)才能正常工作（通常>2.5V+Dropout）。考虑到LDO可能的输入波动及安规耐压余量，器件需支持至少36V耐压以兼容常见并联基准规格，且最小工作电压需低于LDO输出电压减去压降。",
+          "source_parameter": "input_voltage_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度0~40°C，但生产规范建议工业级器件以提高可靠性。TL432通常为工业级或汽车级，此处推荐工业级以匹配其他关键器件等级。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "并联式电压基准",
+        "Precision Voltage Reference",
+        "TL432",
+        "可调基准源",
+        "Shunt Regulator",
+        "低温漂"
+      ],
+      "specified_device": {
+        "model": "TL432",
+        "intent": "reference"
+      },
+      "note": "可选参数（未进条件）：package"
+    },
+    {
+      "id": "M-SIG-AMP-HV-001",
+      "module_name": "高速运算放大器 (VPS8702)",
+      "module_type": "模拟前端",
+      "category": "模拟IC",
+      "leaf_code": "l_transformer_driver",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "gain_bandwidth_product",
+          "op": ">=",
+          "value": 100000000.0,
+          "unit": "Hz",
+          "reason": "需求文档明确要求系统带宽为 100 MHz（第 3.1.2 节），且模块描述指出 VPS8702 用于处理 100 MHz 高频成分。根据 GBW 常数特性，运放的增益带宽积必须显著高于目标工作频率以保证足够的增益和相位裕度，否则会导致高频信号衰减或振荡。",
+          "source_parameter": "gain_bandwidth_product"
+        },
+        {
+          "field": "input_capacitance",
+          "op": "<=",
+          "value": 2e-12,
+          "unit": "F",
+          "reason": "模块描述明确指出输入电容需 <2 pF 以最小化负载效应。高速运放的高输入电容会与源阻抗（50Ω）及反馈网络形成极点，严重限制带宽并引起谐振。对于 100 MHz 应用，低输入电容是保持信号完整性的关键。",
+          "source_parameter": "input_capacitance"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            2.5,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "系统采用单电源供电架构。高压侧由 ME6211C25 提供 2.5V（第 2.2.3 节），低压侧 SGM2209 可配置为 3.3V 或 5V。运放必须在这些电压下正常工作，且输入/输出共模范围和摆幅需覆盖信号电平（特别是单电源下的中点偏置或 0-5V 范围）。严禁负电压供电。",
+          "source_parameter": "supply_voltage_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "高速运放",
+        "High Speed Op Amp",
+        "宽带放大器",
+        "高GBW",
+        "高摆率",
+        "100MHz Amplifier"
+      ],
+      "specified_device": {
+        "model": "VPS8702",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-SIG-AMP-LV-001",
+      "module_name": "精密运算放大器 (SGM8061XN5)",
+      "module_type": "模拟前端",
+      "category": "运算放大器",
+      "leaf_code": "l_operational_amplifier",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            2.5,
+            2.5
+          ],
+          "unit": "V",
+          "reason": "SGM8061XN5 位于高压侧浮动域，由 ME6211C25 供电。器件必须能在该电压下正常工作且不超过绝对最大额定值（通常 ±18V）。",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "input_offset_voltage",
+          "op": "<=",
+          "value": 7.5e-05,
+          "unit": "V",
+          "reason": "作为直流精度校正和基准缓冲级，高失调电压将直接导致测量误差超出允许范围（增益误差<1%）。",
+          "source_parameter": "input_offset_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "器件必须在系统工作温度范围内保证所有电气参数（特别是失调电压温漂）符合规格。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "gain_bandwidth_product",
+          "op": ">=",
+          "value": 1000000.0,
+          "unit": "Hz",
+          "reason": "无需像 VPS8702 那样具备 GHz 级带宽。GBW 需足以满足直流至中低频（如 kHz 级别）的精确放大和缓冲，同时避免不必要的功耗和高频振荡风险。",
+          "source_parameter": "gain_bandwidth_product"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -70.0,
+            -70.0
+          ],
+          "reason": "用户指定了具体型号后缀 XN5，隐含了对封装尺寸的要求。若替代器件需保持同等板级占用空间，则必须兼容此封装或更优。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "精密运放",
+        "Precision Op Amp",
+        "Low Offset Voltage",
+        "Low Noise Amplifier",
+        "Buffer",
+        "Instrumentation Op Amp"
+      ],
+      "specified_device": {
+        "model": "SGM8061XN5",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-SIG-SW-001",
+      "module_name": "模拟开关 (BL1551B)",
+      "module_type": "模拟前端",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_analog_switch_multiplexer",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            2.3,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "高压侧LDO (ME6211C25) 输出为 2.5 V ±1%（见需求文档 2.2.3 及模块 M-PWR-HV-001）。BL1551B 由该电源供电，因此其 VDD 必须在 2.5 V 附近。考虑到模拟开关通常支持宽电压范围（如 2.7V-5.5V 或单电源 2.5V-5.5V），器件必须能在 2.5 V 下正常工作且保持低 R_on。若器件最低工作电压高于 2.5 V（例如某些 CMOS ",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "on_resistance",
+          "op": "<=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "Requirement Doc 2.2.2 明确指定 Ron < 1 Ω。在精密测量中，开关电阻会分压并随温度变化，直接影响精度。",
+          "source_parameter": "on_resistance"
+        },
+        {
+          "field": "bandwidth_3db",
+          "op": ">=",
+          "value": 100000000.0,
+          "unit": "Hz",
+          "reason": "系统核心带宽要求为 100 MHz（Requirement Doc 1.1 & 3.1.2）。模拟开关作为信号链路的一部分，其带宽必须至少等于系统带宽，否则会限制整体响应速度并引起幅度平坦度恶化。",
+          "source_parameter": "bandwidth_3db"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "模拟开关",
+        "Analog Switch",
+        "Signal Switch",
+        "Multiplexer",
+        "低导通电阻",
+        "R_on < 1Ω"
+      ],
+      "specified_device": {
+        "model": "BL1551B",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-SIG-ATT-001",
+      "module_name": "前置衰减电阻网络",
+      "module_type": "模拟前端",
+      "category": "电阻",
+      "leaf_code": "l_analog_front_end_afe",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "power_rating",
+          "op": ">=",
+          "value": 0.5,
+          "unit": "W",
+          "reason": "模块 notes 明确标注“功率>0.5W”。考虑到高压探头可能承受瞬态浪涌（IEC 61000-4-5 Level 3），器件的连续耗散功率必须严格大于此值以防止过热烧毁或阻值漂移。",
+          "source_parameter": "power_rating"
+        },
+        {
+          "field": "frequency_response",
+          "op": ">=",
+          "value": 100000000.0,
+          "unit": "Hz",
+          "reason": "系统带宽要求为 100 MHz。电阻在高频下呈现感性或容性阻抗，若自谐振频率低于工作频段，将导致衰减曲线不平坦甚至振荡。因此，所选电阻（尤其是贴片式）必须在 100 MHz 处保持纯阻性特征。",
+          "source_parameter": "frequency_response"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "is",
+          "value": "['Axial Leaded', 'SMD 1206/2010/Large SMD']",
+          "reason": "由于功率 >0.5W 且涉及高压，普通 0603/0805 SMD 电阻可能无法承受功率或耐压不足。轴向引线电阻（如 MELF 或传统 Axial）或大尺寸 SMD 电阻更适合高压高功率应用，并提供更好的爬电距离。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "精密电阻网络",
+        "金属膜电阻",
+        "电阻排",
+        "Resistor Network",
+        "Metal Film Resistor",
+        "衰减网络"
+      ]
+    },
+    {
+      "id": "M-ISL-OPTO-001",
+      "module_name": "光耦隔离器 (JC3H7C)",
+      "module_type": "隔离器件",
+      "category": "光耦合器",
+      "leaf_code": "l_digital_isolator_with_power_supply",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "isolation_voltage",
+          "op": ">=",
+          "value": 3750.0,
+          "unit": "Vrms",
+          "reason": "需求文档第2.2.4节明确要求隔离电压>3750 Vrms，且需满足IEC 61010-1安规要求。这是高压探头安全隔离的核心指标，不满足将导致严重安全风险及认证失败。",
+          "source_parameter": "isolation_voltage"
+        },
+        {
+          "field": "propagation_delay",
+          "op": "<=",
+          "value": 1e-08,
+          "unit": "s",
+          "reason": "为满足100MHz带宽（上升时间约3.5ns）及低失真传输，隔离器件的传播延迟必须极短。常规光耦（us级）会导致严重相位失真和幅度衰减。若选用高速数字隔离器，通常要求延迟在10ns以内以匹配高速信号链路。",
+          "source_parameter": "propagation_delay"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            40.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档第3.2.1节明确规定工作温度为0°C ～ +40°C。器件必须在此范围内正常工作。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "光耦",
+        "光电耦合器",
+        "Optocoupler",
+        "High Speed Optocoupler",
+        "高CTR光耦",
+        "数字隔离器"
+      ],
+      "specified_device": {
+        "model": "JC3H7C",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-CTL-SW-001",
+      "module_name": "拨动开关 (ToggleSwitch)",
+      "module_type": "人机交互",
+      "category": "开关",
+      "leaf_code": "l_signal_switch_codec_multiplexer",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "switch_type",
+          "op": "is",
+          "value": "['SPDT', 'SP3T']",
+          "reason": "模块用于手动选择量程，需根据具体衰减倍率数量确定极数。若只有两档（如×1和×10），SPDT即可；若有三档，需SP3T。这是功能实现的基础拓扑约束。",
+          "source_parameter": "switch_type"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "Panel Mount",
+          "reason": "系统为电子测试测量仪器附件（探头/适配器），需要用户直接操作，因此必须是面板安装式，而非PCB焊接式或线缆连接式。",
+          "source_parameter": "mounting_type"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "系统涉及高压差分测量，虽开关仅控制低压逻辑，但安规要求整体结构满足IEC 61010-1。绝缘电阻是基本安全指标，防止漏电影响高精度测量或造成安全隐患。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "dielectric_withstand_voltage",
+          "op": ">=",
+          "value": 500.0,
+          "unit": "V",
+          "reason": "对应安规要求的绝缘强度。虽然控制信号是低压，但考虑到探头前端的高压环境，开关外壳及内部结构需具备足够的介电强度以防止击穿或爬电。",
+          "source_parameter": "dielectric_withstand_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": ">=",
+          "value": 0.05,
+          "unit": "Ω",
+          "reason": "用户明确指定接触电阻上限。虽然控制的是模拟开关的逻辑引脚（高阻抗），但低接触电阻可确保信号传输的可靠性并减少热噪声，对于精密测量仪器属于重要参数。",
+          "source_parameter": "contact_resistance"
+        }
+      ],
+      "keywords": [
+        "拨动开关",
+        "Toggle Switch",
+        "Multi-position Switch",
+        "SPDT",
+        "SP3T",
+        "Panel Mount Switch"
+      ]
+    },
+    {
+      "id": "M-CTL-LED-001",
+      "module_name": "状态指示灯 (LED_IND)",
+      "module_type": "人机交互",
+      "category": "分立半导体",
+      "leaf_code": "l_rgb_led_with_built_in_ic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "forward_current_if",
+          "op": "cover",
+          "value": [
+            0.005,
+            0.01
+          ],
+          "unit": "A",
+          "reason": "用户notes明确指定If 5-10mA。这是决定LED亮度和可靠性的核心参数，同时也决定了限流电阻的功率和阻值选择。",
+          "source_parameter": "forward_current_If"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            40.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作环境为0°C～+40°C。LED必须在整个温度范围内保持正常发光特性，不发生热失效或亮度严重衰减。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "color",
+          "op": "is",
+          "value": "['Green', 'Red']",
+          "reason": "用户notes明确指定颜色：绿(电源)/红(故障)。不同颜色的LED具有不同的Vf特性和光谱分布，需确保采购到的器件符合这两种颜色规格。",
+          "source_parameter": "color"
+        },
+        {
+          "field": "package",
+          "op": "is",
+          "value": "SMD",
+          "reason": "系统整体采用SMT工艺（4.1.3节），且模块数量为1，空间受限。虽然未指定具体封装尺寸，但应选择适合高密度贴片的标准封装。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "LED",
+        "发光二极管",
+        "Light Emitting Diode",
+        "Status Indicator",
+        "指示灯 LED",
+        "Standard Brightness"
+      ],
+      "note": "可选参数（未进条件）：luminous_intensity"
+    },
+    {
+      "id": "M-IFC-BNC-IN-001",
+      "module_name": "BNC输入连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 2,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "BNC",
+          "reason": "模块名称及描述明确指定为 BNC 连接器，且需替代 SMA 或作为标准接口。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "PCB Mount",
+          "reason": "需求文档明确指出 'PCB Mount'，且生产要求为 SMT/DIP 贴片或插件工艺，非面板安装。",
+          "source_parameter": "mounting_style"
+        },
+        {
+          "field": "impedance",
+          "op": ">=",
+          "value": 50.0,
+          "unit": "Ω",
+          "reason": "系统为 100 MHz 宽带高阻抗匹配设计，PCB 走线需严格匹配 50 Ω，连接器特性阻抗必须一致以避免反射。",
+          "source_parameter": "impedance"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1000.0,
+          "unit": "V",
+          "reason": "应用为高压差分探头，需求文档 Section 3.2.3 规定绝缘强度为 1000 VDC。连接器介质必须能承受此电压而不击穿。",
+          "source_parameter": "insulation_resistance"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_material",
+          "op": "is",
+          "value": "Gold-plated Copper Alloy",
+          "reason": "需求文档 Section 4.1.1 指定表面处理为沉金 (ENIG)。对于高频同轴连接器，中心针和外壳接触面需保证良好的导电性和抗氧化性，镀金是标准配置。",
+          "source_parameter": "contact_material"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -20.0,
+            70.0
+          ],
+          "unit": "degC",
+          "reason": "需求文档 Section 1.3 规定存储温度为 -20°C ～ +70°C。连接器材料在此范围内不应发生物理变形或性能退化。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "BNC连接器",
+        "BNC Connector",
+        "同轴连接器",
+        "Coaxial Connector",
+        "50Ω",
+        "PCB Mount"
+      ]
+    },
+    {
+      "id": "M-IFC-BNC-OUT-001",
+      "module_name": "BNC输出连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "BNC",
+          "reason": "模块明确指定为BNC输出连接器，需与示波器标准接口物理兼容。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "impedance",
+          "op": ">=",
+          "value": 50.0,
+          "unit": "Ω",
+          "reason": "系统要求输出阻抗50Ω以匹配示波器输入，避免信号反射影响100MHz带宽性能。",
+          "source_parameter": "impedance"
+        },
+        {
+          "field": "frequency_range",
+          "op": ">=",
+          "value": 1000000000.0,
+          "unit": "Hz",
+          "reason": "系统带宽要求100MHz，连接器需支持该频率及以上的信号传输而不引入显著损耗或模式转换。",
+          "source_parameter": "frequency_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "SMT (Surface Mount)",
+          "reason": "PCB工艺要求全贴片(SMT)，且BNC需机械加固（点胶），SMT BNC更适合高密度板并便于自动化组装。",
+          "source_parameter": "mounting_style"
+        }
+      ],
+      "keywords": [
+        "BNC连接器",
+        "BNC Connector",
+        "Coaxial Connector",
+        "同轴连接器",
+        "50Ω连接器"
+      ]
+    },
+    {
+      "id": "M-IFC-USB-001",
+      "module_name": "USB-C供电接口",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "shielding",
+          "op": "is",
+          "value": "是",
+          "reason": "系统面临严格的 EMC 要求（ESD ±8kV Contact）。USB-C 连接器必须具备金属屏蔽外壳（Shell）并良好接地，以提供 ESD 放电的低阻抗路径，保护内部引脚。无屏蔽或屏蔽不良将直接导致 ESD 失败。",
+          "source_parameter": "shielding"
+        },
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 16.0,
+          "unit": "int",
+          "reason": "USB Type-C 标准物理接口固定为 16 Pin。虽然仅使用部分引脚（VBUS, GND, CC1/2, D+/D-），但器件本身必须是完整的 16 Pin Type-C  receptacle。",
+          "source_parameter": "pin_count"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "USB Type-C Connector",
+        "USB-C",
+        "Type-C Receptacle",
+        "USB 3.1 Gen 1",
+        "USB PD",
+        "5V/1.5A"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,823 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-case12-v1",
+  "project": {
+    "name": "case12（由历史选型产物转换）",
+    "summary": "来源 /share/home/zhengzhiqi/workspace/web/output/case12/console/stages/03_device_selection__cb42c0d9.json"
+  },
+  "global_constraints": {
+    "budget_total_cny": 800.0,
+    "currency": "CNY",
+    "note": "预算取自历史产物，仅供参考"
+  },
+  "selection_items": [
+    {
+      "id": "M-PWR-BUCK-001",
+      "module_name": "主降压转换器",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_professional_power_management_pmic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            24.0,
+            48.0
+          ],
+          "unit": "V",
+          "reason": "需求文档明确指定 DC 24V~48V 宽电压输入。考虑到启动瞬间可能存在的浪涌或电网波动，器件的绝对最大额定值（Absolute Maximum Rating）需高于 48V（通常建议 ≥60V），且控制环路需支持在此宽范围内稳定工作。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "efficiency",
+          "op": ">=",
+          "value": 90.0,
+          "unit": "%",
+          "reason": "需求文档第 2.1.1 节及 3.1.1 节均强调整机满载效率 ≥90%。作为主要电源转换级，Buck 转换器自身效率直接影响系统热设计和整体能效。",
+          "source_parameter": "efficiency"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            105.0
+          ],
+          "unit": "°C",
+          "reason": "生产要求 4.1.2 节指出关键器件需为“工业级（-40℃ ~ +85℃）”。考虑到功放内部积热严重，选择耐高温的器件（如 105°C 或 125°C 等级）可提高长期可靠性。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "switching_frequency",
+          "op": "cover",
+          "value": [
+            200000.0,
+            600000.0
+          ],
+          "unit": "Hz",
+          "reason": "虽然需求未直接指定频率，但作为 HiFi 功放电源，开关频率应远高于音频最高频率（20kHz）至少 10 倍以上，以避免调制产物进入音频带。同时，高频有助于减小无源元件体积。常见 Buck 控制器频率在此范围。",
+          "source_parameter": "switching_frequency"
+        }
+      ],
+      "keywords": [
+        "同步降压转换器",
+        "Buck Converter",
+        "DC-DC Step-Down",
+        "高压输入",
+        "Power Management IC"
+      ]
+    },
+    {
+      "id": "M-PWR-LDO-001",
+      "module_name": "低噪声线性稳压器",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_professional_power_management_pmic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            12.0,
+            48.0
+          ],
+          "unit": "V",
+          "reason": "LDO前级为M-PWR-BUCK-001。根据需求文档，系统输入为24-48V，BUCK需输出稳定电压供后续使用。若BUCK输出设为12V或15V以匹配NE5532的±12V供电需求，LDO输入必须能承受此电压及可能的纹波/瞬态过冲。考虑到HiFi对噪声的敏感性，通常采用较高电压降压后由LDO进一步稳压，故输入范围需覆盖BUCK的输出能力上限。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "output_voltage",
+          "op": "cover",
+          "value": [
+            12.0,
+            15.0
+          ],
+          "unit": "V",
+          "reason": "描述中明确指出为NE5532和蓝牙提供电源。NE5532典型双电源为±12V（总压差24V）或单电源+虚地。若采用单电源架构（如VCC=12V~15V，GND=0V），LDO需提供稳定的正电压。若采用双极性供电，可能需要两个LDO或特殊拓扑，但基于“低噪声LDO”单一模块定义，最可能的场景是提供一路干净的模拟正电压（如12V或15V）给运放的正电源脚，负电源脚由负压生成电路或虚拟地处理；或者该LD",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "output_current",
+          "op": "cover",
+          "value": [
+            0.1,
+            0.2
+          ],
+          "unit": "A",
+          "reason": "负载包括NE5532（双通道，静态电流约2mA/通道，动态峰值可达几十mA）和蓝牙模组（音频解码+DAC，静态+射频发射峰值可能达100-200mA）。虽然NE5532电流较小，但蓝牙模组的瞬时峰值电流可能较大。为确保稳定性并留有余量，建议选型支持至少200mA输出的LDO。",
+          "source_parameter": "output_current"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "dropout_voltage",
+          "op": "cover",
+          "value": [
+            0.5,
+            0.5
+          ],
+          "unit": "V",
+          "reason": "作为线性稳压器，压差决定了输入输出之间的最小电压差。较低的压差意味着更低的功耗（P=(Vin-Vout)*Iout）和更好的动态响应。对于电池供电或高效率要求的设备尤为重要，尽管本系统有外部适配器，但低噪声LDO通常也追求低热设计。",
+          "source_parameter": "dropout_voltage"
+        }
+      ],
+      "keywords": [
+        "LDO",
+        "Low Dropout Regulator",
+        "线性稳压器",
+        "低压差稳压器",
+        "低噪声电源",
+        "模拟电源"
+      ]
+    },
+    {
+      "id": "M-AMP-IC-001",
+      "module_name": "D类功放芯片",
+      "module_type": "执行器与驱动",
+      "category": "电源管理 IC",
+      "leaf_code": "l_audio_power_amplifier",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            24.0,
+            48.0
+          ],
+          "unit": "V",
+          "reason": "系统电源输入明确指定为 DC 24V~48V，且该电压直接供给功放模块。器件供电引脚必须能承受此范围内的最大电压（48V）并能在最低电压下正常工作。",
+          "source_parameter": "supply_voltage_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            40.0
+          ],
+          "unit": "°C",
+          "reason": "用户环境约束为 0~40°C。工程假设建议选用工业级器件以应对功放内部积热带来的高温应力，确保 10 年寿命。",
+          "source_parameter": "operating_temperature_range"
+        },
+        {
+          "field": "efficiency_min",
+          "op": ">=",
+          "value": 90.0,
+          "unit": "%",
+          "reason": "整机满载效率定义为 ≥90%，D类功放本身的高效率是实现这一目标的基础。高效率也直接关联到散热设计和待机功耗。",
+          "source_parameter": "efficiency_min"
+        },
+        {
+          "field": "standby_current_max",
+          "op": ">=",
+          "value": 0.02,
+          "unit": "A",
+          "reason": "满足整机待机功耗 < 0.5 W 的约束 (@24V输入时)。",
+          "source_parameter": "standby_current_max"
+        }
+      ],
+      "keywords": [
+        "音频功放",
+        "D类放大器",
+        "Class D Audio Amplifier",
+        "立体声功放",
+        "BTL功放",
+        "TPA3255"
+      ],
+      "specified_device": {
+        "model": "TPA3255",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-PRE-OPAMP-001",
+      "module_name": "双通道运算放大器",
+      "module_type": "传感器",
+      "category": "模拟IC",
+      "leaf_code": "l_operational_amplifier",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            -12.0,
+            12.0
+          ],
+          "unit": "V",
+          "reason": "需求文档 2.2.1 节明确指出 NE5532 供电建议为 ±12V。作为运算放大器，其供电电压范围决定了动态范围和共模输入范围，必须覆盖系统提供的电源轨。",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "gain_bandwidth_product",
+          "op": ">=",
+          "value": 10000000.0,
+          "unit": "Hz",
+          "reason": "需求文档 Module Notes 中明确指定增益带宽积为 10MHz。对于音频应用（20kHz），足够的GBW是保证高频段增益精度和低失真所必需的。",
+          "source_parameter": "gain_bandwidth_product"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档 4.1.2 节工程假设要求关键器件使用工业级（-40℃ ~ +85℃）。虽然整机工作温度为 0-40℃，但功放内部环境温度较高，工业级器件能提供更高的可靠性余量。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "运算放大器",
+        "运放",
+        "Op-Amp",
+        "Operational Amplifier",
+        "双通道",
+        "Dual Op-Amp"
+      ],
+      "specified_device": {
+        "model": "NE5532",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-PRE-POT-001",
+      "module_name": "音调调节电位器",
+      "module_type": "人机交互",
+      "category": "电位器",
+      "leaf_code": "l_digital_potentiometer",
+      "quantity": 2,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "resistance",
+          "op": ">=",
+          "value": 10000.0,
+          "unit": "Ω",
+          "reason": "模块 notes 明确要求阻值为 10kΩ。该阻值决定了 NE5532 音调控制电路（Baxandall 拓扑）的时间常数与增益调节范围，若阻值偏差过大将导致频率响应曲线偏离设计指标。",
+          "source_parameter": "resistance"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "['Panel Mount', 'PCB Mount with Bracket']",
+          "reason": "作为人机交互接口，电位器必须固定在机箱面板上以承受用户操作扭矩。仅靠 PCB 焊接无法提供足够的机械强度，易导致焊点疲劳断裂或元件移位。",
+          "source_parameter": "mounting_style"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": ">=",
+          "value": 0.05,
+          "unit": "Ω",
+          "reason": "工程建议：音频前级信号路径对接触电阻敏感。高接触电阻会引入热噪声和接触不良导致的爆裂声（Crackling noise），严重影响信噪比和听感。参考同类 HiFi 器件规格。",
+          "source_parameter": "contact_resistance"
+        }
+      ],
+      "keywords": [
+        "电位器",
+        "Rotary Potentiometer",
+        "Audio Taper",
+        "B型对数",
+        "音调控制",
+        "Tone Control"
+      ]
+    },
+    {
+      "id": "M-COMM-BT-001",
+      "module_name": "蓝牙音频模组",
+      "module_type": "通信",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_cellular_2g_3g_4g_5g_module",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            3.0,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "模块依赖 M-PWR-LDO-001 供电。通常蓝牙SoC的数字核心和射频部分工作电压为 3.3V。LDO 需提供稳定的 3.3V 电源轨。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            40.0
+          ],
+          "unit": "degC",
+          "reason": "产品环境约束规定工作温度为 0℃ ～ 40℃。器件必须在整个范围内正常工作。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "quiescent_current",
+          "op": "<=",
+          "value": 0.05,
+          "unit": "A",
+          "reason": "整机待机功耗要求 <0.5W (@24V)，即总电流 <20mA。考虑到其他电路（NE5532、继电器控制等）也有静态电流，蓝牙模组的静态电流应控制在较低水平（如<50mA），以确保不显著挤压其他模块的电流预算。",
+          "source_parameter": "quiescent_current"
+        }
+      ],
+      "keywords": [
+        "Bluetooth Audio SoC",
+        "蓝牙音频芯片",
+        "CSR8675",
+        "QCC系列",
+        "AAC解码",
+        "aptX HD"
+      ],
+      "note": "可选参数（未进条件）：package"
+    },
+    {
+      "id": "M-COMM-ANT-001",
+      "module_name": "蓝牙天线接口",
+      "module_type": "通信",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "cover",
+          "value": [
+            4.0,
+            4.0
+          ],
+          "reason": "模块描述明确指定为 'IPEX connector'，且用于连接蓝牙天线。MHF4 是蓝牙模组最常用的微型射频连接器标准，需确保与蓝牙模组（如 CSR8675/QCC 系列）上的母座/公座配合。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "impedance",
+          "op": ">=",
+          "value": 50.0,
+          "unit": "Ω",
+          "reason": "模块 notes 明确要求 '阻抗50Ω匹配'。射频链路中阻抗失配会导致 VSWR 升高，显著降低蓝牙接收灵敏度和发射功率，导致连接不稳定或断连。",
+          "source_parameter": "impedance"
+        },
+        {
+          "field": "frequency_range",
+          "op": "cover",
+          "value": [
+            2400000000.0,
+            2483500000.0
+          ],
+          "unit": "Hz",
+          "reason": "依赖模块 M-COMM-BT-001 为蓝牙 5.0 模块，工作于 ISM 2.4GHz 频段。连接器必须在整个频段内保持低插入损耗和高隔离度。",
+          "source_parameter": "frequency_range"
+        },
+        {
+          "field": "voltage_rating",
+          "op": "<=",
+          "value": 50.0,
+          "unit": "V",
+          "reason": "射频连接器虽主要传输高频信号，但也需承受一定的直流耐压以防静电或意外短路击穿。50V 是此类微型连接器的常见额定值，足以满足 24-48V 系统环境下的安规要求（尽管天线本身不带高压，但需考虑 ESD 和邻近电路耦合）。",
+          "source_parameter": "voltage_rating"
+        },
+        {
+          "field": "shielding",
+          "op": "is",
+          "value": "Shielded",
+          "reason": "蓝牙工作在 2.4GHz 敏感频段，且模块 notes 强调 '天线下方严禁铺铜'，暗示对噪声极度敏感。连接器必须具备良好屏蔽性以防止外部数字噪声耦合进射频前端或泄漏出去造成 EMI 失败。",
+          "source_parameter": "shielding"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "insertion_loss",
+          "op": "<=",
+          "value": 0.5,
+          "unit": "dB",
+          "reason": "虽然未明确指定数值，但作为 HiFi 设备中的关键射频路径，过高的插损会降低信噪比和有效辐射功率。通常高质量 IPEX 连接器在 2.4GHz 下插损应小于 0.5dB。若大于 1dB 可能影响边缘场景的连接稳定性。",
+          "source_parameter": "insertion_loss"
+        }
+      ],
+      "keywords": [
+        "射频同轴连接器",
+        "IPEX connector",
+        "U.FL connector",
+        "MHF connector",
+        "RF coaxial connector",
+        "antenna connector"
+      ]
+    },
+    {
+      "id": "M-RELAY-SW-001",
+      "module_name": "信号切换继电器",
+      "module_type": "执行器与驱动",
+      "category": "继电器",
+      "leaf_code": "l_signal_relay",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "coil_voltage",
+          "op": "cover",
+          "value": [
+            4.5,
+            6.0
+          ],
+          "unit": "V_DC",
+          "reason": "notes 指出线圈电压通常为 5V 或 12V。考虑到依赖模块 M-RELAY-DRV-001 使用 S8050 NPN 晶体管驱动，且系统由 Buck 转换器提供 5V/12V 轨，5V 继电器更易于与常见的 MCU 逻辑电平兼容，且功耗较低。若选用 12V 继电器，驱动电路需额外电平转换或更高电压轨。此处基于常见 HiFi 设计惯例及 S8050 驱动能力，优先推荐 5V，但器件必须能在此范",
+          "source_parameter": "coil_voltage"
+        },
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.05,
+          "unit": "Ω",
+          "reason": "HiFi 应用对接触电阻敏感。虽然音频电流小，但高接触电阻会引入热噪声和非线性。HFD4 系列典型值为 50mΩ 以下。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "package",
+          "op": "is",
+          "value": "DIP / Through-Hole",
+          "reason": "module.type 为 '执行器与驱动'，且 confirmed_device HFD4/5-S 通常为插件封装。Ch4.1.2 明确指出 '继电器: HFD4/5-S 插件封装（DIP）'，并提到 'DIP插件时需防止变形'。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_material",
+          "op": "is",
+          "value": "Gold-plated contacts",
+          "reason": "用于高保真音频模拟信号切换，氧化层会导致非线性失真和接触不良。notes 中明确要求“触点镀金”。",
+          "source_parameter": "contact_material"
+        },
+        {
+          "field": "isolation_voltage",
+          "op": ">=",
+          "value": 500.0,
+          "unit": "V_AC",
+          "reason": "虽然音频信号电压低，但继电器内部线圈（高压侧/驱动侧）与触点（低压侧/信号侧）之间需要足够的绝缘强度以防止击穿和耦合噪声。这是机电继电器的基本安全与性能指标。",
+          "source_parameter": "isolation_voltage"
+        }
+      ],
+      "keywords": [
+        "信号继电器",
+        "Signal Relay",
+        "DPDT Relay",
+        "双刀双掷继电器",
+        "低接触电阻继电器",
+        "HFD4"
+      ],
+      "specified_device": {
+        "model": "HFD4/5-S",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-RELAY-DRV-001",
+      "module_name": "继电器驱动晶体管",
+      "module_type": "执行器与驱动",
+      "category": "分立半导体",
+      "leaf_code": "l_bipolar_junction_transistor_bjt",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "is",
+          "value": "['TO-92', 'SOT-89']",
+          "reason": "模块描述中明确指出 'TO-92或SOT-89封装'。TO-92 适合通孔插件（DIP），便于手工补焊和替换，符合 HiFi 功放可能的维护需求；SOT-89 适合表面贴装（SMT）。候选器件必须支持这两种封装形式之一，以便 PCB 布局选择。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "power_dissipation",
+          "op": ">=",
+          "value": 0.5,
+          "unit": "W",
+          "reason": "继电器驱动属于开关应用，静态功耗低，主要功耗发生在开关瞬态。但在饱和导通时，Vce(sat) 约为 0.2V-0.3V。即使电流为 100mA，功耗也仅为 20-30mW，远低于 S8050 的额定功率（通常 TO-92 为 500mW-625mW，SOT-89 可达 1W+）。此参数主要确保器件在长期工作和环境温度升高（HiFi 功放内部温度较高）时有足够的热裕量，不会因结温过高导致 HFE 下",
+          "source_parameter": "power_dissipation"
+        }
+      ],
+      "keywords": [
+        "NPN晶体管",
+        "NPN BJT",
+        "S8050",
+        "开关晶体管",
+        "驱动三极管",
+        "通用NPN"
+      ],
+      "specified_device": {
+        "model": "S8050",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-RELAY-SWITCH-001",
+      "module_name": "输入选择开关",
+      "module_type": "人机交互",
+      "category": "开关",
+      "leaf_code": "l_signal_switch_codec_multiplexer",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "switch_type",
+          "op": "is",
+          "value": "['Tactile Switch', 'DIP Switch']",
+          "reason": "模块描述明确指定为“轻触开关”或“拨码开关”，用于纯硬件逻辑控制继电器驱动管的基极电平。电子式开关（如MOSFET模拟开关）不符合“机械按键”的描述及纯硬件控制架构。",
+          "source_parameter": "switch_type"
+        },
+        {
+          "field": "contact_resistance",
+          "op": ">=",
+          "value": 0.05,
+          "unit": "Ω",
+          "reason": "输入需求文档 `notes` 中明确规定接触电阻需小于 50mΩ。对于音频信号切换或敏感的控制回路，高接触电阻会导致信号衰减、噪声引入或控制电压降过大导致驱动管无法完全导通。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "operating_voltage",
+          "op": "cover",
+          "value": [
+            0.0,
+            12.0
+          ],
+          "unit": "V",
+          "reason": "根据 `SS-REL-001` 模块描述，该开关通过 S8050 晶体管驱动继电器。S8050 基极由 MCU 或逻辑电路控制，典型逻辑电平为 3.3V 或 5V。开关两端承受的电压为逻辑电平电压，而非高压侧。考虑到工业级可靠性，选择额定电压高于工作电压的器件是标准工程实践。",
+          "source_parameter": "operating_voltage"
+        },
+        {
+          "field": "rated_current",
+          "op": "cover",
+          "value": [
+            0.0,
+            0.05
+          ],
+          "unit": "A",
+          "reason": "该开关串联在 S8050 基极驱动回路中。S8050 驱动继电器线圈所需基极电流通常在几毫安到十几毫安之间（取决于线圈阻抗和 HFE）。虽然电流很小，但必须确保开关触点能长期可靠通过此电流而不发生粘连或氧化失效。参考模块表中给出的工程假设值 50mA 作为保守选型下限。",
+          "source_parameter": "rated_current"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "轻触开关",
+        "Tactile Switch",
+        "拨码开关",
+        "DIP Switch",
+        "机械按键",
+        "Input Selector"
+      ],
+      "note": "可选参数（未进条件）：mounting_type"
+    },
+    {
+      "id": "M-IO-RCA-001",
+      "module_name": "RCA莲花座",
+      "module_type": "通信",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "RCA (Coaxial Audio)",
+          "reason": "模块名称及描述明确指定为RCA莲花座，用于立体声模拟音频输入。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 2.0,
+          "unit": "channels",
+          "reason": "需求文档接口汇总表指出数量为“1对(L/R)”，且描述中注明“立体声对”。",
+          "source_parameter": "channel_count"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_material",
+          "op": "is",
+          "value": "Gold Plated",
+          "reason": "Notes明确要求“镀金触点”，对于HiFi音频接口，镀金可防止氧化并保证低接触电阻和信号完整性。",
+          "source_parameter": "contact_material"
+        }
+      ],
+      "keywords": [
+        "RCA connector",
+        "莲花座",
+        "音频接口",
+        "Coaxial audio",
+        "AV connector",
+        "3.5mm to RCA"
+      ],
+      "note": "可选参数（未进条件）：impedance"
+    },
+    {
+      "id": "M-IO-JACK-001",
+      "module_name": "3.5mm耳机插座",
+      "module_type": "通信",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 2.0,
+          "unit": "count",
+          "reason": "需求明确为立体声（Stereo），需要左、右两个信号通道加一个公共地。双声道（Dual Channel）是功能实现的最低要求。",
+          "source_parameter": "channel_count"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "degC",
+          "reason": "连接器材料需在系统工作环境下保持机械强度和电气性能。鉴于功放内部积热及工业级元件假设，器件额定温度应覆盖 -40°C 至 +85°C 以确保长期可靠性。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 0.1,
+          "unit": "Ω",
+          "reason": "满足安规及 EMC 隔离要求，防止信号地与电源地/机壳间漏电引入噪声或安全隐患。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "dielectric_withstand_voltage",
+          "op": ">=",
+          "value": 500.0,
+          "unit": "V",
+          "reason": "确保信号引脚与外壳/PCB之间有足够的绝缘强度，防止高压击穿。",
+          "source_parameter": "dielectric_withstand_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "['Through-Hole with Lock Nut', 'Panel Mount']",
+          "reason": "作为面板接口，需固定于机箱前面板。虽然未指定具体安装方式，但通常此类模块采用 PCB 焊盘固定（Through-hole Solder Terminal）并配合螺母锁紧，或直接面板安装式（Panel Mount）。考虑到 BOM 选型便利性及通用性，提供两种常见约束供评估器筛选。",
+          "source_parameter": "mounting_style"
+        },
+        {
+          "field": "contact_material",
+          "op": "is",
+          "value": "Gold Plated Contacts",
+          "reason": "HiFi 设备对接触电阻稳定性敏感。镀金触点能防止硫化氧化导致的接触不良和高噪声，符合高保真定位。铜合金基体保证弹性寿命。",
+          "source_parameter": "contact_material"
+        },
+        {
+          "field": "contact_resistance",
+          "op": ">=",
+          "value": 0.02,
+          "unit": "Ω",
+          "reason": "低接触电阻有助于减少信号衰减和热噪声，对于 HiFi 音频传输至关重要。",
+          "source_parameter": "contact_resistance"
+        }
+      ],
+      "keywords": [
+        "3.5mm Jack",
+        "TRS Connector",
+        "Audio Socket",
+        "耳机插座",
+        "立体声接口",
+        "Phone Jack"
+      ]
+    },
+    {
+      "id": "M-IO-SPK-001",
+      "module_name": "扬声器输出端子",
+      "module_type": "通信",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "current_rating",
+          "op": ">=",
+          "value": 40.0,
+          "unit": "A",
+          "reason": "系统电源输入峰值电流为 30A (Ch 3.1.1)。扬声器输出端子承载功放全部输出电流。虽然D类效率>90%，但需考虑短路保护触发时的瞬态大电流及长期高负载下的温升。通常 HiFi 功放端子选型标准为 40A-60A，以匹配 315W@4Ω 的输出能力并确保低接触电阻发热可控。",
+          "source_parameter": "current_rating"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_material",
+          "op": "is",
+          "value": "Phosphor Bronze",
+          "reason": "大功率音频连接需要低接触电阻以减少功率损耗和热噪声。磷青铜是接线端子的标准高性能材料。",
+          "source_parameter": "contact_material"
+        }
+      ],
+      "keywords": [
+        "接线端子",
+        "Terminal Block",
+        "Speaker Terminal",
+        "Screw Terminal",
+        "Spring Terminal",
+        "PCB Connector"
+      ]
+    },
+    {
+      "id": "M-IO-DC-001",
+      "module_name": "DC电源插座",
+      "module_type": "电源管理",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            24.0,
+            48.0
+          ],
+          "unit": "V",
+          "reason": "系统需求明确规定输入电压范围为 DC 24V~48V，器件额定电压必须高于此最大值以提供安全裕量。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "current_rating",
+          "op": ">=",
+          "value": 30.0,
+          "unit": "A",
+          "reason": "需求文档指出峰值电流为 30 A（瞬态大动态信号驱动）。连接器额定电流必须至少覆盖此峰值，否则会导致触点熔焊或过热失效。",
+          "source_parameter": "current_rating"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "['Panel Mount', 'PCB Edge Mount']",
+          "reason": "系统分解 SS-IO-001 notes 提到“PCB边缘布局”。通常 DC Jack 采用面板安装（Panel Mount）并焊接在 PCB 边缘，或者直接垂直/水平焊接在 PCB 上。需确认具体装配方式以选择封装。",
+          "source_parameter": "mounting_style"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 0.1,
+          "unit": "Ω",
+          "reason": "虽然未明确数值，但作为高压输入接口，良好的绝缘电阻是满足 EMC 和安全认证（如 IEC 62368-1）的基础要求。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.02,
+          "unit": "Ω",
+          "reason": "低接触电阻有助于减少在大电流（30A峰值）下的功耗和发热，符合整机效率及散热设计要求。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "工作环境温度为 0~40°C。考虑到靠近电源部分可能产生的热量，连接器耐温应至少覆盖此范围并有一定余量。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "DC电源插座",
+        "DC Jack",
+        "DC Power Socket",
+        " barrel connector",
+        "直流电源接口",
+        "内正外负"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,771 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-case14-v1",
+  "project": {
+    "name": "case14（由历史选型产物转换）",
+    "summary": "来源 /share/home/zhengzhiqi/workspace/web/output/case14/console/stages/03_device_selection__a8a6c669.json"
+  },
+  "global_constraints": {
+    "budget_total_cny": null,
+    "currency": "CNY",
+    "note": "预算取自历史产物，仅供参考"
+  },
+  "selection_items": [
+    {
+      "id": "M-LDO-001",
+      "module_name": "低压差稳压器 (LDO)",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_linear_regulator_ldo",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "模块描述明确指定将输入稳压至3.3V，为ESP32-C3和ES8311等敏感器件供电。这是核心功能约束。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "output_current",
+          "op": ">=",
+          "value": 0.35,
+          "unit": "A",
+          "reason": "根据需求文档 2.2.2 修正方案A，功放NS4150B独立供电，LDO仅负责ESP32-C3、ES8311及外围。ESP32-C3 Wi-Fi发射峰值约280mA，加上ES8311及其他外设，综合峰值预算约为350mA。原型号RT9013标称500mA，新选器件需至少覆盖此负载需求以防止过热或掉电。",
+          "source_parameter": "max_output_current"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            3.7,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "输入来源为锂电池(VBAT, 3.0V-4.2V)或USB(5V)。LDO必须在整个输入范围内保持稳压。考虑到LDO的压差(Vdo)，当电池电压降至3.0-3.3V时，若LDO压差过大将无法维持3.3V输出。因此需要极低压差(Low Dropout)特性，且耐压需覆盖5V USB场景。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "dropout_voltage",
+          "op": "<=",
+          "value": 0.3,
+          "unit": "V",
+          "reason": "由于输入来自锂电池(最低约3.0V-3.3V)，而输出固定为3.3V，LDO必须具备极低的压差能力。如果压差大于0.3V，当电池电压低于3.6V时，输出电压将跌落，导致系统复位或音频失真。",
+          "source_parameter": "dropout_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "quiescent_current",
+          "op": "<=",
+          "value": 0.0001,
+          "unit": "A",
+          "reason": "需求文档 1.3 约束条件中提到 '待机功耗: < 1 mA'。虽然主要待机功耗来自MCU深度睡眠，但LDO的静态电流也是系统漏电流的一部分。低IQ有助于延长电池续航。",
+          "source_parameter": "quiescent_current"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档 3.2.1 规定工作温度为 0°C ～ +40°C，存储温度 -40°C ～ 85°C。器件应至少覆盖商业级温度范围(0-70°C)以提供余量。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "keywords": [
+        "LDO",
+        "Low Dropout Regulator",
+        "低压差稳压器",
+        "线性稳压器",
+        "3.3V LDO",
+        "低噪声 LDO"
+      ],
+      "specified_device": {
+        "model": "RT9013-33GB",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-CHG-001",
+      "module_name": "锂电池充电管理IC",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_battery_management",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.75,
+            5.25
+          ],
+          "unit": "V",
+          "reason": "系统通过USB-C接口供电，需求文档明确输入电压范围为4.75 V ～ 5.25 V (USB Type-C 标准)。充电IC必须能在此范围内正常工作。",
+          "source_parameter": "input_voltage_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "锂电池充电IC",
+        "Li-Ion Charger",
+        "TP4057",
+        "线性充电管理",
+        "恒流恒压充电",
+        "USB充电IC"
+      ],
+      "specified_device": {
+        "model": "TP4057",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-SW-P-001",
+      "module_name": "高侧电源开关 (P-MOS)",
+      "module_type": "电源管理",
+      "category": "分立半导体",
+      "leaf_code": "l_professional_power_management_pmic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "continuous_drain_current",
+          "op": ">=",
+          "value": 3.0,
+          "unit": "A",
+          "reason": "器件需承载系统总负载电流。尽管功放可能独立供电，但主控、Codec等数字/模拟部分仍需由此路径供电，且需应对瞬时浪涌。需求文档提及峰值电流>1.5A。即使保守估计数字部分峰值为500mA-800mA，器件额定电流也应留有至少2倍余量以应对热降额和瞬态冲击。AO3401A典型连续电流为-5.8A，满足此要求。若额定电流过低，长期运行或高温环境下可能过热损坏。",
+          "source_parameter": "continuous_drain_current"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            125.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档3.2.1节规定工作温度0°C~+40°C，存储温度-40°C~+85°C。器件结温需能承受环境温度加上自身功耗产生的温升。虽然应用环境较温和，但作为关键电源部件，必须具备工业/商业宽温等级以确保可靠性。AO3401A通常为-55°C至+150°C或-40°C至+125°C。下限-40°C覆盖存储和极端低温启动，上限125°C覆盖内部温升后的结温安全边界。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "P-MOSFET",
+        "P-Channel MOSFET",
+        "Power MOSFET",
+        "High-Side Switch",
+        "电源开关管",
+        "AO3401A"
+      ],
+      "specified_device": {
+        "model": "AO3401A",
+        "intent": "reference"
+      },
+      "note": "可选参数（未进条件）：gate_charge_qg"
+    },
+    {
+      "id": "M-SW-N-001",
+      "module_name": "低侧驱动开关 (N-MOS)",
+      "module_type": "电源管理",
+      "category": "分立半导体",
+      "leaf_code": "l_professional_power_management_pmic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "keywords": [
+        "N-MOSFET",
+        "N沟道MOSFET",
+        "N-Channel MOSFET",
+        "逻辑电平MOS",
+        "低侧开关",
+        "Low Side Switch"
+      ],
+      "specified_device": {
+        "model": "SI1304BDL",
+        "intent": "reference"
+      },
+      "note": "可选参数（未进条件）：continuous_drain_current_id"
+    },
+    {
+      "id": "M-MCU-001",
+      "module_name": "微控制器 (MCU)",
+      "module_type": "主控计算",
+      "category": "微控制器",
+      "leaf_code": "l_microcontroller_mcu_mpu_soc",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "MCU由RT9013 LDO供电，LDO输出为3.3V。MCU的VDD引脚必须承受此电压。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            40.0
+          ],
+          "unit": "degC",
+          "reason": "消费类电子标准，工作温度0°C ～ +40°C。器件必须在此范围内正常工作。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "clock_frequency",
+          "op": ">=",
+          "value": 160000000.0,
+          "unit": "Hz",
+          "reason": "ESP32-C3标准主频为160MHz，需支持该频率以处理Wi-Fi协议栈、蓝牙连接及音频数据流。",
+          "source_parameter": "clock_frequency"
+        }
+      ],
+      "keywords": [
+        "MCU",
+        "RISC-V",
+        "Wi-Fi SoC",
+        "Bluetooth LE",
+        "ESP32-C3",
+        "无线微控制器"
+      ],
+      "specified_device": {
+        "model": "ESP32-C3",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-XTAL-001",
+      "module_name": "系统时钟源",
+      "module_type": "时钟源",
+      "category": "时钟器件",
+      "leaf_code": "l_voltage_controlled_crystal_oscillator_vcxo",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "frequency",
+          "op": ">=",
+          "value": 40000000.0,
+          "unit": "Hz",
+          "reason": "需求文档明确指出 ESP32-C3 需外部晶振，且工程假设及常见搭配为 40MHz。ESP32-C3 内部 PLL 锁相环依赖此参考频率生成系统主频（最高 160MHz）。若频率偏差过大，将导致 Wi-Fi/BT 射频校准失败、I2S 音频采样率错误及通信超时。",
+          "source_parameter": "frequency"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "晶体振荡器",
+        "Crystal Oscillator",
+        "XO",
+        "晶振",
+        "40MHz",
+        "参考时钟"
+      ]
+    },
+    {
+      "id": "M-CODEC-001",
+      "module_name": "音频编解码器 (Codec)",
+      "module_type": "音频处理",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_signal_switch_codec_multiplexer",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档 4.1.2 节规定温度等级为商业级（0℃ ~ +70℃）。虽然工作环境定义为 0-40°C，但器件自身需满足商业级标准以应对局部温升。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -24.0,
+            -24.0
+          ],
+          "reason": "硬件需求说明书 4.1.2 节明确列出 ES8311 的封装类型为 QFN-24。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "Audio Codec",
+        "音频编解码器",
+        "I2S Codec",
+        "ADC DAC",
+        "ES8311",
+        "低功耗音频IC"
+      ],
+      "specified_device": {
+        "model": "ES8311",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-AMP-001",
+      "module_name": "音频功率放大器",
+      "module_type": "音频处理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_audio_power_amplifier",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "output_power",
+          "op": ">=",
+          "value": 3.0,
+          "unit": "W",
+          "reason": "需求明确指定功放需驱动4Ω扬声器并提供3W输出功率。这是核心功能指标，不满足则无法达到设计目标。",
+          "source_parameter": "output_power"
+        },
+        {
+          "field": "topology",
+          "op": "is",
+          "value": "['Class-D', 'Integrated Filter']",
+          "reason": "需求明确要求“无外部LC滤波”设计，这意味着器件内部必须集成EMI滤波器或采用高频调制技术（如Class D with integrated filter），否则无法满足EMC要求。",
+          "source_parameter": "topology"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            3.0,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "根据电源子系统分析，功放建议由VBAT（锂电池）直接供电以提供大电流。单节锂电池电压范围为3.0V-4.2V。器件必须能在此范围内正常工作并输出3W功率。若使用5V直供也需兼容，但VBAT是主要约束场景。",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "control_interface",
+          "op": "is",
+          "value": "['Digital Input', 'Mute/Standby']",
+          "reason": "需要MCU通过GPIO控制功放的待机(Mute/Standby)状态，以实现低功耗管理和静音切换。",
+          "source_parameter": "control_interface"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "efficiency",
+          "op": ">=",
+          "value": 90.0,
+          "unit": "%",
+          "reason": "需求规定效率>90%。高效率有助于降低散热压力，特别是在紧凑的开发板布局中。",
+          "source_parameter": "efficiency"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "消费类电子标准工作温度，确保在高温环境下性能稳定。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "D类功放",
+        "Class D Audio Amplifier",
+        "音频功放IC",
+        "3W Audio Amp",
+        "无LC滤波功放",
+        "SPK Driver"
+      ],
+      "specified_device": {
+        "model": "NS4150B",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-MIC-001",
+      "module_name": "MEMS麦克风传感器",
+      "module_type": "传感器",
+      "category": "传感器",
+      "leaf_code": "l_mems_microphone",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "output_type",
+          "op": "is",
+          "value": "Analog Differential",
+          "reason": "模块描述及分类明确指定为“模拟差分输出MEMS麦克风”。这是选择器件的核心依据，决定了后续信号调理电路（差分转单端或差分接收）的设计方向。",
+          "source_parameter": "output_type"
+        },
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            1.62,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "MEMS麦克风通常由数字核心电源供电。系统由RT9013提供3.3V给音频Codec和MCU，工程假设麦克风也由同一3.3V轨供电（或通过独立LDO）。器件需支持1.8V-3.3V标准电压域以兼容系统。",
+          "source_parameter": "supply_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "sensitivity",
+          "op": "cover",
+          "value": [
+            -34.0,
+            -26.0
+          ],
+          "unit": "dBFS/Pa",
+          "reason": "为满足系统≥95dB SNR的高保真要求，麦克风本身需具备高灵敏度以在合理声压下产生足够大的电信号，从而降低前端放大器的增益需求及引入的噪声。典型高保真MEMS麦克风灵敏度在-26dB至-34dB范围内。",
+          "source_parameter": "sensitivity"
+        },
+        {
+          "field": "frequency_response",
+          "op": "cover",
+          "value": [
+            50.0,
+            16000.0
+          ],
+          "unit": "Hz",
+          "reason": "语音交互主要频段集中在300Hz-3.4kHz，但为了捕捉清晰的环境声音和辅助关键词识别，全带宽响应更好。50Hz-16kHz覆盖了大部分语音能量和高频辅音信息。",
+          "source_parameter": "frequency_response"
+        }
+      ],
+      "keywords": [
+        "MEMS microphone",
+        "模拟麦克风",
+        "差分输出麦克风",
+        "Analog MEMS Mic",
+        "Sound Sensor",
+        "PDM to Analog"
+      ],
+      "specified_device": {
+        "model": "ZTS6216",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-FLASH-001",
+      "module_name": "SPI Flash 存储器",
+      "module_type": "存储",
+      "category": "存储器",
+      "leaf_code": "l_nor_flash",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "storage_capacity",
+          "op": ">=",
+          "value": 16.0,
+          "unit": "MB",
+          "reason": "需求文档明确指定存储离线语音模型、音频样本及日志数据，且分类映射中基于用户意图定义为16MB。W25Q128实际为16Mbit(2MB)，若严格按16MB容量选型，需选择W25Q256或更大容量器件；若仅按接口兼容选W25Q128则容量不足。此处以用户声明的“16MB”硬约束为准，要求器件标称容量至少16MB。",
+          "source_parameter": "storage_capacity"
+        },
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            2.7,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "模块依赖M-LDO-001提供的3.3V电源。标准SPI NOR Flash通常工作在2.7V-3.6V或1.7V-3.6V。鉴于系统为3.3V逻辑电平，器件必须能在3.3V下可靠工作且耐压余量足够。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档Ch3.2.1规定工作温度0~40°C，Ch4.1.2建议温度等级为商业级(0~70°C)。为确保在高温环境（如夏天车内或密闭盒子）下的稳定性，器件额定温度最好覆盖至70°C。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "SPI NOR Flash",
+        "Flash Memory",
+        "Non-volatile Memory",
+        "Quad SPI",
+        "QSPI",
+        "存储芯片"
+      ],
+      "specified_device": {
+        "model": "W25Q128JVSIQ",
+        "intent": "reference"
+      },
+      "note": "可选参数（未进条件）：package"
+    },
+    {
+      "id": "M-ANT-001",
+      "module_name": "射频天线",
+      "module_type": "通信",
+      "category": "天线",
+      "leaf_code": "l_antenna",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "center_frequency",
+          "op": "cover",
+          "value": [
+            2400000000.0,
+            2483500000.0
+          ],
+          "unit": "Hz",
+          "reason": "ESP32-C3 的 Wi-Fi (2.4 GHz ISM band) 和 Bluetooth LE 均工作在 2.4 GHz 频段。天线中心频率必须与此匹配，否则无法有效辐射或接收信号。",
+          "source_parameter": "center_frequency"
+        },
+        {
+          "field": "impedance",
+          "op": ">=",
+          "value": 50.0,
+          "unit": "Ω",
+          "reason": "射频传输线标准阻抗为 50 Ω。天线输入阻抗若偏离 50 Ω 过多，将导致严重的反射损耗（VSWR 升高），降低发射功率和接收灵敏度。",
+          "source_parameter": "impedance"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "SMD",
+          "reason": "该器件为表面贴装（SMD）陶瓷天线，需直接焊接在 PCB 上，并通过内部或外部匹配电路与 RF 引脚连接。",
+          "source_parameter": "mounting_type"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "陶瓷天线",
+        "Ceramic Antenna",
+        "PCB Antenna",
+        "2.4GHz Antenna",
+        "Wi-Fi Antenna",
+        "Bluetooth Antenna"
+      ],
+      "specified_device": {
+        "model": "RFANT3216120A5T",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-USBC-001",
+      "module_name": "USB-C 连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "USB Type-C Receptacle",
+          "reason": "模块名称及描述明确指定为 USB-C Receptacle，用于供电及 UART 调试。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 16.0,
+          "unit": "pins",
+          "reason": "USB Type-C 标准母座通常为 16 引脚，需支持 CC 配置、D+/D- 数据线及 VBUS/GND 供电，满足文档中提到的供电和通信功能需求。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度为 0~40°C，存储温度 -20~70°C。连接器作为物理接口，其材料耐热性应至少覆盖工业/商业级宽温范围，以确保在老化测试（45-50°C）及潜在高温环境下不发生变形或接触失效。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "电气安全基本参数，防止漏电影响敏感模拟电路（如音频 Codec）的地平面噪声。",
+          "source_parameter": "insulation_resistance"
+        }
+      ],
+      "keywords": [
+        "USB Type-C Receptacle",
+        "Type-C Connector",
+        "USB-C Socket",
+        "Type-C 母口",
+        "USB-C 插座"
+      ]
+    },
+    {
+      "id": "M-DBG-001",
+      "module_name": "调试排针",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 4.0,
+          "unit": "pins",
+          "reason": "模块描述明确指定为 '4 Pin'，用于引出 UART TX/RX、GND、VCC/SWD/JTAG 信号。少于 4 针无法实现定义功能，多于 4 针不符合规格书约束。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 2.54,
+          "unit": "mm",
+          "reason": "Notes 字段明确指定 '规格：2.54mm Pitch'。这是排针与插座/PCB 焊盘配合的关键机械参数，不匹配将导致无法装配或电气连接失败。",
+          "source_parameter": "pitch"
+        },
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "Male Pin Header",
+          "reason": "Category mapping 明确指出为 'Male Connector' 和 '排针'。在开发板设计中，Debug Header 通常为公头以便插入调试器或转接座，若误选母头将无法使用。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "Through-Hole Vertical",
+          "reason": "调试排针通常采用直插式 (Through-Hole) 封装以提供足够的机械强度，便于频繁插拔调试工具。表面贴装 (SMD) 排针在频繁插拔下易脱落，除非有特殊固定结构。",
+          "source_parameter": "mounting_style"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 3.0,
+          "unit": "A",
+          "reason": "虽然 Debug 接口主要传输信号，但其中包含 VCC 引脚。系统峰值电流可能超过 1.5 A（见需求文档 3.1.1），且 VCC 引脚可能需要通过该排针为外部扩展模块供电或从外部注入电源。标准 2.54mm 排针通常额定 1-3 A，选择高额定值可确保 VCC 引脚的热稳定性及安全性。",
+          "source_parameter": "contact_current_rating"
+        }
+      ],
+      "keywords": [
+        "Pin Header",
+        "排针",
+        "2.54mm Pitch",
+        "4 Pin",
+        "Male Connector",
+        "调试接口"
+      ],
+      "note": "可选参数（未进条件）：operating_temperature"
+    },
+    {
+      "id": "M-EXT-001",
+      "module_name": "外设扩展接口",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "Through-Hole",
+          "reason": "对于 GPIO 扩展接口，用户需要进行频繁的插拔操作。贴片 (SMD) 连接器在反复插拔下容易从 PCB 焊盘脱落，而通孔 (Through-Hole) 排针具有更好的机械强度和可靠性，是开发板扩展接口的标准选择。",
+          "source_parameter": "mounting_style"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 3.0,
+          "unit": "A",
+          "reason": "该接口用于引出 UART/I2C/GPIO。虽然信号引脚本身电流很小，但预留引脚可能包含 VCC 供电功能。考虑到 ESP32-C3 系统总峰值电流 >1.5A，若通过排针对外供电，连接器触点必须具备足够的载流能力以防止过热或压降过大。工程上建议选用额定电流 ≥3A 的连接器以提供安全裕量。",
+          "source_parameter": "contact_current_rating"
+        }
+      ],
+      "keywords": [
+        "排针",
+        "排母",
+        "Header",
+        "Socket",
+        "PCB Connector",
+        "Pin Header"
+      ]
+    },
+    {
+      "id": "M-LED-001",
+      "module_name": "状态指示灯",
+      "module_type": "人机交互",
+      "category": "分立半导体",
+      "leaf_code": "l_rgb_led_with_built_in_ic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "forward_voltage",
+          "op": "cover",
+          "value": [
+            1.8,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "系统由3.3V LDO供电。若使用RGB LED或白光LED，正向电压(Vf)通常在3.0-3.6V之间；若使用红光LED，Vf约为1.8-2.2V。器件必须能在此电压范围内正常工作且允许串联限流电阻进行驱动。",
+          "source_parameter": "forward_voltage"
+        },
+        {
+          "field": "reverse_voltage",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "V",
+          "reason": "反向耐压必须高于系统最大供电电压（USB输入5V或电池充满4.2V+LDO压差等极端情况），防止GPIO配置为高阻态或低电平输出时LED反向击穿。",
+          "source_parameter": "reverse_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "forward_current",
+          "op": "cover",
+          "value": [
+            0.005,
+            0.02
+          ],
+          "unit": "A",
+          "reason": "ESP32-C3 GPIO典型驱动能力为4-12mA（部分引脚可达20mA），通常通过外部驱动或并联多颗LED或使用达林顿结构扩展，或者直接使用20mA标准的LED配合限流电阻。作为指示灯，5-20mA是标准工作区间。",
+          "source_parameter": "forward_current"
+        }
+      ],
+      "keywords": [
+        "LED",
+        "发光二极管",
+        "Light Emitting Diode",
+        "指示灯",
+        "Status LED",
+        "RGB LED"
+      ]
+    }
+  ]
+}

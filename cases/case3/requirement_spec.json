@@ -1,0 +1,786 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-case3-v1",
+  "project": {
+    "name": "case3（由历史选型产物转换）",
+    "summary": "来源 /share/home/zhengzhiqi/workspace/web/output/case3/console/stages/03_device_selection__fd744b65.json"
+  },
+  "global_constraints": {
+    "budget_total_cny": 80.0,
+    "currency": "CNY",
+    "note": "预算取自历史产物，仅供参考"
+  },
+  "selection_items": [
+    {
+      "id": "M-PWR-DCDC-001",
+      "module_name": "主降压转换器 (DC-DC)",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_professional_power_management_pmic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.75,
+            5.25
+          ],
+          "unit": "V",
+          "reason": "系统由 USB Type-C 供电，需求文档明确指定输入电压范围为 4.75 V ～ 5.25 V。器件的绝对最大额定值及工作范围必须完全包含此区间。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "该 DC-DC 为数字负载（ESP32-S3、Flash、PSRAM、LCD）的主电源轨，需求明确要求输出 3.3V 主干电源，且 ESP32-S3 要求 VDD33 稳定在 3.3V ±5%。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "output_current",
+          "op": ">=",
+          "value": 0.5,
+          "unit": "A",
+          "reason": "模块 Notes 明确指出需根据峰值电流 ~500 mA 选型。考虑到 ESP32-S3 Wi-Fi 发射峰值、MCU 满载及外围负载，器件额定电流必须至少覆盖此值并保留一定余量以防过热或保护触发。",
+          "source_parameter": "continuous_output_current"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "switching_frequency",
+          "op": "cover",
+          "value": [
+            500000.0,
+            2200000.0
+          ],
+          "unit": "Hz",
+          "reason": "为了平衡电感尺寸（与频率成反比）和电磁干扰（EMI），以及满足音频子系统对低频开关噪声隔离的需求（避免落入音频频段或产生可闻噪声），建议开关频率高于 20 kHz。高频有助于减小被动元件体积，但过高会增加损耗。常见同步降压 IC 频率在 500kHz-2.2MHz 之间。",
+          "source_parameter": "switching_frequency"
+        },
+        {
+          "field": "efficiency",
+          "op": ">=",
+          "value": 85.0,
+          "unit": "%",
+          "reason": "模块 category_semantic_intent 明确要求效率 >85%。高能效有助于降低发热，特别是在紧凑的开发板布局中，同时满足功耗约束。",
+          "source_parameter": "efficiency"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "应用场景为室内办公/家庭（0°C～40°C），但生产与测试考虑中提到关键器件需满足工业级标准（-40℃~+85℃）以确保可靠性。选择工业级器件可提供更好的热裕量。",
+          "source_parameter": "operating_temperature_range"
+        },
+        {
+          "field": "package",
+          "op": "is",
+          "value": "QFN",
+          "reason": "开发板尺寸受限（< 60mm x 50mm），且需处理约 500mA 电流及相应的热耗散。QFN 封装（如 QFN-16, QFN-8 等带裸露焊盘类型）是此类电源管理 IC 的标准选择，利于 PCB 散热和空间节省。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "同步降压转换器",
+        "DC-DC Buck Converter",
+        "Step-Down Regulator",
+        "电源管理IC",
+        "PMIC",
+        "3.3V LDO/DCDC"
+      ]
+    },
+    {
+      "id": "M-PWR-LDO-001",
+      "module_name": "低噪声音频 LDO",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_professional_power_management_pmic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "模块描述明确指出生成 3.3V 电源用于 ES7210/ES8311 等音频芯片。系统需求文档规定 VDD33 供电电压严格稳定在 3.3V ±5%，但考虑到 LDO 稳压特性及音频模拟电路对共模电压的敏感性，目标器件应支持精确输出 3.3V。",
+          "source_parameter": "output_voltage_3v3"
+        },
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 1.8,
+          "unit": "V",
+          "reason": "模块描述明确指出生成 1.8V 电源。ES8311 数字部分通常由 1.8V 供电，且 I2S 接口电平需兼容（见模块分解中的接口定义）。若选用单通道 LDO，则此参数不适用或需双通道器件；若为双通道 LDO，则必须提供此路输出。",
+          "source_parameter": "output_voltage_1v8"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            3.3,
+            5.25
+          ],
+          "unit": "V",
+          "reason": "模块依赖 M-PWR-DCDC-001，其输出为 3.3V 主干电源。根据 USB 规范，输入电压范围为 4.75V ~ 5.25V，但 DC-DC 输出可能存在波动或负载调整率影响，最低可能降至 3.3V 左右（甚至略低，取决于 DC-DC 精度）。LDO 必须在整个上游电源轨范围内正常工作。特别注意压差（Dropout Voltage）限制，当输入接近 3.3V 时，LDO 仍需能稳定输出 3",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "dropout_voltage",
+          "op": "cover",
+          "value": [
+            0.0002,
+            0.0002
+          ],
+          "unit": "V",
+          "reason": "模块 notes 特别提示'注意压差限制'。由于输出为 3.3V，而输入来自 DC-DC 转换后的 3.3V 总线，两者电压非常接近。若 LDO 压差过大（如传统 LDO 的 500mV+），当输入电压因负载瞬态跌落至 3.3V 附近时将无法维持输出，导致音频芯片复位或噪声激增。因此必须选择 Ultra-Low Dropout 型 LDO。",
+          "source_parameter": "dropout_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "channel_count",
+          "op": "cover",
+          "value": [
+            1.0,
+            2.0
+          ],
+          "unit": "channels",
+          "reason": "模块描述明确要求从 3.3V 生成 3.3V 和 1.8V 两路电压。最直接的实现方式是选用双通道 LDO（Dual Channel LDO），其中一路配置为 3.3V 输出，另一路配置为 1.8V 输出。若使用单通道 LDO，则需额外增加一个独立的 1.8V LDO 或 DC-DC，但这违背了'单一物理器件类别'的宽类映射初衷，且增加了 PCB 面积和噪声源。因此，首选双通道，次选单通道（需额外",
+          "source_parameter": "channel_count"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -23.0,
+            -23.0
+          ],
+          "unit": "package",
+          "reason": "系统尺寸约束建议控制在 60 mm × 50 mm 以内。LDO 作为辅助电源，应尽量节省 PCB 面积。常见的超低噪声 LDO 如 TPS7Axx 系列提供 SOT-23-5/6 或更小的 WLCSP/DFN 封装。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "LDO",
+        "Low Dropout Regulator",
+        "Low Noise LDO",
+        "Ultra-Low Noise",
+        "Linear Regulator",
+        "音频电源"
+      ],
+      "note": "可选参数（未进条件）：quiescent_current"
+    },
+    {
+      "id": "M-MCU-001",
+      "module_name": "ESP32-S3 模组",
+      "module_type": "主控计算",
+      "category": "微控制器",
+      "leaf_code": "l_wifi_module",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "package",
+          "op": "is",
+          "value": "QFN",
+          "reason": "Confirmed Device 为 ESP32-S3-WROOM-1-N16R8，Notes 明确指出 QFN 封装，需注意底部散热焊盘焊接。PCB 设计必须适配该封装。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            40.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档 1.3 节及 3.2.1 节明确工作温度为 0°C ～ 40°C。虽然器件可选工业级 (-40~85°C)，但目标器件必须在 0-40°C 范围内保证所有性能指标（特别是 RF 性能和稳定性）。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "flash_capacity",
+          "op": ">=",
+          "value": 16.0,
+          "unit": "MB",
+          "reason": "Confirmed Device 型号包含 'N16'，代表 16MB Flash。需求文档 1.2 节要求确保 16 MB Flash 带宽充足。这是模组选型的核心规格之一。",
+          "source_parameter": "flash_capacity"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "MCU",
+        "SoC",
+        "ESP32-S3",
+        "Xtensa LX7",
+        "Wi-Fi 4",
+        "Bluetooth 5"
+      ],
+      "specified_device": {
+        "model": "ESP32-S3-WROOM-1-N16R8",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-AUD-ADC-001",
+      "module_name": "PDM 麦克风接口 ADC",
+      "module_type": "传感器",
+      "category": "传感器",
+      "leaf_code": "l_analog_to_digital_conversion_chip_adc",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            2.5,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "ES7210 数据手册规定电源电压范围为 2.5 V 至 3.6 V。系统由低噪声 LDO (M-PWR-LDO-001) 供电，该 LDO 输出为 3.3 V，处于此范围内。",
+          "source_parameter": "supply_voltage_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "is",
+          "value": "['WLCSP', 'QFN']",
+          "reason": "模块 notes 明确指出“WLCSP/QFN 封装，布局需靠近麦克风阵列以减少噪声耦合”。这限制了只能选择小尺寸封装的器件。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "虽然应用场景为室内 (0~40°C)，但生产规范 4.1.2 节要求关键器件采用“工业级 (-40℃ ~ +85℃)”以确保长期可靠性。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "PDM microphone interface ADC",
+        "PDM to PCM converter",
+        "MEMS microphone codec",
+        "audio ADC",
+        "ES7210",
+        "多通道 PDM 接收器"
+      ],
+      "specified_device": {
+        "model": "ES7210",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-AUD-CODEC-001",
+      "module_name": "音频编解码器 (Codec)",
+      "module_type": "执行器与驱动",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_signal_switch_codec_multiplexer",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "control_interface",
+          "op": "cover",
+          "value": [
+            2.0,
+            2.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档 Ch2.2.2 明确指出 I2C 用于配置 ES8311 寄存器。critical_passives 中包含 'I2C 上拉电阻'，证实了物理连接的存在。器件必须具备 I2C 从机接口功能。",
+          "source_parameter": "control_interface"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "Audio Codec",
+        "Stereo DAC/ADC",
+        "I2S Interface",
+        "TDM",
+        "ES8311",
+        "音频编解码器"
+      ],
+      "specified_device": {
+        "model": "ES8311",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-AUD-AMP-001",
+      "module_name": "D 类功率放大器",
+      "module_type": "执行器与驱动",
+      "category": "音频放大器",
+      "leaf_code": "l_audio_power_amplifier",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            4.75,
+            5.25
+          ],
+          "unit": "V",
+          "reason": "NS4150B 明确设计为 5V 供电，以驱动扬声器并实现 ≥3W 输出功率。输入电压必须覆盖 USB 5V 的标准波动范围，同时器件耐压需留有足够余量以防浪涌损坏。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "output_power",
+          "op": ">=",
+          "value": 3.0,
+          "unit": "W",
+          "reason": "这是核心功能指标。在 5V 供电和 8Ω 负载条件下，器件必须能持续提供至少 3W 的 RMS 功率。",
+          "source_parameter": "output_power"
+        },
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 2.0,
+          "unit": "count",
+          "reason": "应用为立体声（Stereo）音频系统，需要独立驱动左、右两个声道扬声器。",
+          "source_parameter": "channel_count"
+        },
+        {
+          "field": "topology",
+          "op": "is",
+          "value": "Class-D",
+          "reason": "需求明确要求 D 类（Class-D）拓扑以实现高效率和大功率输出。",
+          "source_parameter": "topology"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "control_interface",
+          "op": "is",
+          "value": "['PWM', 'SPDIF']",
+          "reason": "D 类功放通常通过 PWM 信号或 SPDIF 信号进行数字音频调制控制。虽然 ES8311 Codec 输出模拟信号，但 NS4150B 作为 D 类功放，若采用数字输入需支持相应协议；若采用模拟输入则需支持内部调制。鉴于关键词包含 SPDIF/PWM，目标器件应具备相应的数字调制能力或兼容模拟驱动模式。此处约束为必须具备接受音频控制信号的能力（通常为单线 PWM 或差分 SPDIF）。",
+          "source_parameter": "control_interface"
+        },
+        {
+          "field": "efficiency",
+          "op": ">=",
+          "value": 85.0,
+          "unit": "%",
+          "reason": "系统峰值电流限制为 500mA，且为便携/开发板应用，高效率有助于降低发热并满足整体功耗预算。",
+          "source_parameter": "efficiency"
+        },
+        {
+          "field": "standby_current",
+          "op": ">=",
+          "value": 0.001,
+          "unit": "A",
+          "reason": "虽然系统待机主要受 MCU 影响，但功放自身的静态电流应尽可能低，以避免在系统休眠时消耗过多电池电量（若使用电池模式）。",
+          "source_parameter": "standby_current"
+        }
+      ],
+      "keywords": [
+        "Class D Audio Amplifier",
+        "D类功放",
+        "立体声放大器",
+        "SPDIF",
+        "PWM Audio",
+        "高保真音频"
+      ],
+      "specified_device": {
+        "model": "NS4150B",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-COM-UART-001",
+      "module_name": "USB 转 UART 控制器",
+      "module_type": "通信",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_usb_conversion_chip",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            3.0,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "模块描述及系统接口定义明确指出该 USB 转 UART 桥接芯片工作电压为 3.3 V。ESP32-S3 的 I/O 容忍电压通常为 3.6 V，CH340K 需在此范围内稳定工作并驱动 UART 信号。",
+          "source_parameter": "supply_voltage_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "应用场景定义为室内办公/家庭（0°C ~ 40°C），工业级器件（-40~85°C）可提供更好的可靠性余量，但商业级（0~70°C）通常足以满足此需求且成本更低。若选工业级更佳，非强制。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "USB to UART Bridge",
+        "USB转串口",
+        "CH340",
+        "FTDI",
+        "PL2303",
+        "UART Converter"
+      ],
+      "specified_device": {
+        "model": "CH340K",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-HMI-LCD-CONN-001",
+      "module_name": "LCD/FPC 连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 24.0,
+          "unit": "pins",
+          "reason": "模块描述及系统接口定义中明确指定为 24-pin，用于连接 SPI LCD 及触摸传感器信号。引脚数不足将导致物理无法连接或功能缺失。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 0.5,
+          "unit": "mm",
+          "reason": "FPC 连接器的间距必须与配套 FPC 线缆的焊盘间距完全一致，否则无法实现电气连接或造成短路。",
+          "source_parameter": "pitch"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "确保信号完整性及隔离性能，防止漏电干扰高速 SPI 信号或触摸灵敏度。符合通用连接器行业标准。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作环境为 0-40°C。连接器材料（塑料体、金属端子）需在此范围内保持机械性能和电气稳定性。选择 70°C 等级可兼容标准室内环境及一定的自热影响。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "FPC Connector",
+        "ZIF Socket",
+        "Flexible Printed Circuit",
+        "Zero Insertion Force",
+        "LCD Connector",
+        "Touch Screen Interface"
+      ],
+      "note": "可选参数（未进条件）：shielding"
+    },
+    {
+      "id": "M-EXT-CAM-CONN-001",
+      "module_name": "摄像头 FPC 连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 15.0,
+          "reason": "模块描述及需求文档明确指定为 15-pin 连接器，用于 DVP 接口连接。引脚数不足会导致信号无法连接或悬空，造成功能失败。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 0.5,
+          "unit": "mm",
+          "reason": "FPC 线缆的线距必须与连接器间距严格一致，否则无法插入或导致短路/接触不良。",
+          "source_parameter": "pitch"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "防止信号间漏电或电源短路的基本要求，违反将导致电气故障。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "dielectric_withstand_voltage",
+          "op": ">=",
+          "value": 500.0,
+          "unit": "Vrms",
+          "reason": "提供基本的绝缘安全裕量，防止击穿。",
+          "source_parameter": "dielectric_withstand_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "虽然系统工作温度为 0~40°C，但工业级/消费级电子产品通常要求器件具备更宽的温度范围以应对存储、运输及局部热点。-40~85°C 是标准工业级范围，确保长期可靠性。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "['SMD', 'Surface Mount']",
+          "reason": "ESP32-S3 开发板采用 SMT 工艺，且空间紧凑（60x50mm），必须使用表面贴装连接器以符合 PCB 制造工艺。",
+          "source_parameter": "mounting_style"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_material",
+          "op": "is",
+          "value": "['Phosphor Bronze', 'Beryllium Copper']",
+          "reason": "DVP 接口传输并行视频数据，需要良好的弹性和导电性。磷青铜或铍铜是行业标准材料，能保证足够的插拔寿命和接触可靠性。工程建议选用镀金触点以防腐蚀。",
+          "source_parameter": "contact_material"
+        }
+      ],
+      "keywords": [
+        "ZIF连接器",
+        "FPC连接器",
+        "柔性电路板连接器",
+        "0.5mm间距",
+        "15pin连接器",
+        "DVP接口连接器"
+      ]
+    },
+    {
+      "id": "M-EXT-USB-CONN-001",
+      "module_name": "USB Type-C 连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "USB Type-C Receptacle",
+          "reason": "模块描述明确指定为 USB Type-C 母座，用于物理连接和电气通路。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 16.0,
+          "unit": "pins",
+          "reason": "标准 USB Type-C 连接器为 16-pin。notes 明确要求 '16-pin'，且需支持 VBUS、D+/D-、CC1/CC2、SBU/GND 等所有必要信号。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "虽然应用环境为 0-40°C，但元器件选型遵循工业级标准（Ch4.1.2），且需考虑生产焊接高温及潜在的高温存储环境。-40~85°C 是工业级连接器的标准范围。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "基本电气安全要求，防止内部短路。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "dielectric_withstand_voltage",
+          "op": ">=",
+          "value": 500.0,
+          "unit": "V",
+          "reason": "基本绝缘耐压要求。",
+          "source_parameter": "dielectric_withstand_voltage"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "USB Type-C Receptacle",
+        "Type-C 母座",
+        "USB-C Connector",
+        "16-pin SMD",
+        "PD Compatible"
+      ]
+    },
+    {
+      "id": "M-EXT-DEBUG-CONN-001",
+      "module_name": "调试排针",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 20.0,
+          "unit": "pins",
+          "reason": "模块描述明确指定为 2x10 Pin 排针，用于引出 JTAG/SWD 及电源。若引脚数不足，无法连接标准调试器或引出必要信号；若过多则浪费空间且可能短路。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 2.54,
+          "unit": "mm",
+          "reason": "标准调试工具（如 ESP-Prog）和开发板布局通常采用 2.54mm 间距。若间距不匹配，物理上无法插入连接器。",
+          "source_parameter": "pitch"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "through_hole",
+          "reason": "排针通常采用直插式安装以提供机械稳固性，特别是用于频繁插拔的调试接口。SMD 排针在机械强度和抗振动方面通常不如 PTH，且文档未指定 SMD。",
+          "source_parameter": "mounting_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            105.0
+          ],
+          "unit": "°C",
+          "reason": "虽然应用环境为 0-40°C，但器件应具备一定的工业级耐受能力以应对生产过程中的高温（如回流焊）及可能的极端环境。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "排针",
+        "Header",
+        "2.54mm Pitch",
+        "Male Connector",
+        "Debug Interface",
+        "JTAG/SWD"
+      ],
+      "note": "可选参数（未进条件）：rated_current"
+    },
+    {
+      "id": "M-PROT-FUSE-001",
+      "module_name": "USB 过流保险丝",
+      "module_type": "保护",
+      "category": "保护器件",
+      "leaf_code": "l_electrostatic_and_surge_protection_tvs_esd",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 1.5,
+          "unit": "A",
+          "reason": "需求文档明确指定保持电流为 1.5A。该器件串联在 USB 输入路径上，若额定电流过低会导致正常工作（如音频功放满负荷、Wi-Fi 发射时总电流可达 500mA-600mA）时误动作；若过高则失去对 1.5A 故障点的保护作用。",
+          "source_parameter": "rated_current"
+        },
+        {
+          "field": "voltage_rating",
+          "op": ">=",
+          "value": 6.0,
+          "unit": "V",
+          "reason": "系统输入为 USB 5V (4.75-5.25V)。PPTC 保险丝通常标称电压为 6V, 8V, 12V, 30V 等。必须选择耐压至少 6V 的型号，以承受 USB 输入的瞬时波动和反向电动势，防止击穿。",
+          "source_parameter": "voltage_rating"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "虽然应用环境为 0-40°C，但考虑到生产存储及可能的极端工况，且系统其他关键器件（MCU, Audio Codec）均为工业级（-40~85°C），保险丝也应具备相应的宽温能力以保证寿命和性能稳定性。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "keywords": [
+        "自恢复保险丝",
+        "PPTC",
+        "Polyfuse",
+        "Resettable Fuse",
+        "过流保护",
+        "1.5A"
+      ],
+      "note": "可选参数（未进条件）：package"
+    },
+    {
+      "id": "M-PROT-ESD-001",
+      "module_name": "ESD 保护阵列",
+      "module_type": "保护",
+      "category": "保护器件",
+      "leaf_code": "l_electrostatic_and_surge_protection_tvs_esd",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "clamping_voltage_max",
+          "op": ">=",
+          "value": 15.0,
+          "unit": "V",
+          "reason": "模块清单中指定钳位电压 <15V。考虑到 ESP32-S3 和音频芯片的 IO 引脚通常耐受 3.3V + 容差（最高约 4.0V-5.5V），以及 TVS 本身的响应延迟，钳位电压必须足够低以确保在 ESD 脉冲期间，被保护线路上的电压不会超过后端芯片的绝对最大额定值（Absolute Maximum Rating）。15V 是一个常见的工业级安全上限，具体需结合后端芯片 datasheet 确",
+          "source_parameter": "clamping_voltage_max"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "is",
+          "value": "DFN or UDFN",
+          "reason": "开发板尺寸受限（60x50mm），且布局密集。TVS 阵列应选用小封装（如 DFN-4, DFN-6, WLCSP 等）以节省 PCB 面积并便于靠近接口放置，减少寄生电感，提高 ESD 保护效果。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "TVS Array",
+        "ESD Protection",
+        "Transient Voltage Suppressor",
+        "静电保护",
+        "低电容 TVS",
+        "多通道保护"
+      ]
+    }
+  ]
+}

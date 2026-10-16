@@ -1,0 +1,1006 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-case18-v1",
+  "project": {
+    "name": "case18（由历史选型产物转换）",
+    "summary": "来源 /share/home/zhengzhiqi/workspace/web/output/case18/console/stages/03_device_selection__aa453ca7.json"
+  },
+  "global_constraints": {
+    "budget_total_cny": 50.0,
+    "currency": "CNY",
+    "note": "预算取自历史产物，仅供参考"
+  },
+  "selection_items": [
+    {
+      "id": "M-PWR-SW-001",
+      "module_name": "电源开关保护组",
+      "module_type": "电源开关",
+      "category": "分立半导体",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "keywords": [
+        "P-MOSFET",
+        "Schottky Diode",
+        "防反接",
+        "电源开关",
+        "Input Protection",
+        "Power Switch IC"
+      ]
+    },
+    {
+      "id": "M-PWR-LDO-DIG-001",
+      "module_name": "数字逻辑3.3V LDO",
+      "module_type": "线性稳压器",
+      "category": "电源管理 IC",
+      "leaf_code": "l_linear_regulator_ldo",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "模块名称及描述明确指定为“数字逻辑3.3V LDO”，为 MCU、ADS1298 数字部分等提供电源。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "output_current",
+          "op": ">=",
+          "value": 0.3,
+          "unit": "A",
+          "reason": "系统功耗约束（Section 3.1.1）规定峰值电流 ≤ 300 mA。LDO 需承载此峰值电流而不进入热保护或电压跌落。",
+          "source_parameter": "max_output_current"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            3.0,
+            4.2
+          ],
+          "unit": "V",
+          "reason": "系统由单节锂电池供电（Section 3.1.1），经防反接开关后输入 LDO。LDO 必须在整个输入范围内稳定输出 3.3 V。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "dropout_voltage",
+          "op": ">=",
+          "value": 0.3,
+          "unit": "V",
+          "reason": "为确保在电池电压较低时仍能稳定输出 3.3V，LDO 必须具备极低的压降电压。",
+          "source_parameter": "dropout_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            125.0
+          ],
+          "unit": "°C",
+          "reason": "生产与测试考虑 (Section 4.1.2) 要求器件温度为工业级 (-40℃ ~ +85℃)。LDO 在大电流下会产生显著热量 (P = (Vin-Vout)*Iout)，需具备足够的热裕量。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "quiescent_current",
+          "op": ">=",
+          "value": 5e-05,
+          "unit": "A",
+          "reason": "系统要求待机 ≤ 5 mA。虽然 LDO 主要负载是数字电路，但低功耗 LDO 有助于整体能效和电池寿命（≥ 8 hours）。",
+          "source_parameter": "quiescent_current"
+        }
+      ],
+      "keywords": [
+        "LDO",
+        "低压差线性稳压器",
+        "Low Dropout Regulator",
+        "3.3V LDO",
+        "High Current LDO",
+        "大电流 LDO"
+      ]
+    },
+    {
+      "id": "M-PWR-LDO-ANA-001",
+      "module_name": "模拟AVDD低噪声LDO",
+      "module_type": "线性稳压器",
+      "category": "电源管理 IC",
+      "leaf_code": "l_linear_regulator_ldo",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "必须满足ADS1298模拟电源引脚的电气规格要求，同时需匹配系统3.3V电源架构。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            2.5,
+            4.5
+          ],
+          "unit": "V",
+          "reason": "器件必须能在整个电池放电周期内正常工作，且在满电时不被过压击穿。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "output_current",
+          "op": ">=",
+          "value": 0.05,
+          "unit": "A",
+          "reason": "若电流能力不足，会导致输出电压跌落或LDO过热保护，造成ADC采样中断或精度下降。",
+          "source_parameter": "output_current"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "超出温度范围可能导致参数漂移、稳定性丧失或器件损坏。医疗电子设备需保证在预期环境下的可靠性。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "dropout_voltage",
+          "op": ">=",
+          "value": 0.2,
+          "unit": "V",
+          "reason": "虽然输入通常高于输出，但在电池电量低或负载瞬变时，输入电压可能波动。极低的压差有助于提高效率并减少热耗散，特别是在输入接近输出电压时。",
+          "source_parameter": "dropout_voltage"
+        },
+        {
+          "field": "quiescent_current",
+          "op": ">=",
+          "value": 0.0001,
+          "unit": "A",
+          "reason": "低功耗设计有助于延长电池续航时间，尤其是在待机模式下。",
+          "source_parameter": "quiescent_current"
+        }
+      ],
+      "keywords": [
+        "LDO",
+        "Low Dropout Regulator",
+        "Low Noise LDO",
+        "Ultra-Low Noise LDO",
+        "Linear Regulator",
+        "模拟电源 LDO"
+      ]
+    },
+    {
+      "id": "M-PWR-DCDC-001",
+      "module_name": "电机驱动5V升压转换器",
+      "module_type": "直流-直流转换器",
+      "category": "电源管理 IC",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            3.0,
+            4.2
+          ],
+          "unit": "V",
+          "reason": "单节锂电池满电及放电截止电压。若器件耐压不足或启动阈值过高，将无法在电池低电量时工作或在充满电时损坏。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "V",
+          "reason": "GC8838步进电机驱动芯片的VCC引脚标准供电电压。电压过低会导致驱动能力下降，过高可能损坏驱动器内部逻辑或功率级。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "output_current",
+          "op": ">=",
+          "value": 0.5,
+          "unit": "A",
+          "reason": "模块描述明确要求 Iout≥500mA。虽然系统总峰值电流限制为300mA，但这是针对主电源轨的约束，而本升压模块专供电机驱动，需满足GC8838及其负载的需求。选型时需考虑 derating，建议实际额定能力更高。",
+          "source_parameter": "continuous_output_current"
+        },
+        {
+          "field": "efficiency",
+          "op": ">=",
+          "value": 85.0,
+          "unit": "%",
+          "reason": "需求文档明确指定效率≥85%。低功耗是医疗便携设备的核心约束，低效率会导致电池续航缩短及局部温升过高。",
+          "source_parameter": "efficiency"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "switching_frequency",
+          "op": "cover",
+          "value": [
+            500000.0,
+            2000000.0
+          ],
+          "unit": "Hz",
+          "reason": "为了在便携设备中减小电感和电容体积，同时避免音频频段噪声干扰心电信号采集（通常避开 <20kHz），选择较高开关频率（如1MHz左右）是工程最佳实践。",
+          "source_parameter": "switching_frequency"
+        }
+      ],
+      "keywords": [
+        "同步升压转换器",
+        "Boost Converter",
+        "Step-Up Regulator",
+        "DC-DC Boost IC",
+        "锂电升压芯片"
+      ]
+    },
+    {
+      "id": "M-MCU-001",
+      "module_name": "主控制器MCU",
+      "module_type": "微控制器",
+      "category": "微控制器",
+      "leaf_code": "l_microcontroller_mcu_mpu_soc",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            40.0
+          ],
+          "unit": "°C",
+          "reason": "法规约束要求工作温度 0°C～+40°C，考虑到便携设备可能在非恒温环境使用，推荐工业级器件以提高可靠性。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            100.0,
+            100.0
+          ],
+          "unit": "or",
+          "reason": "GD32F470ZIT6 具体型号通常对应 LQFP100 封装，需容纳足够的 GPIO、SPI、UART 引脚。若选其他型号，需确保引脚数匹配。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "MCU",
+        "ARM Cortex-M4",
+        "32-bit Microcontroller",
+        "GD32F470",
+        "STM32F4",
+        "Cortex-M4 MCU"
+      ],
+      "specified_device": {
+        "model": "GD32F470ZIT6",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-USB-CONV-001",
+      "module_name": "USB转UART桥接芯片",
+      "module_type": "接口转换器",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_usb_conversion_chip",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            2.8,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "CH340C 由数字逻辑 LDO (M-PWR-LDO-DIG-001) 供电，该 LDO 输出为 3.3V。CH340C 标准工作电压为 3.3V (2.8V-5.5V 范围)。器件必须支持 3.3V 供电且在此电压下稳定工作。",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            40.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度为 0°C ~ +40°C。虽然医疗级常要求工业级 (-40~85°C)，但作为内部接口芯片，最低限度必须覆盖用户规定的 0-40°C。考虑到成本约束 ($50 BOM) 和国产器件特性，优先选择 Commercial (0-70°C) 或 Industrial 级，严禁使用扩展/军用级以外的低温性能不足的器件（如某些仅支持 0-50°C 但无宽温余量的低端替代品，虽 0-40 在范围",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "USB to UART Bridge",
+        "串口转换器",
+        "CH340",
+        "CP2102",
+        "FTDI",
+        "USB转TTL"
+      ],
+      "specified_device": {
+        "model": "CH340C",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-AFE-001",
+      "module_name": "生物电模拟前端AFE #1",
+      "module_type": "模拟前端",
+      "category": "模拟前端",
+      "leaf_code": "l_analog_front_end_afe",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "resolution",
+          "op": ">=",
+          "value": 24.0,
+          "unit": "bit",
+          "reason": "需求文档明确指定使用ADS1298实现24-bit高精度采集，且F-01要求24-bit分辨率以捕获μV级心电信号。低于此精度将导致信号量化噪声过大，无法通过医疗诊断标准。",
+          "source_parameter": "resolution"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            40.0
+          ],
+          "unit": "°C",
+          "reason": "需求Ch 1.3及Ch 3.2.1明确规定工作温度为0~40°C。器件必须在整个范围内保持24位ADC的线性度和精度指标。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "power_consumption",
+          "op": "<=",
+          "value": 0.0075,
+          "unit": "W",
+          "reason": "系统峰值电流≤300mA，典型工作≤80mA。双片ADS1298加上MCU及其他外设，每片AFE的功耗需控制在合理范围（通常ADS1298在500SPS下约几毫瓦），以确保电池续航≥8小时。",
+          "source_parameter": "power_consumption"
+        }
+      ],
+      "keywords": [
+        "AFE",
+        "Analog Front End",
+        "Biopotential ADC",
+        "ECG ADC",
+        "Bio-signal Acquisition",
+        "24-bit ADC"
+      ],
+      "specified_device": {
+        "model": "ADS1298IPAR",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-AFE-002",
+      "module_name": "生物电模拟前端AFE #2",
+      "module_type": "模拟前端",
+      "category": "传感器接口/专用ADC",
+      "leaf_code": "l_analog_front_end_afe",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "resolution",
+          "op": ">=",
+          "value": 24.0,
+          "unit": "bit",
+          "reason": "需求文档第3.1.3节明确要求'ADC分辨率：24-bit'，且目标为诊断级心电采集，低噪声高分辨率是核心指标。",
+          "source_parameter": "resolution"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            40.0
+          ],
+          "unit": "°C",
+          "reason": "需求1.3及3.2.1规定工作温度为0~40°C。作为医疗诊断设备，器件温度漂移指标也需在范围内保证精度。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "is",
+          "value": "QFN",
+          "reason": "confirmed_device为ADS1298IPAR，后缀'PAR'对应TQFP/QFN类封装（实际TI ADS1298常见为PW/TQFP或RGZR/QFN）。需求4.1.2明确指出'ADS1298: QFN-EP (带散热焊盘)'。需确保选型封装支持良好的热管理和PCB布局。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "生物电模拟前端",
+        "ECG ADC",
+        "8通道ADC",
+        "24位模数转换器",
+        "AFE",
+        "ADS1298"
+      ],
+      "specified_device": {
+        "model": "ADS1298IPAR",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-CONN-ELEC-001",
+      "module_name": "电极接口连接器组",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 10,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "Banana Jack Socket",
+          "reason": "模块名称及关键词明确指定为“香蕉座(Banana Jack)”，用于连接标准医疗电极插头。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 10.0,
+          "unit": "ch",
+          "reason": "需求文档第2.2.3节及模块描述明确指出需要连接 RA, LA, RL, LL, V1-V6 共 10 个物理接口。",
+          "source_parameter": "channel_count"
+        },
+        {
+          "field": "contact_material",
+          "op": "is",
+          "value": "Gold Plated",
+          "reason": "模块 notes 明确要求“镀金触点”，且用于微弱生物电信号采集，低接触电阻和高耐腐蚀性至关重要。",
+          "source_parameter": "contact_material"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 0.1,
+          "unit": "Ω",
+          "reason": "模块 notes 明确要求绝缘阻抗 >100MΩ，以防止漏电流干扰微伏级心电信号并满足医疗安全要求。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "Panel Mount",
+          "reason": "作为外部患者电极接口，通常安装在设备外壳面板上，需提供机械固定。",
+          "source_parameter": "mounting_style"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            40.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度约束为 0°C ～ +40°C，连接器必须在此范围内保持性能稳定。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "current_rating",
+          "op": "<=",
+          "value": 5.0,
+          "unit": "A",
+          "reason": "虽然心电信号电流极小，但香蕉插座通常具备较高的额定电流能力（如5A-10A），以应对可能的测试场景或误接高压风险，且属于该规格器件的通用属性。",
+          "source_parameter": "current_rating"
+        },
+        {
+          "field": "voltage_rating",
+          "op": "<=",
+          "value": 1000.0,
+          "unit": "V",
+          "reason": "医疗设备需满足 IEC 60601-1 安规要求，输入端可能面临高电压瞬态（如 ESD、浪涌），高耐压插座有助于提高安全性。",
+          "source_parameter": "voltage_rating"
+        }
+      ],
+      "keywords": [
+        "香蕉座",
+        "Banana Jack",
+        "4mm插座",
+        "电极接口",
+        "Medical Connector",
+        "测试探针座"
+      ]
+    },
+    {
+      "id": "M-PROT-GDT-001",
+      "module_name": "气体放电管保护器件",
+      "module_type": "保护器件",
+      "category": "保护器件",
+      "leaf_code": "l_gas_discharge_tube_gdt",
+      "quantity": 10,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1000000000.0,
+          "unit": "Ω",
+          "reason": "作为患者连接部分的保护器件，GDT在正常工作状态下必须呈现极高的阻抗，以确保流经人体的漏电流符合安规标准（通常微安级）。低绝缘电阻会导致基线漂移或增加触电风险。",
+          "source_parameter": "insulation_resistance"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "器件必须在系统预期的工作环境和存储温度下保持性能稳定，特别是击穿电压的温度系数不能导致极端温度下的保护失效。工业级温度范围是医疗设备的一般要求。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "keywords": [
+        "气体放电管",
+        "Gas Discharge Tube",
+        "GDT",
+        "浪涌保护器",
+        "Surge Protector",
+        "SPD"
+      ],
+      "specified_device": {
+        "model": "B88069X1640T902",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-PROT-TRANS-001",
+      "module_name": "晶体管限流保护器件",
+      "module_type": "保护器件",
+      "category": "分立半导体",
+      "leaf_code": "l_digital_transistor",
+      "quantity": 10,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "transistor_type",
+          "op": "is",
+          "value": "NPN",
+          "reason": "模块描述及confirmed_device明确指定为NPN晶体管，用于配合GDT进行保护。若极性错误（如PNP），将无法正确钳位或限流，导致AFE损坏。",
+          "source_parameter": "transistor_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -55.0,
+            150.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度为0°C～40°C，存储温度-20°C～60°C。器件结温范围需宽于工作环境温度，以确保在高温老化测试（50-60°C）或极端环境下可靠工作。标准硅器件通常支持-55°C至150°C，满足医疗工业级要求。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "collector_current_ic_max",
+          "op": ">=",
+          "value": 0.1,
+          "unit": "A",
+          "reason": "作为限流保护器件，在正常工作时仅流过微小的漏电流（μA级）。但在ESD或浪涌期间，它可能与GDT协同动作限制流入AFE的电流。DTC114EE典型集电极电流为100mA，足以应对大多数ESD事件的瞬态能量吸收，同时不会因过大电流而误导通或过热。",
+          "source_parameter": "collector_current_ic_max"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -323.0,
+            -323.0
+          ],
+          "reason": "型号DTC114EE的标准封装为SOT-323。该封装体积小，适合高密度PCB布局，且符合模块notes中提到的“靠近电极接口放置”的空间要求。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "预偏置晶体管",
+        "集成电阻NPN",
+        "DTC114EE",
+        "带阻三极管",
+        "内置电阻晶体管",
+        "NPN Digital Transistor"
+      ],
+      "specified_device": {
+        "model": "DTC114EE",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-HMI-LCD-001",
+      "module_name": "液晶显示屏接口",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 28.0,
+          "unit": "pins",
+          "reason": "模块描述明确指定为 '28Pin FPC插座'，且需求文档接口汇总清单中确认物理接口为 'FPC LCD: 28-Pin FPC 插座'。引脚数不匹配将无法物理连接。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "['ZIF (Zero Insertion Force)', 'Bottom Contact']",
+          "reason": "分类结果明确指出为 'ZIF插座' 和 'Bottom Contact'。LCD 模组通常采用 ZIF 连接器以减小厚度并方便插拔，底部接触是 FPC 与 PCB 垂直连接的标准方式。若不支持 ZIF 或侧向接触，将导致无法安装或尺寸超标。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 0.5,
+          "unit": "mm",
+          "reason": "28 Pin 的 LCD FPC 连接器常见间距为 0.5mm 或 1.0mm。考虑到便携式医疗设备对轻薄化的要求（整机高度限制 40mm），以及主流中小尺寸 TFT-LCD 模组的行业标准，0.5mm 是最可能的规格。若 Pitch 不匹配，FPC 无法插入。建议检索时优先覆盖 0.5mm，并验证屏模组具体规格。",
+          "source_parameter": "pitch"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "['Surface Mount (SMT)', 'Board Edge']",
+          "reason": "系统组装工艺要求主要为 SMT（第 4.1.3 节）。连接器位于 HMI 模块，通常安装在 PCB 边缘以便屏幕连接。SMT Board Edge 安装是此类应用的标准工艺，插件式连接器会显著增加高度并占用内部空间。",
+          "source_parameter": "mounting_style"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -20.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度要求 0~40°C，存储温度 -20~60°C。连接器作为机械部件，其材料（塑料/金属）必须在这些温度范围内保持性能稳定，特别是 ZIF 结构的锁紧力不能随温度剧烈变化导致接触不良。工业级连接器通常覆盖 -40~85°C，此处取保守值。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "FPC连接器",
+        "ZIF插座",
+        "28Pin",
+        "LCD Connector",
+        "柔性电路板连接器",
+        "Bottom Contact"
+      ]
+    },
+    {
+      "id": "M-HMI-BUZ-001",
+      "module_name": "有源蜂鸣器",
+      "module_type": "声光器件",
+      "category": "声光器件",
+      "leaf_code": "l_buzzer",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            2.7,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "模块描述明确指定 '3.3V驱动'。依赖模块 M-PWR-LDO-DIG-001 提供稳定的 3.3V 数字电源。考虑到锂电池充电时的最高电压 (4.2V) 及可能的瞬态浪涌，器件耐压需留有余量（通常选择 5.5V 额定值）。工作电压范围需完全覆盖 LDO 输出的 3.3V ±容差。",
+          "source_parameter": "supply_voltage"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "有源蜂鸣器",
+        "Active Buzzer",
+        "Piezo Buzzer",
+        "声音报警器",
+        "3.3V 蜂鸣器"
+      ]
+    },
+    {
+      "id": "M-HMI-KEY-001",
+      "module_name": "用户按键组",
+      "module_type": "开关",
+      "category": "开关",
+      "leaf_code": "l_signal_switch_codec_multiplexer",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "医疗设备需满足 IEC 60601-1 绝缘要求。虽然按键本身不直接连接患者，但作为人机接口的一部分，其绝缘性能需符合整体安规设计，防止漏电流路径。",
+          "source_parameter": "insulation_resistance"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": ">=",
+          "value": 0.05,
+          "unit": "Ω",
+          "reason": "按键连接至 MCU GPIO（内部上拉），虽然电流极小，但低接触电阻可确保信号边沿清晰，减少因接触不良导致的误触发或去抖困难。对于医疗设备的可靠性至关重要。",
+          "source_parameter": "contact_resistance"
+        }
+      ],
+      "keywords": [
+        "轻触开关",
+        "Tactile Switch",
+        "按键开关",
+        "Momentary Switch",
+        "Push Button",
+        "微动开关"
+      ],
+      "note": "可选参数（未进条件）：mounting_type"
+    },
+    {
+      "id": "M-DRV-MOTOR-001",
+      "module_name": "步进电机驱动芯片",
+      "module_type": "电机驱动器",
+      "category": "分立半导体",
+      "leaf_code": "l_stepper_motor_driver_chip",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            5.0,
+            30.0
+          ],
+          "unit": "V",
+          "reason": "GC8838 数据手册标准规格为 VCC 5-30V。系统依赖 M-PWR-DCDC-001 提供 5V 电源，但驱动器需支持一定余量以防瞬态过压或不同打印机头电压差异。",
+          "source_parameter": "supply_voltage_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "is",
+          "value": "QFN (Exposed Pad)",
+          "reason": "GC8838 常见封装为 SOP-16 或 QFN-16。考虑到 PCBA 尺寸限制 (150x100mm) 和散热需求，QFN 更优。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "Stepper Motor Driver",
+        "步进电机驱动器",
+        "GC8838",
+        "全步/半步驱动",
+        "微步细分",
+        "脉冲方向控制"
+      ],
+      "specified_device": {
+        "model": "GC8838",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-CONN-XT60-001",
+      "module_name": "XT60电源接口",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "voltage_rating",
+          "op": "cover",
+          "value": [
+            4.2,
+            15.0
+          ],
+          "unit": "V",
+          "reason": "输入源为单节锂电池，最高电压 4.2V。XT60 标准耐压通常为 15V 或更高。必须确保绝缘耐压远高于工作电压以防止电弧或击穿。",
+          "source_parameter": "voltage_rating"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "PCB Through-Hole",
+          "reason": "XT60 为大电流且有一定机械应力风险的连接器。文档 notes 明确要求“底部建议点胶加固”，这通常对应于具有较长引脚或专门设计用于焊接在 PCB 焊盘上的插件式（Through-Hole）结构，而非表面贴装（SMD），以确保机械强度和导电截面积。",
+          "source_parameter": "mounting_method"
+        },
+        {
+          "field": "polarity",
+          "op": "is",
+          "value": "Keyed (Polarized)",
+          "reason": "作为电池输入接口，防反接是基本安全要求。虽然电路中有 SK34 二极管防反接，但物理连接器的极性键位是防止用户误插的第一道防线，避免损坏后端电路或引发安全事故。",
+          "source_parameter": "polarity"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.005,
+          "unit": "Ω",
+          "reason": "低接触电阻对于大电流传输至关重要，可减少连接器自身的发热和压降，特别是在电机启动等瞬态大电流场景下。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -20.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统存储温度要求 -20°C ~ +60°C，工作环境 0°C ~ 40°C。连接器材料（塑料和金属）需在这些温度下保持机械性能和电气性能稳定，特别是低温下的脆性和高温下的软化。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "医疗电子设备对绝缘有较高要求，防止漏电流。虽然主要绝缘由外壳保证，但连接器本身的绝缘性能也是 EMC 和安全认证的一部分。",
+          "source_parameter": "insulation_resistance"
+        }
+      ],
+      "keywords": [
+        "XT60",
+        "电源连接器",
+        "Battery Connector",
+        "T-Plug",
+        "大电流接口",
+        "DC Power Jack"
+      ]
+    },
+    {
+      "id": "M-CONN-USB-001",
+      "module_name": "USB Type-B接口",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "Micro-USB Type-B",
+          "reason": "模块描述明确指定为 Micro-USB Type-B，且系统需求中定义为 USB 通信与供电接口。若类型不匹配将无法物理连接及实现 F-05 功能。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "依据 IEC 60601-1 医疗安全要求，外部可触及的导电部件之间及与地之间需具备高绝缘电阻，防止漏电流危害患者。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "dielectric_withstand_voltage",
+          "op": ">=",
+          "value": 500.0,
+          "unit": "V",
+          "reason": "IEC 60601-1 基础绝缘或加强绝缘测试电压要求，确保电气安全隔离。",
+          "source_parameter": "dielectric_withstand_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            40.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度约束为 0°C ~ +40°C。连接器材料（塑料、金属镀层）在此范围内必须保持机械性能和电气稳定性。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.05,
+          "unit": "Ω",
+          "reason": "USB 标准通常要求接触电阻 ≤ 50mΩ 以保证信号质量和低功耗传输。医疗便携设备对连接可靠性有较高要求，低阻值有助于减少发热和信号衰减。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "SMT (Surface Mount)",
+          "reason": "PCBA 尺寸限制严格（150x100mm），且追求高集成度。SMT 连接器占用面积小，适合高密度布局。若结构强度要求极高，可选插件加固，但 SMT 更符合现代便携医疗设备趋势。",
+          "source_parameter": "mounting_style"
+        }
+      ],
+      "keywords": [
+        "Micro-USB",
+        "USB Type-B",
+        "连接器",
+        "Connector",
+        "Mini USB",
+        "数据接口"
+      ]
+    },
+    {
+      "id": "M-CONN-SWD-001",
+      "module_name": "SWD调试接口",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "through_hole",
+          "reason": "Category keywords中包含“通孔排针”。医疗便携设备在振动环境下需要连接器具有足够的机械强度，通孔插件通常比贴片SMD提供更高的抗拉强度和可靠性。",
+          "source_parameter": "mounting_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "degC",
+          "reason": "系统需求规定工作温度为0~40°C，存储温度为-20~60°C。考虑到制造、运输及可能的极端环境维护，器件本身应具备工业级温度特性（-40~85°C）以确保在整个生命周期内的机械完整性和电气性能稳定。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_plating",
+          "op": "is",
+          "value": "gold",
+          "reason": "SWD接口用于开发和生产测试，预计会有频繁的插拔操作。镀金层能提供低接触电阻和优异的耐腐蚀性，确保长期连接的可靠性。工程建议采用3u\"或5u\"金厚。",
+          "source_parameter": "contact_plating"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "作为医疗设备的一部分，尽管是数字接口，仍应遵循医疗电子的一般绝缘要求，防止漏电干扰敏感的模拟前端（ADS1298）或造成安全隐患。高绝缘电阻是高质量连接器的基本指标。",
+          "source_parameter": "insulation_resistance"
+        }
+      ],
+      "keywords": [
+        "排针",
+        "Pin Header",
+        "2.54mm",
+        "SWD接口",
+        "调试接口",
+        "通孔排针"
+      ],
+      "note": "可选参数（未进条件）：rated_current"
+    }
+  ]
+}

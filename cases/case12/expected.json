@@ -1,0 +1,123 @@
+{
+  "case": "case12",
+  "requirement_version": "req-case12-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-BUCK-001": {
+      "module_name": "主降压转换器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PWR-LDO-001": {
+      "module_name": "低噪声线性稳压器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-AMP-IC-001": {
+      "module_name": "D类功放芯片",
+      "historical_selection": [
+        {
+          "model": "TPA3255",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "TPA3255",
+      "evaluation_source": ""
+    },
+    "M-PRE-OPAMP-001": {
+      "module_name": "双通道运算放大器",
+      "historical_selection": [
+        {
+          "model": "NE5532",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "NE5532",
+      "evaluation_source": ""
+    },
+    "M-PRE-POT-001": {
+      "module_name": "音调调节电位器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-COMM-BT-001": {
+      "module_name": "蓝牙音频模组",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-COMM-ANT-001": {
+      "module_name": "蓝牙天线接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-RELAY-SW-001": {
+      "module_name": "信号切换继电器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "HFD4/5-S",
+      "evaluation_source": ""
+    },
+    "M-RELAY-DRV-001": {
+      "module_name": "继电器驱动晶体管",
+      "historical_selection": [
+        {
+          "model": "S8050",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "S8050",
+      "evaluation_source": ""
+    },
+    "M-RELAY-SWITCH-001": {
+      "module_name": "输入选择开关",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-IO-RCA-001": {
+      "module_name": "RCA莲花座",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-IO-JACK-001": {
+      "module_name": "3.5mm耳机插座",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-IO-SPK-001": {
+      "module_name": "扬声器输出端子",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-IO-DC-001": {
+      "module_name": "DC电源插座",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

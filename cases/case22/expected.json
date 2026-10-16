@@ -1,0 +1,183 @@
+{
+  "case": "case22",
+  "requirement_version": "req-case22-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-LDO-001": {
+      "module_name": "LDO 稳压器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-ESD-001": {
+      "module_name": "USB ESD 保护器件",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-MCU-001": {
+      "module_name": "MCU 芯片",
+      "historical_selection": [
+        {
+          "model": "IAP15F2K61S2-28I-LQFP44",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "IAP15F2K61S2-28I-LQFP44",
+      "evaluation_source": ""
+    },
+    "M-CRY-001": {
+      "module_name": "系统晶振",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CH340-001": {
+      "module_name": "USB 转串口芯片",
+      "historical_selection": [
+        {
+          "model": "CH340C",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "CH340C",
+      "evaluation_source": ""
+    },
+    "M-USB-CONN-001": {
+      "module_name": "USB Type-B 插座",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-LATCH-001": {
+      "module_name": "8 位锁存器",
+      "historical_selection": [
+        {
+          "model": "SN74HC573ADWR",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "SN74HC573ADWR",
+      "evaluation_source": ""
+    },
+    "M-DIGIT-001": {
+      "module_name": "4 位数码管",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-LED-001": {
+      "module_name": "LED 发光二极管",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-BUZZER-DRV-001": {
+      "module_name": "蜂鸣器驱动三极管",
+      "historical_selection": [
+        {
+          "model": "S8050",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "S8050",
+      "evaluation_source": ""
+    },
+    "M-BUZZER-001": {
+      "module_name": "有源蜂鸣器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-KEY-INDEP-001": {
+      "module_name": "独立按键",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-KEY-MATRIX-001": {
+      "module_name": "矩阵键盘",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-POT-001": {
+      "module_name": "电位器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "3386P",
+      "evaluation_source": ""
+    },
+    "M-TEMP-001": {
+      "module_name": "数字温度传感器",
+      "historical_selection": [
+        {
+          "model": "DS18B20",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "DS18B20",
+      "evaluation_source": ""
+    },
+    "M-ULTRA-001": {
+      "module_name": "超声波测距模块",
+      "historical_selection": [
+        {
+          "model": "TCT40-16T",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "TCT40-16T",
+      "evaluation_source": ""
+    },
+    "M-IR-001": {
+      "module_name": "红外接收头",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-ISP-001": {
+      "module_name": "ISP 下载接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HDR20-001": {
+      "module_name": "GPIO 扩展排针 (20Pin)",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HDR16-001": {
+      "module_name": "GPIO 扩展排针 (16Pin)",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

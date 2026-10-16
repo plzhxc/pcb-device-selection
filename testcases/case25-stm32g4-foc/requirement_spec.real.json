@@ -1,0 +1,516 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "SPEC-d942b4d6c43448bf9a38c4155106ed62-v12-d12",
+  "project": {
+    "name": "验收 domain-final-b · CASE-14 · R1 · 基于STM32G4的FOC电机驱动学习板",
+    "summary": "用于封闭台架电机控制学习的STM32G431RBT6 FOC开发板研发原型，支持单台三相BLDC/PMSM无感FOC及滑模观测器。目标输入为3S至6S锂电池，系统工作电压9.0V至25.2V；连续相电流目标5A，峰值10A最长1秒且每10秒至多一次。XT30PW用于电池直流输入，MR30PW用于三相电机U/V/W输出。编码器和外接霍尔位置传感器为硬件接口扩展，验证接线与读数，不要求有感FOC固件；板上不新增磁场传感器。模块方案已确认，具体实现仍由设计核验。"
+  },
+  "global_constraints": {
+    "currency": "CNY",
+    "note": "成本来自预设元件库参考价；需求侧未提供预算"
+  },
+  "selection_items": [
+    {
+      "id": "SEL-001",
+      "module_name": "STM32G4主控与实时控制模块",
+      "module_type": "32位Cortex M单片机子模块",
+      "category": "32位Cortex M单片机子模块",
+      "leaf_code": "l_cryptographic_coprocessor",
+      "leaf_codes": [
+        "l_cryptographic_coprocessor",
+        "l_digital_signal_processor_dsp_dsc",
+        "l_microcontroller_mcu_mpu_soc",
+        "l_programmable_logic_device_cpld_fpga",
+        "l_secure_authenticator",
+        "l_secure_element",
+        "l_trusted_platform_module"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-002"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "purpose": "以STM32G431RBT6作为主控，运行FOC控制并协调采样、通信、存储及外设控制。",
+      "boundary": "主控最小系统、时钟复位、供电域和调试接口的具体实现待设计；器件介绍中的能力需受控核验。普通状态LED如有，由主控GPIO承担指示，不单设数码管或点阵显示模块。",
+      "chenxin_module_id": "MOD-001",
+      "chenxin_selection_item_id": "SEL-001",
+      "specified_device": {
+        "model": "STM32G431RBT6",
+        "intent": "must"
+      },
+      "note": "用户器件介绍：Cortex-M4、170MHz、集成硬件DSP指令、单精度FPU、高分辨率PWM定时器及内置比较器；不直接等同整机保证指标。；用户器件介绍：12位、5MSPS高速ADC；不作为整机测量精度或采样性能保证。",
+      "specified_reference_ids": [
+        "REF-001"
+      ]
+    },
+    {
+      "id": "SEL-002",
+      "module_name": "三相无刷电机逆变驱动模块",
+      "module_type": "无刷电机驱动子模块",
+      "category": "无刷电机驱动子模块",
+      "leaf_code": "l_brush_dc_motor_drive_chip",
+      "leaf_codes": [
+        "l_brush_dc_motor_drive_chip",
+        "l_brushless_dc_bldc_motor_drive_chip",
+        "l_field_effect_transistor_mosfet",
+        "l_gate_driver_chip",
+        "l_ignition_timing_controller",
+        "l_isolated_gate_driver",
+        "l_motor_drive_chip",
+        "l_relay_coil_driver_chip",
+        "l_stepper_motor_driver_chip"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-003",
+        "REQ-004",
+        "REQ-017"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "purpose": "用NCE7560K N-MOSFET构建三相全桥，驱动BLDC或PMSM电机。",
+      "boundary": "板级目标为连续相电流5A、峰值10A最长1秒且每10秒至多一次。母线瞬态、开关频率、散热、能量回流、保护实现以及急停、过流和温升验证由设计核定；器件标称值不构成板级电流能力。",
+      "chenxin_module_id": "MOD-002",
+      "chenxin_selection_item_id": "SEL-002",
+      "specified_device": {
+        "model": "NCE7560K",
+        "intent": "must"
+      },
+      "note": "约束没有 field_key，无法对应器件字段；用户器件介绍标称75V/60A、Rds(on) 6.5mΩ；不作为整板输出能力或连续电流承诺。",
+      "specified_reference_ids": [
+        "REF-002"
+      ]
+    },
+    {
+      "id": "SEL-003",
+      "module_name": "功率MOSFET辅助驱动模块",
+      "module_type": "IGBT与功率MOS栅极驱动子模块",
+      "category": "IGBT与功率MOS栅极驱动子模块",
+      "leaf_code": "l_brush_dc_motor_drive_chip",
+      "leaf_codes": [
+        "l_brush_dc_motor_drive_chip",
+        "l_brushless_dc_bldc_motor_drive_chip",
+        "l_field_effect_transistor_mosfet",
+        "l_gate_driver_chip",
+        "l_ignition_timing_controller",
+        "l_isolated_gate_driver",
+        "l_motor_drive_chip",
+        "l_relay_coil_driver_chip",
+        "l_stepper_motor_driver_chip"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-005"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "purpose": "由FMMT593高压PNP晶体管构成功率管辅助驱动电路。",
+      "boundary": "驱动拓扑、栅极电平、切换时序、器件适用性及故障状态待设计和核验。",
+      "chenxin_module_id": "MOD-003",
+      "chenxin_selection_item_id": "SEL-003",
+      "specified_device": {
+        "model": "FMMT593",
+        "intent": "must"
+      },
+      "specified_reference_ids": [
+        "REF-003"
+      ]
+    },
+    {
+      "id": "SEL-004",
+      "module_name": "三相低边电流采样模块",
+      "module_type": "电流检测放大子模块",
+      "category": "电流检测放大子模块",
+      "leaf_code": "l_current_sensing_amplifier",
+      "leaf_codes": [
+        "l_current_sensing_amplifier",
+        "l_current_sensor",
+        "l_electric_energy_metering_chip",
+        "l_sensor_measurement_converter"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-006"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "purpose": "使用RS624XQ四通道轨到轨运放实现三相低边电流采样信号调理。",
+      "boundary": "采样电阻、量程、增益、带宽、精度、偏置和过流保护接口待设计核定。",
+      "chenxin_module_id": "MOD-004",
+      "chenxin_selection_item_id": "SEL-004",
+      "specified_device": {
+        "model": "RS624XQ",
+        "intent": "must"
+      },
+      "specified_reference_ids": [
+        "REF-004"
+      ]
+    },
+    {
+      "id": "SEL-005",
+      "module_name": "GS4157B模拟开关模块",
+      "module_type": "模拟开关子模块",
+      "category": "模拟开关子模块",
+      "leaf_code": "l_analog_switch_multiplexer",
+      "leaf_codes": [
+        "l_analog_switch_multiplexer",
+        "l_analog_switch_special_purpose",
+        "l_signal_switch_codec_multiplexer"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-008"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "purpose": "用GS4157B接通或切换模拟信号通道，支持通道自动切换功能。",
+      "boundary": "模拟信号来源、通道映射、控制条件、切换时序与开关电气范围待定义。",
+      "chenxin_module_id": "MOD-005",
+      "chenxin_selection_item_id": "SEL-005",
+      "specified_device": {
+        "model": "GS4157B",
+        "intent": "must"
+      },
+      "specified_reference_ids": [
+        "REF-007"
+      ]
+    },
+    {
+      "id": "SEL-006",
+      "module_name": "LM321单相电流采样模块",
+      "module_type": "电流检测放大子模块",
+      "category": "电流检测放大子模块",
+      "leaf_code": "l_current_sensing_amplifier",
+      "leaf_codes": [
+        "l_current_sensing_amplifier",
+        "l_current_sensor",
+        "l_electric_energy_metering_chip",
+        "l_sensor_measurement_converter"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-009"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "purpose": "由LM321运放实现单相电流采样信号调理。",
+      "boundary": "采样对象、量程、精度、带宽、增益和保护待设计核定。",
+      "chenxin_module_id": "MOD-006",
+      "chenxin_selection_item_id": "SEL-006",
+      "specified_device": {
+        "model": "LM321",
+        "intent": "must"
+      },
+      "specified_reference_ids": [
+        "REF-008"
+      ]
+    },
+    {
+      "id": "SEL-007",
+      "module_name": "CAN物理层收发模块",
+      "module_type": "CAN收发子模块",
+      "category": "CAN收发子模块",
+      "leaf_code": "l_can_bus_module",
+      "leaf_codes": [
+        "l_can_bus_module",
+        "l_can_controller",
+        "l_can_transceiver",
+        "l_isolated_can_transceiver",
+        "l_isolated_can_transceiver_with_power_supply"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-007"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "purpose": "使用TJA1051TK/3高速CAN收发器实现控制器与CAN总线间的物理层连接。",
+      "boundary": "CAN标准、波特率、隔离、端接、共模防护和连接器定义待明确。",
+      "chenxin_module_id": "MOD-007",
+      "chenxin_selection_item_id": "SEL-007",
+      "specified_device": {
+        "model": "TJA1051TK/3",
+        "intent": "must"
+      },
+      "specified_reference_ids": [
+        "REF-006"
+      ]
+    },
+    {
+      "id": "SEL-008",
+      "module_name": "TS-KG02S继电器输出控制模块",
+      "module_type": "电磁继电器驱动子模块",
+      "category": "电磁继电器驱动子模块",
+      "leaf_code": "l_brush_dc_motor_drive_chip",
+      "leaf_codes": [
+        "l_brush_dc_motor_drive_chip",
+        "l_brushless_dc_bldc_motor_drive_chip",
+        "l_field_effect_transistor_mosfet",
+        "l_gate_driver_chip",
+        "l_ignition_timing_controller",
+        "l_isolated_gate_driver",
+        "l_motor_drive_chip",
+        "l_relay_coil_driver_chip",
+        "l_stepper_motor_driver_chip"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-010"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "purpose": "实现板载继电器输出控制。",
+      "boundary": "继电器负载、触点额定值、驱动电路、默认状态与保护要求待核定。",
+      "chenxin_module_id": "MOD-008",
+      "chenxin_selection_item_id": "SEL-008",
+      "specified_device": {
+        "model": "TS-KG02S",
+        "intent": "must"
+      },
+      "specified_reference_ids": [
+        "REF-009"
+      ]
+    },
+    {
+      "id": "SEL-009",
+      "module_name": "SPI NOR Flash配置存储模块",
+      "module_type": "NOR Flash子模块",
+      "category": "NOR Flash子模块",
+      "leaf_code": "l_eeprom",
+      "leaf_codes": [
+        "l_eeprom",
+        "l_ferroelectric_random_access_memory_fram",
+        "l_nand_flash",
+        "l_non_volatile_memory_rom",
+        "l_nor_flash",
+        "l_nvsram_non_volatile_sram"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-011"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "purpose": "使用W25Q16JVUXIQ SPI Flash保存配置参数。",
+      "boundary": "参数布局、写入策略、掉电一致性和耐久性要求待设计；用户给出的2MB按原述记录。",
+      "chenxin_module_id": "MOD-009",
+      "chenxin_selection_item_id": "SEL-009",
+      "specified_device": {
+        "model": "W25Q16JVUXIQ",
+        "intent": "must"
+      },
+      "note": "用户描述为2MB SPI Flash，用于存储配置参数。",
+      "specified_reference_ids": [
+        "REF-005"
+      ]
+    },
+    {
+      "id": "SEL-010",
+      "module_name": "XT30PW与MR30PW电源连接接口",
+      "module_type": "接口模块",
+      "category": "接口模块",
+      "leaf_code": "l_ac_power_connector",
+      "leaf_codes": [
+        "l_ac_power_connector",
+        "l_audio_connector_headphones",
+        "l_automotive_connector",
+        "l_banana_plug_alligator_clip",
+        "l_barrier_terminal_block",
+        "l_blade_shrapnel_contacts_the_battery_connector",
+        "l_board_to_board_and_backplane_connectors",
+        "l_button_and_strip_battery_connector",
+        "l_circular_cable_connector",
+        "l_circular_din_connector",
+        "l_cold_pressed_terminal",
+        "l_d_sub_vga_connector",
+        "l_dc_power_connector",
+        "l_din41612_connector",
+        "l_displayport_dp_connector",
+        "l_dvi_connector",
+        "l_ethernet_connector_rj45_rj11",
+        "l_feed_rf_insulator",
+        "l_female_connector",
+        "l_ffc_connector_flexible_flat_cable",
+        "l_ffc_fpc_connector",
+        "l_gold_finger_connector",
+        "l_hard_disk_connector_sas_sata_m_2",
+        "l_hdmi_connector",
+        "l_ic_transistor_socket",
+        "l_idc_pierceable_connector_bull_horn_simplified_bull",
+        "l_ieee_1394_firewire_connector",
+        "l_lotus_connector_rca_connector",
+        "l_memory_module_connector_ddr",
+        "l_micro_match_connector",
+        "l_optical_module_connector",
+        "l_pci_pcie_connector",
+        "l_pin_header",
+        "l_plug_in_terminal_block",
+        "l_pogo_pin_spring_probe_connector",
+        "l_rf_coaxial_connector",
+        "l_rubber_shell_wire_to_board_wire_to_wire",
+        "l_screw_terminal_block",
+        "l_sd_card_memory_card_connector",
+        "l_shorting_cap_jumper_cap",
+        "l_sim_card_connector",
+        "l_spring_loaded_terminal_block",
+        "l_telecommunication_interface_ic",
+        "l_test_point_test_loop",
+        "l_usb_connector",
+        "l_usb_conversion_chip",
+        "l_usb_hub",
+        "l_usb_type_c_port_controller",
+        "l_wire_to_board_pin_header"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-012",
+        "REQ-015"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "purpose": "XT30PW提供3S至6S锂电池直流输入，MR30PW提供三相电机U/V/W输出连接。",
+      "boundary": "两连接器分别承担电池输入和三相电机输出，不作为并联电源入口。接插件身份、电流额定能力、端口保护和布线由设计核验；模块仍按已确认的1个独立电路记录。",
+      "chenxin_module_id": "MOD-010",
+      "chenxin_selection_item_id": "SEL-010",
+      "specified_device": {
+        "model": "XT30PW",
+        "intent": "must"
+      },
+      "specified_reference_ids": [
+        "REF-010",
+        "REF-011"
+      ]
+    },
+    {
+      "id": "SEL-011",
+      "module_name": "编码器接口模块",
+      "module_type": "编码器接口模块",
+      "category": "编码器接口模块",
+      "leaf_code": "l_magnetic_angle_sensor",
+      "leaf_codes": [
+        "l_magnetic_angle_sensor",
+        "l_position_sensor",
+        "l_resolver_to_digital_converter",
+        "l_rotary_encoder"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-013"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "purpose": "提供外接编码器位置传感器接口，支持接线与读数验证。",
+      "boundary": "编码器类型、信号电平、供电、线路接收方式和协议由设计核对；本版不要求有感FOC固件。",
+      "chenxin_module_id": "MOD-011",
+      "chenxin_selection_item_id": "SEL-011"
+    },
+    {
+      "id": "SEL-012",
+      "module_name": "霍尔位置传感器接口模块",
+      "module_type": "接口模块",
+      "category": "接口模块",
+      "leaf_code": "l_ac_power_connector",
+      "leaf_codes": [
+        "l_ac_power_connector",
+        "l_audio_connector_headphones",
+        "l_automotive_connector",
+        "l_banana_plug_alligator_clip",
+        "l_barrier_terminal_block",
+        "l_blade_shrapnel_contacts_the_battery_connector",
+        "l_board_to_board_and_backplane_connectors",
+        "l_button_and_strip_battery_connector",
+        "l_circular_cable_connector",
+        "l_circular_din_connector",
+        "l_cold_pressed_terminal",
+        "l_d_sub_vga_connector",
+        "l_dc_power_connector",
+        "l_din41612_connector",
+        "l_displayport_dp_connector",
+        "l_dvi_connector",
+        "l_ethernet_connector_rj45_rj11",
+        "l_feed_rf_insulator",
+        "l_female_connector",
+        "l_ffc_connector_flexible_flat_cable",
+        "l_ffc_fpc_connector",
+        "l_gold_finger_connector",
+        "l_hard_disk_connector_sas_sata_m_2",
+        "l_hdmi_connector",
+        "l_ic_transistor_socket",
+        "l_idc_pierceable_connector_bull_horn_simplified_bull",
+        "l_ieee_1394_firewire_connector",
+        "l_lotus_connector_rca_connector",
+        "l_memory_module_connector_ddr",
+        "l_micro_match_connector",
+        "l_optical_module_connector",
+        "l_pci_pcie_connector",
+        "l_pin_header",
+        "l_plug_in_terminal_block",
+        "l_pogo_pin_spring_probe_connector",
+        "l_rf_coaxial_connector",
+        "l_rubber_shell_wire_to_board_wire_to_wire",
+        "l_screw_terminal_block",
+        "l_sd_card_memory_card_connector",
+        "l_shorting_cap_jumper_cap",
+        "l_sim_card_connector",
+        "l_spring_loaded_terminal_block",
+        "l_telecommunication_interface_ic",
+        "l_test_point_test_loop",
+        "l_usb_connector",
+        "l_usb_conversion_chip",
+        "l_usb_hub",
+        "l_usb_type_c_port_controller",
+        "l_wire_to_board_pin_header"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-014"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "purpose": "提供外接霍尔位置传感器接入，承担接口接线、供电和信号电平适配，并支持读数验证。",
+      "boundary": "霍尔位置传感器在板外；具体信号定义、电气范围、供电参数和接口实现由设计核对。本板不增加磁场传感器，也不要求有感FOC固件。",
+      "chenxin_module_id": "MOD-012",
+      "chenxin_selection_item_id": "SEL-012"
+    },
+    {
+      "id": "SEL-013",
+      "module_name": "控制电源转换模块",
+      "module_type": "电源转换模块",
+      "category": "电源转换模块",
+      "leaf_code": "l_ac_dc_controller_and_voltage_regulator",
+      "leaf_codes": [
+        "l_ac_dc_controller_and_voltage_regulator",
+        "l_charge_pump",
+        "l_dc_dc_power_module",
+        "l_dc_dc_pwm_controller",
+        "l_linear_regulator_ldo",
+        "l_nonisolated_dc_dc_power_module",
+        "l_professional_power_management_pmic",
+        "l_step_down_dc_dc_converter",
+        "l_step_up_buck_boost_converter"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-002",
+        "REQ-012"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "purpose": "从3S至6S电池供电路径形成主控及板载逻辑所需的电源轨。",
+      "boundary": "用户确认该模块类别、用途及1个独立电路。系统输入目标为9.0V至25.2V；转换方式、输出电压、轨数、额定能力和保护由设计阶段核对并满足产品要求。器件参数及硬件状态未据此视为已验证。",
+      "chenxin_module_id": "MOD-013",
+      "chenxin_selection_item_id": "SEL-013",
+      "note": "用户器件介绍：Cortex-M4、170MHz、集成硬件DSP指令、单精度FPU、高分辨率PWM定时器及内置比较器；不直接等同整机保证指标。；用户器件介绍：12位、5MSPS高速ADC；不作为整机测量精度或采样性能保证。"
+    }
+  ],
+  "source": {
+    "system": "requirements_studio",
+    "schema_version": "pcbagent.requirement-spec/1.0",
+    "spec_id": "SPEC-d942b4d6c43448bf9a38c4155106ed62-v12-d12",
+    "project_id": "d942b4d6c43448bf9a38c4155106ed62",
+    "requirement_version": 12,
+    "review_status": "approved",
+    "handoff_status": "ready_with_open_items"
+  }
+}

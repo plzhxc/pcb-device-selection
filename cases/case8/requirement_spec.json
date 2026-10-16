@@ -1,0 +1,1066 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-case8-v1",
+  "project": {
+    "name": "case8（由历史选型产物转换）",
+    "summary": "来源 /share/home/zhengzhiqi/workspace/web/output/case8/console/stages/03_device_selection__77650096.json"
+  },
+  "global_constraints": {
+    "budget_total_cny": 85.0,
+    "currency": "CNY",
+    "note": "预算取自历史产物，仅供参考"
+  },
+  "selection_items": [
+    {
+      "id": "M-PWR-BUCK-001",
+      "module_name": "SYW-1912 DC-DC降压芯片",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_professional_power_management_pmic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.5,
+            28.0
+          ],
+          "unit": "V",
+          "reason": "系统需求明确指定 VIN 范围为 4.5V~28V DC。SYW-1912 作为第一级降压芯片，必须在此宽压范围内正常工作。若耐压不足，在 28V 或浪涌工况下会损坏；若启动电压过高，在 4.5V 时无法启动。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "V",
+          "reason": "Module description 明确指出将 VIN 转换为 5V 逻辑电压。该 5V 轨用于给继电器线圈（ULN2802 驱动侧）供电，并为 ME6211C33 LDO 提供输入。LDO 需要足够的压差（Dropout Voltage），若 Buck 输出过低，LDO 将无法稳压至 3.3V。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "efficiency",
+          "op": ">=",
+          "value": 85.0,
+          "unit": "%",
+          "reason": "硬件需求说明书 3.1.1 节明确规定电源效率 ≥ 85%。这是为了控制功耗和发热，特别是在 28V 输入降至 5V 的大压差工况下，低效率会导致严重的热损耗。",
+          "source_parameter": "efficiency"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "产品应用场景为车载/户外工业监控，环境约束明确要求工作温度 -40℃ ~ +85℃。器件必须在低温下正常启动和工作，在高温下不降额失效或过热保护。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "switching_frequency",
+          "op": "cover",
+          "value": [
+            100000.0,
+            1000000.0
+          ],
+          "unit": "Hz",
+          "reason": "SWY-1912 为同步整流 Buck 芯片。较高的开关频率有助于减小外部电感和电容体积，符合 PCB 紧凑化要求（≤80x50mm）。同时需避开 4G 通信频段干扰，通常选择几百 kHz 到 1 MHz 之间。",
+          "source_parameter": "switching_frequency"
+        },
+        {
+          "field": "ripple_noise",
+          "op": "<=",
+          "value": 50.0,
+          "unit": "mV pp",
+          "reason": "硬件需求说明书 3.1.1 节规定纹波噪声 ≤ 50 mV pp。虽然 5V 轨主要供数字电路和继电器，但较低的纹波有助于减少 EMI 干扰，并保证后续 LDO 的稳定性。",
+          "source_parameter": "ripple_noise"
+        },
+        {
+          "field": "quiescent_current",
+          "op": "<=",
+          "value": 0.0001,
+          "unit": "A",
+          "reason": "系统待机功耗要求 < 5 mA @ 12V。虽然主负载电流较大，但 Buck 芯片自身的静态电流应尽可能小，以降低待机时的总功耗，延长电池寿命（若有备用电池场景）。",
+          "source_parameter": "quiescent_current"
+        }
+      ],
+      "keywords": [
+        "Buck DC-DC",
+        "同步降压",
+        "宽压输入",
+        "SW1912",
+        "Step-Down Converter",
+        "Power Management"
+      ]
+    },
+    {
+      "id": "M-PWR-LDO-001",
+      "module_name": "ME6211C33 LDO稳压器",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_linear_regulator_ldo",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "模块名称明确为 ME6211C33，且描述指出输出供 MCU (ESP32-C3) 及敏感数字电路使用。ESP32-C3 标准工作电压为 3.3V，LDO 型号后缀 '33' 亦代表 3.3V 输出。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "output_current",
+          "op": ">=",
+          "value": 1.2,
+          "unit": "A",
+          "reason": "需求文档 notes 明确指出“负载电流可达 1.2A”。此外，下游 4G 模组峰值电流 >1A，加上 MCU 和其他外设，总负载可能接近或达到 1.2A。若 LDO 额定电流不足，将导致过热保护或电压跌落，造成系统重启。",
+          "source_parameter": "max_output_current"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.5,
+            7.0
+          ],
+          "unit": "V",
+          "reason": "根据拓扑，LDO 输入来自 SYW-1912 Buck 转换器。Buck 输出设定为 5V。因此 LDO 典型输入为 5V。考虑到 Buck 在重载或低压输入下的波动，以及 LDO 需要一定的 Dropout Voltage (压差)，输入范围需覆盖 4.5V-5V 区间。同时，器件本身的绝对最大输入电压 (Abs Max VIN) 必须高于此范围，通常 SOT-23-5 LDO 为 6V-18V",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            125.0
+          ],
+          "unit": "°C",
+          "reason": "系统应用环境为车载/工业，明确要求工作温度 -40℃ ~ +85℃。LDO 自身在大电流（1.2A）和压差（1.7V+）下会产生显著热量（P ≈ 2W+），器件必须能在高温环境下可靠工作且不发生热关断或性能退化。SOT-23 封装散热较差，高温性能尤为关键。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "dropout_voltage",
+          "op": ">=",
+          "value": 0.5,
+          "unit": "V",
+          "reason": "文档 notes 提到“压差约 1.7V”（基于 5V->3.3V）。但在最恶劣工况下，若 Buck 输出因负载瞬变降至 4.5V，LDO 需要至少 $4.5 - 3.3 = 1.2V$ 的压差才能正常工作。虽然 ME6211 典型 dropout 较低，但作为参数约束，必须确保器件在全负载范围内的 dropout 特性能满足最低输入电压要求，否则会导致 LDO 退出稳压区。",
+          "source_parameter": "dropout_voltage"
+        },
+        {
+          "field": "quiescent_current",
+          "op": ">=",
+          "value": 0.0001,
+          "unit": "A",
+          "reason": "系统待机功耗要求 < 5 mA @ 12V。虽然 LDO 处于第二级，其静态电流会直接加在待机电流预算中。较低的 IQ 有助于满足低功耗待机指标，并减少自身发热。",
+          "source_parameter": "quiescent_current"
+        }
+      ],
+      "keywords": [
+        "LDO",
+        "低压差线性稳压器",
+        "Low Dropout Regulator",
+        "3.3V LDO",
+        "ME6211",
+        "电源管理IC"
+      ],
+      "specified_device": {
+        "model": "ME6211C33",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-PWR-BOOST-001",
+      "module_name": "ME3116AM6G DC-DC升压芯片",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_professional_power_management_pmic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.5,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "器件输入电压范围必须覆盖其实际连接点的电压。根据系统架构，若输入来自SYW-1912输出的5V轨，则需支持5V。若直接连接VIN(28V)，则需高压耐受能力。鉴于ME3116通常为低压器件，且系统已有Buck，最可能的场景是输入为5V。但为满足文档‘从VIN...升压’的字面描述及潜在的高压应用，参数需明确输入耐压上限。若输入为5V，Min=4.5V, Max=5.5V。若输入为VIN，Max>=",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "output_voltage",
+          "op": "cover",
+          "value": [
+            5.1,
+            24.0
+          ],
+          "unit": "V",
+          "reason": "作为升压转换器，输出电压必须高于输入电压。若输入为5V，输出需设定为目标电压。常见工业IoT应用中，背光或特定继电器线圈可能需要12V或24V。若仅驱动5V继电器，则无需升压。此处约束为输出可调或固定于一个高于5V的值，具体取决于负载需求（如12V）。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -23.0,
+            -23.0
+          ],
+          "unit": "String",
+          "reason": "受限于PCB尺寸和高密度布局，器件封装必须小巧。ME3116AM6G通常对应SOT-23-5或类似小型封装。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "Celsius",
+          "reason": "产品应用于车载/工业环境，明确要求-40℃至+85℃的工作温度范围。所有电源器件必须为此等级。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "switching_frequency",
+          "op": "cover",
+          "value": [
+            500000.0,
+            2000000.0
+          ],
+          "unit": "Hz",
+          "reason": "为了在紧凑PCB内使用小型电感和电容，开关频率应较高。高频有助于减小被动元件体积，但会增加开关损耗。需在效率和尺寸间折中。ME3116类器件通常在几百kHz到几MHz。",
+          "source_parameter": "switching_frequency"
+        },
+        {
+          "field": "efficiency",
+          "op": ">=",
+          "value": 85.0,
+          "unit": "%",
+          "reason": "系统对效率有明确要求，以减少发热并提高电池寿命。Boost转换器在不同输入输出电压比下的效率差异较大。",
+          "source_parameter": "efficiency"
+        }
+      ],
+      "keywords": [
+        "Boost Converter",
+        "DC-DC 升压芯片",
+        "Step-Up Converter",
+        "开关稳压器",
+        "ME3116"
+      ]
+    },
+    {
+      "id": "M-PWR-USB-001",
+      "module_name": "LPW5209AB5F USB限流开关",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_power_electronic_switch",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.5,
+            28.0
+          ],
+          "unit": "V",
+          "reason": "系统电源输入为 4.5V~28V DC。USB 限流开关串联在 USB 端口前，若 USB 由系统 5V/3.3V 供电或作为主机供电端，其漏电流和反向电压耐受需符合系统规范；若作为从机保护，需承受上游 USB 主机的 5V VBUS。此处约束主要指器件需在系统工作电压域内稳定运行且具备足够的耐压余量以应对浪涌。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统环境约束明确要求工作温度 -40℃～+85℃（车规/工规级）。所有电源管理器件必须符合此温度等级，否则在极端环境下可能失效。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -23.0,
+            -23.0
+          ],
+          "reason": "PCB 尺寸限制 80x50mm，且器件规模较大，需节省空间。LPW5209 典型封装为 SOT-23-6，符合紧凑化集成目标。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "USB Current Limit Switch",
+        "过流保护",
+        "短路保护",
+        "限流开关",
+        "Type-C PFC",
+        "Power Path"
+      ],
+      "specified_device": {
+        "model": "LPW5209AB5F",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-MCU-001",
+      "module_name": "ESP32-C3FH4 主控芯片",
+      "module_type": "主控计算",
+      "category": "微控制器",
+      "leaf_code": "l_microcontroller_mcu_mpu_soc",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            3.0,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "ESP32-C3FH4 核心逻辑及 I/O 默认工作电压为 3.3V。系统电源链路最终由 ME6211C33 LDO 提供 3.3V 给 MCU。LDO 输入来自 SYW-1912 (5V)，压差 1.7V。MCU 必须在 3.0V-3.6V 范围内稳定运行以支持 Wi-Fi/BLE 发射及 GPIO 电平驱动。",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "应用场景为车载追踪、户外资产监控及工业现场，需求文档 3.2.1 节明确要求工作温度 -40℃～+85℃。器件必须在此范围内保证电气性能不降级。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -32.0,
+            -32.0
+          ],
+          "reason": "ESP32-C3FH4 典型封装为 QFN-32。该封装利于散热（通过底部焊盘连接到 PCB 铜层）并节省 PCB 面积（符合 ≤ 80x50mm 限制）。需配合 ENIG 表面处理工艺焊接。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "MCU",
+        "RISC-V MCU",
+        "ESP32-C3",
+        "Wi-Fi BLE SoC",
+        "无线微控制器",
+        "System on Chip"
+      ],
+      "specified_device": {
+        "model": "ESP32-C3FH4",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-COM-LTE-001",
+      "module_name": "WH-GM800TF 4G模组",
+      "module_type": "通信",
+      "category": "通信 IC",
+      "leaf_code": "l_cellular_2g_3g_4g_5g_module",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            3.0,
+            4.2
+          ],
+          "unit": "V",
+          "reason": "模组由3.3V LDO供电，考虑到LDO压差、线路损耗及纹波，模组实际引脚电压可能在3.0V-3.6V之间波动。为确保模组在极端情况下仍能正常工作且不损坏，目标器件必须支持至少3.0V至4.2V的输入范围。",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "应用场景为车载/户外工业，环境温度变化极大。普通商业级器件（0~70℃）在冬季或高温环境下会失效，故必须选用工业级或车规级器件。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "LTE Module",
+        "Cat4",
+        "Quectel",
+        "WH-GM800TF",
+        "无线通信模块",
+        "蜂窝模组"
+      ],
+      "specified_device": {
+        "model": "WH-GM800TF",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-COM-GPS-001",
+      "module_name": "ATGM336H GPS模组",
+      "module_type": "传感器",
+      "category": "传感器",
+      "leaf_code": "l_satellite_positioning_module",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            3.0,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "模块依赖 M-PWR-LDO-001 (ME6211C33) 输出 3.3V 供电。ESP32-C3 及通用 GNSS 模组逻辑电平均为 3.3V。若电压超出此范围，可能导致 MCU/GNSS 复位或逻辑错误。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "interface_type",
+          "op": "is",
+          "value": "UART_TX",
+          "reason": "根据 IF-02 定义，GPS 模组仅需向 MCU 发送数据（单向 TX），无需接收指令。若器件仅提供双向 UART 且无独立 TX 引脚配置，需确保硬件连接兼容性；通常 GNSS 模组为全双工 UART，但系统仅使用 TX 线。",
+          "source_parameter": "interface_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统环境约束 Ch 3.2.1 规定工作温度 -40℃～+85℃。GNSS 模组作为室外/车载应用关键部件，必须在低温下正常搜星，在高温下稳定运行。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "power_consumption",
+          "op": "<=",
+          "value": 0.045,
+          "unit": "A",
+          "reason": "ATGM336H 典型功耗约 30-40mA。系统待机功耗要求 <5mA，但 GPS 工作时电流较大。需确保器件在跟踪模式下的电流不会导致 3.3V LDO 过热或超出电源轨瞬态响应能力（虽主要靠 Buck 供电，但需考虑峰值）。",
+          "source_parameter": "power_consumption"
+        }
+      ],
+      "keywords": [
+        "GPS模块",
+        "北斗模组",
+        "GNSS Module",
+        "卫星定位",
+        "NMEA输出",
+        "ATGM336H"
+      ],
+      "specified_device": {
+        "model": "ATGM336H",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-COM-SIM-001",
+      "module_name": "Nano SIM卡座",
+      "module_type": "通信",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "contact_type",
+          "op": "is",
+          "value": "['Gold-plated Pogo Pin', 'Metal Leaf Spring']",
+          "reason": "需求 notes 中明确说明“金属弹片接触”。此类结构通常用于提供低接触电阻和一定的轴向容差，适合工业环境下的长期插拔。",
+          "source_parameter": "contact_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统整体工作温度为 -40℃ ~ +85℃（车规/工规）。连接器作为物理接口，其材料（塑料、金属）在低温下会变脆，高温下会老化或变形，必须满足此宽温要求以确保可靠性。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "防止SIM卡引脚间漏电导致逻辑错误或功耗异常。这是连接器的基本电气绝缘要求。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "dielectric_withstand_voltage",
+          "op": ">=",
+          "value": 100.0,
+          "unit": "V AC",
+          "reason": "确保引脚间及引脚与外壳间的绝缘强度，防止高压击穿。虽然SIM卡工作电压低（3V），但需承受可能的静电或瞬态干扰。",
+          "source_parameter": "dielectric_withstand_voltage"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "Surface Mount (SMD)",
+          "reason": "PCB 尺寸为 80x50mm，高密度集成（ESP32, 4G模组等），且要求“紧凑化集成”。SMD 封装占用面积小，适合高密度板。插件式（DIP）通常体积过大且抗振动性能较差。",
+          "source_parameter": "mounting_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.05,
+          "unit": "Ω",
+          "reason": "SIM卡通信依赖稳定的数字信号电平。高接触电阻会导致信号衰减或电压跌落，特别是在长距离走线或恶劣环境下，可能引起通信误码或认证失败。",
+          "source_parameter": "contact_resistance"
+        }
+      ],
+      "keywords": [
+        "SIM卡连接器",
+        "Nano SIM Connector",
+        "SIM Card Socket",
+        "Smart Card Reader Connector",
+        "SIM座",
+        "插接件"
+      ],
+      "note": "可选参数（未进条件）：shielding"
+    },
+    {
+      "id": "M-IF-USB-001",
+      "module_name": "CH340G USB-UART桥接芯片",
+      "module_type": "调试与连接",
+      "category": "接口/通信 IC",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            3.3,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "器件需具备宽电压输入能力，能够适应由5V USB总线直接供电（经限流保护）或由3.3V LDO供电两种场景。若仅支持单一固定电压，将限制电路设计的灵活性并可能导致过压损坏或欠压复位。",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "产品应用于车载/户外工业场景，芯片必须在极端温度下保持USB枚举稳定性和UART数据完整性。商业级器件在低温下可能出现启动失败或高温下漏电增加导致功能异常。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "USB to UART Bridge Controller",
+        "USB转TTL",
+        "CH340G",
+        "CP2102",
+        "UART Bridge IC",
+        "Serial Converter"
+      ],
+      "note": "可选参数（未进条件）：package"
+    },
+    {
+      "id": "M-IF-LVL-001",
+      "module_name": "RS0102YH8 电平转换器",
+      "module_type": "驱动",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_converter_level_shifter",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "degC",
+          "reason": "Requirement Doc Ch 3.2.1 明确规定工作温度为 -40℃ ~ +85℃。所有有源器件必须符合此环境约束。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 2.0,
+          "unit": "channels",
+          "reason": "RS0102YH8 型号暗示其为双通道（Dual）电平转换器。虽然当前设计指出 MCU 与 4G 模组直连无需此器件，但该模块作为“通用电平转换组件保留”，需具备处理至少两路信号（如 TX/RX 或 GPIO 对）的能力。",
+          "source_parameter": "channel_count"
+        },
+        {
+          "field": "data_rate",
+          "op": "cover",
+          "value": [
+            0.0,
+            10.0
+          ],
+          "unit": "Mbps",
+          "reason": "虽然当前 UART 仅用到 115200 bps，但作为通用接口组件，应具备足够的带宽以支持可能的 I2C Fast Mode (400 kHz) 或更高速率的 SPI/UART。RS0102 等典型器件通常支持高达数 Mbps 的速率。",
+          "source_parameter": "data_rate"
+        },
+        {
+          "field": "leakage_current",
+          "op": "<=",
+          "value": 1e-06,
+          "unit": "A",
+          "reason": "系统要求待机功耗 < 5 mA。虽然电平转换器静态电流通常很小，但在高阻抗总线或特定配置下，过高的漏电流可能导致逻辑错误或额外功耗。",
+          "source_parameter": "leakage_current"
+        }
+      ],
+      "keywords": [
+        "电平转换器",
+        "Level Translator",
+        "Voltage Level Shifter",
+        "双向转换",
+        "I2C Level Shifter",
+        "RS0102YH8"
+      ],
+      "specified_device": {
+        "model": "RS0102YH8",
+        "intent": "reference"
+      },
+      "note": "可选参数（未进条件）：package"
+    },
+    {
+      "id": "M-HMI-BZ-001",
+      "module_name": "有源蜂鸣器",
+      "module_type": "人机交互",
+      "category": "声学器件",
+      "leaf_code": "l_buzzer",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            2.5,
+            5.0
+          ],
+          "unit": "V",
+          "reason": "模块描述明确指定了有源蜂鸣器的驱动电压范围为 2.5V 至 5V。器件必须在此电压范围内正常工作，且需兼容系统 3.3V 逻辑域供电（通常通过限流电阻或直接连接）。若电压低于 2.5V 可能无声或声压不足，高于 5V 可能损坏内部振荡电路或压电片。",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "polarity",
+          "op": "is",
+          "value": "Polarized",
+          "reason": "绝大多数有源蜂鸣器具有极性（正负极之分），接反会导致不工作或损坏内部电路。因此器件必须具备明确的引脚定义（VCC/GND 或 +/-），且用户电路设计需严格对应。",
+          "source_parameter": "polarity"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "有源蜂鸣器",
+        "Active Buzzer",
+        "Piezo Buzzer",
+        "压电蜂鸣器",
+        "音频报警",
+        "Audio Alarm"
+      ],
+      "note": "可选参数（未进条件）：package"
+    },
+    {
+      "id": "M-HMI-LED-001",
+      "module_name": "状态指示LED",
+      "module_type": "人机交互",
+      "category": "分立半导体",
+      "leaf_code": "l_rgb_led_with_built_in_ic",
+      "quantity": 3,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "forward_voltage",
+          "op": ">=",
+          "value": 2.0,
+          "unit": "V",
+          "reason": "用于计算限流电阻阻值以确保LED在3.3V供电下获得合适电流。若VF过高，可能无法点亮或亮度不足；若过低，需极小电阻导致功耗过大。文档明确指定约2V，通常对应红/黄/绿光LED。",
+          "source_parameter": "forward_voltage"
+        },
+        {
+          "field": "reverse_voltage",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "V",
+          "reason": "LED通常直接由GPIO控制或经电阻连接至地。若GPIO输出低电平，LED承受正向电压；若GPIO输出高电平或高阻态，LED两端压差较小。但在电路设计失误或瞬态情况下，需防止反向击穿。标准LED反向耐压通常较低（~5V）。",
+          "source_parameter": "reverse_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统应用于车载/工业场景，环境温度极端。LED必须在整个工作温度范围内正常发光，且色度漂移在可接受范围内。低温下正向压降会升高，需确保在最冷环境下仍能点亮。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "power_rating",
+          "op": ">=",
+          "value": 0.05,
+          "unit": "W",
+          "reason": "虽然LED主要靠电流驱动，但额定功率是器件安全工作的上限指标。在20mA、2V条件下，功耗约40mW。标准0603 LED额定功率通常为50-100mW，需确保不超标。",
+          "source_parameter": "power_rating"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "forward_current",
+          "op": "cover",
+          "value": [
+            0.005,
+            0.02
+          ],
+          "unit": "A",
+          "reason": "作为状态指示灯，无需高功率驱动，但需保证可视性。ESP32-C3 GPIO灌电流能力有限（通常~10-20mA），且为保护GPIO和延长寿命，建议工作在常规指示电流范围。",
+          "source_parameter": "forward_current"
+        },
+        {
+          "field": "luminous_intensity",
+          "op": ">=",
+          "value": 2.0,
+          "unit": "mcd",
+          "reason": "作为状态指示灯，需在各种光照条件下（包括户外强光）可见。具体亮度取决于安装位置和外壳透光率，但需具备足够的初始亮度以支持PWM调光或电阻分压调光。",
+          "source_parameter": "luminous_intensity"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            603.0,
+            603.0
+          ],
+          "unit": "code",
+          "reason": "PCB尺寸紧凑(80x50mm)，元器件密度较高，且要求SMT为主。传统插件LED占用空间大且增加组装成本。表面贴装LED符合高密度集成和自动化生产要求。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "发光二极管",
+        "LED",
+        "Light Emitting Diode",
+        "指示灯",
+        "Status LED",
+        "光电二极管"
+      ]
+    },
+    {
+      "id": "M-HMI-KP-001",
+      "module_name": "按键开关",
+      "module_type": "人机交互",
+      "category": "开关",
+      "leaf_code": "l_signal_switch_codec_multiplexer",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "switch_type",
+          "op": "is",
+          "value": "Normally Open (NO)",
+          "reason": "模块描述明确指定为“复位或功能按键”，且 notes 中注明“常开型”。若为常闭型将导致系统上电即触发异常状态。",
+          "source_parameter": "switch_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统整体环境约束要求工作温度 -40℃ ~ +85℃（车规/工规），按键作为外露人机交互部件，必须在此范围内正常操作且无材料脆化或粘连风险。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.1,
+          "unit": "Ω",
+          "reason": "按键连接至 ESP32-C3 GPIO（3.3V域）并配合上拉/下拉电阻。接触电阻过大会导致电压分压错误，造成MCU误判按键状态。工业级轻触开关通常要求低接触电阻以保证信号完整性。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 0.1,
+          "unit": "Ω",
+          "reason": "防止按键引脚间或引脚对地漏电影响GPIO电平稳定性，特别是在高湿度环境（95% RH）下。",
+          "source_parameter": "insulation_resistance"
+        }
+      ],
+      "keywords": [
+        "轻触开关",
+        "Tactile Switch",
+        "按键开关",
+        "Push Button",
+        "Momentary Switch",
+        "复位键"
+      ]
+    },
+    {
+      "id": "M-DRV-OPTO-001",
+      "module_name": "EL3H7 光耦隔离器",
+      "module_type": "驱动",
+      "category": "分立半导体",
+      "leaf_code": "l_transistor_output_optocoupler",
+      "quantity": 9,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "isolation_voltage",
+          "op": ">=",
+          "value": 5000.0,
+          "unit": "Vrms",
+          "reason": "Module description states 'prevent reverse EMF damaging MCU' and 'isolate MCU control signal'. Requirement doc mentions 'High reliability and isolation'. Standard EL3H7 provides 5kVrms. This is critic",
+          "source_parameter": "isolation_voltage"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "光耦",
+        "Optocoupler",
+        "光电隔离器",
+        "PhotoMOS",
+        "CTR",
+        "MCU隔离"
+      ],
+      "specified_device": {
+        "model": "EL3H7",
+        "intent": "reference"
+      },
+      "note": "可选参数（未进条件）：package、propagation_delay"
+    },
+    {
+      "id": "M-DRV-ULN-001",
+      "module_name": "ULN2802 达林顿阵列",
+      "module_type": "驱动",
+      "category": "分立半导体",
+      "leaf_code": "l_brushless_dc_bldc_motor_drive_chip",
+      "quantity": 2,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "output_type",
+          "op": "is",
+          "value": "Sinking (Open Collector)",
+          "reason": "模块描述明确指出“提供灌电流能力”，且ULN2802为标准达林顿阵列，其内部结构为集电极开路输出，需外部上拉至负载电压。若为源电流输出将无法驱动该继电器拓扑。",
+          "source_parameter": "output_type"
+        },
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 8.0,
+          "unit": "channels",
+          "reason": "需求文档指出前8路由一颗驱动，第9路由另一颗驱动。ULN2802是8通道器件，满足单颗驱动8路的需求。若通道数不足则无法实现指定架构。",
+          "source_parameter": "channel_count"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统需求文档第1.3节明确规定工作温度为 -40℃～+85℃（车规/工规级）。所有关键驱动器件必须在此范围内保证电气参数不超标。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -28.0,
+            -28.0
+          ],
+          "unit": "or",
+          "reason": "ULN2802常见封装为DIP-28或SOP-28。考虑到单通道500mA电流及多通道同时工作的热耗散，宽体SOP或DIP封装的热性能优于小尺寸QFN/DFN。此外，模块notes提到数量2颗，DIP/SOP易于在有限空间内布置并留出散热铜皮。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "达林顿阵列",
+        "Darlington Array",
+        "High Current Driver",
+        "Relay Driver IC",
+        "ULN2802",
+        "灌电流驱动"
+      ]
+    },
+    {
+      "id": "M-PROT-FUSE-001",
+      "module_name": "输入熔断器",
+      "module_type": "保护",
+      "category": "保护器件",
+      "leaf_code": "l_electrostatic_and_surge_protection_tvs_esd",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "rated_current",
+          "op": "cover",
+          "value": [
+            3.0,
+            6.0
+          ],
+          "unit": "A",
+          "reason": "保险丝需承载系统正常工作电流及瞬态峰值。输入峰值电流为2.0A（4G发射及继电器吸合），平均工作电流<500mA。为避免正常工况下误熔断，额定电流(In)必须大于峰值电流并留有启动/浪涌余量。通常选择In >= 1.5~2倍峰值或至少略高于最大稳态电流+裕量。考虑到车载/工业环境的热降额，建议In在3.0A~5.0A之间。若选一次性保险丝，需满足I^2t耐受能力；若选PPTC，需确保保持电流(Ih",
+          "source_parameter": "rated_current"
+        },
+        {
+          "field": "voltage_rating",
+          "op": ">=",
+          "value": 32.0,
+          "unit": "V",
+          "reason": "保险丝串联在电源输入端，其耐压值必须高于系统最高输入电压以及可能出现的瞬态浪涌电压。系统最高输入电压为28V DC。IEC 61000-4-5 Level 3浪涌测试通常在24V系统中产生约500V-1000V的脉冲（取决于耦合网络），但在直流侧保护中，保险丝本身的直流额定电压(Vdc)只需覆盖稳态最高电压即可，因为TVS负责钳位瞬态高压。然而，为了安全冗余和符合工业标准，通常选择耐压至少为最高工",
+          "source_parameter": "voltage_rating"
+        },
+        {
+          "field": "breaking_capacity",
+          "op": ">=",
+          "value": 100.0,
+          "unit": "A",
+          "reason": "作为输入端的第一道防线，保险丝必须具备足够的分断能力（Breaking Capacity/Icn）以切断上游电源可能提供的最大短路电流。虽然TVS会限制部分能量，但保险丝仍需能安全切断由后端短路或内部故障引起的过流。对于低压直流系统（<32V），一般要求分断能力至少为额定电流的数倍或达到标准规定的最小值（如100A@32V或更高）。这是防止电弧持续燃烧导致火灾的关键参数。",
+          "source_parameter": "breaking_capacity"
+        },
+        {
+          "field": "temperature_range",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "产品应用于车载/户外工业场景，明确要求工作温度-40℃至+85℃。保险丝的电气特性（特别是电阻和熔断特性）随温度变化，且材料需在极端温度下保持机械完整性。因此，器件本身必须在整个环境温度范围内可靠工作。",
+          "source_parameter": "temperature_range"
+        },
+        {
+          "field": "action_time",
+          "op": ">=",
+          "value": 0.1,
+          "unit": "s",
+          "reason": "保险丝的动作时间特性必须与系统的浪涌耐受能力协调。系统有2.0A/100ms的峰值电流（4G发射/继电器吸合）。如果保险丝是快断型（Fast Acting），可能会在正常的2A瞬态峰值下误动作。因此，如果选择一次性保险丝，可能需要‘慢断’（Time-Lag / Slow Blow）特性，或者精确计算I^2t值以确保能承受2A/100ms的能量而不熔断，同时能在真正的短路（如>10A）时快速熔断。如",
+          "source_parameter": "action_time"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "type",
+          "op": "is",
+          "value": "['One-time Fuse', 'PPTC']",
+          "reason": "模块描述建议自恢复或一次性。在车载/无人值守工业场景中，自恢复保险丝（PPTC）可提供便利性（无需人工复位），但存在漏电流大、响应慢、高温下保持电流下降的问题。一次性保险丝（Fuse）响应快、精度高、无漏电流，但故障后需更换。考虑到“高可靠性”和“9路继电器”的大电流应用，一次性快断或慢断保险丝（视具体浪涌耐受需求而定）通常是更稳妥的安全选择，除非用户明确强调免维护便利性。此处不强制单一类型，但要",
+          "source_parameter": "type"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            805.0,
+            805.0
+          ],
+          "unit": "or",
+          "reason": "PCB尺寸紧凑（80x50mm），且元器件密度较高。保险丝应选择表面贴装（SMD）封装以利于自动化生产并节省空间。常见的贴片保险丝封装有0603, 0805, 1206等。考虑到3A以上的电流，0603可能载流能力不足或体积过小导致散热困难，0805或1206更为常见和合适。需确保封装与PCB布局兼容。",
+          "source_parameter": "package"
+        }
+      ],
+      "keywords": [
+        "保险丝",
+        "Fuse",
+        "过流保护",
+        "一次性保险丝",
+        "自恢复保险丝",
+        "PPTC"
+      ]
+    },
+    {
+      "id": "M-PROT-TVS-001",
+      "module_name": "TVS阵列",
+      "module_type": "保护",
+      "category": "保护器件",
+      "leaf_code": "l_electrostatic_and_surge_protection_tvs_esd",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 2.0,
+          "unit": "channels",
+          "reason": "系统包含多个外露接口：电源输入(VIN)、USB调试口、可能的天线接口（虽为RF但常集成共模/ESD保护）、以及按键。虽然当前模块ID仅指代“TVS阵列”，但作为保护模块，它必须至少提供对VIN和USB的保护。考虑到USB Type-C通常有VBUS/D+/D-/CC等多条线，单通道TVS无法满足USB保护需求，因此TVS阵列至少需要多通道（如双通道用于电源+USB，或多通道用于USB内部各线）。",
+          "source_parameter": "channel_count"
+        },
+        {
+          "field": "clamping_voltage",
+          "op": "<=",
+          "value": 30.0,
+          "unit": "V",
+          "reason": "当TVS被触发时，其两端电压即为钳位电压。该电压必须确保不会击穿后端的DC-DC转换器（SYW-1912）或MCU。鉴于输入最高28V，钳位电压应控制在合理范围（例如<30-35V），以保护后续电路。",
+          "source_parameter": "clamping_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档第3.2.1节明确规定工作温度为-40℃～+85℃。TVS器件的性能（如漏电流、响应时间、钳位电压）随温度变化，必须在极端温度下仍能满足保护要求。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "TVS阵列",
+        "瞬态电压抑制器",
+        "ESD保护器件",
+        "TVS Diode Array",
+        "静电放电保护",
+        "Surge Protection"
+      ]
+    }
+  ]
+}

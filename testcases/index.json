@@ -1,0 +1,42 @@
+[
+  {
+    "case": "case31-key-sound-toy",
+    "mentioned_devices": 2,
+    "resolved_devices": 0,
+    "sample_spec_id": "SPEC-029ca4360143491f9620b8361143f078-v16-d1",
+    "selection_items": 5,
+    "recommended": 2,
+    "unverified": 3,
+    "manual_recommended": null
+  },
+  {
+    "case": "case30-pn532-nfc",
+    "mentioned_devices": 7,
+    "resolved_devices": 4,
+    "sample_spec_id": "SPEC-95f3fa586ac84e71a763987388feae04-v12-d9",
+    "selection_items": 7,
+    "recommended": 4,
+    "unverified": 3,
+    "manual_recommended": 4
+  },
+  {
+    "case": "case25-stm32g4-foc",
+    "mentioned_devices": 12,
+    "resolved_devices": 6,
+    "sample_spec_id": "SPEC-d942b4d6c43448bf9a38c4155106ed62-v12-d12",
+    "selection_items": 13,
+    "recommended": 0,
+    "unverified": 13,
+    "manual_recommended": 1
+  },
+  {
+    "case": "case29-lora-radio",
+    "mentioned_devices": 7,
+    "resolved_devices": 5,
+    "sample_spec_id": "SPEC-5f471c5ea0df471484e1c0efecd4a381-v8-d21",
+    "selection_items": 9,
+    "recommended": 0,
+    "unverified": 9,
+    "manual_recommended": 3
+  }
+]

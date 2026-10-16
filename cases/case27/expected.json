@@ -1,0 +1,109 @@
+{
+  "case": "case27",
+  "requirement_version": "req-case27-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-MCU-001": {
+      "module_name": "移动电源SoC",
+      "historical_selection": [
+        {
+          "model": "IP5568",
+          "supplier_part": "C198832",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "IP5568",
+      "evaluation_source": ""
+    },
+    "M-BATT-PROT-001": {
+      "module_name": "电池保护开关",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "RUH30D20H",
+      "evaluation_source": ""
+    },
+    "M-LD-SW-001": {
+      "module_name": "主负载开关",
+      "historical_selection": [
+        {
+          "model": "RU20P7C",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "RU20P7C",
+      "evaluation_source": ""
+    },
+    "M-WL-HB-001": {
+      "module_name": "无线发射半桥功率管",
+      "historical_selection": [
+        {
+          "model": "RUH30D20H",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "RUH30D20H",
+      "evaluation_source": ""
+    },
+    "M-AUX-SW-001": {
+      "module_name": "辅助小信号开关",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "BSS84",
+      "evaluation_source": ""
+    },
+    "M-SENSE-001": {
+      "module_name": "电流/电压采样电阻",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-USB-001": {
+      "module_name": "USB-A 输出接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-WL-COIL-001": {
+      "module_name": "Qi 无线发射线圈",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-ESD-001": {
+      "module_name": "端口ESD/浪涌保护",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-KEY-001": {
+      "module_name": "功能按键",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-LED-001": {
+      "module_name": "电量指示灯",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-RELAY-001": {
+      "module_name": "安全隔离继电器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "TM-005-D-02",
+      "evaluation_source": ""
+    }
+  }
+}

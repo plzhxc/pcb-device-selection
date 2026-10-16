@@ -1,0 +1,128 @@
+{
+  "case": "case3",
+  "requirement_version": "req-case3-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-DCDC-001": {
+      "module_name": "主降压转换器 (DC-DC)",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PWR-LDO-001": {
+      "module_name": "低噪声音频 LDO",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-MCU-001": {
+      "module_name": "ESP32-S3 模组",
+      "historical_selection": [
+        {
+          "model": "ESP32-S3-WROOM-1-N16R8",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "ESP32-S3-WROOM-1-N16R8",
+      "evaluation_source": ""
+    },
+    "M-AUD-ADC-001": {
+      "module_name": "PDM 麦克风接口 ADC",
+      "historical_selection": [
+        {
+          "model": "ES7210",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "ES7210",
+      "evaluation_source": ""
+    },
+    "M-AUD-CODEC-001": {
+      "module_name": "音频编解码器 (Codec)",
+      "historical_selection": [
+        {
+          "model": "ES8311",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "ES8311",
+      "evaluation_source": ""
+    },
+    "M-AUD-AMP-001": {
+      "module_name": "D 类功率放大器",
+      "historical_selection": [
+        {
+          "model": "NS4150B",
+          "supplier_part": "C189961",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "NS4150B",
+      "evaluation_source": ""
+    },
+    "M-COM-UART-001": {
+      "module_name": "USB 转 UART 控制器",
+      "historical_selection": [
+        {
+          "model": "CH340K",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "CH340K",
+      "evaluation_source": ""
+    },
+    "M-HMI-LCD-CONN-001": {
+      "module_name": "LCD/FPC 连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-EXT-CAM-CONN-001": {
+      "module_name": "摄像头 FPC 连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-EXT-USB-CONN-001": {
+      "module_name": "USB Type-C 连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-EXT-DEBUG-CONN-001": {
+      "module_name": "调试排针",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-FUSE-001": {
+      "module_name": "USB 过流保险丝",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-ESD-001": {
+      "module_name": "ESD 保护阵列",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

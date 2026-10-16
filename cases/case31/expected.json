@@ -1,0 +1,88 @@
+{
+  "case": "case31",
+  "requirement_version": "req-case31-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-001": {
+      "module_name": "PW5100 同步升压芯片",
+      "historical_selection": [
+        {
+          "model": "PW5100",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "PW5100",
+      "evaluation_source": ""
+    },
+    "M-MCU-001": {
+      "module_name": "CX588 OTP语音MCU",
+      "historical_selection": [
+        {
+          "model": "CX588",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "CX588",
+      "evaluation_source": ""
+    },
+    "M-SENS-001": {
+      "module_name": "C10S01X 触摸感应芯片",
+      "historical_selection": [
+        {
+          "model": "C10S01X",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "C10S01X",
+      "evaluation_source": ""
+    },
+    "M-KPAD-001": {
+      "module_name": "物理微动开关矩阵",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-SPK-001": {
+      "module_name": "扬声器接口端子",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-LED-001": {
+      "module_name": "LED状态指示灯",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-BAT-001": {
+      "module_name": "电池连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-SW-001": {
+      "module_name": "电源开关座",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-ESD-001": {
+      "module_name": "ESD静电保护器件",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "case": "case14",
+  "requirement_version": "req-case14-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-LDO-001": {
+      "module_name": "低压差稳压器 (LDO)",
+      "historical_selection": [
+        {
+          "model": "RT9013-33GB",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "RT9013-33GB",
+      "evaluation_source": ""
+    },
+    "M-CHG-001": {
+      "module_name": "锂电池充电管理IC",
+      "historical_selection": [
+        {
+          "model": "TP4057",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "TP4057",
+      "evaluation_source": ""
+    },
+    "M-SW-P-001": {
+      "module_name": "高侧电源开关 (P-MOS)",
+      "historical_selection": [
+        {
+          "model": "AO3401A",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "AO3401A",
+      "evaluation_source": ""
+    },
+    "M-SW-N-001": {
+      "module_name": "低侧驱动开关 (N-MOS)",
+      "historical_selection": [
+        {
+          "model": "SI1304BDL",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "SI1304BDL",
+      "evaluation_source": ""
+    },
+    "M-MCU-001": {
+      "module_name": "微控制器 (MCU)",
+      "historical_selection": [
+        {
+          "model": "ESP32-C3",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "ESP32-C3",
+      "evaluation_source": ""
+    },
+    "M-XTAL-001": {
+      "module_name": "系统时钟源",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CODEC-001": {
+      "module_name": "音频编解码器 (Codec)",
+      "historical_selection": [
+        {
+          "model": "ES8311",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "ES8311",
+      "evaluation_source": ""
+    },
+    "M-AMP-001": {
+      "module_name": "音频功率放大器",
+      "historical_selection": [
+        {
+          "model": "NS4150B",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "NS4150B",
+      "evaluation_source": ""
+    },
+    "M-MIC-001": {
+      "module_name": "MEMS麦克风传感器",
+      "historical_selection": [
+        {
+          "model": "ZTS6216",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "ZTS6216",
+      "evaluation_source": ""
+    },
+    "M-FLASH-001": {
+      "module_name": "SPI Flash 存储器",
+      "historical_selection": [
+        {
+          "model": "W25Q128JVSIQ",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "W25Q128JVSIQ",
+      "evaluation_source": ""
+    },
+    "M-ANT-001": {
+      "module_name": "射频天线",
+      "historical_selection": [
+        {
+          "model": "RFANT3216120A5T",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "RFANT3216120A5T",
+      "evaluation_source": ""
+    },
+    "M-USBC-001": {
+      "module_name": "USB-C 连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-DBG-001": {
+      "module_name": "调试排针",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-EXT-001": {
+      "module_name": "外设扩展接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-LED-001": {
+      "module_name": "状态指示灯",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

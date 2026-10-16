@@ -1,0 +1,234 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "SPEC-029ca4360143491f9620b8361143f078-v16-d1",
+  "project": {
+    "name": "验收 dev-pair1 · CASE-19 · R1 · 按键发声玩具",
+    "summary": "面向3岁以上儿童的室内家用按键发声玩具研发原型，采用单节AA/AAA电池供电，六个机械键分别触发预烧录音效，另有独立触摸唤醒、自动待机、扬声器输出和LED状态指示。"
+  },
+  "global_constraints": {
+    "currency": "CNY",
+    "note": "成本来自预设元件库参考价；需求侧未提供预算"
+  },
+  "selection_items": [
+    {
+      "id": "SEL-001",
+      "module_name": "语音播放与控制核心",
+      "module_type": "8位单片机与8051类子模块",
+      "category": "8位单片机与8051类子模块",
+      "leaf_code": "l_cryptographic_coprocessor",
+      "leaf_codes": [
+        "l_cryptographic_coprocessor",
+        "l_digital_signal_processor_dsp_dsc",
+        "l_microcontroller_mcu_mpu_soc",
+        "l_programmable_logic_device_cpld_fpga",
+        "l_secure_authenticator",
+        "l_secure_element",
+        "l_trusted_platform_module"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-002",
+        "REQ-003",
+        "REQ-007"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "purpose": "承接机械键事件，选择并控制六段出厂预置音效播放；CX588为指定核心器件。",
+      "boundary": "六个机械键各对应一段音效，单段播放，按新键立即切换，长按不重复触发且松开后可再次触发。触摸键独立负责唤醒；任一机械键也可唤醒待机设备。音效生产预烧录，编码与容量匹配待设计；器件身份及能力待资料核验。",
+      "chenxin_module_id": "MOD-001",
+      "chenxin_selection_item_id": "SEL-001",
+      "specified_device": {
+        "model": "CX588",
+        "intent": "must"
+      },
+      "note": "用户描述CX588内置8位MCU、音频DAC和1.2W功放，支持PWM/DAC直接驱动扬声器并可存储多段语音；相关器件参数待核验。；用户描述C10S01X为单通道电容式触摸感应芯片，灵敏度可调；型号及器件参数待核验。",
+      "specified_reference_ids": [
+        "REF-001"
+      ]
+    },
+    {
+      "id": "SEL-002",
+      "module_name": "单节电池升压供电",
+      "module_type": "Boost升压子模块",
+      "category": "Boost升压子模块",
+      "leaf_code": "l_ac_dc_controller_and_voltage_regulator",
+      "leaf_codes": [
+        "l_ac_dc_controller_and_voltage_regulator",
+        "l_charge_pump",
+        "l_dc_dc_power_module",
+        "l_dc_dc_pwm_controller",
+        "l_linear_regulator_ldo",
+        "l_nonisolated_dc_dc_power_module",
+        "l_professional_power_management_pmic",
+        "l_step_down_dc_dc_converter",
+        "l_step_up_buck_boost_converter"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-004",
+        "REQ-006"
+      ],
+      "hard_conditions": [
+        {
+          "field": "input_voltage",
+          "op": "cover",
+          "value": 0.9,
+          "source_constraint_id": "new-dc-3",
+          "unit": "V",
+          "related_requirement": "REQ-004",
+          "reason": "单节1.5V干电池供电（0.9V~1.5V输入范围）"
+        },
+        {
+          "field": "output_voltage",
+          "op": "==",
+          "value": 3.3,
+          "source_constraint_id": "new-dc-4",
+          "unit": "V",
+          "related_requirement": "REQ-004",
+          "reason": "3.3V固定输出"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "feature",
+          "op": "contains",
+          "value": 8.0,
+          "source_constraint_id": "new-dc-8",
+          "related_requirement": "REQ-006",
+          "reason": "8Ω/2W表示扬声器规格；不把2W作为整机音频输出要求。实际输出功率按CX588、3.3V供电和扬声器匹配设计"
+        }
+      ],
+      "purpose": "将单节AA或AAA干电池输入升压至固定3.3V，为核心电路供电。",
+      "boundary": "本版保留PW5100作为实现约束，输入范围为0.9V~1.5V，功能验收点为0.9V、1.2V和1.5V。负载能力、效率工况、纹波、启动表现及实际外围仍待资料和设计核对，不声称器件参数已验证。",
+      "chenxin_module_id": "MOD-002",
+      "chenxin_selection_item_id": "SEL-002",
+      "specified_device": {
+        "model": "PW5100",
+        "intent": "must"
+      },
+      "note": "用户描述启动电压为0.9V，待器件资料核验。；用户描述固定输出3.3V，待器件资料核验。；用户描述PW5100为同步升压芯片，效率>94%；效率工况及器件参数待核验。",
+      "specified_reference_ids": [
+        "REF-003"
+      ]
+    },
+    {
+      "id": "SEL-003",
+      "module_name": "独立电容触摸唤醒输入",
+      "module_type": "电容传感器模块",
+      "category": "电容传感器模块",
+      "leaf_code": "l_capacitive_sensor_ic",
+      "leaf_codes": [
+        "l_capacitive_sensor_ic",
+        "l_capacitive_touch_sensor_ic",
+        "l_inductive_capacitive_sensing_interface"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-003"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "purpose": "检测独立触摸唤醒键，并向核心提供唤醒事件。",
+      "boundary": "保留C10S01X单通道电容触摸检测和灵敏度可调要求；触摸键不占用六个机械发声键。触摸键可从待机唤醒设备；具体闲置时间、待机唤醒电路及接口待设计核对，器件身份和参数待资料核验。",
+      "chenxin_module_id": "MOD-003",
+      "chenxin_selection_item_id": "SEL-003",
+      "specified_device": {
+        "model": "C10S01X",
+        "intent": "must"
+      },
+      "note": "用户描述C10S01X为单通道电容式触摸感应芯片，灵敏度可调；型号及器件参数待核验。",
+      "specified_reference_ids": [
+        "REF-002"
+      ]
+    },
+    {
+      "id": "SEL-004",
+      "module_name": "机械键矩阵输入",
+      "module_type": "矩阵键盘子模块",
+      "category": "矩阵键盘子模块",
+      "leaf_code": "l_button_switch",
+      "leaf_codes": [
+        "l_button_switch",
+        "l_capacitive_touch_sensor_ic",
+        "l_dip_switch",
+        "l_direct_key_switch",
+        "l_mechanical_keyboard_switch",
+        "l_metal_dome",
+        "l_multi_way_switch",
+        "l_multifunction_switch",
+        "l_rocker_switch",
+        "l_rotary_coding_switch",
+        "l_rotary_encoder",
+        "l_rotary_switch",
+        "l_slide_switch",
+        "l_tactile_switch",
+        "l_toggle_switch",
+        "l_touch_screen_controller",
+        "l_travel_switch"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-002",
+        "REQ-003",
+        "REQ-005"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "purpose": "为六个机械发声键提供按键输入，并将键事件送至核心。",
+      "boundary": "六个机械键各触发对应音效，也可唤醒待机设备；触摸唤醒键保持独立。矩阵行列配置、电气连接和去抖由设计阶段确定。",
+      "chenxin_module_id": "MOD-004",
+      "chenxin_selection_item_id": "SEL-004",
+      "note": "用户描述CX588内置8位MCU、音频DAC和1.2W功放，支持PWM/DAC直接驱动扬声器并可存储多段语音；相关器件参数待核验。；用户描述C10S01X为单通道电容式触摸感应芯片，灵敏度可调；型号及器件参数待核验。"
+    },
+    {
+      "id": "SEL-005",
+      "module_name": "扬声器音频输出",
+      "module_type": "蜂鸣器与扬声器模块",
+      "category": "蜂鸣器与扬声器模块",
+      "leaf_code": "l_audio_codec",
+      "leaf_codes": [
+        "l_audio_codec",
+        "l_audio_power_amplifier",
+        "l_buzzer",
+        "l_loudspeaker_speaker"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-002",
+        "REQ-006"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [
+        {
+          "field": "feature",
+          "op": "contains",
+          "value": 8.0,
+          "source_constraint_id": "new-dc-8",
+          "related_requirement": "REQ-006",
+          "reason": "8Ω/2W表示扬声器规格；不把2W作为整机音频输出要求。实际输出功率按CX588、3.3V供电和扬声器匹配设计"
+        }
+      ],
+      "purpose": "将语音或音效输出至8Ω/2W规格的扬声器。",
+      "boundary": "8Ω/2W是扬声器规格，不要求整机输出2W。实际功率按CX588、3.3V供电和扬声器匹配设计；研发验收为六段音效可清楚区分且无明显破音。此功能不代表新增独立功放器件；芯片能力待资料核验。",
+      "chenxin_module_id": "MOD-005",
+      "chenxin_selection_item_id": "SEL-005",
+      "specified_device": {
+        "model": "CX588",
+        "intent": "must"
+      },
+      "note": "用户描述CX588内置8位MCU、音频DAC和1.2W功放，支持PWM/DAC直接驱动扬声器并可存储多段语音；相关器件参数待核验。",
+      "specified_reference_ids": [
+        "REF-001"
+      ]
+    }
+  ],
+  "source": {
+    "system": "requirements_studio",
+    "schema_version": "pcbagent.requirement-spec/1.0",
+    "spec_id": "SPEC-029ca4360143491f9620b8361143f078-v16-d1",
+    "project_id": "029ca4360143491f9620b8361143f078",
+    "requirement_version": 16,
+    "review_status": "approved",
+    "handoff_status": "ready_with_open_items"
+  }
+}

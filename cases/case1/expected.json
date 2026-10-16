@@ -1,0 +1,171 @@
+{
+  "case": "case1",
+  "requirement_version": "req-case1-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-MCU-MAIN-001": {
+      "module_name": "主控制器",
+      "historical_selection": [
+        {
+          "model": "STM32F103CBT6",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "STM32F103CBT6",
+      "evaluation_source": ""
+    },
+    "M-MCU-DYN-001": {
+      "module_name": "动态组件控制器",
+      "historical_selection": [
+        {
+          "model": "STM32F405RGT6",
+          "supplier_part": "C15742",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "recommended",
+      "confirmed_device": "STM32F405RGT6",
+      "evaluation_source": ""
+    },
+    "M-KEYSCAN-001": {
+      "module_name": "并行转串行移位寄存器",
+      "historical_selection": [
+        {
+          "model": "74HC165",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "74HC165",
+      "evaluation_source": ""
+    },
+    "M-KEY-001": {
+      "module_name": "热插拔轴座",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-RGB-001": {
+      "module_name": "可编程RGB LED",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PWR-LDO-001": {
+      "module_name": "低压差线性稳压器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PWR-BUCK-001": {
+      "module_name": "DC-DC降压转换器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PWR-EFUSE-001": {
+      "module_name": "电子保险丝",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-ENC-001": {
+      "module_name": "磁编码器",
+      "historical_selection": [
+        {
+          "model": "AS5047P",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "AS5047P",
+      "evaluation_source": ""
+    },
+    "M-MOTOR-DRV-001": {
+      "module_name": "FOC电机驱动IC",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-MOTOR-001": {
+      "module_name": "无刷直流电机",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-DISP-EINK-001": {
+      "module_name": "电子墨水屏",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-DISP-OLED-001": {
+      "module_name": "OLED显示屏",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-TOUCH-001": {
+      "module_name": "电容触摸条",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HUB-CTRL-001": {
+      "module_name": "USB HUB控制器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-USBC-001": {
+      "module_name": "USB Type-C 接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-USBA-001": {
+      "module_name": "USB Type-A 接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-TVS-001": {
+      "module_name": "ESD保护阵列",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-FPC-001": {
+      "module_name": "FPC连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-SUB-001": {
+      "module_name": "子板连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

@@ -1,0 +1,481 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-case20-v1",
+  "project": {
+    "name": "case20（由历史选型产物转换）",
+    "summary": "来源 /share/home/zhengzhiqi/workspace/web/output/case20/console/stages/03_device_selection__36feb486.json"
+  },
+  "global_constraints": {
+    "budget_total_cny": 80.0,
+    "currency": "CNY",
+    "note": "预算取自历史产物，仅供参考"
+  },
+  "selection_items": [
+    {
+      "id": "M-PWR-LDO-001",
+      "module_name": "ME6118A33 LDO",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_linear_regulator_ldo",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "需求文档第2.1.1节明确指定输出电压为3.3V ±5%，用于ESP32和MPU6500供电。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "output_current",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "A",
+          "reason": "模块描述及需求文档第2.1.1节明确指定最大输出电流为1A。虽然逻辑侧峰值约400mA，但需满足规格书定义的1A额定值及余量。",
+          "source_parameter": "max_output_current"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            3.0,
+            4.2
+          ],
+          "unit": "V",
+          "reason": "系统由1S锂电池供电，标称3.7V，充满4.2V，放电截止3.0V。LDO必须在此范围内稳定工作。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "dropout_voltage",
+          "op": "<=",
+          "value": 0.5,
+          "unit": "V",
+          "reason": "在电池最低电压3.0V时，输入-输出压差仅为-0.3V（理论不可行）或极小。实际上，考虑到SS14二极管压降(~0.3-0.4V)，LDO实际输入最低约为2.6V-2.7V。若要求3.0V输入下正常工作，压差需<0.3V。鉴于ME6118A33典型压差较低，且需求强调3.0V输入，器件必须具备极低压差特性以确保在电池低压时不跌落。*注：若严格遵循3.0V输入，普通LDO可能无法维持3.3V输出，此",
+          "source_parameter": "dropout_voltage"
+        },
+        {
+          "field": "ripple_noise",
+          "op": "<=",
+          "value": 50.0,
+          "unit": "mVpp",
+          "reason": "需求文档Notes及第3.1.1节明确要求纹波<50mV pp，以保障IMU (MPU6500) 的模拟前端精度。",
+          "source_parameter": "ripple_noise"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档第3.2.1节规定工作温度0°C~40°C，生产规范第4.1.2节允许使用商业级(0~70°C)器件。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "quiescent_current",
+          "op": "<=",
+          "value": 2e-05,
+          "unit": "A",
+          "reason": "需求文档第3.1.1节提及静态电流<10μA（ME6118A33典型值），待机功耗<5mA主要依赖ESP32深睡。低静态电流有助于延长电池寿命。",
+          "source_parameter": "quiescent_current"
+        }
+      ],
+      "keywords": [
+        "LDO",
+        "低压差线性稳压器",
+        "Linear Regulator",
+        "3.3V LDO",
+        "1A LDO",
+        "ME6218"
+      ],
+      "specified_device": {
+        "model": "ME6118A33",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-PWR-DIODE-001",
+      "module_name": "SS14 防反接二极管",
+      "module_type": "电源管理",
+      "category": "分立半导体",
+      "leaf_code": "l_professional_power_management_pmic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -55.0,
+            150.0
+          ],
+          "unit": "°C",
+          "reason": "虽然系统工作温度为 0~40°C，但二极管自身在大电流下会产生热量，结温会升高。器件的结温上限（通常 150°C 或 175°C）必须确保在最恶劣工况下不失效。商业级/工业级通用肖特基通常覆盖此范围。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "forward_voltage_drop",
+          "op": "<=",
+          "value": 1.1,
+          "unit": "V",
+          "reason": "肖特基二极管用于防反接，其正向压降直接导致电源效率损失和发热。低压降有助于提高电池续航并减少 LDO 的输入压差压力。SS14 的典型 VF 约为 0.5-0.7 V，最大约 1.1 V。较低的 VF 是重要优化指标。",
+          "source_parameter": "forward_voltage_drop"
+        },
+        {
+          "field": "package",
+          "op": "is",
+          "value": "['SMA', 'DO-214AC']",
+          "reason": "SS14 最常见的封装是 SMA (DO-214AC)。考虑到无人机对重量和空间的限制，SMD 封装优于插件。需确保封装尺寸与 PCB 库一致。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "肖特基二极管",
+        "Schottky Diode",
+        "SS14",
+        "防反接二极管",
+        "Power Rectifier",
+        "1A 40V"
+      ]
+    },
+    {
+      "id": "M-MCU-001",
+      "module_name": "ESP32-WROOM-32",
+      "module_type": "主控计算",
+      "category": "微控制器",
+      "leaf_code": "l_wifi_module",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            2.2,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "ESP32-WROOM-32 模组内部集成 LDO，其输入引脚（VDD33）需承受来自外部 ME6118A33 LDO 的 3.3 V 供电。根据 ESP32 数据手册，VDD33 绝对最大额定值为 3.6 V，最低工作电压为 2.2 V。虽然系统供电标称 3.3 V，但器件必须能容忍电源轨在启动或瞬态时的波动。",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "产品工作环境为 0°C ～ 40°C。商业级器件 (0~70°C) 满足需求且成本更低。若选型工业级 (-40~85°C) 亦可，但非必须。下限 0°C 为硬约束。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "MCU",
+        "SoC",
+        "ESP32",
+        "Wi-Fi MCU",
+        "BLE Module",
+        "双核处理器"
+      ],
+      "specified_device": {
+        "model": "ESP32-WROOM-32",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-SEN-IMU-001",
+      "module_name": "MPU6500 IMU",
+      "module_type": "传感器",
+      "category": "传感器",
+      "leaf_code": "l_photoelectric_slot_sensor_phototransistor",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            3.0,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "系统由 ME6118A33 LDO 供电，LDO 输出为 3.3 V ±5%（即 3.165 V ~ 3.465 V），考虑到 LDO 负载瞬态及输入波动，目标器件必须能在 3.0 V 至 3.6 V 范围内正常工作。MPU6500 绝对最大额定值通常为 3.6 V，因此上限不能超过此值。",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档第 3.2.1 节规定工作温度为 0°C ~ 40°C，第 4.1.2 节明确选用商业级器件。器件最低工作温度不得高于 0°C。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "IMU",
+        "惯性测量单元",
+        "陀螺仪加速度计",
+        "Gyroscope Accelerometer",
+        "MEMS Sensor",
+        "MPU6500"
+      ],
+      "specified_device": {
+        "model": "MPU6500",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-DRV-MOS-001",
+      "module_name": "AO3416 N-MOSFET",
+      "module_type": "执行器与驱动",
+      "category": "分立半导体",
+      "leaf_code": "",
+      "quantity": 4,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档第 3.2.1 章规定工作温度为 0°C ~ 40°C。商业级器件通常覆盖 0~70°C，足以满足环境要求并留有余量应对器件自热。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "N-MOSFET",
+        "N沟道MOS管",
+        "Power MOSFET",
+        "Low Side Switch",
+        "AO3416",
+        "低侧开关"
+      ],
+      "specified_device": {
+        "model": "AO3416",
+        "intent": "reference"
+      },
+      "note": "可选参数（未进条件）：gate_charge_qg"
+    },
+    {
+      "id": "M-CONN-BAT-001",
+      "module_name": "电池输入连接器",
+      "module_type": "调试与连接",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "JST-PH",
+          "reason": "文档明确指定电池接口为 JST-PH 系列，这是物理兼容性的硬性约束。若型号错误将无法插入或接触不良。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 2.0,
+          "unit": "mm",
+          "reason": "文档明确指定 2.0mm 间距。这是决定连接器引脚布局的关键尺寸，直接影响 PCB 封装设计。",
+          "source_parameter": "pitch"
+        },
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 2.0,
+          "unit": "count",
+          "reason": "1S 锂电池包含正极和负极两根线，因此需要 2-pin 连接器。少于 2 pin 无法供电，多于 2 pin 则浪费空间且可能不匹配电池插头。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "voltage_rating",
+          "op": ">=",
+          "value": 4.2,
+          "unit": "V",
+          "reason": "输入电压范围为 3.0 V ~ 4.2 V。虽然低压下大多数连接器都能承受，但耐压值必须符合安全规范，防止击穿或电弧。",
+          "source_parameter": "voltage_rating"
+        },
+        {
+          "field": "polarity",
+          "op": "cover",
+          "value": [
+            1.0,
+            1.0
+          ],
+          "unit": "string",
+          "reason": "文档明确指定“中心正，外围负”或标准的 JST-PH 极性定义。接反会导致后续防反接二极管导通发热甚至损坏，虽然后续有 SS14 保护，但正确的极性是基本功能要求。",
+          "source_parameter": "polarity"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            40.0
+          ],
+          "unit": "°C",
+          "reason": "工作环境温度 0°C ~ 40°C。连接器材料（塑料外壳、金属端子）必须在此范围内保持机械强度和电气性能，不发生脆裂或氧化加剧。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "current_rating",
+          "op": ">=",
+          "value": 1.5,
+          "unit": "A",
+          "reason": "系统峰值电流限制在 1.5 A（电机启动瞬态）。虽然 JST-PH 2.0mm 通常额定电流为 1A-3A（取决于厂商和端子材质），但考虑到无人机的高振动环境和长期可靠性，建议选择额定电流至少覆盖峰值需求的规格，并留有适当余量。",
+          "source_parameter": "current_rating"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "['SMD', 'THT']",
+          "reason": "PCB 采用 SMT 为主工艺。虽然 JST-PH 有插件版本，但在微型无人机（50x50mm）中，为了节省空间和符合轻量化假设，通常优选贴片式（Surface Mount）电池座。若空间允许，插件也可接受，但需确认是否支持自动化贴装。此处建议优先 SMT 以符合紧凑设计。",
+          "source_parameter": "mounting_style"
+        }
+      ],
+      "keywords": [
+        "JST-PH",
+        "Battery Connector",
+        "2.0mm Pitch",
+        "Li-ion Battery Socket",
+        "PH Series",
+        "1S Battery Connector"
+      ]
+    },
+    {
+      "id": "M-CONN-EXT-001",
+      "module_name": "外设扩展接口",
+      "module_type": "调试与连接",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "ch",
+          "reason": "需求文档第2.2.5节明确定义5个物理接口通道，用于引出I2C、UART和GPIO信号。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "rated_current",
+          "op": "cover",
+          "value": [
+            0.012,
+            0.02
+          ],
+          "unit": "A",
+          "reason": "ESP32 单个 GPIO 引脚的最大灌/拉电流限制为 12 mA（绝对最大值）。连接器引脚必须能够承受此电流而不发生过热或接触电阻过大导致的电压降。虽然工程上建议留有余量（如 20-30 mA），但下限必须覆盖 MCU 极限。",
+          "source_parameter": "current_rating_per_pin"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度为 0°C ~ 40°C。连接器材料（塑料/金属）在此范围内必须保持机械性能和电气性能稳定。工业级器件通常覆盖更广范围，是更好的选择，但商业级（0-70°C）已满足最低要求。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.03,
+          "unit": "Ω",
+          "reason": "为了保证信号完整性及低功耗下的稳定性，标准排针/连接器的接触电阻应较低。虽无硬性规定，但高阻值会导致信号衰减或发热。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 0.1,
+          "unit": "Ω",
+          "reason": "标准电气连接器绝缘电阻要求，防止漏电影响敏感模拟信号（如IMU供电）或造成短路风险。",
+          "source_parameter": "insulation_resistance"
+        }
+      ],
+      "keywords": [
+        "排针",
+        "Pin Header",
+        "Connector",
+        "扩展接口",
+        "GPIO Connector",
+        "板对线连接器"
+      ],
+      "note": "可选参数（未进条件）：mounting_type"
+    },
+    {
+      "id": "M-PROT-ESD-001",
+      "module_name": "TVS ESD保护阵列",
+      "module_type": "保护",
+      "category": "保护器件",
+      "leaf_code": "l_electrostatic_and_surge_protection_tvs_esd",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "channels",
+          "reason": "ESD 保护阵列必须覆盖所有外部暴露的信号线（GPIO/I2C/UART/PWM）。若通道数不足，未保护的引脚将直接遭受 ESD 冲击导致主控或传感器损坏。",
+          "source_parameter": "channel_count"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "is",
+          "value": "Multi-channel SMD Array",
+          "reason": "为了节省 PCB 面积（PCB ≤ 50x50mm）并实现多通道集成，应采用小型化封装的多通道 ESD 阵列（如 SOT-23-6, TSSOP-14, QFN 等），而非分立二极管。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "器件需在指定环境温度范围内保持电气特性稳定。商业级器件通常满足 0~70°C，完全覆盖用户需求。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "keywords": [
+        "ESD Protection Array",
+        "TVS Diode Array",
+        "静电保护",
+        "瞬态抑制二极管",
+        "Multi-channel ESD",
+        "IEC 61000-4-2"
+      ]
+    }
+  ]
+}

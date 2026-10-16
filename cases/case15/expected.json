@@ -1,0 +1,134 @@
+{
+  "case": "case15",
+  "requirement_version": "req-case15-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-LDO-001": {
+      "module_name": "外部电源LDO",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-MCU-001": {
+      "module_name": "主控制器",
+      "historical_selection": [
+        {
+          "model": "STM32U5A9NJH6Q",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "STM32U5A9NJH6Q",
+      "evaluation_source": ""
+    },
+    "M-MEM-FLASH-001": {
+      "module_name": "NOR Flash",
+      "historical_selection": [
+        {
+          "model": "MX25UM51245GXDI00",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "MX25UM51245GXDI00",
+      "evaluation_source": ""
+    },
+    "M-MEM-TF-001": {
+      "module_name": "TF卡座",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-SEN-IMU-001": {
+      "module_name": "六轴IMU",
+      "historical_selection": [
+        {
+          "model": "LSM6DSV16X",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "LSM6DSV16X",
+      "evaluation_source": ""
+    },
+    "M-SEN-BARO-001": {
+      "module_name": "气压高度计",
+      "historical_selection": [
+        {
+          "model": "LPS22HB",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "LPS22HB",
+      "evaluation_source": ""
+    },
+    "M-SEN-TH-001": {
+      "module_name": "温湿度传感器",
+      "historical_selection": [
+        {
+          "model": "HTS221",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "HTS221",
+      "evaluation_source": ""
+    },
+    "M-SHIFT-001": {
+      "module_name": "双向电平转换器",
+      "historical_selection": [
+        {
+          "model": "TXS0108EPWR",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "TXS0108EPWR",
+      "evaluation_source": ""
+    },
+    "M-HMI-OLED-001": {
+      "module_name": "OLED显示接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-IFC-USB-001": {
+      "module_name": "USB-C连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-ESD-USB-001": {
+      "module_name": "USB端口ESD保护",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-ESD-SIG-001": {
+      "module_name": "信号线ESD保护",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-DBG-HEADER-001": {
+      "module_name": "调试接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

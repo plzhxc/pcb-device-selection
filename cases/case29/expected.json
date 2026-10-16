@@ -1,0 +1,167 @@
+{
+  "case": "case29",
+  "requirement_version": "req-case29-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-CHG-001": {
+      "module_name": "TP4056X",
+      "historical_selection": [
+        {
+          "model": "TP4056X",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "TP4056X",
+      "evaluation_source": ""
+    },
+    "M-PWR-BST-001": {
+      "module_name": "SX1308",
+      "historical_selection": [
+        {
+          "model": "SX1308",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "SX1308",
+      "evaluation_source": ""
+    },
+    "M-PWR-LDO-001": {
+      "module_name": "SPX3819",
+      "historical_selection": [
+        {
+          "model": "SPX3819",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "SPX3819",
+      "evaluation_source": ""
+    },
+    "M-PWR-SW-001": {
+      "module_name": "AO3401A",
+      "historical_selection": [
+        {
+          "model": "AO3401A",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "AO3401A",
+      "evaluation_source": ""
+    },
+    "M-CTRL-MCU-001": {
+      "module_name": "ESP32-WROOM-32E",
+      "historical_selection": [
+        {
+          "model": "ESP32-WROOM-32E",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "ESP32-WROOM-32E",
+      "evaluation_source": ""
+    },
+    "M-COMM-LORA-001": {
+      "module_name": "E32-433T30D",
+      "historical_selection": [
+        {
+          "model": "E32-433T30D",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "E32-433T30D",
+      "evaluation_source": ""
+    },
+    "M-COMM-ANT-001": {
+      "module_name": "IPEX LoRa天线座",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-COMM-ANT-002": {
+      "module_name": "IPEX WiFi/BLE天线座",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-SENS-BAT-001": {
+      "module_name": "IP3005A",
+      "historical_selection": [
+        {
+          "model": "IP3005A",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "IP3005A",
+      "evaluation_source": ""
+    },
+    "M-SENS-LED-001": {
+      "module_name": "电量指示LED",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HMI-SW-001": {
+      "module_name": "按键组",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-EXT-CONN-001": {
+      "module_name": "外设排针接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-EXT-SW-002": {
+      "module_name": "S8050",
+      "historical_selection": [
+        {
+          "model": "S8050",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "S8050",
+      "evaluation_source": ""
+    },
+    "M-PROT-TVS-001": {
+      "module_name": "USB TVS阵列",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-FUSE-001": {
+      "module_name": "自恢复保险丝/熔断器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-DBG-USB-001": {
+      "module_name": "USB-C连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

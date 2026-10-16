@@ -1,0 +1,222 @@
+{
+  "case": "case9",
+  "requirement_version": "req-case9-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-DCDC-001": {
+      "module_name": "主DC-DC转换器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PWR-LDO-001": {
+      "module_name": "模拟/逻辑LDO",
+      "historical_selection": [
+        {
+          "model": "LR7533",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "LR7533",
+      "evaluation_source": ""
+    },
+    "M-PWR-MOSFET-001": {
+      "module_name": "数控电源调整管",
+      "historical_selection": [
+        {
+          "model": "AGM15P13E",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "AGM15P13E",
+      "evaluation_source": ""
+    },
+    "M-PWR-GDRV-001": {
+      "module_name": "MOSFET栅极驱动器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-MCU-001": {
+      "module_name": "主控MCU",
+      "historical_selection": [
+        {
+          "model": "STM32F407VET6",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "STM32F407VET6",
+      "evaluation_source": ""
+    },
+    "M-MCU-FLASH-001": {
+      "module_name": "SPI Flash存储器",
+      "historical_selection": [
+        {
+          "model": "W25Q256JVEIQ",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "W25Q256JVEIQ",
+      "evaluation_source": ""
+    },
+    "M-FPGA-001": {
+      "module_name": "FPGA协处理器",
+      "historical_selection": [
+        {
+          "model": "AGM6014A",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "AGM6014A",
+      "evaluation_source": ""
+    },
+    "M-FPGA-ADC-001": {
+      "module_name": "高速ADC采样芯片",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-FPGA-DAC-001": {
+      "module_name": "DDS波形DAC芯片",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-FPGA-LS-001": {
+      "module_name": "双向电平转换器",
+      "historical_selection": [
+        {
+          "model": "TXB0108",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-AFE-MUX-001": {
+      "module_name": "模拟多路开关",
+      "historical_selection": [
+        {
+          "model": "MX5050T",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "MX5050T",
+      "evaluation_source": ""
+    },
+    "M-AFE-OPA-001": {
+      "module_name": "信号缓冲运放",
+      "historical_selection": [
+        {
+          "model": "LMV321",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "LMV321",
+      "evaluation_source": ""
+    },
+    "M-AFE-OPA-002": {
+      "module_name": "高精度调理运放",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-AFE-CS-001": {
+      "module_name": "电流检测放大器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HMI-FPC-001": {
+      "module_name": "FPC显示屏连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HMI-ENC-001": {
+      "module_name": "旋转编码器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-INTF-USB-001": {
+      "module_name": "USB高速PHY芯片",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-INTF-USBC-001": {
+      "module_name": "USB-C连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-INTF-BNC-001": {
+      "module_name": "BNC信号连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-INTF-BANANA-001": {
+      "module_name": "香蕉头测量接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-INTF-ESD-001": {
+      "module_name": "ESD保护阵列",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-TEMP-001": {
+      "module_name": "数字温度传感器",
+      "historical_selection": [
+        {
+          "model": "TMP102",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "TMP102",
+      "evaluation_source": ""
+    },
+    "M-PROT-FUSE-001": {
+      "module_name": "过流保护保险丝",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

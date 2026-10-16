@@ -1,0 +1,1166 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-case2-re-v1",
+  "project": {
+    "name": "case2_re（由历史选型产物转换）",
+    "summary": "来源 /share/home/zhengzhiqi/workspace/web/output/case2_re/console/stages/03_device_selection__b5a6b6e7.json"
+  },
+  "global_constraints": {
+    "budget_total_cny": 250.0,
+    "currency": "CNY",
+    "note": "预算取自历史产物，仅供参考"
+  },
+  "selection_items": [
+    {
+      "id": "M-PWR-IC-001",
+      "module_name": "PMIC IC",
+      "module_type": "电源管理芯片",
+      "category": "电源管理 IC",
+      "leaf_code": "l_professional_power_management_pmic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.5,
+            6.0
+          ],
+          "unit": "V",
+          "reason": "PMIC必须能够承受系统输入的5V直流电并在5.5V上限下安全工作。若耐压不足会导致器件击穿损坏。",
+          "source_parameter": "input_voltage_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "器件的工作温度范围必须覆盖系统预期的最高环境温度加上PCB局部温升。商业级通常足够，但若环境恶劣需工业级。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "PMIC",
+        "电源管理芯片",
+        "Power Management IC",
+        "DC-DC Converter",
+        "LDO",
+        "多路输出电源"
+      ],
+      "specified_device": {
+        "model": "RK809-5",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-PWR-IN-001",
+      "module_name": "电源输入连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 4.0,
+          "unit": "A",
+          "reason": "根据需求文档第 2.2.1 节及模块描述，系统峰值功耗对应电流为 3.5 A。连接器长期承载能力必须大于此值以防止过热失效。",
+          "source_parameter": "rated_current"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "依据需求文档第 3.2.1 节，设备工作温度为 0~50°C。连接器材料（塑料/金属）在此范围内必须保持机械性能和电气稳定性。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.02,
+          "unit": "Ω",
+          "reason": "高接触电阻会导致显著的热损耗 ($I^2R$)。在 3.5 A 下，若 R=20mΩ，单点压降 70 mV，功耗 245 mW。低阻值有助于满足散热和效率要求。模块 notes 明确建议“优先选用低接触电阻型号”。",
+          "source_parameter": "contact_resistance"
+        }
+      ],
+      "keywords": [
+        "DC Jack",
+        "Pogo Pin Connector",
+        "Power Input Socket",
+        "5V DC Connector",
+        "High Current Connector"
+      ]
+    },
+    {
+      "id": "M-PWR-FUSE-001",
+      "module_name": "输入保险丝",
+      "module_type": "保护器件",
+      "category": "保护器件",
+      "leaf_code": "l_thermal_cut_out_tco",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 4.0,
+          "unit": "A",
+          "reason": "需求文档第 3.1.1 节明确输入峰值电流为 1.0 A，但第 2.2.1 节指出系统最大负载电流需支持峰值 3.5 A。模块描述及 5.2.2 表明确要求 Input Fuse 为 4.0 A，以在 3.5 A 峰值下提供约 1.14 倍的安全裕量，防止满载误熔断。",
+          "source_parameter": "rated_current"
+        },
+        {
+          "field": "voltage_rating",
+          "op": ">=",
+          "value": 6.0,
+          "unit": "V",
+          "reason": "系统供电为 5 V DC (5.0-5.5 V)。保险丝/PTC 的额定电压必须高于系统最高工作电压。5.5 V 是硬上限，因此器件耐压至少需为 6 V。考虑到安规余量，通常选用 6 V 或更高。",
+          "source_parameter": "voltage_rating"
+        },
+        {
+          "field": "breaking_capacity",
+          "op": ">=",
+          "value": 50.0,
+          "unit": "A",
+          "reason": "系统输入端可能面临短路故障。若使用一次性保险丝，其额定分断能力必须大于电源适配器或后端电路可能提供的最大短路电流，否则保险丝爆炸或无法切断电路将导致严重安全事故。50 A 是基于常见 5V/3.5A 电源适配器内阻估算的最小安全值。",
+          "source_parameter": "breaking_capacity"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度为 0~50°C。保护器件在高温下性能会下降（特别是 PTC 的保持电流会降低）。商业级器件通常覆盖此范围，但工业环境建议更宽范围。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "keywords": [
+        "保险丝",
+        "Fuse",
+        "自恢复保险丝",
+        "PTC",
+        "过流保护",
+        "一次性熔断器"
+      ]
+    },
+    {
+      "id": "M-MCU-001",
+      "module_name": "SoC IC",
+      "module_type": "主控芯片",
+      "category": "微控制器",
+      "leaf_code": "l_microcontroller_mcu_mpu_soc",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "package",
+          "op": "is",
+          "value": "FC-BGA",
+          "reason": "模块描述明确指定为 RK3566 SoC。根据系统模块分解中的详细参数表，RK3566 采用 FC-BGA 封装（通常脚数较多以容纳高速总线）。这是物理装配和 PCB 布局的硬性约束。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.5,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "RK3566 通过 PMIC (RK809-5) 供电。PMIC 输入为 5V DC。SoC 内部 LDO 或电源管理模块的输入耐压必须能够承受 PMIC 输出的最大电压（通常 VDD_IO 或 VDD_CORE 上电时的瞬态或稳态最大值）。虽然 SoC 核心电压较低（~0.8V），但其 I/O 域（VDD_IO）通常为 1.8V 或 3.3V。此处指 SoC 整体供电系统的兼容性，更具体地，So",
+          "source_parameter": "input_voltage_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "SoC",
+        "System on Chip",
+        "RK3566",
+        "ARM Cortex-A55",
+        "Linux MCU",
+        "Application Processor"
+      ],
+      "specified_device": {
+        "model": "RK3566",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-MEM-001",
+      "module_name": "LPDDR4 内存",
+      "module_type": "存储器",
+      "category": "存储器",
+      "leaf_code": "l_synchronous_dynamic_random_access_memory_sdram",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "memory_type",
+          "op": "cover",
+          "value": [
+            4.0,
+            4.0
+          ],
+          "reason": "系统明确指定使用 LPDDR4 内存颗粒，与 RK3566 SoC 的内存控制器兼容。",
+          "source_parameter": "memory_type"
+        },
+        {
+          "field": "data_rate",
+          "op": "cover",
+          "value": [
+            1866.0,
+            2133.0
+          ],
+          "unit": "Mbps",
+          "reason": "需求文档明确要求运行频率为 1866/2133 Mbps。若器件不支持此范围内的任意一种速度，系统将无法在指定性能下运行。",
+          "source_parameter": "data_rate"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            153.0,
+            153.0
+          ],
+          "reason": "RK3566 SoC 的 LPDDR4 接口标准封装为 BGA153。物理封装不匹配将无法装配。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度为 0°C ~ 50°C。商业级存储器通常支持 0~70°C 或 0~95°C，满足系统要求。工业级 (-40~85°C) 更佳但成本更高，鉴于系统无严苛低温需求，商业级上限 70°C 为最低要求。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "keywords": [
+        "LPDDR4",
+        "Low Power DDR4",
+        "DRAM",
+        "BGA Memory",
+        "Mobile DRAM",
+        "内存颗粒"
+      ]
+    },
+    {
+      "id": "M-STOR-001",
+      "module_name": "eMMC 存储",
+      "module_type": "存储器",
+      "category": "存储器",
+      "leaf_code": "l_synchronous_dynamic_random_access_memory_sdram",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            153.0,
+            153.0
+          ],
+          "reason": "模块分类明确标注 'BGA 封装'，且 RK3566 的 eMMC 接口物理布局针对标准 eMMC BGA153 封装优化。错误的封装将导致无法 SMT 贴装或电气连接失败。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作环境温度为 0°C ~ 50°C。考虑到 PCB 局部热点及降额设计原则，选择商业级 (Commercial, 0-70°C) 器件是成本与可靠性的平衡点，且满足 MTBF 要求。工业级 (-40~85°C) 可选但非强制。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "eMMC",
+        "嵌入式多媒体卡",
+        "Embedded MultiMediaCard",
+        "Flash Memory",
+        "NAND Flash",
+        "BGA封装"
+      ]
+    },
+    {
+      "id": "M-WIFI-001",
+      "module_name": "Wi-Fi & BT 模组",
+      "module_type": "无线通信模块",
+      "category": "无线通信模块",
+      "leaf_code": "l_wifi_module",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统定义为商业级应用，工作温度上限 50°C。模组应至少满足商业级温度范围，考虑到射频性能随温度变化，宽温型更佳但非强制。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "Wi-Fi BT Combo Module",
+        "Wireless Module",
+        "AP6212",
+        "802.11ac Wi-Fi",
+        "Bluetooth 5.0",
+        "SDIO Interface"
+      ],
+      "specified_device": {
+        "model": "AP6212",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-ETH-PHY-001",
+      "module_name": "千兆以太网 PHY",
+      "module_type": "网络收发器",
+      "category": "接口/通信 IC",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            3.0,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "PHY 芯片核心逻辑及 I/O 电平需与 RK3566 的 3.3V 兼容（或内置电平转换）。供电电压超出范围可能导致器件损坏或逻辑错误。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "器件必须在系统工作环境温度范围内稳定工作。商业级器件（0-70°C）足以覆盖 0-50°C 的系统要求，并提供结温裕量。若选用工业级（-40~85°C）亦可，但非必须。下限 0°C 为硬约束。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "Ethernet PHY",
+        "以太网物理层收发器",
+        "千兆PHY",
+        "RGMII PHY",
+        "10/100/1000BASE-T Transceiver"
+      ]
+    },
+    {
+      "id": "M-ETH-RJ45-001",
+      "module_name": "RJ45 连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "isolation_voltage",
+          "op": ">=",
+          "value": 1500.0,
+          "unit": "Vrms",
+          "reason": "内置隔离变压器是以太网接口的安全与信号完整性核心。根据需求文档表 5.2.2 及 IEC 62368-1 安规要求，端口需具备足够的电气隔离以保护后端 SoC/PHY 免受外部浪涌和电位差损害。",
+          "source_parameter": "isolation_voltage"
+        },
+        {
+          "field": "connector_type",
+          "op": "cover",
+          "value": [
+            45.0,
+            45.0
+          ],
+          "unit": "Receptac",
+          "reason": "模块定义明确为“带隔离变压器”的 RJ45 连接器。若选用无变压器版本，需额外增加分立变压器，改变 BOM 结构和 PCB 布局，且不符合当前单一物理实体选型策略。",
+          "source_parameter": "connector_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "SMD or THT",
+          "reason": "卡片电脑尺寸限制（100x70mm）可能倾向于 SMD 以节省面积，但 RJ45 承受较大插拔力，THT 更稳固。需根据具体 PCB 布局决定，两者均符合功能需求，故标为 important 而非 critical。",
+          "source_parameter": "mounting_style"
+        }
+      ],
+      "keywords": [
+        "RJ45 Connector",
+        "Ethernet Jack",
+        "LAN Port",
+        "网络接口连接器",
+        "带隔离变压器",
+        "10/100/1000Base-T"
+      ]
+    },
+    {
+      "id": "M-USB3-CONN-001",
+      "module_name": "USB 3.0 连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "Type-A Receptacle",
+          "reason": "模块描述明确指定为 USB 3.0 Type-A 母座。USB 3.0 物理接口通常比 USB 2.0 更长（内部多出 5 个引脚），若误选 USB 2.0 连接器将无法连接 USB 3.0 设备或导致机械干涉。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "data_rate",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "Gbps",
+          "reason": "USB 3.0 标准定义的理论传输速率为 5 Gbps。连接器需支持此高频信号传输而不产生过度的插入损耗或回波损耗。",
+          "source_parameter": "data_rate"
+        },
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 19.0,
+          "unit": "pins",
+          "reason": "USB 3.0 Type-A 母座标准引脚数为 19 Pin（包括 5 个额外的 SS 引脚）。引脚数不对将导致无法焊接或电气连接缺失。",
+          "source_parameter": "pin_count"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度为 0°C ～ 50°C。连接器材料（塑料体、弹片）在此范围内需保持机械性能和电气性能稳定。商业级器件通常覆盖此范围。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "USB Connector",
+        "Type-A Receptacle",
+        "USB 3.0 Connector",
+        "USB A Female",
+        "5Gbps Connector"
+      ]
+    },
+    {
+      "id": "M-USB2-CONN-001",
+      "module_name": "USB 2.0 连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 3,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "Type-A Receptacle",
+          "reason": "模块描述明确指定为 USB 2.0 Type-A 母座。若类型错误（如误选 Mini/Micro/Type-C），将无法插入标准 USB 设备，导致功能完全失败。",
+          "source_parameter": "connector_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.02,
+          "unit": "Ω",
+          "reason": "高接触电阻会导致 VBUS 压降过大或信号完整性恶化。虽然模块未显式给出，但参考同系统中电源输入连接器的要求（Ch 5.2.2）及 USB 规范，低接触电阻是保证供电和信号质量的关键工程参数。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "shielding",
+          "op": "is",
+          "value": "是",
+          "reason": "USB 2.0 高频信号易受干扰，且 EMC 测试（FCC Class B）通常要求连接器具备接地屏蔽以抑制辐射发射。模块描述虽未显式强调，但作为标准 USB 连接器，屏蔽是保证 SI/EMC 性能的重要工程特征。",
+          "source_parameter": "shielding"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度为 0~50°C。连接器需在此范围内可靠工作。商业级器件（0-70°C）足以满足需求，无需工业级，以控制成本。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "USB Connector",
+        "Type-A Receptacle",
+        "USB 2.0",
+        "USB A Port",
+        "480Mbps",
+        "Board Mount USB"
+      ],
+      "note": "可选参数（未进条件）：mounting_type"
+    },
+    {
+      "id": "M-HDMI-001",
+      "module_name": "Micro HDMI 连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 19.0,
+          "unit": "pins",
+          "reason": "Micro HDMI (Type-D) 标准定义为 19-pin，引脚数量错误会导致无法插入或电气连接失败。",
+          "source_parameter": "pin_count"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "quantity",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "pcs",
+          "reason": "系统仅需 1 个 Micro HDMI 输出口用于三屏异显之一。",
+          "source_parameter": "quantity"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "SMD",
+          "reason": "PCB 采用 SMT 组装工艺（Ch4.1.2），且卡片电脑空间紧凑，通常选用表面贴装型连接器以节省高度和空间。",
+          "source_parameter": "mounting_style"
+        },
+        {
+          "field": "shielding",
+          "op": "is",
+          "value": "是",
+          "reason": "系统需满足 FCC Class B / CE Class B EMC 要求，且外部有 ESD 保护阵列。带金属屏蔽外壳的连接器有助于提供接地回路，抑制 EMI 辐射和耦合。",
+          "source_parameter": "shielding"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            50.0
+          ],
+          "unit": "celsius",
+          "reason": "系统工作温度范围为 0°C ～ 50°C。连接器材料需在此范围内保持机械性能和电气接触稳定性。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "Micro HDMI",
+        "HDMI Connector",
+        "Type-D Socket",
+        "HDMI 2.0",
+        "4K@60fps",
+        "19-pin"
+      ]
+    },
+    {
+      "id": "M-EDP-001",
+      "module_name": "EDP 连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": "cover",
+          "value": [
+            30.0,
+            40.0
+          ],
+          "unit": "pins",
+          "reason": "eDP 接口需要足够的引脚来传输 Lane 数据、辅助电源及接地。根据描述和表格，目标器件必须支持这两种常见规格以匹配屏幕模组。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 0.5,
+          "unit": "mm",
+          "reason": "高密度 eDP 连接器标准间距为 0.5mm。引脚间距错误将导致无法与 FPC 排线对齐，造成开路或短路。",
+          "source_parameter": "pitch"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "Surface Mount (SMD)",
+          "reason": "卡片电脑开发板空间受限（100x70mm），且主要采用 SMT 工艺。ZIF 连接器通常设计为 SMD 贴装以节省高度和面积。",
+          "source_parameter": "mounting_style"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "器件的工作温度范围必须完全覆盖系统规定的 0-50°C 工作环境，并留有适当裕量（如至 70°C）以确保长期可靠性。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.03,
+          "unit": "Ω",
+          "reason": "高速数字信号传输要求低接触电阻以减少信号衰减和发热。一般工业级 ZIF 连接器接触电阻通常在 20-30 mΩ 以内。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "防止信号间串扰和漏电的标准绝缘要求，通常定义为 >1000 MΩ @ 500V DC。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "dielectric_withstand_voltage",
+          "op": ">=",
+          "value": 500.0,
+          "unit": "V",
+          "reason": "低压信号连接器的常规耐压测试标准，确保绝缘可靠性。",
+          "source_parameter": "dielectric_withstand_voltage"
+        }
+      ],
+      "keywords": [
+        "FPC Connector",
+        "ZIF Connector",
+        "eDP Connector",
+        "板对板连接器",
+        "0.5mm间距连接器"
+      ],
+      "note": "可选参数（未进条件）：shielding"
+    },
+    {
+      "id": "M-DSI-001",
+      "module_name": "MIPI DSI 连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": "cover",
+          "value": [
+            15.0,
+            22.0
+          ],
+          "unit": "pins",
+          "reason": "需求文档描述中明确指出该连接器通常为 15-pin 或 22-pin。RK3566 的 MIPI DSI 接口通常支持 4-Lane 配置，15-pin 通常对应 4 Data Lanes + 1 Clock Lane + GND/Power，22-pin 可能包含额外的 GND、屏蔽接地或备用引脚以优化信号完整性。选型时必须严格匹配目标屏幕模组（Panel）的 FPC 定义，否则无法物理连接或电",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 0.5,
+          "unit": "mm",
+          "reason": "高密度 MIPI DSI FPC 连接器行业标准间距通常为 0.5 mm。若间距不匹配（如 0.3 mm 或 0.8 mm），FPC 线缆将无法插入或接触不良，导致功能失败。",
+          "source_parameter": "pitch"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作环境温度为 0°C ～ 50°C（Ch 3.2.1）。连接器材料（塑料体、金属端子）必须在环境温度及自身温升下保持机械性能和电气性能稳定。商业级连接器通常覆盖 -40~85°C 或 0~70°C，需确保其下限不低于 0°C，上限高于 50°C 以应对局部热点。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "基本的电气隔离要求，防止相邻引脚间漏电或短路，确保信号纯净度。",
+          "source_parameter": "insulation_resistance"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.03,
+          "unit": "Ω",
+          "reason": "低接触电阻对于高速数字信号（MIPI DSI 高频差分对）的信号完整性和功耗至关重要。高接触电阻会导致信号衰减、发热及潜在的间歇性连接故障。",
+          "source_parameter": "contact_resistance"
+        }
+      ],
+      "keywords": [
+        "FPC连接器",
+        "ZIF连接器",
+        "MIPI DSI Connector",
+        "板对板连接器",
+        "柔性电路板连接器"
+      ],
+      "note": "可选参数（未进条件）：shielding"
+    },
+    {
+      "id": "M-GPIO-001",
+      "module_name": "40-Pin GPIO 排针",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 40.0,
+          "unit": "pins",
+          "reason": "模块描述明确指定为 2x20 Pin，且需兼容 Raspberry Pi 4 定义。引脚数不足将导致无法插入标准树莓派 HAT 或连接对应线缆。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 2.54,
+          "unit": "mm",
+          "reason": "Raspberry Pi GPIO 标准间距为 2.54mm (100 mil)。间距偏差会导致针脚错位、短路或无法插入母座。",
+          "source_parameter": "pitch"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_material",
+          "op": "is",
+          "value": "Phosphor Bronze",
+          "reason": "为保证 GPIO 接口的长期机械稳定性和导电性，通常使用磷青铜作为弹片材料。黄铜硬度高但弹性差，易导致接触不良。",
+          "source_parameter": "contact_material"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "确保各引脚间及引脚与地之间具有良好的绝缘性能，防止信号串扰或漏电，符合电子连接器通用安规标准。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度为 0~50°C。连接器材料（塑料壳体、金属弹片）在该范围内需保持物理性能稳定，不发生脆裂或蠕变。商业级器件通常覆盖此范围。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "排针",
+        "Pin Header",
+        "2x20 Pin",
+        "2.54mm Pitch",
+        "Raspberry Pi GPIO",
+        "40-Pin Connector"
+      ]
+    },
+    {
+      "id": "M-GOLD-001",
+      "module_name": "39-Pin 高速金手指",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 39.0,
+          "unit": "Pin",
+          "reason": "模块名称明确指定为 '39-Pin'，且系统需求 F-08 及接口汇总表均要求 39 Pin 金手指以引出 PCIe/SATA/Audio 信号。引脚数不匹配将导致物理无法安装或功能缺失。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "['Edge Card Connector', 'Gold Finger']",
+          "reason": "模块分类及描述明确指出为边缘连接器（Edge Card/Gold Finger），用于插入主板插槽。普通排针或板对板连接器无法满足此机械形态需求。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "系统环境约束 Ch3.2.1 规定工作温度为 0°C ～ 50°C。连接器材料（塑料主体、金属触点）必须在此范围内保持机械性能和电气性能稳定。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "高速信号隔离的基本电气要求，防止串扰和漏电。通常行业标准为 >1000MΩ @ 500VDC。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "dielectric_withstand_voltage",
+          "op": ">=",
+          "value": 500.0,
+          "unit": "V",
+          "reason": "连接器绝缘体需承受一定的耐压测试，防止高压击穿。对于 3.3V/1.2V 逻辑电平的高速连接器，500VAC 是常见的安规/可靠性测试标准。",
+          "source_parameter": "dielectric_withstand_voltage"
+        }
+      ],
+      "keywords": [
+        "Edge Card Connector",
+        "Gold Finger",
+        "PCIe Connector",
+        "High Speed Connector",
+        "100 Ohm Impedance",
+        "Differential Signal"
+      ]
+    },
+    {
+      "id": "M-TF-001",
+      "module_name": "TF Card 卡座",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作环境上限为 50°C，考虑到 PCB 局部温升及存储温度要求，器件本身至少需满足商业级（0~70°C）或工业级（-40~85°C）标准。低于此范围的器件可能在高温高湿环境下出现接触不良或材料老化加速。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "Surface Mount (SMD)",
+          "reason": "系统主要采用 SMT 工艺以降低成本并提高自动化率。虽然存在 THT 卡座，但在卡片电脑这种高密度 PCB 上，SMD 卡座更利于布局紧凑性和机械稳定性（配合底部焊盘）。若选 THT 需确认是否允许通孔工艺及额外成本。",
+          "source_parameter": "mounting_type"
+        }
+      ],
+      "keywords": [
+        "Micro SD Card Socket",
+        "TF卡座",
+        "SD Card Connector",
+        "Push-Pull",
+        "SD 3.0",
+        "MMC"
+      ]
+    },
+    {
+      "id": "M-ESD-001",
+      "module_name": "ESD 保护阵列",
+      "module_type": "保护器件",
+      "category": "保护器件",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 8.0,
+          "unit": "channels",
+          "reason": "需覆盖 HDMI (TMDS 3 pairs + DDC), USB 3.0 (SS TX/RX pairs + FS pairs), USB 2.0 (3 ports x 2 lines = 6 lines)。TPD2E2U06 仅 2 通道，不足以覆盖所有接口。目标器件必须拥有足够的独立保护通道以同时保护 HDMI、USB 3.0 和 USB 2.0 数据线。建议至少 8-10 个独立数据线保",
+          "source_parameter": "channel_count"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作环境温度上限为 50°C。虽然商业级器件 (0~70°C) 通常足够，但考虑到 PCB 局部热点及长期可靠性，器件需在此范围内稳定工作。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "package",
+          "op": "is",
+          "value": "compact",
+          "reason": "卡片电脑尺寸受限 (100x70mm)，且需在有限空间内容纳 HDMI、USB 3.0 和多个 USB 2.0 的保护。小型化封装（如 WLCSP, QFN, 或紧凑 SOT）有助于节省 PCB 面积并降低寄生电感，从而提高 ESD 性能。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "ESD Protection Array",
+        "静电保护器件",
+        "TVS Diode Array",
+        "Transient Voltage Suppressor",
+        "HDMI ESD",
+        "USB ESD"
+      ]
+    },
+    {
+      "id": "M-TVSETH-001",
+      "module_name": "以太网浪涌保护 TVS",
+      "module_type": "保护器件",
+      "category": "保护器件",
+      "leaf_code": "l_surge_protector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "clamping_voltage_max",
+          "op": ">=",
+          "value": 12.0,
+          "unit": "V",
+          "reason": "模块描述明确要求钳位电压 12V。以太网线路通常工作电压较低（如 3.3V 或隔离侧低压），过高的钳位电压可能导致浪涌能量无法被有效旁路，或者超过 RJ45 变压器及后端 PHY 芯片的耐压极限（通常变压器耐压为 1500V RMS 隔离，但共模瞬态耐受有限）。12V 钳位能有效保护低压侧电路。",
+          "source_parameter": "clamping_voltage_max"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -214.0,
+            -214.0
+          ],
+          "unit": "AC",
+          "reason": "400W 的浪涌功率需要较大的引脚截面积和散热能力，SMA (DO-214AC) 是此类功率 TVS 的标准封装。模块描述中提到‘封装: SMA/DO-214AC’（见 5.2.2 表）。这影响了 PCB 占用面积和热性能。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "TVS Diode Array",
+        "浪涌保护器",
+        "ESD Protection",
+        "RJ45 Surge Protector",
+        "Transient Voltage Suppressor",
+        "以太网保护"
+      ]
+    },
+    {
+      "id": "M-JTAG-001",
+      "module_name": "JTAG 调试排针",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 10.0,
+          "unit": "Pin",
+          "reason": "模块描述明确指定为 10-Pin，且需求文档第 5.2.2 表确认 JTAG Connector 规格。引脚数量不足将导致无法连接完整的 JTAG 信号（TCK/TMS/TDI/TDO/GND 等）或调试器兼容性问题。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 2.54,
+          "unit": "mm",
+          "reason": "模块描述明确指定为 2.54mm 间距排针。这是标准 DIP/JTAG 连接器接口，若间距不匹配将无法插入对应的母座或调试线缆。",
+          "source_parameter": "pitch"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "电气安全与绝缘基本要求，防止相邻引脚间漏电或短路，确保调试信号纯净。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "dielectric_withstand_voltage",
+          "op": ">=",
+          "value": 500.0,
+          "unit": "V AC",
+          "reason": "连接器绝缘耐压要求，防止击穿。对于 3.3V/1.8V 逻辑系统，500V AC 是标准的安全余量。",
+          "source_parameter": "dielectric_withstand_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度为 0°C ～ 50°C。连接器材料（塑料、金属）在该范围内需保持机械性能和电气性能稳定。商业级连接器通常支持 -40~85°C，满足此要求。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.02,
+          "unit": "Ω",
+          "reason": "虽然 JTAG 电流很小，但低接触电阻是保证信号完整性（特别是 TCK 高频边沿）和长期可靠性的基本要求。参考同系统中电源输入连接器的要求及通用工业标准。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "['Through-Hole', 'Surface_Mount']",
+          "reason": "需根据 PCBAgent 后续生成的 PCB 布局确定。通常 Debug Header 在边缘，通孔 (Through-Hole) 更稳固，表面贴装 (SMT) 更节省空间。两者皆可行，非电气硬性约束，但影响装配。",
+          "source_parameter": "mounting_style"
+        }
+      ],
+      "keywords": [
+        "排针",
+        "Header",
+        "2.54mm Pin Header",
+        "JTAG Connector",
+        "Debug Header",
+        "Pin Strip"
+      ]
+    },
+    {
+      "id": "M-UART-001",
+      "module_name": "UART 调试排针",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 4.0,
+          "unit": "Pin",
+          "reason": "模块描述明确指定为 '4-Pin'，用于引出 TX/RX/GND（通常第4针为NC或VCC预留）。少于4针无法连接目标信号，多于4针可能导致定位错误或浪费空间。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 2.54,
+          "unit": "mm",
+          "reason": "标准调试接口间距，与PCB焊盘及配套杜邦线/调试器插头匹配。若偏差将导致无法插入或接触不良。",
+          "source_parameter": "pitch"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 0.1,
+          "unit": "Ω",
+          "reason": "防止引脚间漏电导致 UART 通信误码或逻辑电平失效。这是连接器基本电气性能要求。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "dielectric_withstand_voltage",
+          "op": ">=",
+          "value": 500.0,
+          "unit": "V",
+          "reason": "防止引脚间击穿。虽然工作电压仅为 3.3V，但安规测试和可靠性要求通常规定至少 500VAC 的介电强度。",
+          "source_parameter": "dielectric_withstand_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度为 0°C ～ 50°C。连接器材料（塑料、金属）必须在整个工作区间内保持物理稳定性和电气性能。建议选用商业级（-40~85°C）或工业级器件以提供余量，但最低必须满足 0~50°C。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.02,
+          "unit": "Ω",
+          "reason": "低接触电阻确保信号完整性，特别是对于 UART 这种异步串行通信，高阻抗可能导致信号衰减和误码。",
+          "source_parameter": "contact_resistance"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "A",
+          "reason": "UART 调试信号电流极小（mA级），但连接器需具备通用性以应对可能的 GPIO 复用或意外短接风险。工业级排针通常额定 1A-3A，确保机械强度和低接触电阻。低于 1A 可能因接触电阻过大导致发热或信号完整性问题。",
+          "source_parameter": "contact_current_rating"
+        }
+      ],
+      "keywords": [
+        "排针",
+        "Pin Header",
+        "2.54mm",
+        "4 Pin",
+        "UART Connector",
+        "Debug Header"
+      ],
+      "note": "可选参数（未进条件）：mounting_type"
+    }
+  ]
+}

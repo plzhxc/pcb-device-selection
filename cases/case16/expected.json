@@ -1,0 +1,180 @@
+{
+  "case": "case16",
+  "requirement_version": "req-case16-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-SW-001": {
+      "module_name": "主电源开关",
+      "historical_selection": [
+        {
+          "model": "2N7002",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PWR-MAIN-001": {
+      "module_name": "核心逻辑 DC-DC",
+      "historical_selection": [
+        {
+          "model": "TPS56520",
+          "supplier_part": "C1008408",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "recommended",
+      "confirmed_device": "TPS56520",
+      "evaluation_source": ""
+    },
+    "M-PWR-FAN-001": {
+      "module_name": "风扇专用 DC-DC",
+      "historical_selection": [
+        {
+          "model": "TPS56C230",
+          "supplier_part": "C164608",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "TPS56C230",
+      "evaluation_source": ""
+    },
+    "M-CORE-SW-001": {
+      "module_name": "PCIe Switch",
+      "historical_selection": [
+        {
+          "model": "PEX8724",
+          "supplier_part": "C289021",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "PEX8724",
+      "evaluation_source": ""
+    },
+    "M-MCU-001": {
+      "module_name": "板级管理 MCU",
+      "historical_selection": [
+        {
+          "model": "STM32G030C8T6",
+          "supplier_part": "C188300",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "recommended",
+      "confirmed_device": "STM32G030C8T6",
+      "evaluation_source": ""
+    },
+    "M-STO-BRG-001": {
+      "module_name": "SATA Bridge Controller",
+      "historical_selection": [
+        {
+          "model": "JMB585",
+          "supplier_part": "C111336",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "JMB585",
+      "evaluation_source": ""
+    },
+    "M-STO-FLASH-001": {
+      "module_name": "SPI Flash Memory",
+      "historical_selection": [
+        {
+          "model": "P25Q40",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CLK-BUF-001": {
+      "module_name": "Clock Buffer",
+      "historical_selection": [
+        {
+          "model": "LMK00301",
+          "supplier_part": "C139550",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "recommended",
+      "confirmed_device": "LMK00301",
+      "evaluation_source": ""
+    },
+    "M-I2C-TRANS-001": {
+      "module_name": "I2C Level Translator",
+      "historical_selection": [
+        {
+          "model": "PCA9306",
+          "supplier_part": "C100839",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "recommended",
+      "confirmed_device": "PCA9306",
+      "evaluation_source": ""
+    },
+    "M-IO-SATA-001": {
+      "module_name": "SATA Connectors",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-IO-FAN-001": {
+      "module_name": "Fan Headers",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-IO-PCIE-001": {
+      "module_name": "PCIe Connector",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HMI-LED-001": {
+      "module_name": "Status LEDs",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-ESD-SATA-001": {
+      "module_name": "SATA ESD Array",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-ESD-PCIE-001": {
+      "module_name": "PCIe ESD Array",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-TVS-IN-001": {
+      "module_name": "Input TVS Diode",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-DBG-HDR-001": {
+      "module_name": "Debug Header",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

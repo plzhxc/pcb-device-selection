@@ -1,0 +1,135 @@
+{
+  "case": "case7",
+  "requirement_version": "req-case7-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-DCDC-001": {
+      "module_name": "TPS54360 DC-DC 降压芯片",
+      "historical_selection": [
+        {
+          "model": "TPS54360",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "TPS54360",
+      "evaluation_source": ""
+    },
+    "M-PWR-LDO-001": {
+      "module_name": "LM1117GS-3.3 LDO",
+      "historical_selection": [
+        {
+          "model": "LM1117GS-3.3",
+          "supplier_part": "C411821",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "LM1117GS-3.3",
+      "evaluation_source": ""
+    },
+    "M-PWR-REF-001": {
+      "module_name": "LN33X61Q1 精密电压基准",
+      "historical_selection": [
+        {
+          "model": "LN33X61Q1",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-MCU-001": {
+      "module_name": "AT32F403AVGT7 主控",
+      "historical_selection": [
+        {
+          "model": "AT32F403AVGT7",
+          "supplier_part": "C528442",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "AT32F403AVGT7",
+      "evaluation_source": ""
+    },
+    "M-DIG-DAC-001": {
+      "module_name": "SC81440 多通道 DAC",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-ANA-AMP-001": {
+      "module_name": "GS8552-SR 精密双通道零漂移运放",
+      "historical_selection": [
+        {
+          "model": "GS8552-SR",
+          "supplier_part": "C157716",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "GS8552-SR",
+      "evaluation_source": ""
+    },
+    "M-COM-CH340N-001": {
+      "module_name": "CH340N USB 转 UART 桥接芯片",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-USB-001": {
+      "module_name": "USB Type-C/Micro-B 连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HMI-OLED-001": {
+      "module_name": "OLED 显示屏模块",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HMI-ENC-001": {
+      "module_name": "编码器旋钮",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-ACT-FAN-DRV-001": {
+      "module_name": "风扇驱动 MOSFET",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-ESD-001": {
+      "module_name": "ESD 保护阵列",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-GPIO-001": {
+      "module_name": "GPIO 排针扩展接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONV-LVL-001": {
+      "module_name": "BSS138 电平转换 MOSFET",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

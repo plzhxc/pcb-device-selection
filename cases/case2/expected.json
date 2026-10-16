@@ -1,0 +1,206 @@
+{
+  "case": "case2",
+  "requirement_version": "req-case2-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-PMIC-001": {
+      "module_name": "主电源管理芯片",
+      "historical_selection": [
+        {
+          "model": "RK809-5",
+          "supplier_part": "C30608",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "RK809-5",
+      "evaluation_source": ""
+    },
+    "M-PWR-FUSE-001": {
+      "module_name": "输入过流保护保险丝",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PWR-LED-001": {
+      "module_name": "电源状态指示灯",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CORE-SOC-001": {
+      "module_name": "应用处理器 SoC",
+      "historical_selection": [
+        {
+          "model": "RK3566",
+          "supplier_part": "C27663",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "recommended",
+      "confirmed_device": "RK3566",
+      "evaluation_source": ""
+    },
+    "M-CORE-RAM-001": {
+      "module_name": "系统主内存",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CORE-BOOT-001": {
+      "module_name": "SPI NOR Flash",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CORE-EMMC-001": {
+      "module_name": "eMMC 系统存储",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-NET-WIFI-001": {
+      "module_name": "Wi-Fi & Bluetooth 组合模组",
+      "historical_selection": [
+        {
+          "model": "AP6212",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "AP6212",
+      "evaluation_source": ""
+    },
+    "M-NET-PHY-001": {
+      "module_name": "千兆以太网 PHY 芯片",
+      "historical_selection": [
+        {
+          "model": "RTL8211E",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-NET-TRANS-001": {
+      "module_name": "以太网隔离变压器模块",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-DISP-HDMI-001": {
+      "module_name": "Micro HDMI 插座",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-DISP-EDP-001": {
+      "module_name": "EDP 排线座",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-DISP-DSI-001": {
+      "module_name": "MIPI DSI FPC 连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-IO-USB3-001": {
+      "module_name": "USB 3.0 Type-A 母座",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-IO-USB2-001": {
+      "module_name": "USB 2.0 Type-A 母座",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-IO-TF-001": {
+      "module_name": "TF 卡座",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-IO-GPIO-001": {
+      "module_name": "40 Pin GPIO 排针",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-IO-DBG-001": {
+      "module_name": "调试 UART 排针",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-IO-BTN-001": {
+      "module_name": "电源按键",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-EXT-M2-001": {
+      "module_name": "M.2 Key M 插槽",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-EXT-GOLD-001": {
+      "module_name": "39 Pin 高速扩展金手指",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CAM-CSI-001": {
+      "module_name": "MIPI CSI FPC 连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-TVSHIGH-001": {
+      "module_name": "高速信号 ESD 保护阵列",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-ESDLOW-001": {
+      "module_name": "低速/电源 ESD 保护二极管",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-AUD-BUZZER-001": {
+      "module_name": "有源蜂鸣器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

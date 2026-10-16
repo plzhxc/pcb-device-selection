@@ -1,0 +1,93 @@
+{
+  "case": "case20",
+  "requirement_version": "req-case20-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-LDO-001": {
+      "module_name": "ME6118A33 LDO",
+      "historical_selection": [
+        {
+          "model": "ME6118A33",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "ME6118A33",
+      "evaluation_source": ""
+    },
+    "M-PWR-DIODE-001": {
+      "module_name": "SS14 防反接二极管",
+      "historical_selection": [
+        {
+          "model": "SS14",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-MCU-001": {
+      "module_name": "ESP32-WROOM-32",
+      "historical_selection": [
+        {
+          "model": "ESP32-WROOM-32",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "ESP32-WROOM-32",
+      "evaluation_source": ""
+    },
+    "M-SEN-IMU-001": {
+      "module_name": "MPU6500 IMU",
+      "historical_selection": [
+        {
+          "model": "MPU6500",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "MPU6500",
+      "evaluation_source": ""
+    },
+    "M-DRV-MOS-001": {
+      "module_name": "AO3416 N-MOSFET",
+      "historical_selection": [
+        {
+          "model": "AO3416",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "AO3416",
+      "evaluation_source": ""
+    },
+    "M-CONN-BAT-001": {
+      "module_name": "电池输入连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-EXT-001": {
+      "module_name": "外设扩展接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-ESD-001": {
+      "module_name": "TVS ESD保护阵列",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

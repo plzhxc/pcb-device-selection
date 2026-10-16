@@ -1,0 +1,266 @@
+{
+  "case": "case17",
+  "requirement_version": "req-case17-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-TPS5450-001": {
+      "module_name": "TPS5450 DC-DC转换器",
+      "historical_selection": [
+        {
+          "model": "TPS5450",
+          "supplier_part": "C280180",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "TPS5450",
+      "evaluation_source": ""
+    },
+    "M-PWR-ME6211-001": {
+      "module_name": "ME6211C33 LDO稳压器",
+      "historical_selection": [
+        {
+          "model": "ME6211C33",
+          "supplier_part": "C280181",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "ME6211C33",
+      "evaluation_source": ""
+    },
+    "M-PWR-FUSE-001": {
+      "module_name": "输入保险丝",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PWR-TVS-001": {
+      "module_name": "输入TVS二极管",
+      "historical_selection": [
+        {
+          "model": "SMBJ36A",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-MCU-001": {
+      "module_name": "STM32F446ZET6 MCU",
+      "historical_selection": [
+        {
+          "model": "STM32F446ZET6",
+          "supplier_part": "C15742",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "STM32F446ZET6",
+      "evaluation_source": ""
+    },
+    "M-DRV-TMC2209-001": {
+      "module_name": "TMC2209 步进电机驱动器",
+      "historical_selection": [
+        {
+          "model": "TMC2209",
+          "supplier_part": "C22290",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "TMC2209",
+      "evaluation_source": ""
+    },
+    "M-CONN-XH4A-001": {
+      "module_name": "XH-4A 电机连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-SEN-INA826-001": {
+      "module_name": "INA826 仪表放大器",
+      "historical_selection": [
+        {
+          "model": "INA826",
+          "supplier_part": "C280182",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "recommended",
+      "confirmed_device": "INA826",
+      "evaluation_source": ""
+    },
+    "M-CONN-LIMIT-001": {
+      "module_name": "限位/传感器端子排",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-BLT-001": {
+      "module_name": "BLTouch 接口连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-COM-MCP2542FD-001": {
+      "module_name": "MCP2542FD CAN收发器",
+      "historical_selection": [
+        {
+          "model": "MCP2542FD",
+          "supplier_part": "C15743",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "MCP2542FD",
+      "evaluation_source": ""
+    },
+    "M-CONN-USBC-001": {
+      "module_name": "USB-C 连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-USBA-001": {
+      "module_name": "USB-A 连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-RJ11-001": {
+      "module_name": "RJ11 调试接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-MEM-AT24C32D-001": {
+      "module_name": "AT24C32D EEPROM",
+      "historical_selection": [
+        {
+          "model": "AT24C32D",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "AT24C32D",
+      "evaluation_source": ""
+    },
+    "M-CONN-TF-001": {
+      "module_name": "TF卡座",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-DRV-HD50N06D-001": {
+      "module_name": "HD50N06D N-MOSFET",
+      "historical_selection": [
+        {
+          "model": "HD50N06D",
+          "supplier_part": "C10673",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "recommended",
+      "confirmed_device": "HD50N06D",
+      "evaluation_source": ""
+    },
+    "M-DRV-SI7446DP-001": {
+      "module_name": "SI7446DP P-MOSFET",
+      "historical_selection": [
+        {
+          "model": "SI7446DP",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-OPTO-EL357C-001": {
+      "module_name": "EL357C 光耦",
+      "historical_selection": [
+        {
+          "model": "EL357C",
+          "supplier_part": "C280187",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "recommended",
+      "confirmed_device": "EL357C",
+      "evaluation_source": ""
+    },
+    "M-BUF-SN74HC125-001": {
+      "module_name": "SN74HC125 缓冲器",
+      "historical_selection": [
+        {
+          "model": "SN74HC125",
+          "supplier_part": "C280184",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "SN74HC125",
+      "evaluation_source": ""
+    },
+    "M-BUF-74HCT365-001": {
+      "module_name": "74HCT365D 缓冲器",
+      "historical_selection": [
+        {
+          "model": "74HCT365D",
+          "supplier_part": "C280185",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "recommended",
+      "confirmed_device": "74HCT365D",
+      "evaluation_source": ""
+    },
+    "M-BUF-74LVC1G125-001": {
+      "module_name": "74LVC1G125 缓冲器",
+      "historical_selection": [
+        {
+          "model": "74LVC1G125",
+          "supplier_part": "C280186",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "74LVC1G125",
+      "evaluation_source": ""
+    },
+    "M-LED-STATUS-001": {
+      "module_name": "状态指示灯 LED",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-LED-RGB-001": {
+      "module_name": "RGB灯带接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-BEEP-001": {
+      "module_name": "蜂鸣器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

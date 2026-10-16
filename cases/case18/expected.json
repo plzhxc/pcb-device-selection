@@ -1,0 +1,186 @@
+{
+  "case": "case18",
+  "requirement_version": "req-case18-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-SW-001": {
+      "module_name": "电源开关保护组",
+      "historical_selection": [
+        {
+          "model": "SK34",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        },
+        {
+          "model": "IRLML6402",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PWR-LDO-DIG-001": {
+      "module_name": "数字逻辑3.3V LDO",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PWR-LDO-ANA-001": {
+      "module_name": "模拟AVDD低噪声LDO",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PWR-DCDC-001": {
+      "module_name": "电机驱动5V升压转换器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-MCU-001": {
+      "module_name": "主控制器MCU",
+      "historical_selection": [
+        {
+          "model": "GD32F470ZIT6",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "GD32F470ZIT6",
+      "evaluation_source": ""
+    },
+    "M-USB-CONV-001": {
+      "module_name": "USB转UART桥接芯片",
+      "historical_selection": [
+        {
+          "model": "CH340C",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "CH340C",
+      "evaluation_source": ""
+    },
+    "M-AFE-001": {
+      "module_name": "生物电模拟前端AFE #1",
+      "historical_selection": [
+        {
+          "model": "ADS1298IPAR",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "ADS1298IPAR",
+      "evaluation_source": ""
+    },
+    "M-AFE-002": {
+      "module_name": "生物电模拟前端AFE #2",
+      "historical_selection": [
+        {
+          "model": "ADS1298IPAR",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "ADS1298IPAR",
+      "evaluation_source": ""
+    },
+    "M-CONN-ELEC-001": {
+      "module_name": "电极接口连接器组",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-GDT-001": {
+      "module_name": "气体放电管保护器件",
+      "historical_selection": [
+        {
+          "model": "B88069X1640T902",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "B88069X1640T902",
+      "evaluation_source": ""
+    },
+    "M-PROT-TRANS-001": {
+      "module_name": "晶体管限流保护器件",
+      "historical_selection": [
+        {
+          "model": "DTC114EE",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "DTC114EE",
+      "evaluation_source": ""
+    },
+    "M-HMI-LCD-001": {
+      "module_name": "液晶显示屏接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HMI-BUZ-001": {
+      "module_name": "有源蜂鸣器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HMI-KEY-001": {
+      "module_name": "用户按键组",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-DRV-MOTOR-001": {
+      "module_name": "步进电机驱动芯片",
+      "historical_selection": [
+        {
+          "model": "GC8838",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "GC8838",
+      "evaluation_source": ""
+    },
+    "M-CONN-XT60-001": {
+      "module_name": "XT60电源接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-USB-001": {
+      "module_name": "USB Type-B接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-SWD-001": {
+      "module_name": "SWD调试接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

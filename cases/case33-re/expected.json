@@ -1,0 +1,175 @@
+{
+  "case": "case33_re",
+  "requirement_version": "req-case33-re-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-CHG-001": {
+      "module_name": "TP5000 充电管理芯片",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "TP5000",
+      "evaluation_source": ""
+    },
+    "M-PWR-DCDC-001": {
+      "module_name": "DC-DC Buck Converter",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PWR-LDO-001": {
+      "module_name": "3.3V LDO 稳压器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-MCU-001": {
+      "module_name": "STM32F405RGT6",
+      "historical_selection": [
+        {
+          "model": "STM32F405RGT6",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "STM32F405RGT6",
+      "evaluation_source": ""
+    },
+    "M-MCU-RTC-001": {
+      "module_name": "CR1220 纽扣电池座",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-SENS-AHT-001": {
+      "module_name": "AHT10 温湿度传感器",
+      "historical_selection": [
+        {
+          "model": "AHT10",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "AHT10",
+      "evaluation_source": ""
+    },
+    "M-SENS-QMC-001": {
+      "module_name": "QMC5883L 三轴地磁传感器",
+      "historical_selection": [
+        {
+          "model": "QMC5883L",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "QMC5883L",
+      "evaluation_source": ""
+    },
+    "M-SENS-BMP-001": {
+      "module_name": "BMP280 气压/温度传感器",
+      "historical_selection": [
+        {
+          "model": "BMP280",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "BMP280",
+      "evaluation_source": ""
+    },
+    "M-SENS-LS-001": {
+      "module_name": "2N7002 N-MOSFET 电平转换器",
+      "historical_selection": [
+        {
+          "model": "2N7002",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "2N7002",
+      "evaluation_source": ""
+    },
+    "M-COMM-RS485-001": {
+      "module_name": "MAX3485ECSA RS485 收发器",
+      "historical_selection": [
+        {
+          "model": "MAX3485ECSA",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "MAX3485ECSA",
+      "evaluation_source": ""
+    },
+    "M-COMM-USBC-001": {
+      "module_name": "USB-C 连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-STOR-TF-001": {
+      "module_name": "TF Card Socket",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HMI-BUZZ-001": {
+      "module_name": "有源蜂鸣器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HMI-BUZZ-DRV-001": {
+      "module_name": "蜂鸣器驱动 MOSFET (2N7002)",
+      "historical_selection": [
+        {
+          "model": "2N7002",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "2N7002",
+      "evaluation_source": ""
+    },
+    "M-HMI-LED-001": {
+      "module_name": "LED 指示灯",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-ESD-001": {
+      "module_name": "TVS/ESD 保护阵列",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-FUSE-001": {
+      "module_name": "自恢复保险丝",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-DBG-SWD-001": {
+      "module_name": "SWD 调试排针",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

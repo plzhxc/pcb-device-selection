@@ -1,0 +1,368 @@
+{
+  "schema": "pcbagent.device_selection.cases.v1",
+  "generated_from": "/share/home/zhengzhiqi/workspace/web/output/case*/console/stages/03_device_selection__*.json",
+  "totals": {
+    "cases": 31,
+    "modules": 527,
+    "hard": 1347,
+    "preferred": 613,
+    "unmapped": 2368
+  },
+  "skipped_sources": [
+    {
+      "source": "/share/home/zhengzhiqi/workspace/web/output/case10/console/stages/03_device_selection__7c07c31c.json",
+      "reason": "历史产物状态 'error'，错误 \"AgentStepError: agent role 'parameter_estimator' failed at step 'parameter_estimation.module_8' with status 'output_inva\"，无模块"
+    },
+    {
+      "source": "/share/home/zhengzhiqi/workspace/web/output/case24/console/stages/03_device_selection__dc578995.json",
+      "reason": "历史产物状态 'error'，错误 \"AgentStepError: agent role 'parameter_estimator' failed at step 'parameter_estimation.module_16' with status 'output_inv\"，无模块"
+    },
+    {
+      "source": "/share/home/zhengzhiqi/workspace/web/output/case4_re/console/stages/03_device_selection__c2944e43.json",
+      "reason": "历史产物状态 'error'，错误 \"AgentStepError: agent role 'parameter_estimator' failed at step 'parameter_estimation.module_13' with status 'output_inv\"，无模块"
+    }
+  ],
+  "cases": [
+    {
+      "case": "case1",
+      "path": "case1/requirement_spec.json",
+      "requirement_version": "req-case1-v1",
+      "modules": 20,
+      "hard_conditions": 50,
+      "preferred_conditions": 27,
+      "unmapped_parameters": 98,
+      "leaf_unresolved": 6,
+      "modules_with_historical_selection": 4
+    },
+    {
+      "case": "case10_re",
+      "path": "case10-re/requirement_spec.json",
+      "requirement_version": "req-case10-re-v1",
+      "modules": 13,
+      "hard_conditions": 39,
+      "preferred_conditions": 11,
+      "unmapped_parameters": 54,
+      "leaf_unresolved": 0,
+      "modules_with_historical_selection": 6
+    },
+    {
+      "case": "case11",
+      "path": "case11/requirement_spec.json",
+      "requirement_version": "req-case11-v1",
+      "modules": 28,
+      "hard_conditions": 66,
+      "preferred_conditions": 27,
+      "unmapped_parameters": 139,
+      "leaf_unresolved": 1,
+      "modules_with_historical_selection": 17
+    },
+    {
+      "case": "case12",
+      "path": "case12/requirement_spec.json",
+      "requirement_version": "req-case12-v1",
+      "modules": 14,
+      "hard_conditions": 34,
+      "preferred_conditions": 22,
+      "unmapped_parameters": 54,
+      "leaf_unresolved": 0,
+      "modules_with_historical_selection": 3
+    },
+    {
+      "case": "case13",
+      "path": "case13/requirement_spec.json",
+      "requirement_version": "req-case13-v1",
+      "modules": 13,
+      "hard_conditions": 34,
+      "preferred_conditions": 16,
+      "unmapped_parameters": 55,
+      "leaf_unresolved": 1,
+      "modules_with_historical_selection": 8
+    },
+    {
+      "case": "case14",
+      "path": "case14/requirement_spec.json",
+      "requirement_version": "req-case14-v1",
+      "modules": 15,
+      "hard_conditions": 33,
+      "preferred_conditions": 12,
+      "unmapped_parameters": 78,
+      "leaf_unresolved": 0,
+      "modules_with_historical_selection": 10
+    },
+    {
+      "case": "case15",
+      "path": "case15/requirement_spec.json",
+      "requirement_version": "req-case15-v1",
+      "modules": 13,
+      "hard_conditions": 34,
+      "preferred_conditions": 18,
+      "unmapped_parameters": 61,
+      "leaf_unresolved": 2,
+      "modules_with_historical_selection": 6
+    },
+    {
+      "case": "case16",
+      "path": "case16/requirement_spec.json",
+      "requirement_version": "req-case16-v1",
+      "modules": 17,
+      "hard_conditions": 44,
+      "preferred_conditions": 22,
+      "unmapped_parameters": 69,
+      "leaf_unresolved": 5,
+      "modules_with_historical_selection": 9
+    },
+    {
+      "case": "case17",
+      "path": "case17/requirement_spec.json",
+      "requirement_version": "req-case17-v1",
+      "modules": 25,
+      "hard_conditions": 66,
+      "preferred_conditions": 31,
+      "unmapped_parameters": 103,
+      "leaf_unresolved": 2,
+      "modules_with_historical_selection": 14
+    },
+    {
+      "case": "case18",
+      "path": "case18/requirement_spec.json",
+      "requirement_version": "req-case18-v1",
+      "modules": 18,
+      "hard_conditions": 46,
+      "preferred_conditions": 21,
+      "unmapped_parameters": 98,
+      "leaf_unresolved": 2,
+      "modules_with_historical_selection": 8
+    },
+    {
+      "case": "case19",
+      "path": "case19/requirement_spec.json",
+      "requirement_version": "req-case19-v1",
+      "modules": 15,
+      "hard_conditions": 52,
+      "preferred_conditions": 21,
+      "unmapped_parameters": 55,
+      "leaf_unresolved": 0,
+      "modules_with_historical_selection": 11
+    },
+    {
+      "case": "case2",
+      "path": "case2/requirement_spec.json",
+      "requirement_version": "req-case2-v1",
+      "modules": 25,
+      "hard_conditions": 65,
+      "preferred_conditions": 25,
+      "unmapped_parameters": 123,
+      "leaf_unresolved": 3,
+      "modules_with_historical_selection": 4
+    },
+    {
+      "case": "case20",
+      "path": "case20/requirement_spec.json",
+      "requirement_version": "req-case20-v1",
+      "modules": 8,
+      "hard_conditions": 22,
+      "preferred_conditions": 9,
+      "unmapped_parameters": 32,
+      "leaf_unresolved": 1,
+      "modules_with_historical_selection": 5
+    },
+    {
+      "case": "case21",
+      "path": "case21/requirement_spec.json",
+      "requirement_version": "req-case21-v1",
+      "modules": 17,
+      "hard_conditions": 48,
+      "preferred_conditions": 25,
+      "unmapped_parameters": 65,
+      "leaf_unresolved": 0,
+      "modules_with_historical_selection": 8
+    },
+    {
+      "case": "case22",
+      "path": "case22/requirement_spec.json",
+      "requirement_version": "req-case22-v1",
+      "modules": 20,
+      "hard_conditions": 42,
+      "preferred_conditions": 23,
+      "unmapped_parameters": 86,
+      "leaf_unresolved": 3,
+      "modules_with_historical_selection": 6
+    },
+    {
+      "case": "case23",
+      "path": "case23/requirement_spec.json",
+      "requirement_version": "req-case23-v1",
+      "modules": 15,
+      "hard_conditions": 38,
+      "preferred_conditions": 15,
+      "unmapped_parameters": 64,
+      "leaf_unresolved": 1,
+      "modules_with_historical_selection": 3
+    },
+    {
+      "case": "case24_re",
+      "path": "case24-re/requirement_spec.json",
+      "requirement_version": "req-case24-re-v1",
+      "modules": 23,
+      "hard_conditions": 60,
+      "preferred_conditions": 28,
+      "unmapped_parameters": 95,
+      "leaf_unresolved": 1,
+      "modules_with_historical_selection": 13
+    },
+    {
+      "case": "case26",
+      "path": "case26/requirement_spec.json",
+      "requirement_version": "req-case26-v1",
+      "modules": 18,
+      "hard_conditions": 33,
+      "preferred_conditions": 15,
+      "unmapped_parameters": 84,
+      "leaf_unresolved": 2,
+      "modules_with_historical_selection": 8
+    },
+    {
+      "case": "case27",
+      "path": "case27/requirement_spec.json",
+      "requirement_version": "req-case27-v1",
+      "modules": 12,
+      "hard_conditions": 31,
+      "preferred_conditions": 11,
+      "unmapped_parameters": 51,
+      "leaf_unresolved": 0,
+      "modules_with_historical_selection": 3
+    },
+    {
+      "case": "case29",
+      "path": "case29/requirement_spec.json",
+      "requirement_version": "req-case29-v1",
+      "modules": 16,
+      "hard_conditions": 41,
+      "preferred_conditions": 26,
+      "unmapped_parameters": 66,
+      "leaf_unresolved": 2,
+      "modules_with_historical_selection": 8
+    },
+    {
+      "case": "case2_re",
+      "path": "case2-re/requirement_spec.json",
+      "requirement_version": "req-case2-re-v1",
+      "modules": 21,
+      "hard_conditions": 49,
+      "preferred_conditions": 30,
+      "unmapped_parameters": 90,
+      "leaf_unresolved": 2,
+      "modules_with_historical_selection": 4
+    },
+    {
+      "case": "case3",
+      "path": "case3/requirement_spec.json",
+      "requirement_version": "req-case3-v1",
+      "modules": 13,
+      "hard_conditions": 36,
+      "preferred_conditions": 18,
+      "unmapped_parameters": 59,
+      "leaf_unresolved": 0,
+      "modules_with_historical_selection": 5
+    },
+    {
+      "case": "case30",
+      "path": "case30/requirement_spec.json",
+      "requirement_version": "req-case30-v1",
+      "modules": 11,
+      "hard_conditions": 27,
+      "preferred_conditions": 12,
+      "unmapped_parameters": 53,
+      "leaf_unresolved": 1,
+      "modules_with_historical_selection": 3
+    },
+    {
+      "case": "case31",
+      "path": "case31/requirement_spec.json",
+      "requirement_version": "req-case31-v1",
+      "modules": 9,
+      "hard_conditions": 29,
+      "preferred_conditions": 12,
+      "unmapped_parameters": 36,
+      "leaf_unresolved": 1,
+      "modules_with_historical_selection": 3
+    },
+    {
+      "case": "case33_re",
+      "path": "case33-re/requirement_spec.json",
+      "requirement_version": "req-case33-re-v1",
+      "modules": 18,
+      "hard_conditions": 40,
+      "preferred_conditions": 17,
+      "unmapped_parameters": 87,
+      "leaf_unresolved": 0,
+      "modules_with_historical_selection": 7
+    },
+    {
+      "case": "case34",
+      "path": "case34/requirement_spec.json",
+      "requirement_version": "req-case34-v1",
+      "modules": 20,
+      "hard_conditions": 58,
+      "preferred_conditions": 23,
+      "unmapped_parameters": 83,
+      "leaf_unresolved": 3,
+      "modules_with_historical_selection": 10
+    },
+    {
+      "case": "case4",
+      "path": "case4/requirement_spec.json",
+      "requirement_version": "req-case4-v1",
+      "modules": 26,
+      "hard_conditions": 56,
+      "preferred_conditions": 28,
+      "unmapped_parameters": 141,
+      "leaf_unresolved": 2,
+      "modules_with_historical_selection": 7
+    },
+    {
+      "case": "case6",
+      "path": "case6/requirement_spec.json",
+      "requirement_version": "req-case6-v1",
+      "modules": 10,
+      "hard_conditions": 31,
+      "preferred_conditions": 12,
+      "unmapped_parameters": 45,
+      "leaf_unresolved": 0,
+      "modules_with_historical_selection": 2
+    },
+    {
+      "case": "case7",
+      "path": "case7/requirement_spec.json",
+      "requirement_version": "req-case7-v1",
+      "modules": 14,
+      "hard_conditions": 36,
+      "preferred_conditions": 9,
+      "unmapped_parameters": 68,
+      "leaf_unresolved": 2,
+      "modules_with_historical_selection": 5
+    },
+    {
+      "case": "case8",
+      "path": "case8/requirement_spec.json",
+      "requirement_version": "req-case8-v1",
+      "modules": 17,
+      "hard_conditions": 49,
+      "preferred_conditions": 22,
+      "unmapped_parameters": 70,
+      "leaf_unresolved": 1,
+      "modules_with_historical_selection": 11
+    },
+    {
+      "case": "case9",
+      "path": "case9/requirement_spec.json",
+      "requirement_version": "req-case9-v1",
+      "modules": 23,
+      "hard_conditions": 58,
+      "preferred_conditions": 25,
+      "unmapped_parameters": 106,
+      "leaf_unresolved": 2,
+      "modules_with_historical_selection": 9
+    }
+  ]
+}

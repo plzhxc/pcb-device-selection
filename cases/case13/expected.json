@@ -1,0 +1,146 @@
+{
+  "case": "case13",
+  "requirement_version": "req-case13-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-DCDC-001": {
+      "module_name": "DC-DC Buck转换器",
+      "historical_selection": [
+        {
+          "model": "LP3220",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "LP3220",
+      "evaluation_source": ""
+    },
+    "M-PWR-LDO-001": {
+      "module_name": "3.3V LDO稳压器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-MCU-001": {
+      "module_name": "主控制器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-MEM-001": {
+      "module_name": "配置存储EEPROM",
+      "historical_selection": [
+        {
+          "model": "AT24C16D",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "AT24C16D",
+      "evaluation_source": ""
+    },
+    "M-CLK-001": {
+      "module_name": "实时时钟晶振",
+      "historical_selection": [
+        {
+          "model": "FL26T2",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "FL26T2",
+      "evaluation_source": ""
+    },
+    "M-HDMI-SW-001": {
+      "module_name": "HDMI高速矩阵切换IC",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-USB-MUX-001": {
+      "module_name": "USB 2.0高速多路复用器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-RELAY-AUD-001": {
+      "module_name": "音频切换继电器阵列",
+      "historical_selection": [
+        {
+          "model": "G6S-2",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "G6S-2",
+      "evaluation_source": ""
+    },
+    "M-TRANS-NPN-001": {
+      "module_name": "NPN驱动晶体管",
+      "historical_selection": [
+        {
+          "model": "MMBT3904",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "MMBT3904",
+      "evaluation_source": ""
+    },
+    "M-TRANS-PNP-001": {
+      "module_name": "PNP驱动晶体管",
+      "historical_selection": [
+        {
+          "model": "S8550",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "S8550",
+      "evaluation_source": ""
+    },
+    "M-OPTO-TX-001": {
+      "module_name": "光纤发送模块",
+      "historical_selection": [
+        {
+          "model": "PLT133",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "PLT133",
+      "evaluation_source": ""
+    },
+    "M-OPTO-RX-001": {
+      "module_name": "光纤接收模块",
+      "historical_selection": [
+        {
+          "model": "T10W",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "T10W",
+      "evaluation_source": ""
+    },
+    "M-LED-001": {
+      "module_name": "通道状态指示灯",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

@@ -1,0 +1,3 @@
+设计一款PN532 RFID/NFC调试器工程，采用PN5321A3HN（NXP 13.56MHz NFC读写芯片，集成80C51内核，支持ISO14443A/B、ISO18092、Mifare Classic/Ultralight、FeliCa和NTAG全系列协议）作为核心，搭配CH340N USB转UART串口芯片实现即插即用免驱通信，由RT9013双路LDO（1.2V内核+3.3V IO）提供低噪声稳压电源管理，板载约64个元器件，集成USB-C接口（供电与通信二合一）和4Pin调试排针扩展，支持13.56MHz高频RFID/NFC卡片读写操作、Mifare S50/S70/Ultralight/Desfire卡协议解析、NTAG21x系列标签读写、ISO14443A/B双协议自动识别、板载PCB天线（ANT）近距离感应和红蓝双色LED工作状态指示功能。
+
+开源项目：https://oshwhub.com/yizhidianzi/pn532-rfid-deugger

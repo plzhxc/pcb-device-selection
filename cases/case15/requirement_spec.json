@@ -1,0 +1,782 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-case15-v1",
+  "project": {
+    "name": "case15（由历史选型产物转换）",
+    "summary": "来源 /share/home/zhengzhiqi/workspace/web/output/case15/console/stages/03_device_selection__6bcb08e2.json"
+  },
+  "global_constraints": {
+    "budget_total_cny": 300.0,
+    "currency": "CNY",
+    "note": "预算取自历史产物，仅供参考"
+  },
+  "selection_items": [
+    {
+      "id": "M-PWR-LDO-001",
+      "module_name": "外部电源LDO",
+      "module_type": "电源管理IC",
+      "category": "电源管理IC",
+      "leaf_code": "l_linear_regulator_ldo",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "需求文档明确指定 LDO 需提供 3.3V 电源轨，用于外围器件、Flash VCC（若兼容）及作为电平转换器的 B 侧供电。",
+          "source_parameter": "output_voltage_3v3"
+        },
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 1.8,
+          "unit": "V",
+          "reason": "需求文档明确指定 LDO 需提供 1.8V 低噪声电源轨，用于 MCU 内核及传感器供电。",
+          "source_parameter": "output_voltage_1v8"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.0,
+            5.25
+          ],
+          "unit": "V",
+          "reason": "系统由 USB-C PD/BC1.2 供电，输入电压范围为 4.0 V ～ 5.25 V。LDO 的绝对最大额定值需高于此范围以承受瞬态波动。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "产品环境约束规定工作温度为 -10°C ～ +50°C。LDO 必须在整个温度范围内稳定工作。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "quiescent_current",
+          "op": "<=",
+          "value": 1e-05,
+          "unit": "A",
+          "reason": "模块分类语义意图中明确要求静态电流 < 10μA，以满足低功耗待机要求。",
+          "source_parameter": "quiescent_current"
+        },
+        {
+          "field": "dropout_voltage",
+          "op": "<=",
+          "value": 0.5,
+          "unit": "V @ 200mA",
+          "reason": "虽然未直接指定压差数值，但在最小输入电压 4.0V 时，输出 3.3V 或 1.8V 仍有较大裕量。但对于 1.8V 输出，若输入降至最低有效值，低压差特性有助于保持稳压精度并降低功耗。",
+          "source_parameter": "dropout_voltage"
+        }
+      ],
+      "keywords": [
+        "LDO",
+        "低压差线性稳压器",
+        "Multi-output LDO",
+        "Dual Output LDO",
+        "Low Noise LDO",
+        "3.3V 1.8V Regulator"
+      ]
+    },
+    {
+      "id": "M-MCU-001",
+      "module_name": "主控制器",
+      "module_type": "MCU",
+      "category": "微控制器",
+      "leaf_code": "l_microcontroller_mcu_mpu_soc",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "产品应用于户外运动场景，明确指定工作温度-10°C ~ +50°C。器件必须在此范围内保证功能正常。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "MCU",
+        "微控制器",
+        "ARM Cortex-M33",
+        "超低功耗 MCU",
+        "STM32U5",
+        "带GPU加速器 MCU"
+      ],
+      "specified_device": {
+        "model": "STM32U5A9NJH6Q",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-MEM-FLASH-001",
+      "module_name": "NOR Flash",
+      "module_type": "存储器",
+      "category": "存储器",
+      "leaf_code": "l_nor_flash",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "memory_capacity",
+          "op": ">=",
+          "value": 512.0,
+          "unit": "Mb",
+          "reason": "用户明确指定型号 MX25UM51245GXDI00，该型号容量为 512Mb。若容量不足，无法存储固件、字库及历史数据。",
+          "source_parameter": "memory_capacity"
+        },
+        {
+          "field": "interface_type",
+          "op": "is",
+          "value": "['Octal SPI', 'DTR']",
+          "reason": "需求文档明确要求通过 STM32U5 的 OctoSPI 接口以 Octal DTR 模式运行，时钟频率高达 200MHz。普通 SPI 无法满足带宽要求。",
+          "source_parameter": "interface_type"
+        },
+        {
+          "field": "clock_frequency",
+          "op": ">=",
+          "value": 200000000.0,
+          "unit": "Hz",
+          "reason": "需求文档第 2.2.3 节和 3.1.2 节明确指出 Flash 需在 Octal SPI DTR 模式下支持 200MHz 时钟，以实现高吞吐率。",
+          "source_parameter": "clock_frequency_max"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "产品应用场景为户外运动 AR 眼镜，需求文档第 1.3 章和第 3.2.1 节明确规定工作温度范围为 -10°C ~ +50°C。器件必须在整个范围内正常读写。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "is",
+          "value": "WLCSP",
+          "reason": "用户指定型号 MX25UM51245GXDI00 采用 WLCSP 封装。考虑到 PCBA 尺寸限制（40x20mm），封装尺寸直接影响布局可行性。虽非电气参数，但是关键物理约束。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "NOR Flash",
+        "SPI Flash",
+        "Octal SPI",
+        "DTR",
+        "512Mb",
+        "Micron"
+      ],
+      "specified_device": {
+        "model": "MX25UM51245GXDI00",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-MEM-TF-001",
+      "module_name": "TF卡座",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 9.0,
+          "unit": "pins",
+          "reason": "MicroSD 标准接口包含 CMD, DAT0-3, CLK, VSS, VDD, RSV，共 9 个功能引脚。虽然存在 11-pin 版本（含 CD/DAT1），但基础通信仅需 9-pin。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "SMT",
+          "reason": "系统 PCB 密度极高 (40x20mm, ~145器件)，且需求明确要求 SMT 组装工艺。",
+          "source_parameter": "mounting_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作环境温度约束为 -10°C ~ +50°C，卡座作为物理连接件，其材料（塑料、金属）在此范围内不得发生形变失效或接触不良。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "MicroSD connector",
+        "TF卡座",
+        "SD卡槽",
+        "Memory Card Socket",
+        "9-pin SD",
+        "SMT MicroSD"
+      ]
+    },
+    {
+      "id": "M-SEN-IMU-001",
+      "module_name": "六轴IMU",
+      "module_type": "传感器",
+      "category": "传感器",
+      "leaf_code": "l_attitude_sensor_gyroscope",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            1.7,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "根据模块描述，该 IMU 需与 3.3V 域传感器共用电源轨并通过 TXS0108 电平转换连接至 1.8V MCU。文档指出 LSM6DSV16X 兼容 3.3V VDDIO，且通常此类 MEMS 传感器 VDD 范围为 1.7-3.6V。若器件不支持 3.3V 供电，则无法复用现有的 3.3V LDO 和电平转换架构，导致设计变更。",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档 Section 3.2.1 规定工作温度为 -10°C ～ 50°C。器件必须在整个范围内保持指定的精度和性能指标。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "power_consumption",
+          "op": "<=",
+          "value": 0.001,
+          "unit": "A",
+          "reason": "虽然 IMU 电流占比小，但在可穿戴设备中，累积功耗影响续航。文档 Section 1.3 提到系统待机和工作效率约束。IMU 作为常开传感器，其静态和工作电流越低越好，以便支持 8 小时连续工作。",
+          "source_parameter": "power_consumption"
+        }
+      ],
+      "keywords": [
+        "六轴IMU",
+        "Inertial Measurement Unit",
+        "加速度计",
+        "陀螺仪",
+        "运动传感器",
+        "I2C Sensor"
+      ],
+      "specified_device": {
+        "model": "LSM6DSV16X",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-SEN-BARO-001",
+      "module_name": "气压高度计",
+      "module_type": "传感器",
+      "category": "传感器",
+      "leaf_code": "l_pressure_sensor",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            1.7,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "根据 LPS22HB 数据手册及系统模块描述，传感器供电范围为 1.7V~3.6V。系统通过外部 LDO 提供 3.3V 或 1.8V 电源轨，器件必须兼容此电压域。",
+          "source_parameter": "supply_voltage_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "产品环境约束要求工作温度为 -10°C ~ +50°C。器件工业级（-40~85°C）可完全覆盖此范围，若选型商业级可能导致户外低温失效。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "气压传感器",
+        "Barometer",
+        "MEMS Barometer",
+        "LPS22HB",
+        "I2C Sensor",
+        "高度计"
+      ],
+      "specified_device": {
+        "model": "LPS22HB",
+        "intent": "reference"
+      },
+      "note": "可选参数（未进条件）：package"
+    },
+    {
+      "id": "M-SEN-TH-001",
+      "module_name": "温湿度传感器",
+      "module_type": "传感器",
+      "category": "传感器",
+      "leaf_code": "l_temperature_and_humidity_sensor",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            2.4,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "The sensor must operate within its valid supply voltage window. The system provides a clean 3.3V rail via LDO, which falls within the HTS221's specified 2.4V-3.6V range. Supplying 1.8V would be below ",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "The device must function correctly across the entire defined operational environment of the AR glasses (-10°C to +50°C). Outside this range, readings may be invalid or the device may shut down.",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -8.0,
+            -8.0
+          ],
+          "reason": "Determines PCB footprint, assembly process (reflow profile for WLCSP), and mechanical integration constraints. Must match the existing BOM and layout plan.",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "温湿度传感器",
+        "Humidity and Temperature Sensor",
+        "HTS221",
+        "I2C Sensor",
+        "Capacitive Sensor",
+        "Environmental Sensor"
+      ],
+      "specified_device": {
+        "model": "HTS221",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-SHIFT-001",
+      "module_name": "双向电平转换器",
+      "module_type": "逻辑器件",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_converter_level_shifter",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 8.0,
+          "unit": "ch",
+          "reason": "模块描述明确指定为“8位”双向转换器，且系统中有多个传感器（IMU, Baro, TH）及控制信号需通过该器件互联。若通道数不足，无法连接所有必需信号线。证据：module description '8位...'; requirement_docs 第2.1.2节功能列表。",
+          "source_parameter": "channel_count"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "产品工作温度为-10°C ~ +50°C。为保证可靠性及工业级应用标准，器件温度等级应至少覆盖此范围，工业级（-40~85°C）是消费电子/可穿戴设备的常见选择。证据：requirement_docs section 3.2.1 '工作温度: -10°C ～ 50°C'。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "propagation_delay",
+          "op": "<=",
+          "value": 5e-09,
+          "unit": "s",
+          "reason": "需求文档明确要求传播延迟 < 5ns。虽然I2C速度较慢，但SPI控制信号或GPIO中断对延迟敏感，且TXS0108典型值即为此级别。证据：requirement_docs section 2.1.2 '传播延迟 < 5ns'。",
+          "source_parameter": "propagation_delay"
+        },
+        {
+          "field": "input_capacitance",
+          "op": "<=",
+          "value": 1e-11,
+          "unit": "F",
+          "reason": "低输入电容对于保持高速信号完整性及减少总线负载至关重要，特别是对于I2C/SPI总线。TXS0108的典型值为<10pF。证据：requirement_docs section 5.2.2 'C_in: <10pF'。",
+          "source_parameter": "input_capacitance"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -20.0,
+            -20.0
+          ],
+          "unit": "or",
+          "reason": "PCB尺寸限制为40mm x 20mm，空间极其紧凑。TXS0108常用封装为TSSOP-20或WQFN-20。替代方案需具备类似的小体积封装以适配现有布局或最小化改动。证据：requirement_docs section 1.3 'PCB限制: 40mm × 20mm'。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "电平转换器",
+        "Level Translator",
+        "Bidirectional Level Shifter",
+        "TXS0108",
+        "I2C Level Shifter",
+        "多通道转换器"
+      ],
+      "specified_device": {
+        "model": "TXS0108EPWR",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-HMI-OLED-001",
+      "module_name": "OLED显示接口",
+      "module_type": "连接器/接口",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "ZIF FPC Connector",
+          "reason": "模块明确为连接微型OLED面板的FPC连接器。MIPI DSI接口通常采用板对板或板对线的ZIF（零插拔力）FPC连接器，需支持柔性电路板连接。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "pin_count",
+          "op": "cover",
+          "value": [
+            16.0,
+            30.0
+          ],
+          "unit": "pins",
+          "reason": "MIPI DSI-2 Video Mode通常需要：时钟差分对(2 pins) + 数据差分对(2~8 pins，取决于Lane数量，640x400@60Hz 24bit色深通常需2-4 Lanes) + 电源/地/控制信号(RST, BLK等)。估算最少约16-20 pin。需确保引脚数满足MCU引脚定义及面板规格。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            50.0
+          ],
+          "unit": "degC",
+          "reason": "连接器作为系统的一部分，其材料（塑料体、金属端子）必须在系统规定的-10°C至+50°C环境下保持机械性能和电气性能稳定，不发生脆裂或接触失效。建议选用工业级(-40~85°C)器件以留有余量。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "Surface Mount (SMD)",
+          "reason": "PCBA组装工艺主要为SMT，且PCB尺寸紧凑(40x20mm)，连接器必须为适合自动化贴片生产的表面贴装型(ZIF SMD)。",
+          "source_parameter": "mounting_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.05,
+          "unit": "Ω",
+          "reason": "低接触电阻对于保证高速信号传输的幅度余量和降低功耗至关重要。一般高品质FPC连接器接触电阻在50mΩ以下。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "确保引脚间及引脚与外壳间有足够的绝缘电阻，防止漏电和短路，特别是在高湿度环境(IP54)下。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "dielectric_withstand_voltage",
+          "op": ">=",
+          "value": 500.0,
+          "unit": "V",
+          "reason": "耐压测试指标，确保绝缘强度。虽然MIPI信号电压低(1.8V)，但作为安全规范，连接器本体需具备基本的介电强度。",
+          "source_parameter": "dielectric_withstand_voltage"
+        }
+      ],
+      "keywords": [
+        "FPC Connector",
+        "MIPI DSI",
+        "ZIF Connector",
+        "柔性电路板连接器",
+        "差分阻抗 100Ω",
+        "OLED Interface"
+      ]
+    },
+    {
+      "id": "M-IFC-USB-001",
+      "module_name": "USB-C连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "USB Type-C Receptacle",
+          "reason": "需求文档明确指定为 USB Type-C 接口，用于充电和数据通信。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "pin_count",
+          "op": "cover",
+          "value": [
+            16.0,
+            24.0
+          ],
+          "unit": "pins",
+          "reason": "需求文档描述中明确提及“Type-C 16-pin或24-pin母座”，且第2.2.4节推荐 16-pin 以简化布局。两者均满足 USB FS 电气要求。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "产品工作环境温度约束为 -10°C ～ +50°C。连接器材料（塑料、金属）在此范围内必须保持机械性能和电气连接稳定性。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_material",
+          "op": "is",
+          "value": "Gold-plated contacts",
+          "reason": "USB-C 接口涉及频繁物理接触和可能的恶劣环境（户外运动、汗液）。金触点提供优异的导电性和耐腐蚀性，确保长期可靠性。",
+          "source_parameter": "contact_material"
+        }
+      ],
+      "keywords": [
+        "USB Type-C Receptacle",
+        "Type-C 母座",
+        "USB-C Connector",
+        "16-pin USB-C",
+        "24-pin USB-C",
+        "USB 3.0/3.1 Connector"
+      ],
+      "note": "可选参数（未进条件）：shielding"
+    },
+    {
+      "id": "M-PROT-ESD-USB-001",
+      "module_name": "USB端口ESD保护",
+      "module_type": "保护器件",
+      "category": "保护器件",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "breakdown_voltage",
+          "op": ">=",
+          "value": 5.5,
+          "unit": "V",
+          "reason": "器件必须能够承受USB-C接口的最大输入电压（5.25V），并在正常工作时保持高阻态，避免漏电或误击穿导致电源轨异常。",
+          "source_parameter": "breakdown_voltage"
+        },
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 3.0,
+          "unit": "ch",
+          "reason": "需要同时保护电源线(VBUS)和数据线(DP/DM)，至少需要3个通道。集成多通道阵列有助于节省PCB面积。",
+          "source_parameter": "channel_count"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "器件必须在眼镜佩戴的工作环境温度范围内保持电气特性稳定，特别是在高温下漏电流不应显著增加。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "ESD Protection Array",
+        "TVS Diode Array",
+        "USB ESD Protector",
+        "静电放电保护",
+        "低电容TVS",
+        "USB接口保护"
+      ]
+    },
+    {
+      "id": "M-PROT-ESD-SIG-001",
+      "module_name": "信号线ESD保护",
+      "module_type": "保护器件",
+      "category": "保护器件",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度要求为 -10°C ~ +50°C。电子元器件通常需提供足够的余量，工业级 (-40~85°C) 是消费电子中满足此要求的标准等级，且与系统中其他关键器件 (STM32U5, Sensors) 的温度等级一致，便于供应链管理和可靠性评估。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 4.0,
+          "unit": "ch",
+          "reason": "根据模块间接口定义 (5.3.2)，传感器域包含 I2C_SCL、I2C_SDA 两条线。此外，IMU (LSM6DSV16X) 还有两个中断引脚 (INT1, INT2) 直接连接到 MCU 或通过电平转换，这些引脚同样需要 ESD 保护以防人体接触传感器封装或排线时损坏 MCU IO。因此至少需要 4 个保护通道。若 SPI 模式使用 CS/MISO 等额外信号，可能需要更多通道，但 4 通道",
+          "source_parameter": "channel_count"
+        },
+        {
+          "field": "package",
+          "op": "is",
+          "value": "DFN/WLCSP/QFN",
+          "reason": "PCB 尺寸限制为 40mm × 20mm，属于极紧凑设计。传统 SOP 或 TSSOP 封装占用面积过大，不适合此类高密度布局。DFN (Dual Flat No-lead)、WLCSP (Wafer Level Chip Scale Package) 或小型 QFN 是此类信号线 ESD 阵列的首选封装，以节省 PCB 面积并降低寄生电感。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "ESD保护阵列",
+        "静电放电保护器",
+        "TVS Diode Array",
+        "低电容保护二极管",
+        "I2C/SPI ESD Protection",
+        "Multi-channel TVS"
+      ]
+    },
+    {
+      "id": "M-DBG-HEADER-001",
+      "module_name": "调试接口",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 10.0,
+          "unit": "pins",
+          "reason": "模块描述明确指定为“10-pin”，用于SWD（2线）+ UART（TX/RX/GND/VCC等）调试接口。引脚数不足无法实现定义功能，过多则浪费PCB空间。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 2.0,
+          "unit": "mm",
+          "reason": "模块描述和分类关键词均明确指定“2.0mm Pitch”。这是连接器的物理兼容性关键参数，与PCB焊盘间距直接对应。",
+          "source_parameter": "pitch"
+        },
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "['Header', 'Pin Header']",
+          "reason": "模块名称包含“Header”，且作为Debug接口通常使用公头排针以便插入调试器或测试夹具。需支持单排或双排结构以容纳10个引脚（常见为2x5排列）。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "Through-Hole",
+          "reason": "PCBA采用SMT工艺（4.1.2节），但对于板边或外部接口连接器，通孔（Through-Hole）焊接能提供比SMT更好的机械强度，特别是考虑到IP54防护和可能的插拔应力。",
+          "source_parameter": "mounting_style"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "rated_current",
+          "op": "cover",
+          "value": [
+            1.0,
+            2.0
+          ],
+          "unit": "A",
+          "reason": "虽然SWD/UART信号电流极小，但该Header同时提供3.3V电源引脚（GND, 3.3V）。若调试器通过此接口供电，需具备至少1A以上的载流能力以防过热。即使仅作为信号接口，较高的额定值也是通用排针的标准规格，有助于提高可靠性。",
+          "source_parameter": "current_rating_per_pin"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度为-10°C ~ +50°C（第3章）。连接器材料（塑料壳体、金属端子）需在此范围内保持机械性能和电气性能稳定。建议选型覆盖工业级温度范围（-40~85°C）以确保余量。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "常规电气安全要求，确保引脚间绝缘良好，防止短路或漏电影响3.3V电源轨及信号完整性。",
+          "source_parameter": "insulation_resistance"
+        }
+      ],
+      "keywords": [
+        "排针",
+        "Header",
+        "Debug Header",
+        "SWD",
+        "UART",
+        "2.0mm Pitch"
+      ]
+    }
+  ]
+}

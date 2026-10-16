@@ -1,0 +1,134 @@
+{
+  "case": "case10_re",
+  "requirement_version": "req-case10-re-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-HV-001": {
+      "module_name": "高压侧LDO (ME6211C25)",
+      "historical_selection": [
+        {
+          "model": "ME6211C25",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "ME6211C25",
+      "evaluation_source": ""
+    },
+    "M-PWR-LV-001": {
+      "module_name": "低压侧LDO (SGM2209-ADJ)",
+      "historical_selection": [
+        {
+          "model": "SGM2209-ADJ",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "SGM2209-ADJ",
+      "evaluation_source": ""
+    },
+    "M-PWR-REF-001": {
+      "module_name": "精密电压基准 (TL432)",
+      "historical_selection": [
+        {
+          "model": "TL432",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "TL432",
+      "evaluation_source": ""
+    },
+    "M-SIG-AMP-HV-001": {
+      "module_name": "高速运算放大器 (VPS8702)",
+      "historical_selection": [
+        {
+          "model": "VPS8702",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "VPS8702",
+      "evaluation_source": ""
+    },
+    "M-SIG-AMP-LV-001": {
+      "module_name": "精密运算放大器 (SGM8061XN5)",
+      "historical_selection": [
+        {
+          "model": "SGM8061XN5",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "SGM8061XN5",
+      "evaluation_source": ""
+    },
+    "M-SIG-SW-001": {
+      "module_name": "模拟开关 (BL1551B)",
+      "historical_selection": [
+        {
+          "model": "BL1551B",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "BL1551B",
+      "evaluation_source": ""
+    },
+    "M-SIG-ATT-001": {
+      "module_name": "前置衰减电阻网络",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-ISL-OPTO-001": {
+      "module_name": "光耦隔离器 (JC3H7C)",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "JC3H7C",
+      "evaluation_source": ""
+    },
+    "M-CTL-SW-001": {
+      "module_name": "拨动开关 (ToggleSwitch)",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CTL-LED-001": {
+      "module_name": "状态指示灯 (LED_IND)",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-IFC-BNC-IN-001": {
+      "module_name": "BNC输入连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-IFC-BNC-OUT-001": {
+      "module_name": "BNC输出连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-IFC-USB-001": {
+      "module_name": "USB-C供电接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

@@ -1,0 +1,1038 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-case21-v1",
+  "project": {
+    "name": "case21（由历史选型产物转换）",
+    "summary": "来源 /share/home/zhengzhiqi/workspace/web/output/case21/console/stages/03_device_selection__a71ec6f5.json"
+  },
+  "global_constraints": {
+    "budget_total_cny": 150.0,
+    "currency": "CNY",
+    "note": "预算取自历史产物，仅供参考"
+  },
+  "selection_items": [
+    {
+      "id": "M-PWR-XL4016-001",
+      "module_name": "XL4016E1 DC-DC降压模块",
+      "module_type": "电源芯片",
+      "category": "电源管理 IC",
+      "leaf_code": "l_step_down_dc_dc_converter",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.0,
+            40.0
+          ],
+          "unit": "V",
+          "reason": "需求文档明确要求 DC Jack 输入支持 9V-40V，且 Type-C PD 可能提供最低 5V（甚至部分协议下更低）。XL4016E1 数据手册标称输入上限通常为 40V。若输入超过 40V 将导致器件击穿损坏。同时需兼容低电压 PD 输入，故下限设为 4V 以覆盖典型 Buck 启动阈值。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "output_voltage_range",
+          "op": "cover",
+          "value": [
+            1.2,
+            36.0
+          ],
+          "unit": "V",
+          "reason": "需求要求输出 Motor Rail 建议 <15V 以兼容 LDO。然而，Buck 转换器本身需要具备足够的升压/降压能力。考虑到输入最高 40V，若使用同步整流 Buck，输出电压通常远低于输入。对于异步或非同步架构（如 XL4016），输出电压受限于输入和占空比。关键约束是器件必须能稳定输出用户所需的低压（如 5V, 9V, 12V）。上限 36V 是为了确保器件规格书的一般性覆盖，实际应用中",
+          "source_parameter": "output_voltage_range"
+        },
+        {
+          "field": "ripple_noise",
+          "op": ">=",
+          "value": 50.0,
+          "unit": "mVpp",
+          "reason": "需求文档明确规定纹波噪声需控制在 50 mV pp 以内，以避免干扰 IMU 模拟信号及 ADC 采样精度。这对于高精度传感器（IMU）和数字逻辑供电都是关键指标。若纹波过大，可能导致电机控制不稳定或传感器数据错误。",
+          "source_parameter": "ripple_noise"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "硬件需求说明书 4.1.2 节指出元器件需为工业级 (-40℃ ~ +85℃)，且系统工作温度为 -10°C ~ 50°C。为确保在高温环境（如密闭小车内部、夏季户外）下 8A 电流输出的可靠性，器件必须具备足够的温度余量。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "switching_frequency",
+          "op": ">=",
+          "value": 400000.0,
+          "unit": "Hz",
+          "reason": "XL4016E1 的典型开关频率为 400kHz。该频率决定了外部电感、电容的选型大小以及 EMI 特性。虽然存在一定工程折中空间（如改用 300kHz-500kHz 的其他芯片），但为了匹配已指定的 XL4016E1 外围元件设计或保持效率/体积平衡，应锁定此频率。",
+          "source_parameter": "switching_frequency"
+        },
+        {
+          "field": "efficiency",
+          "op": ">=",
+          "value": 88.0,
+          "unit": "%",
+          "reason": "需求文档指定电源效率为 88%。高效率意味着更少的热损耗，对于 8A 大电流应用至关重要，直接影响散热设计和可靠性。虽然可以通过优化外围元件和 PCB 布局提升效率，但器件本身的拓扑（同步 vs 异步）和内阻是基础。XL4016 通常为非同步（异步）整流，效率略低于同步整流方案，因此需明确此参数为对器件及其外围系统的综合性能要求。",
+          "source_parameter": "efficiency"
+        }
+      ],
+      "keywords": [
+        "Buck Converter",
+        "DC-DC Step-down",
+        "Synchronous Rectification",
+        "Power Management IC",
+        "XL4016",
+        "High Current Buck"
+      ],
+      "specified_device": {
+        "model": "XL4016E1",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-PWR-LDO-001",
+      "module_name": "LM1117-3.3 LDO模块",
+      "module_type": "电源芯片",
+      "category": "电源管理 IC",
+      "leaf_code": "l_linear_regulator_ldo",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "模块明确指定为 LM1117IMPX-3.3，且需求文档要求供给 MCU、传感器及 PD 控制器等逻辑电路。STM32F407 及 LSM6DS3TR-C 等关键器件均为 3.3V 供电，电压偏差过大会导致逻辑错误或损坏。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "output_current",
+          "op": ">=",
+          "value": 1.5,
+          "unit": "A",
+          "reason": "型号 'LM1117' 系列典型最大输出电流为 1.5A。需求文档指出逻辑域电流 < 200mA，但建议设计余量至 1A。若选用低于 1A 的 LDO，在瞬态负载或扩展外设接入时可能触发过热保护或电压跌落。",
+          "source_parameter": "max_output_current"
+        },
+        {
+          "field": "input_voltage_max",
+          "op": ">=",
+          "value": 15.0,
+          "unit": "V",
+          "reason": "需求文档 notes 明确指出 '输入电压严禁超过 15V'。虽然 LM1117 某些版本标称最大输入可达 26V，但在 SOT-223 封装下，若输入电压过高（如来自 XL4016 的 12V+ 且大电流），压差功耗将导致结温迅速超标甚至击穿。为确保安全，约束上限为 15V。",
+          "source_parameter": "input_voltage_max"
+        },
+        {
+          "field": "input_voltage_min",
+          "op": ">=",
+          "value": 4.8,
+          "unit": "V",
+          "reason": "LDO 需要一定的压差（Dropout Voltage）。LM1117 在 1A 负载下的典型压差约为 1.2V。因此，为了在 Motor Rail 波动时保持 3.3V 输出，输入电压至少需为 3.3V + 1.2V = 4.5V。考虑到 XL4016 的输出纹波及负载调整率，设置最小输入为 4.8V 是合理的工程下限。",
+          "source_parameter": "input_voltage_min"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -223.0,
+            -223.0
+          ],
+          "reason": "模块描述及 confirmed_device 均指定为 SOT-223。该封装决定了 PCB 焊盘尺寸及散热路径（通过底部焊盘连接铺铜）。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            125.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档 4.1.2 规定关键器件需为工业级温度范围 (-40℃~+85℃)。LM1117 工业级版本通常支持 -40°C 至 125°C 结温，需确保所选器件等级满足此要求。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "dropout_voltage",
+          "op": ">=",
+          "value": 1.2,
+          "unit": "V",
+          "reason": "低压差 LDO 的核心指标。若压差过大，当 Motor Rail 接近 4.5V 时，LDO 将无法稳压至 3.3V，导致系统复位。",
+          "source_parameter": "dropout_voltage"
+        }
+      ],
+      "keywords": [
+        "LDO",
+        "Linear Regulator",
+        "低压差线性稳压器",
+        "固定输出稳压",
+        "3.3V LDO",
+        "SOT-223"
+      ],
+      "specified_device": {
+        "model": "LM1117IMPX-3.3",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-PWR-CH224K-001",
+      "module_name": "CH224K USB PD Sink模块",
+      "module_type": "协议芯片",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_fast_charging_protocol_chip",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档第 3.2.1 节规定工作温度为 -10°C ~ 50°C。虽然工业级芯片通常为 -40~85°C，但最低要求必须满足 -10°C 启动和工作。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "keywords": [
+        "USB PD Controller",
+        "PD Sink",
+        "Type-C Protocol IC",
+        "CH224K",
+        "USB Power Delivery",
+        "协议控制器"
+      ],
+      "specified_device": {
+        "model": "CH224K",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-MCU-001",
+      "module_name": "STM32F407VET6 MCU",
+      "module_type": "微控制器",
+      "category": "微控制器",
+      "leaf_code": "l_microcontroller_mcu_mpu_soc",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            100.0,
+            100.0
+          ],
+          "reason": "需求文档第 4.1.2 节明确要求 MCU 封装为 LQFP100，引脚间距 0.5mm。这是物理装配和 PCB 布局的关键约束。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "MCU",
+        "ARM Cortex-M4",
+        "STM32F4",
+        "32-bit Microcontroller",
+        "Cortex-M4",
+        "嵌入式控制器"
+      ],
+      "specified_device": {
+        "model": "STM32F407VET6",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-SENS-LSM6DS3-001",
+      "module_name": "LSM6DS3TR-C IMU",
+      "module_type": "传感器",
+      "category": "传感器",
+      "leaf_code": "l_attitude_sensor_gyroscope",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            1.71,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "模块明确指定为 LSM6DS3TR-C，notes 中注明 3.3V 供电。LSM6DS3 数据手册规定 VDD 范围为 1.71V 至 3.6V。系统逻辑域由 LM1117-3.3 提供，需确保器件能在该轨电压下正常工作。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "data_rate",
+          "op": ">=",
+          "value": 1000.0,
+          "unit": "Hz",
+          "reason": "需求文档 2.1.1 F-05 明确要求采样率 ≥ 1kHz。这是实时姿态解算的关键指标。",
+          "source_parameter": "data_rate"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档 3.2.1 规定工作温度为 -10°C ~ 50°C。虽然传感器本身通常是工业级 (-40~85)，但目标器件的规格书必须保证在此范围内性能达标。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "is",
+          "value": "WLCSP",
+          "reason": "Notes 指定 'WLCSP/LGA封装'。LSM6DS3TR-C 通常采用 WLCSP 封装（如 12-bump WLCSP）。这影响 PCB 布局空间和焊接工艺要求。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "IMU",
+        "惯性测量单元",
+        "加速度计",
+        "陀螺仪",
+        "6-Axis Sensor",
+        "LSM6DS3"
+      ],
+      "specified_device": {
+        "model": "LSM6DS3TR-C",
+        "intent": "reference"
+      },
+      "note": "可选参数（未进条件）：power_consumption"
+    },
+    {
+      "id": "M-ACT-DRV8870-001",
+      "module_name": "DRV8870 H桥驱动器",
+      "module_type": "电机驱动",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_brush_dc_motor_drive_chip",
+      "quantity": 4,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "control_interface",
+          "op": "is",
+          "value": "['PWM', 'DIR']",
+          "reason": "需求文档F-03明确要求'通过 PWM 信号控制...实现直流电机的正反转、调速'，且Ch2.2.2指出每路需1路PWM+1路GPIO。",
+          "source_parameter": "control_interface"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -28.0,
+            -28.0
+          ],
+          "reason": "module notes及Key_Notes明确指定'HTSSOP28封装'，且提到'每路需独立散热焊盘连接'。这决定了PCB布局的关键约束。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档Ch4.1.2明确要求'温度等级: 工业级 (-40℃ ~ +85℃)'。虽然应用环境为-10~50°C，但器件选型需满足更宽的工业级标准以确保可靠性。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "Motor Driver",
+        "H-Bridge",
+        "DRV8870",
+        "PWM Control",
+        "过流保护",
+        "HTSSOP28"
+      ],
+      "specified_device": {
+        "model": "DRV8870",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-ACT-SERVO-001",
+      "module_name": "舵机接口连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 4,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 3.0,
+          "unit": "pins",
+          "reason": "模块描述明确指定为“标准3-pin舵机座”，用于引出PWM、VCC和GND。引脚数错误将导致无法连接标准RC舵机。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 2.54,
+          "unit": "mm",
+          "reason": "RC舵机接口行业标准间距为2.54mm（0.1英寸）。若间距不匹配，物理上无法插入标准舵机线束，导致装配失败。",
+          "source_parameter": "pitch"
+        },
+        {
+          "field": "voltage_rating",
+          "op": ">=",
+          "value": 12.0,
+          "unit": "V",
+          "reason": "系统Motor Rail最高可达12V（Type-C PD协商）或更高（DC Jack输入经Buck降压，虽LDO限制<15V，但电机/舵机域电压需覆盖PD最大输出）。连接器耐压必须高于系统最高工作电压以防止击穿或爬电距离不足。",
+          "source_parameter": "voltage_rating"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "Through Hole",
+          "reason": "舵机连接器需要承受一定的机械拉力（线缆拉扯），SMD贴片连接器在机械强度上通常不如插件连接器，且2.54mm间距的SMD舵机座较少见且易脱落。插件（Through Hole）能提供更好的机械稳固性。",
+          "source_parameter": "mounting_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 3.0,
+          "unit": "A",
+          "reason": "系统有4个舵机，且使用XL4016作为电机/舵机共用母线电源。虽然舵机平均电流较小，但启动或堵转瞬间电流可能较大。3A额定值可确保在瞬态峰值下连接器不过热或熔毁，提供足够的安全余量。",
+          "source_parameter": "current_rating_per_pin"
+        },
+        {
+          "field": "contact_material",
+          "op": "is",
+          "value": "['Phosphor Bronze', 'Brass with Gold Plating']",
+          "reason": "为了保证低接触电阻和长期插拔可靠性，特别是考虑到舵机信号线的频繁插拔或震动环境，磷青铜是标准选择。镀金防止氧化腐蚀。",
+          "source_parameter": "contact_material"
+        }
+      ],
+      "keywords": [
+        "舵机连接器",
+        "RC Servo Connector",
+        "3-pin Header",
+        "PWM Interface",
+        "Servo Socket"
+      ]
+    },
+    {
+      "id": "M-ACT-BUZZER-001",
+      "module_name": "TMB12A03 蜂鸣器",
+      "module_type": "声学器件",
+      "category": "声学器件",
+      "leaf_code": "l_buzzer",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "rated_voltage",
+          "op": "cover",
+          "value": [
+            5.0,
+            12.0
+          ],
+          "unit": "V",
+          "reason": "需求文档明确提及 '12V Buzzer' 和 '5V Buzzer' 关键词，且系统电源域包含 Motor Rail (由 XL4016 降压，最高可达 12V-15V) 和逻辑 3.3V。考虑到驱动级使用 N-MOSFET (BSS138/AO3400) 开关，蜂鸣器通常接在 Drain 侧，Source 接地，Anode 接 V_Motor。因此器件额定电压必须覆盖系统可能提供的最高驱动电压",
+          "source_parameter": "rated_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_mode",
+          "op": "is",
+          "value": "['Active', 'Passive']",
+          "reason": "模块描述中同时存在 '有源蜂鸣器' 和 '无源蜂鸣器' 的歧义。TMB12A03 型号通常指代有源蜂鸣器（内部带振荡源），但需求文档 F-06 提到 '有源/无源可调'。若为无源，MCU 需提供精确频率 PWM（通常 2-4kHz）；若有源，仅需数字高低电平。这直接影响固件设计和外围电路（如是否需要滤波电容来平滑 PWM 驱动有源蜂鸣器的声音）。鉴于 'TMB12A03' 常见于有源型号，建议优先",
+          "source_parameter": "operating_mode"
+        },
+        {
+          "field": "package",
+          "op": "is",
+          "value": "['Through-Hole', 'SMD']",
+          "reason": "需求文档 notes 字段明确指出 '插件或SMT；需根据类型选择驱动方式'。这表明封装形式尚未最终锁定，但必须提供两种物理形态的候选供评估。考虑到小车型号紧凑（<100x100mm），SMD 可能更节省空间，但插件蜂鸣器通常音量更大且成本低。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "蜂鸣器",
+        "Buzzer",
+        "有源蜂鸣器",
+        "无源蜂鸣器",
+        "Active/Passive Buzzer",
+        "12V Buzzer"
+      ],
+      "specified_device": {
+        "model": "TMB12A03",
+        "intent": "reference"
+      },
+      "note": "可选参数（未进条件）：resonant_frequency"
+    },
+    {
+      "id": "M-ACT-MOS-001",
+      "module_name": "BSS138 MOSFET",
+      "module_type": "分立半导体",
+      "category": "分立半导体",
+      "leaf_code": "l_field_effect_transistor_mosfet",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "gate_threshold_voltage",
+          "op": "<=",
+          "value": 2.0,
+          "unit": "V",
+          "reason": "栅极由STM32F407的3.3V GPIO直接驱动。为确保MOSFET完全导通（进入线性区而非饱和区），Vgs(th)必须显著低于3.3V。若阈值过高（如>2V），在3.3V驱动下Rds(on)会急剧增大，导致无法有效驱动蜂鸣器或器件过热烧毁。BSS138典型值为1-1.5V，AO3400更低。",
+          "source_parameter": "gate_threshold_voltage"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -23.0,
+            -23.0
+          ],
+          "unit": "Package",
+          "reason": "模块明确指定使用SOT-23封装（与BSS138/AO3400一致），且PCB布局已按此封装预留。更换封装需重新设计PCB，属于硬性约束。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统要求工作温度-10°C ~ 50°C。工业级器件通常覆盖-40°C ~ 85°C，满足此要求。商业级(0~70°C)也满足，但考虑到可靠性及可能的局部自热，工业级更稳妥。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "continuous_drain_current",
+          "op": ">=",
+          "value": 0.2,
+          "unit": "A",
+          "reason": "驱动TMB12A03蜂鸣器。典型有源蜂鸣器工作电流在50-150mA之间。虽然峰值可能更高，但连续导通能力需覆盖稳态电流以防止过热失效。SOT-23封装散热较差，需留有余量。",
+          "source_parameter": "continuous_drain_current"
+        }
+      ],
+      "keywords": [
+        "N-MOSFET",
+        "N-Channel MOSFET",
+        "Logic Level MOSFET",
+        "SOT-23 MOSFET",
+        "BSS138",
+        "AO3400"
+      ],
+      "specified_device": {
+        "model": "BSS138",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-HMI-LED-001",
+      "module_name": "LED指示灯",
+      "module_type": "光电器件",
+      "category": "分立半导体",
+      "leaf_code": "l_rgb_led_with_built_in_ic",
+      "quantity": 2,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "forward_voltage",
+          "op": "cover",
+          "value": [
+            1.8,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "需求明确要求至少2色（红/绿）。红色LED典型VF约1.8-2.2V，绿色/蓝色/白色LED典型VF约3.0-3.6V。器件选型需确保其VF落在MCU GPIO驱动能力范围内，且需配合计算合适的串联电阻。",
+          "source_parameter": "forward_voltage"
+        },
+        {
+          "field": "reverse_voltage",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "V",
+          "reason": "LED反向连接时承受逻辑域电压（3.3V）。标准小信号LED的反向击穿电压通常为5V左右。若低于3.3V可能导致反向漏电或损坏。",
+          "source_parameter": "reverse_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "forward_current",
+          "op": "cover",
+          "value": [
+            0.002,
+            0.025
+          ],
+          "unit": "A",
+          "reason": "由STM32F407 GPIO直接驱动（推挽输出），单引脚安全电流通常为20mA，绝对最大值25mA。为保证寿命和避免影响其他共用电源轨的稳定性，工作电流不宜过大，通常5-10mA足以满足面板指示需求。",
+          "source_parameter": "forward_current"
+        },
+        {
+          "field": "luminous_intensity",
+          "op": "cover",
+          "value": [
+            20.0,
+            100.0
+          ],
+          "unit": "mcd",
+          "reason": "需求未指定亮度等级。对于教育套件/室内应用，中等亮度即可。过高亮度可能造成眩光，过低则不可见。",
+          "source_parameter": "luminous_intensity"
+        }
+      ],
+      "keywords": [
+        "LED",
+        "发光二极管",
+        "Indicator LED",
+        "光电器件",
+        "标准LED"
+      ]
+    },
+    {
+      "id": "M-PROT-TV S-001",
+      "module_name": "TVS二极管阵列",
+      "module_type": "保护器件",
+      "category": "保护器件",
+      "leaf_code": "l_electrostatic_and_surge_protection_tvs_esd",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "clamping_voltage_max",
+          "op": ">=",
+          "value": 5.5,
+          "unit": "V",
+          "reason": "USB 2.0/3.0 数据线及 PD CC 线的逻辑高电平上限通常为 VBUS 或略低，但为确保与 CH224K 及 STM32 USB 控制器兼容，钳位电压必须低于器件绝对最大额定值（通常为 5.5V-6V）。若钳位电压过高，ESD 脉冲将直接损坏后端芯片。",
+          "source_parameter": "clamping_voltage_max"
+        },
+        {
+          "field": "breakdown_voltage_min",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "V",
+          "reason": "TVS 的反向截止电压（Breakdown Voltage）必须高于 USB 正常工作电压（5V），以防止在正常数据传输时误触发导通导致信号衰减或短路。通常选择 Vrwm 为 5V 或 5.5V 的器件。",
+          "source_parameter": "breakdown_voltage_min"
+        },
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 4.0,
+          "unit": "channels",
+          "reason": "USB Type-C 连接器包含 2 条 D+/D- 数据线、2 条 CC1/CC2 配置通道，共 4 条需要 ESD 保护的高速信号线。TVS 阵列必须至少提供 4 个独立的保护通道以覆盖所有关键线路。",
+          "source_parameter": "channel_count"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "capacitance_max",
+          "op": ">=",
+          "value": 1e-12,
+          "unit": "F",
+          "reason": "USB 2.0 (480 Mbps) 对线路电容敏感。过高的寄生电容会导致信号眼图闭合、传输距离缩短或速率降级。对于高速 USB 端口保护，低电容 TVS 是标准选型要求。",
+          "source_parameter": "capacitance_max"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "虽然应用环境为 -10°C ~ 50°C，但系统其他关键器件（MCU, Driver）已指定工业级（-40°C ~ 85°C）。为保持供应链一致性及应对极端工况，保护器件应具备工业级温度特性。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "keywords": [
+        "TVS Array",
+        "ESD Protection",
+        "Transient Voltage Suppressor",
+        "静电放电保护",
+        "浪涌保护",
+        "I/O端口保护"
+      ]
+    },
+    {
+      "id": "M-PROT-FUSE-001",
+      "module_name": "输入保险丝/PTC",
+      "module_type": "保护器件",
+      "category": "保护器件",
+      "leaf_code": "l_thermal_cut_out_tco",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 10.0,
+          "unit": "A",
+          "reason": "需求文档明确指定额定电流为10A。该器件串联在电源入口，若额定电流低于10A，在正常负载下会误熔断导致系统断电；若过高则失去保护意义。",
+          "source_parameter": "rated_current"
+        },
+        {
+          "field": "voltage_rating",
+          "op": ">=",
+          "value": 40.0,
+          "unit": "V",
+          "reason": "系统DC Jack输入最高可达40V。保险丝的耐压值必须高于电路可能出现的最大电压，否则在断开故障电流时可能发生电弧击穿或绝缘失效，造成安全隐患。",
+          "source_parameter": "voltage_rating"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作环境温度为-10°C~50°C，但保险丝自身在大电流下温升较高，且需考虑夏季高温环境或靠近发热源的情况。工业级标准通常要求-40°C~85°C或更高，以确保在极端条件下不误动。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "Fuse",
+        "保险丝",
+        "PTC",
+        "自恢复保险丝",
+        "快断保险丝",
+        "慢断保险丝"
+      ]
+    },
+    {
+      "id": "M-CONN-USBC-001",
+      "module_name": "USB Type-C 插座",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 24.0,
+          "reason": "用户明确指定 '24 Pin'。USB Type-C 标准物理接口为 24 Pin，若引脚数不足将导致供电、数据或 CC 线无法连接，功能完全失败。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "SMT (Surface Mount)",
+          "reason": "用户明确指定 'SMT'。插件型连接器不符合组装工艺要求，且可能影响 PCB 布局密度（<100x100mm）。",
+          "source_parameter": "mounting_type"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "电气安全基本要求，防止 VBUS 与信号线/外壳短路。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.03,
+          "unit": "Ω",
+          "reason": "低接触电阻确保大电流传输时的压降和发热在可控范围内，符合 USB-IF 规范。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档 3.2.1 节明确规定工作温度为 -10°C ~ 50°C。连接器材料（塑料壳体、金属端子）在此范围内必须保持机械性能和电气性能稳定。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_plating",
+          "op": "is",
+          "value": "Gold Plated",
+          "reason": "系统要求 IEC 61000-4-2 Level 4 ESD 防护及长期可靠性。Type-C 接口频繁插拔，镀金可保证低接触电阻和耐腐蚀性。沉金（ENIG）PCB 通常配合镀金端子使用。",
+          "source_parameter": "contact_plating"
+        }
+      ],
+      "keywords": [
+        "USB Type-C Receptacle",
+        "Type-C Connector",
+        "USB-C Socket",
+        "24 Pin",
+        "SMT Connector",
+        "PD Interface"
+      ]
+    },
+    {
+      "id": "M-CONN-DCJACK-001",
+      "module_name": "DC 5.5x2.1mm 电源插座",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "['DC Barrel Jack', '5.5x2.1mm']",
+          "reason": "需求文档明确指定为 DC 5.5x2.1mm 电源插座，物理接口不匹配将无法插入。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 8.0,
+          "unit": "A",
+          "reason": "系统峰值瞬态电流达 14.4A，持续工作电流 8A。插座触点必须能承受此电流而不发生过热熔化或接触电阻过大导致的压降异常。",
+          "source_parameter": "rated_current"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "['Through-hole', 'SMD']",
+          "reason": "考虑到 8A 大电流带来的热效应及机械应力，建议采用焊接在 PCB 上的安装方式以确保电气连接可靠性和散热能力。虽然插件式也可用，但 SMT/通孔焊接更利于大电流走线。此处标记为重要而非关键，因为两种工艺均可实现功能，但焊接型在大电流下通常更优。",
+          "source_parameter": "mounting_style"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 0.1,
+          "unit": "Ω",
+          "reason": "高压输入（最高40V）下，良好的绝缘性能是安全基础。一般工业级连接器要求较高绝缘电阻。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度范围为 -10°C ~ 50°C。连接器材料需在此范围内保持机械强度和电气性能稳定。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "DC Power Jack",
+        "电源插座",
+        "5.5x2.1mm",
+        "DC Barrel Jack",
+        "直流电源接口",
+        "Power Socket"
+      ]
+    },
+    {
+      "id": "M-CONN-SWD-001",
+      "module_name": "SWD 调试排针",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 10.0,
+          "unit": "pins",
+          "reason": "模块描述及用户需求明确指定为 '10 Pin'，用于连接 STM32F407 的 SWD 调试接口（SWDIO, SWCLK, GND, VCC, NRST 等标准引脚），数量错误将导致无法物理连接或功能缺失。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 2.54,
+          "unit": "mm",
+          "reason": "用户需求补充明确指定 '2.54mm Pitch'，这是标准排针与杜邦线或标准调试器接口的通用间距，不匹配将无法插拔。",
+          "source_parameter": "pitch"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 0.1,
+          "unit": "Ω",
+          "reason": "连接器基本电气性能要求，确保信号间无漏电干扰，符合 IPC 标准。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统需求规定工作温度为 -10°C ~ 50°C，且主控 MCU 为工业级 (-40~85°C)。连接器应至少覆盖此范围，推荐工业级规格以保持一致性。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "through-hole",
+          "reason": "SWD 排针通常需要承受插拔力，通孔（Through-Hole）比表面贴装（SMT）具有更好的机械强度和可靠性，是调试接口的标准选型。",
+          "source_parameter": "mounting_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 3.0,
+          "unit": "A",
+          "reason": "SWD 接口仅传输低速数字信号和少量电源电流（通常 <100mA），但作为通用连接器，工程上通常选用额定电流至少 1A-3A 的标准排针以确保接触可靠性和机械寿命。",
+          "source_parameter": "contact_current_rating"
+        }
+      ],
+      "keywords": [
+        "排针",
+        "Header",
+        "SWD Header",
+        "2.54mm Pitch",
+        "调试接口",
+        "10 Pin"
+      ]
+    },
+    {
+      "id": "M-CONN-UART-001",
+      "module_name": "UART 调试排针",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 3.0,
+          "unit": "pins",
+          "reason": "模块描述明确指定为 '3-pin UART Header'，用于连接 TX、RX 和 GND。引脚数量错误将导致无法物理连接或信号缺失。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 2.54,
+          "unit": "mm",
+          "reason": "虽然该模块未显式写出间距，但系统内其他调试接口（SWD Header）及扩展接口均明确指定为 2.54mm Pitch。作为同一系统的调试连接器，保持机械兼容性是工程标准做法，且 2.54mm 是通用排针标准间距。若使用不同间距（如 2.0mm），将无法与标准杜邦线或配套插座兼容。",
+          "source_parameter": "pitch"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 3.0,
+          "unit": "A",
+          "reason": "UART 调试接口主要传输数据，电流极小（通常 <100mA）。然而，GND 引脚可能需要承载一定的回流电流或作为临时供电参考。3.0A 是标准单排排针的保守额定值，远大于实际需求，提供充足余量。最低要求应至少支持 1A 以确保安全。",
+          "source_parameter": "contact_current_rating"
+        }
+      ],
+      "keywords": [
+        "排针",
+        "Header",
+        "连接器",
+        "Pin Header",
+        "3-pin",
+        "UART"
+      ]
+    },
+    {
+      "id": "M-CONN-EXP-001",
+      "module_name": "外部扩展排针",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 4,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "quantity",
+          "op": ">=",
+          "value": 4.0,
+          "unit": "pcs",
+          "reason": "系统需要引出 GPIO、I2C、SPI 等信号供外部扩展，需求文档明确数量为 4 组。",
+          "source_parameter": "quantity"
+        },
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 2.54,
+          "unit": "mm",
+          "reason": "标准排针连接器间距通常为 2.54mm，用于兼容通用杜邦线或面包板连接，确保物理互操作性。",
+          "source_parameter": "pitch"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "through_hole",
+          "reason": "作为外部扩展接口，通常采用直插式排针以便于焊接固定和机械强度，且符合常规开发板设计习惯。SMD 排针通常用于板对板连接，不适合此处的 'Expansion Header' 场景。",
+          "source_parameter": "mounting_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 3.0,
+          "unit": "A",
+          "reason": "虽然扩展接口主要传输信号，但部分引脚可能用于供电（如 VCC 3.3V/5V）或驱动小负载。考虑到系统峰值电流需求和 PCB 铜厚（2oz），连接器触点需具备足够的电流承载能力以支持可能的电源分配，避免过热。",
+          "source_parameter": "contact_current_rating"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 0.1,
+          "unit": "Ω",
+          "reason": "标准连接器电气性能要求，确保信号间无漏电干扰，特别是对于 I2C/SPI 等敏感总线。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统整体定义为工业级环境 (-10°C ~ 50°C)，但关键器件已升级为工业级。连接器作为长期存在的无源器件，选用工业级温度等级可提供更好的可靠性余量，防止热胀冷缩导致接触不良。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "排针",
+        "Expansion Header",
+        "2x5 Pin",
+        "连接器",
+        "Connector",
+        "PCB Mount"
+      ]
+    }
+  ]
+}

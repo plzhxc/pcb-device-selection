@@ -1,0 +1,179 @@
+{
+  "case": "case21",
+  "requirement_version": "req-case21-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-XL4016-001": {
+      "module_name": "XL4016E1 DC-DC降压模块",
+      "historical_selection": [
+        {
+          "model": "XL4016E1",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "XL4016E1",
+      "evaluation_source": ""
+    },
+    "M-PWR-LDO-001": {
+      "module_name": "LM1117-3.3 LDO模块",
+      "historical_selection": [
+        {
+          "model": "LM1117IMPX-3.3",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "LM1117IMPX-3.3",
+      "evaluation_source": ""
+    },
+    "M-PWR-CH224K-001": {
+      "module_name": "CH224K USB PD Sink模块",
+      "historical_selection": [
+        {
+          "model": "CH224K",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "CH224K",
+      "evaluation_source": ""
+    },
+    "M-MCU-001": {
+      "module_name": "STM32F407VET6 MCU",
+      "historical_selection": [
+        {
+          "model": "STM32F407VET6",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "STM32F407VET6",
+      "evaluation_source": ""
+    },
+    "M-SENS-LSM6DS3-001": {
+      "module_name": "LSM6DS3TR-C IMU",
+      "historical_selection": [
+        {
+          "model": "LSM6DS3TR-C",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "LSM6DS3TR-C",
+      "evaluation_source": ""
+    },
+    "M-ACT-DRV8870-001": {
+      "module_name": "DRV8870 H桥驱动器",
+      "historical_selection": [
+        {
+          "model": "DRV8870",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "DRV8870",
+      "evaluation_source": ""
+    },
+    "M-ACT-SERVO-001": {
+      "module_name": "舵机接口连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-ACT-BUZZER-001": {
+      "module_name": "TMB12A03 蜂鸣器",
+      "historical_selection": [
+        {
+          "model": "TMB12A03",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "TMB12A03",
+      "evaluation_source": ""
+    },
+    "M-ACT-MOS-001": {
+      "module_name": "BSS138 MOSFET",
+      "historical_selection": [
+        {
+          "model": "AO3400",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        },
+        {
+          "model": "BSS138",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "recommended",
+      "confirmed_device": "BSS138",
+      "evaluation_source": ""
+    },
+    "M-HMI-LED-001": {
+      "module_name": "LED指示灯",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-TV S-001": {
+      "module_name": "TVS二极管阵列",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-FUSE-001": {
+      "module_name": "输入保险丝/PTC",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-USBC-001": {
+      "module_name": "USB Type-C 插座",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-DCJACK-001": {
+      "module_name": "DC 5.5x2.1mm 电源插座",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-SWD-001": {
+      "module_name": "SWD 调试排针",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-UART-001": {
+      "module_name": "UART 调试排针",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-EXP-001": {
+      "module_name": "外部扩展排针",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

@@ -1,0 +1,207 @@
+{
+  "case": "case34",
+  "requirement_version": "req-case34-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-TPS54540": {
+      "module_name": "主降压 DC-DC (TPS54540)",
+      "historical_selection": [
+        {
+          "model": "TPS54540",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "TPS54540",
+      "evaluation_source": ""
+    },
+    "M-PWR-ME6212": {
+      "module_name": "低压差线性稳压器 (ME6212C33)",
+      "historical_selection": [
+        {
+          "model": "ME6212C33",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "ME6212C33",
+      "evaluation_source": ""
+    },
+    "M-PWR-FUSE": {
+      "module_name": "输入过流保护保险丝",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PWR-TVSPWR": {
+      "module_name": "电源输入浪涌保护 TVS",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-MCU-STM32": {
+      "module_name": "主微控制器 (STM32F405)",
+      "historical_selection": [
+        {
+          "model": "STM32F405RGT6",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "STM32F405RGT6",
+      "evaluation_source": ""
+    },
+    "M-MCU-BOOT": {
+      "module_name": "启动与复位电路元件",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-COPRO-RP2040": {
+      "module_name": "协处理器 (RP2040)",
+      "historical_selection": [
+        {
+          "model": "RP2040",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "RP2040",
+      "evaluation_source": ""
+    },
+    "M-COPRO-FLASH": {
+      "module_name": "外挂 QSPI Flash",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-SENS-MPU6500": {
+      "module_name": "六轴 IMU (MPU6500)",
+      "historical_selection": [
+        {
+          "model": "MPU6500",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "MPU6500",
+      "evaluation_source": ""
+    },
+    "M-COM-MAX3051_1": {
+      "module_name": "高速 CAN 收发器 (Bus 1)",
+      "historical_selection": [
+        {
+          "model": "MAX3051EKA+T",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "MAX3051EKA+T",
+      "evaluation_source": ""
+    },
+    "M-COM-MAX3051_2": {
+      "module_name": "高速 CAN 收发器 (Bus 2)",
+      "historical_selection": [
+        {
+          "model": "MAX3051EKA+T",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "MAX3051EKA+T",
+      "evaluation_source": ""
+    },
+    "M-COM-CH340N": {
+      "module_name": "USB 转 UART 芯片 (CH340N)",
+      "historical_selection": [
+        {
+          "model": "CH340N",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "CH340N",
+      "evaluation_source": ""
+    },
+    "M-COM-USBCON": {
+      "module_name": "USB Type-C 连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HMI-BUZZER": {
+      "module_name": "有源蜂鸣器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HMI-BUZZDRV": {
+      "module_name": "蜂鸣器驱动晶体管",
+      "historical_selection": [
+        {
+          "model": "2N3904",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HMI-LED": {
+      "module_name": "状态指示灯 LED",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-DRV-NPN": {
+      "module_name": "通用 NPN 晶体管 (2N3904)",
+      "historical_selection": [
+        {
+          "model": "2N3904",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "2N3904",
+      "evaluation_source": ""
+    },
+    "M-CONN-XT30": {
+      "module_name": "电源输入连接器 (XT30PW)",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-7PIN": {
+      "module_name": "多功能信号接口排针",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-JTAG": {
+      "module_name": "SWD/JTAG 调试排针",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

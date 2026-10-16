@@ -1,0 +1,130 @@
+{
+  "case": "case23",
+  "requirement_version": "req-case23-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-DCDC-001": {
+      "module_name": "DC-DC降压转换器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "TPS5430",
+      "evaluation_source": ""
+    },
+    "M-PWR-PROT-001": {
+      "module_name": "电源输入保护器件",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-MCU-001": {
+      "module_name": "主控制器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "STM32F4",
+      "evaluation_source": ""
+    },
+    "M-WIFI-001": {
+      "module_name": "无线通信模组",
+      "historical_selection": [
+        {
+          "model": "ESP32-S3-WROOM-1U",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "ESP32-S3-WROOM-1U",
+      "evaluation_source": ""
+    },
+    "M-ETH-PHY-001": {
+      "module_name": "以太网PHY芯片",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-ETH-JACK-001": {
+      "module_name": "RJ45连接器",
+      "historical_selection": [
+        {
+          "model": "HR911105A",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "HR911105A",
+      "evaluation_source": ""
+    },
+    "M-RS485-ISO-001": {
+      "module_name": "隔离式RS485收发器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-RS485-TERM-001": {
+      "module_name": "RS485终端匹配电阻",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-ADC-EXT-001": {
+      "module_name": "外部高精度ADC",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-RELAY-DRV-001": {
+      "module_name": "继电器驱动晶体管/光耦",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-RELAY-001": {
+      "module_name": "大功率继电器",
+      "historical_selection": [
+        {
+          "model": "G5Q-14",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "G5Q-14",
+      "evaluation_source": ""
+    },
+    "M-CLOCK-001": {
+      "module_name": "有源晶振",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-LED-001": {
+      "module_name": "状态指示灯",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-DBG-001": {
+      "module_name": "调试接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PWR-IN-001": {
+      "module_name": "电源输入端子",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

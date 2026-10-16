@@ -1,0 +1,671 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-case27-v1",
+  "project": {
+    "name": "case27（由历史选型产物转换）",
+    "summary": "来源 /share/home/zhengzhiqi/workspace/web/output/case27/console/stages/03_device_selection__c8e00888.json"
+  },
+  "global_constraints": {
+    "budget_total_cny": 3.5,
+    "currency": "CNY",
+    "note": "预算取自历史产物，仅供参考"
+  },
+  "selection_items": [
+    {
+      "id": "M-MCU-001",
+      "module_name": "移动电源SoC",
+      "module_type": "主控计算",
+      "category": "电源管理 IC",
+      "leaf_code": "l_professional_power_management_pmic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.75,
+            20.0
+          ],
+          "unit": "V",
+          "reason": "IP5568需支持PD/QC协议输入，覆盖USB-A PD的5V/9V/12V/15V/20V档位及QC3.0电压范围。下限需兼容电池放电截止电压（约3.0V）或最低充电电压，上限需承受20V PD输入。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "output_current",
+          "op": ">=",
+          "value": 3.0,
+          "unit": "A",
+          "reason": "系统要求最大持续输出 3 A @ 5V (15W-18W)，器件内部升压路径及外部负载开关需能承载此电流而不触发过热保护或限流。",
+          "source_parameter": "continuous_output_current"
+        },
+        {
+          "field": "peak_output_current",
+          "op": ">=",
+          "value": 4.5,
+          "unit": "A",
+          "reason": "瞬态负载可能达到 4.5 A - 5.0 A，器件需具备足够的峰值电流能力以维持电压稳定且不损坏内部功率管。",
+          "source_parameter": "peak_output_current"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            45.0
+          ],
+          "unit": "°C",
+          "reason": "工作环境为 0℃ ～ 45℃，器件必须在此范围内正常工作且满足所有电气参数。商业级(C)通常覆盖 0-70℃，符合需求。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "efficiency",
+          "op": ">=",
+          "value": 85.0,
+          "unit": "%",
+          "reason": "要求典型工况下效率 ≥ 85%，直接影响电池续航和发热控制。虽然可通过优化外围电感/CAP提升，但SoC自身架构需支持高效率同步整流。",
+          "source_parameter": "efficiency"
+        },
+        {
+          "field": "package",
+          "op": "is",
+          "value": "QFN",
+          "reason": "受限于尺寸约束 (80x40x25mm) 和高密度BOM，SoC应采用QFN等小型化封装以节省PCB面积。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "Power Management IC",
+        "PMIC",
+        "Mobile Power Bank SoC",
+        "Battery Charger Controller",
+        "Boost Converter",
+        "Fuel Gauge"
+      ],
+      "specified_device": {
+        "model": "IP5568",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-BATT-PROT-001",
+      "module_name": "电池保护开关",
+      "module_type": "电源管理",
+      "category": "分立半导体",
+      "leaf_code": "l_professional_power_management_pmic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "drain_source_voltage",
+          "op": ">=",
+          "value": 30.0,
+          "unit": "V",
+          "reason": "模块描述与需求文档均明确要求耐压≥30V。虽然单节锂电池标称3.7V，但在无线充电半桥拓扑中，开关管承受的电压应力可能远超电池电压（取决于具体谐振网络与死区时间），且需满足系统对宽压输入的耐受能力。RUH30D20H型号中的'30'也暗示了30V的规格等级。",
+          "source_parameter": "drain_source_voltage"
+        },
+        {
+          "field": "continuous_drain_current",
+          "op": ">=",
+          "value": 20.0,
+          "unit": "A",
+          "reason": "模块描述与需求文档均明确要求电流≥20A。该器件同时承担电池保护主回路切断（需承受满载及短路峰值）和无线充电半桥功率驱动（高频大电流切换）的双重任务，20A是确保在极端故障下不击穿及正常工作时温升可控的基础底线。",
+          "source_parameter": "continuous_drain_current"
+        },
+        {
+          "field": "gate_threshold_voltage",
+          "op": "cover",
+          "value": [
+            0.0,
+            3.3
+          ],
+          "unit": "V",
+          "reason": "该 MOSFET 由 IP5568 SoC 的 EN_PIN 直接控制。IP5568 为移动电源 SoC，其 GPIO 输出高电平通常为 3.3V 或 5V（取决于内部 LDO 或 IO 供电）。为确保 MOSFET 能够完全导通（进入线性区以最小化 Rds(on)），其 Vgs(th) 必须显著低于驱动高电平。若 Vgs(th) 过高，可能导致 MOSFET 处于线性区边缘，导通电阻极大并发热烧",
+          "source_parameter": "gate_threshold_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "degC",
+          "reason": "用户硬约束要求工作温度 0℃～45℃。器件结温 Tj = Ta + P_loss * RthJA。由于存在 20A 大电流和高频开关，器件自身会产生显著热量。商业级（Commercial Grade, 0-70℃）器件通常足以覆盖此环境需求，但需确保在最高环境温度 45℃ 下，加上自发热后的结温不超过器件额定最大值（通常 150℃ 或 175℃）。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "on_resistance",
+          "op": "cover",
+          "value": [
+            0.0,
+            0.03
+          ],
+          "unit": "Ω",
+          "reason": "在 20A 连续电流下，若 Rds(on) 过大将产生严重焦耳热（P=I^2*R）。例如 30mΩ 时功耗约为 12W，这对散热提出挑战。参考电路模块分析表中提到的 RUH30D20H 典型参数，≤30mΩ 是一个合理的工程目标值，以确保效率 ≥85% 并控制温升。",
+          "source_parameter": "on_resistance"
+        }
+      ],
+      "keywords": [
+        "N-MOSFET",
+        "N沟道MOS管",
+        "Power MOSFET",
+        "电池保护开关",
+        "High Side Switch",
+        "30V 20A"
+      ],
+      "specified_device": {
+        "model": "RUH30D20H",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-LD-SW-001",
+      "module_name": "主负载开关",
+      "module_type": "电源管理",
+      "category": "分立半导体",
+      "leaf_code": "l_professional_power_management_pmic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "voltage_rating",
+          "op": ">=",
+          "value": 30.0,
+          "unit": "V",
+          "reason": "该 MOSFET 串联于升压输出端。根据需求文档，系统支持 PD/QC 快充，最高输出电压可达 20 V。考虑到开关瞬态过冲及纹波，器件耐压需留有足够余量以防止击穿。RU20P7C 型号暗示 20 V 耐压可能不足（仅覆盖稳态峰值），故建议至少 30 V 以符合工程安全规范。",
+          "source_parameter": "voltage_rating"
+        },
+        {
+          "field": "continuous_drain_current",
+          "op": ">=",
+          "value": 4.5,
+          "unit": "A",
+          "reason": "需求文档规定最大持续电流为 3 A，峰值电流为 4.5 A。作为负载开关，MOSFET 必须能够承受瞬态浪涌电流而不发生热失效或熔断。因此，$I_D$ 额定值至少应覆盖 4.5 A。",
+          "source_parameter": "continuous_drain_current"
+        },
+        {
+          "field": "gate_threshold_voltage",
+          "op": "cover",
+          "value": [
+            -4.5,
+            -1.5
+          ],
+          "unit": "V",
+          "reason": "该 P-MOS 由 IP5568 GPIO 控制。IP5568 输出高电平时约为电池电压或内部 LDO 电压（通常 3.3V-5V，取决于具体供电轨）。为确保在典型驱动电压（如 3.3V 或 5V）下 $R_{ds(on)}$ 达到最低值，阈值电压 $V_{GS(th)}$ 的绝对值不宜过大（即不能太负），否则可能导致无法完全导通或导通电阻偏高。同时需避免噪声误触发。",
+          "source_parameter": "gate_threshold_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档第 4.1.2 节明确规定温度等级为“商业级 (Commercial Grade, 0℃ ～ 70℃)”，且产品工作温度为 0℃ ～ 45℃。器件必须在整个商业级温度范围内满足电气规格。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "on_resistance",
+          "op": "<=",
+          "value": 0.025,
+          "unit": "Ω",
+          "reason": "导通损耗 $P_{loss} = I^2 \\times R_{ds(on)}$。在 3 A 满载下，若 $R_{ds(on)}$ 过大将导致显著发热，影响效率（要求 ≥85%）并增加散热难度。RU20P7C 数据表通常标注 ≤25 mΩ，此值为保证低功耗和温升可控的关键指标。",
+          "source_parameter": "on_resistance"
+        }
+      ],
+      "keywords": [
+        "P-MOSFET",
+        "P沟道MOS管",
+        "High-Side Switch",
+        "Power MOSFET",
+        "PMOS",
+        "Load Switch"
+      ],
+      "specified_device": {
+        "model": "RU20P7C",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-WL-HB-001",
+      "module_name": "无线发射半桥功率管",
+      "module_type": "电源管理",
+      "category": "分立半导体",
+      "leaf_code": "l_professional_power_management_pmic",
+      "quantity": 2,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "continuous_drain_current",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "A",
+          "reason": "Qi 10W无线充电输出要求大电流驱动能力。模块notes及需求文档2.2.2均明确指出需满足大电流(>5A)。考虑到无线充电效率及线圈Q值，峰值电流可能远高于平均电流，器件必须具备足够的连续漏极电流额定值以承载RMS电流而不发生过热或降额过多。证据：module notes '大电流(>5A)'；Requirement Doc 2.1.1 'Qi 10W'。",
+          "source_parameter": "continuous_drain_current"
+        },
+        {
+          "field": "gate_threshold_voltage",
+          "op": "cover",
+          "value": [
+            1.0,
+            2.5
+          ],
+          "unit": "V",
+          "reason": "驱动源为IP5568 SoC的GPIO/PWM引脚。根据模块接口定义，IP5568输出逻辑电平通常为3.3V或5V TTL。为确保MOSFET完全饱和导通（进入欧姆区），其阈值电压必须显著低于驱动高电平。通常要求Vgs(th) < Vdrive/2，且不能过高导致微导通风险。证据：Module Interface 'GPIO输出 3.3V/5V TTL'；Requirement Doc 5.3.2",
+          "source_parameter": "gate_threshold_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "degC",
+          "reason": "系统工作温度上限为45℃，但器件结温(Tj)会因功耗升高。商业级器件（0~70℃或0~85℃）即可满足环境温度要求。考虑到老化测试温度为55℃，器件需在此环境下长期可靠工作。证据：Requirement Doc 3.2.1 '工作温度: 0 ℃ ～ 45 ℃'；4.1.2 '温度等级: 商业级'。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "N-MOSFET",
+        "N沟道MOS管",
+        "Power MOSFET",
+        "无线充电半桥",
+        "Qi标准",
+        "高频开关管"
+      ],
+      "specified_device": {
+        "model": "RUH30D20H",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-AUX-SW-001",
+      "module_name": "辅助小信号开关",
+      "module_type": "电源管理",
+      "category": "分立半导体",
+      "leaf_code": "l_field_effect_transistor_mosfet",
+      "quantity": 2,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "产品工作温度定义为 0°C ～ 45°C。电子元件通常有 ±25°C 或更宽的设计余量，商业级（Commercial Grade）器件通常覆盖 0-70°C，完全满足需求。若使用工业级则更好，但非强制。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "continuous_drain_current_id",
+          "op": ">=",
+          "value": 0.5,
+          "unit": "A",
+          "reason": "模块描述指出用于“极小电流采样/切换”。然而，在充电宝系统中，辅助 MOSFET 可能串联在 LED 供电或检测回路中。若发生短路，MOSFET 需承受一定时间的故障电流。SE2N7002E 标称 2.2A，BSS84 标称 0.3-0.6A。为确保可靠性，目标器件应具备至少 0.5A 的连续漏极电流能力，这覆盖了 BSS84 的典型规格并提供了冗余。",
+          "source_parameter": "continuous_drain_current_id"
+        }
+      ],
+      "keywords": [
+        "MOSFET",
+        "小信号开关",
+        "逻辑电平转换",
+        "P-MOS",
+        "N-MOS",
+        "BSS84"
+      ],
+      "specified_device": {
+        "model": "BSS84",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-SENSE-001",
+      "module_name": "电流/电压采样电阻",
+      "module_type": "传感器",
+      "category": "电阻",
+      "leaf_code": "l_photoelectric_slot_sensor_phototransistor",
+      "quantity": 2,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "power_rating",
+          "op": "cover",
+          "value": [
+            1.0,
+            3.0
+          ],
+          "unit": "W",
+          "reason": "电流采样电阻承载主回路大电流。在3A持续电流下，若采样电阻为50mΩ，功耗P=I²R=9*0.05=0.45W。考虑到峰值4.5A及散热条件，器件必须有足够的功率余量以防止过热烧毁或阻值漂移。",
+          "source_parameter": "power_rating"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            125.0
+          ],
+          "unit": "°C",
+          "reason": "虽然系统工作温度为0-45°C，但电阻位于大电流路径上，自身温升可能很高。器件本身的额定温度范围需高于其表面最高温度，以保证参数稳定。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "keywords": [
+        "精密采样电阻",
+        "电流检测电阻",
+        "Shunt Resistor",
+        "毫欧电阻",
+        "低阻值电阻",
+        "Power Metal Strip Resistor"
+      ]
+    },
+    {
+      "id": "M-USB-001",
+      "module_name": "USB-A 输出接口",
+      "module_type": "通信",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "USB Type-A Receptacle",
+          "reason": "模块明确指定为 USB Type-A 输出接口，用于连接宿主设备。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 0.1,
+          "unit": "Ω",
+          "reason": "高绝缘电阻是满足安规（如 UN38.3 和 EMC 隔离要求）的基本条件，防止漏电和短路风险。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            45.0
+          ],
+          "unit": "°C",
+          "reason": "器件必须在系统规定的工作温度范围内可靠运行，商业级封装通常覆盖此范围。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.02,
+          "unit": "Ω",
+          "reason": "低接触电阻可减少导通损耗和发热，确保在 3A 负载下 VBUS 压降在允许范围内，防止因压降过大触发过流保护或充电异常。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "Surface Mount (SMD)",
+          "reason": "考虑到尺寸约束（≤ 80x40x25mm）和高密度组装需求（~109颗元器件），SMD 是首选方案以减小占用面积。",
+          "source_parameter": "mounting_style"
+        }
+      ],
+      "keywords": [
+        "USB Type-A Connector",
+        "USB A母座",
+        "USB连接器",
+        "PD Connector",
+        "QC Interface"
+      ]
+    },
+    {
+      "id": "M-WL-COIL-001",
+      "module_name": "Qi 无线发射线圈",
+      "module_type": "执行器",
+      "category": "无源器件",
+      "leaf_code": "l_wireless_charging_coil",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "keywords": [
+        "无线充电线圈",
+        "Qi 发射线圈",
+        "WPT Coil",
+        "Inductive Coupling Coil",
+        "谐振电感",
+        "无线功率传输"
+      ]
+    },
+    {
+      "id": "M-ESD-001",
+      "module_name": "端口ESD/浪涌保护",
+      "module_type": "保护",
+      "category": "保护器件",
+      "leaf_code": "l_electrostatic_and_surge_protection_tvs_esd",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [],
+      "preferred_conditions": [
+        {
+          "field": "number_of_channels",
+          "op": ">=",
+          "value": 4.0,
+          "unit": "ch",
+          "reason": "USB-A 接口主要需要保护的节点包括电源 (VBUS)、地 (GND) 和数据线 (D+, D-)。虽然 USB-A 没有 CC 线，但为了布局对称性和未来兼容性，以及可能的 ID 引脚保护（如有），4 通道多路 TVS 阵列是常见选择。",
+          "source_parameter": "number_of_channels"
+        }
+      ],
+      "keywords": [
+        "TVS二极管",
+        "ESD保护",
+        "瞬态抑制二极管",
+        "USB ESD Protection",
+        "静电放电保护",
+        "浪涌保护"
+      ]
+    },
+    {
+      "id": "M-KEY-001",
+      "module_name": "功能按键",
+      "module_type": "人机交互",
+      "category": "开关",
+      "leaf_code": "l_signal_switch_codec_multiplexer",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "switch_type",
+          "op": "is",
+          "value": "Tactile / Momentary",
+          "reason": "模块描述明确指定为“轻触开关”，用于整机启停及模式切换，需支持低功耗唤醒。常闭或自锁开关无法满足“按键按下/松开”的交互逻辑及唤醒触发需求。",
+          "source_parameter": "switch_type"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 0.1,
+          "unit": "Ω",
+          "reason": "IP55 防护等级要求防尘防溅水。若绝缘电阻不足，湿气侵入可能导致按键引脚间漏电，造成 GPIO 电平漂移、误唤醒或增加静态功耗，违反关断漏电流 <10μA 的要求。",
+          "source_parameter": "insulation_resistance"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.05,
+          "unit": "Ω",
+          "reason": "虽然按键仅连接 GPIO，低接触电阻可确保信号完整性并减少微小泄漏电流对低功耗待机（<5mA）的影响。高接触电阻可能导致信号抖动加剧或误触发。",
+          "source_parameter": "contact_resistance"
+        }
+      ],
+      "keywords": [
+        "轻触开关",
+        "Tactile Switch",
+        "按键开关",
+        "Push Button",
+        "PCB Mount Switch"
+      ]
+    },
+    {
+      "id": "M-LED-001",
+      "module_name": "电量指示灯",
+      "module_type": "人机交互",
+      "category": "分立半导体",
+      "leaf_code": "l_rgb_led_with_built_in_ic",
+      "quantity": 4,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "forward_voltage",
+          "op": "cover",
+          "value": [
+            1.8,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "LED正向压降直接决定限流电阻阻值及功耗。需覆盖常见颜色（红/绿/蓝/白）的典型范围，确保在IP5568驱动电压下能产生足够亮度且不过流。",
+          "source_parameter": "forward_voltage"
+        },
+        {
+          "field": "forward_current",
+          "op": "cover",
+          "value": [
+            0.005,
+            0.02
+          ],
+          "unit": "A",
+          "reason": "电流过小导致夜间不可见，过大则增加电池待机负担并可能缩短LED寿命。需匹配IP5568 GPIO或内部驱动器的单引脚输出能力（通常单脚可达20-30mA）。",
+          "source_parameter": "forward_current"
+        },
+        {
+          "field": "reverse_voltage",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "V",
+          "reason": "防止反向接反或瞬态负压损坏LED。一般LED反向耐压约5V，需确保电路中的反向电动势或误操作不会超过此值。",
+          "source_parameter": "reverse_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "degC",
+          "reason": "LED必须在系统规定的工作温度范围内保持正常发光特性，不发生光衰或失效。商业级LED通常覆盖-40~85℃，完全满足需求。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "power_rating",
+          "op": ">=",
+          "value": 0.05,
+          "unit": "W",
+          "reason": "LED的功率额定值需大于实际工作功耗（例如 2V*10mA=20mW），通常标准LED额定功率为50-100mW，留有足够余量。",
+          "source_parameter": "power_rating"
+        }
+      ],
+      "keywords": [
+        "LED",
+        "发光二极管",
+        "Light Emitting Diode",
+        "Indicator LED",
+        "5mm LED",
+        "0603 LED"
+      ]
+    },
+    {
+      "id": "M-RELAY-001",
+      "module_name": "安全隔离继电器",
+      "module_type": "保护",
+      "category": "机电元件",
+      "leaf_code": "l_electrostatic_and_surge_protection_tvs_esd",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "A",
+          "reason": "继电器需承载系统最大工作电流（3A）及峰值电流（4.5A-5.0A）。若额定电流不足，触点会过热熔焊或烧毁，导致安全切断功能失效。",
+          "source_parameter": "contact_current_rating"
+        },
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.05,
+          "unit": "Ω",
+          "reason": "高接触电阻会导致导通压降过大，产生额外热损耗，影响效率并可能触发过温保护或造成局部过热。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "coil_voltage",
+          "op": "cover",
+          "value": [
+            5.0,
+            3.3
+          ],
+          "unit": "V",
+          "reason": "线圈驱动电压必须与系统逻辑电平（通常由IP5568供电的5V或3.3V域）兼容。若电压不匹配，可能导致无法吸合或线圈烧毁。",
+          "source_parameter": "coil_voltage"
+        },
+        {
+          "field": "isolation_voltage",
+          "op": ">=",
+          "value": 500.0,
+          "unit": "Vrms",
+          "reason": "作为物理隔离开关，继电器触点与线圈之间必须具备足够的电气绝缘强度，以承受浪涌电压并防止高压窜入低压控制侧，保障人员和电路安全。",
+          "source_parameter": "isolation_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            45.0
+          ],
+          "unit": "°C",
+          "reason": "器件必须在整个应用环境温度范围内可靠工作，否则在高温下触点接触电阻增大或线圈参数漂移会导致功能异常。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "Relay",
+        "电磁继电器",
+        "Electromechanical Relay",
+        "Power Relay",
+        "安全切断",
+        "DC Switching"
+      ],
+      "specified_device": {
+        "model": "TM-005-D-02",
+        "intent": "reference"
+      },
+      "note": "可选参数（未进条件）：package"
+    }
+  ]
+}

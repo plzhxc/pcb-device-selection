@@ -1,0 +1,178 @@
+{
+  "case": "case19",
+  "requirement_version": "req-case19-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-DCDC-001": {
+      "module_name": "TPS62933 DC-DC转换器",
+      "historical_selection": [
+        {
+          "model": "TPS62933",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "TPS62933",
+      "evaluation_source": ""
+    },
+    "M-PWR-LDO-001": {
+      "module_name": "ME6211C33 LDO稳压器",
+      "historical_selection": [
+        {
+          "model": "ME6211C33",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "ME6211C33",
+      "evaluation_source": ""
+    },
+    "M-PWR-ISO-001": {
+      "module_name": "B0505S-3WR3 隔离电源模块",
+      "historical_selection": [
+        {
+          "model": "B0505S-3WR3",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "B0505S-3WR3",
+      "evaluation_source": ""
+    },
+    "M-MCU-001": {
+      "module_name": "STM32F407VET6 MCU",
+      "historical_selection": [
+        {
+          "model": "STM32F407VET6",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "STM32F407VET6",
+      "evaluation_source": ""
+    },
+    "M-MEM-FLASH-001": {
+      "module_name": "W25Q128JVSIQ SPI Flash",
+      "historical_selection": [
+        {
+          "model": "W25Q128JVSIQ",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "W25Q128JVSIQ",
+      "evaluation_source": ""
+    },
+    "M-COM-ISOL-001": {
+      "module_name": "CA-IS3722LS 高速数字隔离器",
+      "historical_selection": [
+        {
+          "model": "CA-IS3722LS",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "CA-IS3722LS",
+      "evaluation_source": ""
+    },
+    "M-COM-CAN-001": {
+      "module_name": "TJA1051T/3 CAN收发器",
+      "historical_selection": [
+        {
+          "model": "TJA1051T/3",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "TJA1051T/3",
+      "evaluation_source": ""
+    },
+    "M-COM-RS485-001": {
+      "module_name": "THVD1420DR RS485收发器",
+      "historical_selection": [
+        {
+          "model": "THVD1420DR",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "THVD1420DR",
+      "evaluation_source": ""
+    },
+    "M-COM-RS232-001": {
+      "module_name": "MAX3232IDRG4 RS232收发器",
+      "historical_selection": [
+        {
+          "model": "MAX3232IDRG4",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "MAX3232IDRG4",
+      "evaluation_source": ""
+    },
+    "M-COM-OPTO-001": {
+      "module_name": "PC817 光耦隔离器",
+      "historical_selection": [
+        {
+          "model": "PC817",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "PC817",
+      "evaluation_source": ""
+    },
+    "M-PROT-ESD-001": {
+      "module_name": "PESD3V3L2BT ESD保护阵列",
+      "historical_selection": [
+        {
+          "model": "PESD3V3L2BT",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "PESD3V3L2BT",
+      "evaluation_source": ""
+    },
+    "M-IFACE-USB-001": {
+      "module_name": "USB-C 连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-IFACE-POWER-001": {
+      "module_name": "XT30PW 电源接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-IFACE-GH-001": {
+      "module_name": "GH1.25 电机/传感器接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-IFACE-EXP-001": {
+      "module_name": "扩展排针",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

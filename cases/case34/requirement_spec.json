@@ -1,0 +1,1206 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-case34-v1",
+  "project": {
+    "name": "case34（由历史选型产物转换）",
+    "summary": "来源 /share/home/zhengzhiqi/workspace/web/output/case34/console/stages/03_device_selection__220da584.json"
+  },
+  "global_constraints": {
+    "budget_total_cny": null,
+    "currency": "CNY",
+    "note": "预算取自历史产物，仅供参考"
+  },
+  "selection_items": [
+    {
+      "id": "M-PWR-TPS54540",
+      "module_name": "主降压 DC-DC (TPS54540)",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_step_down_dc_dc_converter",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            9.0,
+            42.0
+          ],
+          "unit": "V",
+          "reason": "需求文档第 1.3 章及 2.2.1 节明确规定输入电压范围为 9V~42V。TPS54540 典型应用支持宽输入，但需确保所选封装/型号能耐受可能的瞬态高压（如 ISO 7637-2 Pulse 1）。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "V",
+          "reason": "模块描述明确指定输出 5V，为后级 LDO (ME6212C33) 及 CAN 收发器供电。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "output_current",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "A",
+          "reason": "需求文档 2.2.1 节指出 TPS54540 支持 5A 输出，且系统峰值电流需求为 6A（由电容补充瞬时电流，稳态设计基于 5A）。器件连续电流能力必须至少满足 5A 稳态负载。",
+          "source_parameter": "continuous_output_current"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档 1.2 章及 3.2.1 节规定工作温度范围为 -40°C ~ +85°C，属于工业级/车规级环境，器件必须在此温度范围内正常工作且性能不降级。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "switching_frequency",
+          "op": ">=",
+          "value": 500000.0,
+          "unit": "Hz",
+          "reason": "TPS54540 典型开关频率为 500 kHz。该频率决定了电感和输出电容的选型大小及效率特性。若需调整以优化 EMI 或尺寸，需在范围内。",
+          "source_parameter": "switching_frequency"
+        },
+        {
+          "field": "efficiency",
+          "op": ">=",
+          "value": 85.0,
+          "unit": "%",
+          "reason": "需求文档 1.3 章及 3.1.1 节明确要求 DC-DC 转换效率 ≥ 85%，以减少发热并满足功耗约束。",
+          "source_parameter": "efficiency"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -28.0,
+            -28.0
+          ],
+          "unit": "Package",
+          "reason": "需求文档 4.1.2 节明确指定 TPS54540 为 HTSSOP-28 封装。该封装提供较大的散热面积，适合 5A 应用。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "同步整流降压转换器",
+        "Buck Converter",
+        "DC-DC Step-Down",
+        "Wide Input Voltage",
+        "Power Management IC"
+      ],
+      "specified_device": {
+        "model": "TPS54540",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-PWR-ME6212",
+      "module_name": "低压差线性稳压器 (ME6212C33)",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_linear_regulator_ldo",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "模块名称及型号 ME6212C33 明确指定输出为 3.3V；系统需求文档指出该 LDO 用于 MCU (STM32/RP2040) 及模拟电路供电，MCU 核心电压通常为 3.3V。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            5.0,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "依赖上游模块 M-PWR-TPS54540 提供 5V 电源。TPS54540 将 9-42V 降至 5V，LDO 输入端直接连接至该 5V 轨。LDO 需在此输入下正常工作且具备足够的压差余量。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "dropout_voltage",
+          "op": "<=",
+          "value": 0.3,
+          "unit": "V",
+          "reason": "输入为 5V，输出为 3.3V，理论压差为 1.7V。但为确保在负载瞬态或输入纹波波动时 LDO 不退出稳压区，且考虑到模块描述中提到的 'Low Dropout' 特性及典型应用参数，器件必须具备较低的压差（通常 <300mV@500mA）以应对可能的输入跌落或保证效率。若压差过大，在低输入电压边缘可能导致输出不稳。",
+          "source_parameter": "dropout_voltage"
+        },
+        {
+          "field": "output_current",
+          "op": ">=",
+          "value": 0.5,
+          "unit": "A",
+          "reason": "下游负载包括 STM32F405 (典型 ~50-100mA, 峰值更高), RP2040 (~50-100mA), MPU6500 (~few mA), CH340N (~few mA) 以及可能的其他数字逻辑和 LED 驱动。虽然总静态电流可能低于 200mA，但考虑到 MCU 全速运行、外设启动瞬间的浪涌电流以及设计余量（Derating），500mA 是此类 LDO 的标准能力要求，且满足",
+          "source_parameter": "max_output_current"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "农机应用场景，需求书明确要求工作温度 -40°C ～ +85°C。器件必须是工业级 (Industrial Grade) 或车规级。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "quiescent_current",
+          "op": "<=",
+          "value": 0.01,
+          "unit": "A",
+          "reason": "系统待机功耗约束为 ≤ 5 mA @ 12V 输入。虽然 LDO 位于后级，但其静态电流会贡献到总待机电流中。较低的 IQ 有助于满足系统的低功耗/长寿命设计要求。",
+          "source_parameter": "quiescent_current"
+        }
+      ],
+      "keywords": [
+        "LDO",
+        "Low Dropout Regulator",
+        "低压差线性稳压器",
+        "线性稳压器",
+        "3.3V LDO",
+        "ME6212"
+      ],
+      "specified_device": {
+        "model": "ME6212C33",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-PWR-FUSE",
+      "module_name": "输入过流保护保险丝",
+      "module_type": "保护器件",
+      "category": "保护器件",
+      "leaf_code": "l_self_resetting_fuse",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "rated_current",
+          "op": "cover",
+          "value": [
+            3.0,
+            5.0
+          ],
+          "unit": "A",
+          "reason": "模块描述明确要求“额定电流建议 3A-5A”。系统峰值功耗 6A@12V (即 ~0.5A) 至满载时输入电流约 2.5A-3A。保险丝需承载正常稳态及瞬态峰值而不误断，同时限制短路/过载电流以保护 XT30PW 连接器及后级 TPS54540。若选 3A，需确保延时特性足够好以承受启动浪涌；若选 5A，则对线路保护较弱但更不易误动作。",
+          "source_parameter": "rated_current"
+        },
+        {
+          "field": "voltage_rating",
+          "op": ">=",
+          "value": 48.0,
+          "unit": "V",
+          "reason": "系统输入电压最高为 42V DC（兼容 24V 农机电源）。保险丝的直流额定电压必须高于最大工作电压，通常留有 20% 余量，故至少需要 48V 规格。若使用 32V 器件，在 42V 下分断电弧可能不可靠，存在安全隐患。",
+          "source_parameter": "voltage_rating"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "农机核心控制板的需求文档明确规定工作温度为 -40°C 至 +85°C。保险丝作为安全保护器件，其材料特性（特别是 PPTC 或双金属片）会随温度变化，若器件低温性能不足可能导致冷启动失效，高温下可能导致提前老化或误动作。因此器件本身的额定工作温度范围必须完全覆盖此区间。",
+          "source_parameter": "operating_temperature_range"
+        },
+        {
+          "field": "breaking_capacity",
+          "op": ">=",
+          "value": 50000.0,
+          "unit": "A",
+          "reason": "虽然系统输入侧有 TVS 和限流，但在极端短路故障下（如 XT30 引脚间短路），电池（农机电源）可提供极大的短路电流。贴片保险丝必须具备足够的分断能力（Breaking Capacity/I_rated）以安全切断电路而不发生爆炸或持续拉弧。对于 42V 系统，通常要求至少 30kA-50kA 的分断能力以确保安规合规。",
+          "source_parameter": "breaking_capacity"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "is",
+          "value": "SMD",
+          "reason": "模块分类为“贴片保险丝 (SMD Fuse)”。考虑到 3A-5A 的电流需求，常规 0402/0603 封装可能无法承受该电流或分断能量，通常需要 1206、1210 或更大尺寸（如 2512）的大电流贴片保险丝。具体尺寸需结合 PCB 布局空间确认，但必须是表面贴装。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "resistance",
+          "op": "<=",
+          "value": 0.05,
+          "unit": "Ω",
+          "reason": "保险丝串联在电源输入路径中，其内阻会产生压降和功耗。为了减少发热并提高系统效率（尤其是输入电压较低如 9V 时），应尽量选择低阻值型号。虽然不直接导致功能失败，但高阻值会降低后级 DC-DC 的有效输入电压裕量。",
+          "source_parameter": "resistance_max"
+        }
+      ],
+      "keywords": [
+        "贴片保险丝",
+        "自恢复保险丝",
+        "PPTC",
+        "一次性保险丝",
+        "SMD Fuse",
+        "过流保护"
+      ]
+    },
+    {
+      "id": "M-PWR-TVSPWR",
+      "module_name": "电源输入浪涌保护 TVS",
+      "module_type": "保护器件",
+      "category": "保护器件",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "directionality",
+          "op": "is",
+          "value": "Unidirectional",
+          "reason": "输入为直流电源 (9V-42V DC)，存在明确的极性。单向 TVS 在正向导通时具有更低的钳位电压和更快的响应速度，能提供更优的保护效果，且反向漏电流通常更小。",
+          "source_parameter": "directionality"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            125.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档第 1.2 节和第 3.2.1 节规定工作温度为 -40°C ～ +85°C。TVS 作为保护器件，其封装和材料必须能在极端低温下保持机械完整性（不脆裂），并在高温环境下有效散热。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "TVS二极管",
+        "Transient Voltage Suppressor",
+        "Surge Protection",
+        "ESD Protection",
+        "Unidirectional TVS",
+        "电源浪涌保护"
+      ]
+    },
+    {
+      "id": "M-MCU-STM32",
+      "module_name": "主微控制器 (STM32F405)",
+      "module_type": "主控计算",
+      "category": "微控制器",
+      "leaf_code": "l_microcontroller_mcu_mpu_soc",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "需求书第 1.3 节明确约束工作温度为 -40°C 至 +85°C。农用车载环境严苛，工业级/车规级是硬性要求。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -176.0,
+            -176.0
+          ],
+          "reason": "需求书第 4.1.2 节及模块描述明确指出封装为 FBGA-176。这直接影响 PCB 布局、X-Ray 检测工艺及替代料选择。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "flash_capacity",
+          "op": ">=",
+          "value": 1024.0,
+          "unit": "MB",
+          "reason": "用户输入及 description 明确指定 STM32F405RGT6 具有 1MB Flash。这是该型号的核心规格，决定了代码存储能力。",
+          "source_parameter": "flash_capacity"
+        }
+      ],
+      "keywords": [
+        "MCU",
+        "ARM Cortex-M4",
+        "STM32F4",
+        "32-bit Microcontroller",
+        "Microcontroller Unit"
+      ],
+      "specified_device": {
+        "model": "STM32F405RGT6",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-MCU-BOOT",
+      "module_name": "启动与复位电路元件",
+      "module_type": "无源器件",
+      "category": "电阻",
+      "leaf_code": "l_ntc_thermistor",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "power_rating",
+          "op": ">=",
+          "value": 0.1,
+          "unit": "W",
+          "reason": "在 3.3 V 供电下，10 kΩ 电阻的功耗约为 P = V^2/R = 3.3^2 / 10000 ≈ 1.089 mW。虽然实际功耗极低，但工业级/车规级贴片电阻的标准额定功率通常为 1/16 W (0.0625W) 或 1/10 W (0.1W)。为确保在农机高振动、宽温环境下的机械可靠性及符合通用工业选型规范，选用 0.1 W 是标准且安全的工程约束，避免使用过于脆弱的 1/16 W 器",
+          "source_parameter": "power_rating"
+        },
+        {
+          "field": "voltage_rating",
+          "op": ">=",
+          "value": 50.0,
+          "unit": "V",
+          "reason": "虽然电阻两端压降仅为 3.3 V，但作为系统级被动器件，特别是在农机环境中，需考虑潜在的瞬态过压或测试工况。选用 50 V 额定电压的 0402/0603 电阻是行业通用标准，能提供足够的电气安全余量。",
+          "source_parameter": "voltage_rating"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            402.0,
+            603.0
+          ],
+          "reason": "系统 PCB 布局紧凑（<150 cm²），且要求高密度 SMT 组装。标准设计中此类小信号下拉/滤波电阻通常使用 0402 或 0603 封装。输入证据中明确提到“0402/0603”依据高密度布局需求。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "temperature_coefficient",
+          "op": ">=",
+          "value": 100.0,
+          "unit": "ppm/°C",
+          "reason": "对于启动配置和复位时间的 RC 常数，精度要求不高。±5% 精度的普通厚膜电阻即可满足。若追求更严格的启动时间一致性，可选 ±1%。温度系数对 10k 下拉影响较小，除非复位时间对温度极度敏感，否则普通工业级电阻即可。此处标记为 important 因为极端低温下阻值漂移可能轻微影响 RC 充电曲线，但对 MCU 启动通常可接受。",
+          "source_parameter": "temperature_coefficient"
+        }
+      ],
+      "keywords": [
+        "Resistor",
+        "下拉电阻",
+        "Pull-down Resistor",
+        "10kΩ",
+        "被动器件"
+      ]
+    },
+    {
+      "id": "M-COPRO-RP2040",
+      "module_name": "协处理器 (RP2040)",
+      "module_type": "主控计算",
+      "category": "微控制器",
+      "leaf_code": "l_microcontroller_mcu_mpu_soc",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "core_architecture",
+          "op": "cover",
+          "value": [
+            0.0,
+            0.0
+          ],
+          "reason": "模块明确指定为 RP2040，且描述中强调双核架构用于传感器数据融合与姿态解算。",
+          "source_parameter": "core_architecture"
+        },
+        {
+          "field": "clock_frequency",
+          "op": ">=",
+          "value": 133000000.0,
+          "unit": "Hz",
+          "reason": "需求文档及模块描述明确指出主频为 133MHz，这是 RP2040 的标准最高运行频率，满足实时性要求。",
+          "source_parameter": "max_clock_frequency"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -56.0,
+            -56.0
+          ],
+          "reason": "模块 notes 明确指定 QFN-56 封装，直接影响 PCB 布局与装配工艺。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "农机应用环境约束要求工作温度 -40°C 至 +85°C。MCU 作为核心计算单元，必须在此范围内可靠运行。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "MCU",
+        "ARM Cortex-M0+",
+        "Dual-core MCU",
+        "RP2040",
+        "Microcontroller",
+        "COPRO"
+      ],
+      "specified_device": {
+        "model": "RP2040",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-COPRO-FLASH",
+      "module_name": "外挂 QSPI Flash",
+      "module_type": "存储器件",
+      "category": "存储器",
+      "leaf_code": "l_synchronous_dynamic_random_access_memory_sdram",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "storage_capacity",
+          "op": "is",
+          "value": "['16 Mbit', '32 Mbit']",
+          "reason": "需求文档明确指出 RP2040 无内置大容量 Flash，且需要外挂 QSPI Flash。容量需满足代码及数据存储需求，用户指定了 16Mb/32Mb 选项。",
+          "source_parameter": "storage_capacity"
+        },
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            1.7,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "Flash 由 ME6212C33 LDO 提供的 3.3 V 电源供电。器件必须能在 3.3 V 下稳定工作，且 I/O 电平需兼容 RP2040 的 3.3 V CMOS 电平。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档第 1.3 节和第 3.2.1 节明确规定工作温度为 -40°C 至 +85°C。作为农机核心控制板，必须满足此环境约束。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -8.0,
+            -8.0
+          ],
+          "reason": "需求文档在 5.2.2 模块清单中工程假设提及 'SOIC-8/SOP'。SOIC-8 是 QSPI Flash 最通用的封装，符合农机板的高可靠性组装要求。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "NOR Flash",
+        "QSPI Flash",
+        "Serial Flash",
+        "外置存储",
+        "Non-volatile Memory"
+      ]
+    },
+    {
+      "id": "M-SENS-MPU6500",
+      "module_name": "六轴 IMU (MPU6500)",
+      "module_type": "传感器",
+      "category": "传感器",
+      "leaf_code": "l_photoelectric_slot_sensor_phototransistor",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            3.0,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "模块依赖 M-PWR-ME6212 提供的 3.3 V 电源轨，MPU6500 典型工作电压为 3.3 V (2.375-3.46 V)。若电压超出此范围将导致器件损坏或逻辑错误。证据：Module description 'dependencies' 指向 LDO；Requirement Doc Ch 2.2.3 'MPU6500 IMU' 接口描述；MPU6500 Datasheet (常识性",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "sampling_rate",
+          "op": ">=",
+          "value": 1000.0,
+          "unit": "Hz",
+          "reason": "系统要求姿态解算采样率为 1 kHz，IMU 必须具备该速率的数据输出能力，否则无法满足实时性要求。证据：Module description '1kHz 采样率'；Requirement Doc Ch 3.1.3 'IMU采样率'。",
+          "source_parameter": "sampling_rate"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "农机应用场景要求 -40°C 至 +85°C 的工作温度，属于工业级/车规级标准。若器件不支持低温启动或高温稳定性，将导致系统失效。证据：Requirement Doc Ch 1.2 '严苛环境适应性'；Ch 3.2.1 '温度特性'。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -24.0,
+            -24.0
+          ],
+          "reason": "Module notes 明确指出使用 LGA-24 封装。虽然 QFN 等替代封装可能在电气上兼容，但物理装配和 BOM 一致性要求锁定封装形式。证据：Module notes 'LGA-24 封装'。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "IMU",
+        "Inertial Measurement Unit",
+        "MPU6500",
+        "加速度计陀螺仪组合",
+        "6-axis IMU",
+        "I2C Sensor"
+      ],
+      "specified_device": {
+        "model": "MPU6500",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-COM-MAX3051_1",
+      "module_name": "高速 CAN 收发器 (Bus 1)",
+      "module_type": "通信接口",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_can_transceiver",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.5,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "模块依赖 M-PWR-TPS54540 提供 5V 电源轨（见系统框图及接口定义）。MAX3051 的 VCC 引脚需由该 5V 轨供电。ISO 11898-2 规定收发器逻辑侧供电通常为 5V，且 MAX3051 绝对最大额定值中 VCC 为 -0.3V 至 7V，但正常工作范围需匹配系统 5V 轨。若电压过低可能导致逻辑电平无法驱动 STM32，过高则可能损坏器件或影响差分输出摆幅。",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            105.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档第 1.2 节和第 3.2.1 节硬性规定工作温度为 -40°C 至 +85°C。考虑到农机环境的高温应力及器件自热，器件本身的额定温度范围应至少覆盖此区间，通常选用工业级 (-40~+105°C) 或车规级规格以确保可靠性。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "standby_current",
+          "op": "<=",
+          "value": 5e-06,
+          "unit": "A",
+          "reason": "虽然主电源 TPS54540 负责主要功耗，但 CAN 收发器的 Standby 电流会影响系统的整体待机功耗预算（需求要求待机 ≤ 5mA @ 12V，即 60mW）。两个收发器的静态电流之和应远小于总预算，以便留出空间给 MCU 和其他外设。",
+          "source_parameter": "standby_current"
+        }
+      ],
+      "keywords": [
+        "CAN FD Transceiver",
+        "高速 CAN 收发器",
+        "ISO 11898-2",
+        "差分收发器",
+        "车载网络芯片",
+        "Bus Transceiver"
+      ],
+      "specified_device": {
+        "model": "MAX3051EKA+T",
+        "intent": "reference"
+      },
+      "note": "可选参数（未进条件）：package"
+    },
+    {
+      "id": "M-COM-MAX3051_2",
+      "module_name": "高速 CAN 收发器 (Bus 2)",
+      "module_type": "通信接口",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_can_transceiver",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            4.75,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "根据系统电源架构，TPS54540 输出 5V 轨直接为 MAX3051 供电。MAX3051 标准工作电压范围为 4.75V-5.5V，需确保在 TPS54540 输出纹波（≤50mV pp）及负载瞬态下不跌落至最低工作电压以下，否则导致通信失效或内部逻辑复位。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            105.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度要求为 -40°C 至 +85°C。考虑到 PCB 位于农机内部且靠近热源（如 TPS54540），器件结温可能高于环境温度。选择 Tj_max=105°C 或更高等级的器件可提供必要的安全余量，确保在高温工况下不因热降额导致性能下降或失效。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -8.0,
+            -8.0
+          ],
+          "reason": "用户指定型号为 MAX3051EKA+T，封装为 TSSOP-8。若进行国产替代，需选择引脚兼容或可适应 PCB 布局的封装，或者重新评估 PCB 走线以适配新封装。此处作为重要约束记录，以便后续 DeviceEvaluator 寻找 Pin-to-Pin 兼容料。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "CAN FD Transceiver",
+        "高速 CAN 收发器",
+        "CAN FD Transceiver",
+        "ISO 11898-2",
+        "TJA1043",
+        "SN65HVD230"
+      ],
+      "specified_device": {
+        "model": "MAX3051EKA+T",
+        "intent": "reference"
+      },
+      "note": "可选参数（未进条件）：standby_current"
+    },
+    {
+      "id": "M-COM-CH340N",
+      "module_name": "USB 转 UART 芯片 (CH340N)",
+      "module_type": "通信接口",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_usb_conversion_chip",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            3.0,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "CH340N 的 VCC 引脚直接连接到系统的 3.3V 电源轨。器件必须能在该电压下稳定工作，且逻辑电平需与 STM32/RP2040 的 3.3V I/O 兼容。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -16.0,
+            -16.0
+          ],
+          "unit": "package",
+          "reason": "PCB 布局已预留 SOP-16 封装焊盘，器件封装必须匹配以避免重新设计 PCB。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "农机应用要求 -40°C 至 +85°C 工作温度，通信芯片作为关键调试/维护接口，必须符合工业级温宽，否则在低温环境下可能导致 USB 枚举失败或通信中断。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "USB to UART",
+        "串口转换芯片",
+        "TTL转USB",
+        "CH340",
+        "FTDI",
+        "CP2102"
+      ],
+      "specified_device": {
+        "model": "CH340N",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-COM-USBCON",
+      "module_name": "USB Type-C 连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 16.0,
+          "unit": "Pin",
+          "reason": "模块描述明确指定为“16Pin Type-C插座”。USB Type-C 标准接口定义包含 24 个引脚，但仅使用其中的 16 个（VBUS, GND, CC1/2, D+/D-, SBU1/SBU2）。若引脚数不符将无法物理安装或电气连接。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "interface_type",
+          "op": "is",
+          "value": "Receptacle (Female)",
+          "reason": "作为主板上的接口，必须为母座（Receptacle）以配合外部 USB-C 公头线缆。",
+          "source_parameter": "interface_type"
+        },
+        {
+          "field": "shielding",
+          "op": "is",
+          "value": "是",
+          "reason": "系统 EMC 要求符合 CISPR 25 Class 3，且具备 ESD ±8kV 防护能力。USB 数据线对噪声敏感，金属屏蔽外壳对于抑制辐射发射和提供 ESD 泄放路径至关重要。",
+          "source_parameter": "shielding"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "农机应用场景要求工作温度 -40°C ～ +85°C。连接器材料（塑料、金属镀层）必须在极端温度下保持机械完整性和电气接触可靠性。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "USB Type-C Receptacle",
+        "Type-C Connector",
+        "USB-C Socket",
+        "16 Pin USB-C",
+        "USB Type-C Female"
+      ]
+    },
+    {
+      "id": "M-HMI-BUZZER",
+      "module_name": "有源蜂鸣器",
+      "module_type": "执行器",
+      "category": "传感器/执行器",
+      "leaf_code": "l_buzzer",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            3.135,
+            3.465
+          ],
+          "unit": "V",
+          "reason": "模块明确指定为 3.3V 驱动，且依赖 3.3V 电源轨。若电压不匹配（如使用 5V 器件直接接 3.3V 控制端可能导致无法开启，或 3.3V 器件接 5V 导致过压损坏），将导致功能失效或器件损坏。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "农机应用场景要求 -40°C 至 +85°C 的工作温度范围。普通消费级器件（0~70°C）在低温下可能无法发声或内部压电/电磁元件特性漂移，在高温下寿命急剧缩短，违反可靠性设计目标。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "有源蜂鸣器",
+        "Active Buzzer",
+        "Piezo Buzzer",
+        "压电蜂鸣器",
+        "电磁蜂鸣器",
+        "声光报警"
+      ],
+      "note": "可选参数（未进条件）：frequency"
+    },
+    {
+      "id": "M-HMI-BUZZDRV",
+      "module_name": "蜂鸣器驱动晶体管",
+      "module_type": "分立半导体",
+      "category": "分立半导体",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -55.0,
+            150.0
+          ],
+          "unit": "°C",
+          "reason": "系统需求明确要求工作温度-40°C ~ +85°C。晶体管必须在整个范围内保持电气特性稳定，特别是HFE和漏电流。工业级或军规器件通常覆盖-55°C到150°C或175°C。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "power_dissipation",
+          "op": "cover",
+          "value": [
+            0.2,
+            0.625
+          ],
+          "unit": "W",
+          "reason": "持续导通时的功耗P = VCE(sat) * IC。对于小信号晶体管，TO-92封装通常额定为300mW-625mW。需确保在最坏情况下的Ic*Vce乘积不超过此值，否则需要散热措施或更大封装。",
+          "source_parameter": "power_dissipation"
+        },
+        {
+          "field": "package",
+          "op": "is",
+          "value": "['TO-92', 'SOT-23']",
+          "reason": "输入提到'复用 2N3904型号'，传统2N3904多为TO-92插件。但现代PCBA趋向全贴片。若PCB设计已定，封装选择受限。若未定，SOT-23更利于自动化生产且占用面积小。需根据M-PWR-ME6212等周围器件的封装风格及PCB工艺决定。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "NPN BJT",
+        "小信号晶体管",
+        "Switching Transistor",
+        "2N3904",
+        "通用 NPN"
+      ]
+    },
+    {
+      "id": "M-HMI-LED",
+      "module_name": "状态指示灯 LED",
+      "module_type": "发光器件",
+      "category": "分立半导体",
+      "leaf_code": "l_rgb_led_with_built_in_ic",
+      "quantity": 3,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档第1.2节和第3.2.1节明确规定系统工作温度为-40°C至+85°C。LED作为光学器件，其发光效率和Vf会随温度变化，但在该范围内必须保持功能正常且不发生永久性损坏（如焊点失效、封装开裂）。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "LED",
+        "发光二极管",
+        "Surface Mount LED",
+        "SMD LED",
+        "Status Indicator",
+        "RGB LED"
+      ]
+    },
+    {
+      "id": "M-DRV-NPN",
+      "module_name": "通用 NPN 晶体管 (2N3904)",
+      "module_type": "分立半导体",
+      "category": "分立半导体",
+      "leaf_code": "",
+      "quantity": 5,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "power_dissipation",
+          "op": ">=",
+          "value": 0.625,
+          "unit": "W",
+          "reason": "2N3904 的标准封装（如 SOT-54, TO-92）额定功耗通常为 625mW。在农机高温环境（+85°C）下，需进行降额使用。如果负载电流较大导致功耗接近或超过此值，器件会过热失效。因此，目标器件必须具备至少 625mW 的耗散能力，且在实际设计中需确保工作点远低于此值（例如通过增大基极电流降低 Vce(sat) 或选用更高功率器件如 2N2222/BC547 若空间允许，但用户指定 2N",
+          "source_parameter": "power_dissipation"
+        },
+        {
+          "field": "operating_temperature",
+          "op": ">=",
+          "value": -55.0,
+          "unit": "°C",
+          "reason": "农机核心控制板要求工作温度 -40°C 至 +85°C。半导体结温通常比环境温度高，因此器件的存储/工作温度下限必须低于 -40°C，上限需能承受内部发热后的结温（通常 150°C 或 175°C）。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "NPN transistor",
+        "通用晶体管",
+        "小信号开关管",
+        "2N3904",
+        "BC547",
+        "switching diode equivalent"
+      ],
+      "specified_device": {
+        "model": "2N3904",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-CONN-XT30",
+      "module_name": "电源输入连接器 (XT30PW)",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "cover",
+          "value": [
+            3e-11,
+            3e-11
+          ],
+          "unit": "W",
+          "reason": "需求文档及模块描述明确指定使用 XT30PW 插头，属于标准件硬性约束。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 2.0,
+          "unit": "Pin",
+          "reason": "XT30 电源接口标准配置为 2 Pin（正极/负极），用于连接电池输入。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "voltage_rating",
+          "op": ">=",
+          "value": 48.0,
+          "unit": "V",
+          "reason": "系统最大输入电压为 42 V。根据安规及工程惯例，连接器耐压通常需留有余量（如 1.5-2倍或至少覆盖到 48V 工业标准等级），以防止击穿风险。",
+          "source_parameter": "voltage_rating_min"
+        },
+        {
+          "field": "current_rating",
+          "op": ">=",
+          "value": 15.0,
+          "unit": "A",
+          "reason": "XT30 标准额定电流通常为 30A，但考虑到 PCB 走线载流能力及保险丝选型（3A-5A），连接器本身需具备足够的过流能力以承受瞬态峰值及长期工作电流，避免温升过高。XT30 标称 30A，此处保守设定下限以确保安全。",
+          "source_parameter": "current_rating_min"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "农机应用场景要求严格的工作温度范围，连接器材料需在此范围内保持机械强度和电气性能稳定。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_material",
+          "op": "is",
+          "value": "铜合金 (镀锡或镀金)",
+          "reason": "电源输入连接器需低接触电阻以减少发热，且需适应农机环境的湿度与振动，防止接触不良。",
+          "source_parameter": "contact_material"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 0.1,
+          "unit": "Ω",
+          "reason": "标准电源连接器绝缘电阻要求，确保高压输入下的安全性。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "dielectric_withstand_voltage",
+          "op": ">=",
+          "value": 1000.0,
+          "unit": "V AC",
+          "reason": "验证绝缘强度，防止输入端对地或引脚间击穿。",
+          "source_parameter": "dielectric_withstand_voltage"
+        }
+      ],
+      "keywords": [
+        "XT30",
+        "电源连接器",
+        "Power Connector",
+        "XT30PW",
+        "2Pin Plug",
+        "电池接口"
+      ]
+    },
+    {
+      "id": "M-CONN-7PIN",
+      "module_name": "多功能信号接口排针",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 7.0,
+          "unit": "pins",
+          "reason": "模块名称及描述明确指定为 7Pin 多功能信号接口，用于连接传感器/限位开关等外部设备。引脚数量不匹配将导致物理无法插接或功能缺失。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "['Pin Header', 'Socket']",
+          "reason": "模块定义为“排针/座”，通常指 PCB 安装的直插或弯插连接器（Header）或其对应的插座（Socket）。需确保极性和间距与对侧线缆或板载连接器完全兼容。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 2.54,
+          "unit": "mm",
+          "reason": "在通用电子设计和该系统的其他连接器（如 JTAG/SWD 调试排针、XT30 虽为大电流但信号端通常标准化）中，2.54mm 是标准信号排针间距。若使用 2.0mm 或其他间距，将对侧线缆或连接器无法装配。鉴于无特定紧凑性要求，2.54mm 为默认工程假设。",
+          "source_parameter": "pitch"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统明确要求工作温度 -40°C 至 +85°C。连接器材料（塑料壳体、金属端子）在此范围内必须保持机械强度和电气性能，否则会导致脆断或接触不良。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 3.0,
+          "unit": "A",
+          "reason": "该接口用于传感器和限位开关输入，通常为数字信号或小电流模拟信号。3A 是标准 2.54mm 排针的保守额定电流，足以覆盖任何可能的电源分配或大电流开关应用，且符合工业连接器通用规格。",
+          "source_parameter": "current_rating_per_pin"
+        },
+        {
+          "field": "contact_resistance",
+          "op": ">=",
+          "value": 0.02,
+          "unit": "Ω",
+          "reason": "为了保证传感器信号采样的精度和限位开关检测的可靠性，接触电阻应尽可能低且稳定。20mΩ 是高质量镀金或镀锡排针的典型最大值，满足信号完整性要求。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "农机环境存在高湿度（95% RH），需要良好的绝缘性能以防止引脚间漏电影响敏感传感器信号。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "voltage_rating",
+          "op": ">=",
+          "value": 60.0,
+          "unit": "V",
+          "reason": "虽然信号电压多为 3.3V/5V，但作为多功能接口可能涉及部分电源分配或感性负载反峰。60V 是标准工业排针的安全额定电压，提供足够余量。",
+          "source_parameter": "voltage_rating"
+        }
+      ],
+      "keywords": [
+        "排针",
+        "排母",
+        "Pin Header",
+        "Connector",
+        "7 Pin",
+        "信号接口"
+      ]
+    },
+    {
+      "id": "M-CONN-JTAG",
+      "module_name": "SWD/JTAG 调试排针",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "Header (Male Pin)",
+          "reason": "作为调试接口连接器，通常焊接在 PCBA 上，由外部调试探针插入。若误选为插座 (Socket) 或母头，将导致无法与标准调试工具连接。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "['Through-Hole (TH)', 'Vertical or Right-Angle']",
+          "reason": "排针作为机械连接点，需承受一定的机械应力（插拔力、振动）。SMD 排针在农机高振动环境下可靠性较低，通孔焊接提供更强的机械固定。方向（直插/弯插）取决于结构空间，但必须为 TH。",
+          "source_parameter": "mounting_style"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统需求明确规定工作温度为 -40°C ~ +85°C。连接器材料（特别是塑料绝缘体）在此温度范围内不能发生脆裂或软化变形，否则影响电气连接可靠性。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "A",
+          "reason": "虽然 SWD/JTAG 信号线电流很小，但 VCC 引脚可能需要提供调试器供电或板端辅助供电。2.54mm 间距的常规排针通常额定电流为 1A-3A。满足 1A 可确保在调试器供电模式下不会过热。",
+          "source_parameter": "current_rating_per_pin"
+        }
+      ],
+      "keywords": [
+        "排针",
+        "Header",
+        "JTAG",
+        "SWD",
+        "调试接口",
+        "2.54mm"
+      ]
+    }
+  ]
+}

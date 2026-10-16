@@ -1,0 +1,1168 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-case1-v1",
+  "project": {
+    "name": "case1（由历史选型产物转换）",
+    "summary": "来源 /share/home/zhengzhiqi/workspace/web/output/case1/console/stages/03_device_selection__38fa0cdc.json"
+  },
+  "global_constraints": {
+    "budget_total_cny": null,
+    "currency": "CNY",
+    "note": "预算取自历史产物，仅供参考"
+  },
+  "selection_items": [
+    {
+      "id": "M-MCU-MAIN-001",
+      "module_name": "主控制器",
+      "module_type": "主控计算",
+      "category": "微控制器",
+      "leaf_code": "l_microcontroller_mcu_mpu_soc",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "flash_capacity",
+          "op": ">=",
+          "value": 128.0,
+          "unit": "KB",
+          "reason": "需求文档明确指定使用 STM32F103CBT6，且要求支持至少3层虚拟键位映射及非易失性存储（Flash占用<50KB）。该型号固定为128KB Flash，必须满足此容量约束。",
+          "source_parameter": "flash_capacity"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -48.0,
+            -48.0
+          ],
+          "unit": "string",
+          "reason": "目标器件已确认为 STM32F103CBT6，其封装为 LQFP-48。PCB 布局与组装工艺必须与此封装兼容。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "工作环境温度限定在 0°C ~ 40°C。器件必须在此范围内正常工作。虽然工程建议选工业级(-40~85)以提高可靠性，但最低限度必须满足商业级(0~70)或更高。",
+          "source_parameter": "operating_temperature_range"
+        },
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            3.135,
+            3.465
+          ],
+          "unit": "V",
+          "reason": "MCU 核心及 IO 工作电压为 3.3V。电源 LDO 必须能提供稳定的 3.3V 输出。",
+          "source_parameter": "supply_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "clock_frequency",
+          "op": ">=",
+          "value": 72000000.0,
+          "unit": "Hz",
+          "reason": "STM32F103 系列最大主频为 72 MHz。需确保外部晶振及 PLL 配置能稳定提供此频率以满足 USB FS 时序及按键扫描延迟要求（≤5ms）。",
+          "source_parameter": "max_clock_frequency"
+        }
+      ],
+      "keywords": [
+        "MCU",
+        "微控制器",
+        "ARM Cortex-M",
+        "USB FS Device",
+        "STM32F103",
+        "LQFP-48"
+      ],
+      "specified_device": {
+        "model": "STM32F103CBT6",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-MCU-DYN-001",
+      "module_name": "动态组件控制器",
+      "module_type": "主控计算",
+      "category": "微控制器",
+      "leaf_code": "l_microcontroller_mcu_mpu_soc",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "flash_capacity",
+          "op": ">=",
+          "value": 1024.0,
+          "unit": "KB",
+          "reason": "用户输入明确指定型号为 STM32F405RGT6，该型号固有 Flash 容量为 1MB (1024KB)。作为目标器件的核心规格，必须满足此硬件约束。",
+          "source_parameter": "flash_capacity"
+        },
+        {
+          "field": "core_architecture",
+          "op": "cover",
+          "value": [
+            4.0,
+            4.0
+          ],
+          "reason": "用户输入指定 STM32F405，属于 Cortex-M4 内核。FOC 控制算法（SVPWM、PID）对浮点运算单元 (FPU) 有依赖，M4 内核是执行此类实时控制任务的最低要求。",
+          "source_parameter": "core_architecture"
+        },
+        {
+          "field": "clock_frequency",
+          "op": ">=",
+          "value": 168000000.0,
+          "unit": "Hz",
+          "reason": "STM32F405 的最高主频为 168MHz。USB High-Speed PHY 及 FOC 闭环控制的高中断频率需要足够的 CPU 算力支持。",
+          "source_parameter": "clock_frequency"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -100.0,
+            -100.0
+          ],
+          "reason": "用户输入明确指定型号后缀 'R' 对应 LQFP-100 封装。这是物理装配的硬性约束。",
+          "source_parameter": "package"
+        },
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            1.8,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "MCU 核心电压范围为 1.8V-3.6V。系统逻辑域由 3.3V LDO 供电，器件必须能在 3.3V 下稳定工作。",
+          "source_parameter": "supply_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档规定工作温度 0°C ~ 40°C。商业级器件 (0-70°C) 可满足此要求并提供热裕度。若选工业级 (-40-85/105) 更佳，但非强制。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "MCU",
+        "ARM Cortex-M4",
+        "STM32F4",
+        "USB Host",
+        "USB Device",
+        "LQFP-100"
+      ],
+      "specified_device": {
+        "model": "STM32F405RGT6",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-KEYSCAN-001",
+      "module_name": "并行转串行移位寄存器",
+      "module_type": "逻辑器件",
+      "category": "逻辑器件",
+      "leaf_code": "l_shift_register",
+      "quantity": 11,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            2.0,
+            6.0
+          ],
+          "unit": "V",
+          "reason": "74HC165 (HC系列) 的绝对最大额定值通常为 VCC = -0.5V 至 +7.0V，推荐工作电压范围为 2.0V 至 6.0V。系统逻辑域由 LDO 提供 3.3V，但考虑到键扫部分可能直接受 5V VBUS 影响或为了兼容 5V MCU 电平，器件必须能在 3.3V 下正常工作且具备 5V 容忍度。若使用 LV 系列（如 74LVC），则上限需为 3.6V，但用户明确指定 HC，故以 ",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -16.0,
+            -16.0
+          ],
+          "reason": "用户输入及模块分类明确指定型号为 74HC165 且封装为 SOIC-16。这是物理装配的关键约束。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "用户需求规定工作温度 0°C ~ 40°C。标准商业级 HC 器件 (0~70°C) 可满足。考虑到生产与测试章节提到“暂按工业级设计以提高可靠性裕度”，选择工业级器件更佳，但商业级在电气上是合格的。此处列为 important 因为超出范围可能导致时序违规或失效。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "keywords": [
+        "并行转串行",
+        "移位寄存器",
+        "8位",
+        "74HC165",
+        "SOIC-16",
+        "SPI接口"
+      ],
+      "specified_device": {
+        "model": "74HC165",
+        "intent": "reference"
+      },
+      "note": "可选参数（未进条件）：static_power_consumption"
+    },
+    {
+      "id": "M-KEY-001",
+      "module_name": "热插拔轴座",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 75,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "SMD",
+          "reason": "分类和描述均指定为 SMD（表面贴装）。若选择 THT（插件），将导致 PCB 装配工艺错误，无法通过 SMT 产线生产。",
+          "source_parameter": "mounting_type"
+        },
+        {
+          "field": "contact_material",
+          "op": "is",
+          "value": "Gold Plated",
+          "reason": "需求文档明确要求 PCB 使用沉金工艺以保证接触稳定性，轴座触点通常需镀金以防止氧化并降低接触电阻，确保长期使用的信号可靠性。",
+          "source_parameter": "contact_material"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            40.0
+          ],
+          "unit": "°C",
+          "reason": "器件必须在系统规定的工作温度范围内保持电气和机械性能稳定。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 0.1,
+          "unit": "Ω",
+          "reason": "防止键位串扰（Ghosting）的关键参数。高绝缘电阻确保未按下时电路断开，避免误触发。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "dielectric_withstand_voltage",
+          "op": ">=",
+          "value": 100.0,
+          "unit": "V",
+          "reason": "确保轴体引脚间及引脚对地间的绝缘强度，防止高压击穿。虽然工作电压低，但需满足基本安规隔离要求。",
+          "source_parameter": "dielectric_withstand_voltage"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "热插拔轴座",
+        "机械键盘插座",
+        "Switch Socket SMD",
+        "MX Switch Socket",
+        "Cherry MX Compatible",
+        "Keyboard Hot-swap"
+      ]
+    },
+    {
+      "id": "M-RGB-001",
+      "module_name": "可编程RGB LED",
+      "module_type": "光电器件",
+      "category": "光电器件",
+      "leaf_code": "l_rgb_led",
+      "quantity": 104,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "V",
+          "reason": "模块描述明确指定“5V供电”，且 WS2812B/SK9822 标准工作电压为 5V。输入证据等级：用户/需求文档明确值 (M-RGB-001 description, requirement_ch3_1_1)。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            5050.0,
+            5050.0
+          ],
+          "unit": "mm",
+          "reason": "Category mapping 和 description 均指定 SMD 5050。这是机械装配的关键约束。输入证据等级：用户/需求文档明确值。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "lifespan",
+          "op": ">=",
+          "value": 100000.0,
+          "unit": "hours",
+          "reason": "Requirement Doc Ch 3.3.1 明确规定 RGB LED 寿命指标。",
+          "source_parameter": "lifespan_min"
+        }
+      ],
+      "keywords": [
+        "WS2812B",
+        "SK9822",
+        "可编程RGB灯珠",
+        "单总线LED",
+        "NeoPixel",
+        "SMD 5050 RGB"
+      ],
+      "note": "可选参数（未进条件）：operating_temperature"
+    },
+    {
+      "id": "M-PWR-LDO-001",
+      "module_name": "低压差线性稳压器",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_professional_power_management_pmic",
+      "quantity": 2,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.5,
+            5.25
+          ],
+          "unit": "V",
+          "reason": "系统由 USB Type-C 供电，标称 5V。LDO 输入端直接连接 VBUS（可能经过 eFuse），需承受 USB 规范允许的电压波动及线路压降。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "为 STM32F103/F405 的 IO 域、74HC165 逻辑电平及传感器供电的标准电压。",
+          "source_parameter": "output_voltage_3v3"
+        },
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 1.8,
+          "unit": "V",
+          "reason": "STM32F103 内核电压通常为 1.8V，且模块描述明确提及转换为 1.8V。",
+          "source_parameter": "output_voltage_1v8"
+        },
+        {
+          "field": "output_current",
+          "op": "cover",
+          "value": [
+            0.5,
+            1.0
+          ],
+          "unit": "A",
+          "reason": "需求文档 Ch3.1.1 规定工作电流 ≤ 500mA，但 Ch5.5 电源拓扑说明中明确指出 LDO 选型需支持 >500mA 并建议 1A 以上余量。考虑到 FOC 电机噪声对电源完整性的潜在影响，需确保瞬态响应能力。",
+          "source_parameter": "output_current_3v3"
+        },
+        {
+          "field": "dropout_voltage",
+          "op": "<=",
+          "value": 0.3,
+          "unit": "V",
+          "reason": "输入仅 5V，输出 3.3V，裕量极小（1.7V）。若 LDO 压差过大（如传统 LDO 的 1V+），在 VBUS 偏低或线路有压降时将无法维持稳压。需选用超低dropout (Ultra-LDO) 器件。",
+          "source_parameter": "dropout_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "output_current",
+          "op": "cover",
+          "value": [
+            0.2,
+            0.5
+          ],
+          "unit": "A",
+          "reason": "主要供给 MCU 内核及部分低速外设，电流相对较小，但需满足多路负载叠加。",
+          "source_parameter": "output_current_1v8"
+        }
+      ],
+      "keywords": [
+        "LDO",
+        "Low Dropout Regulator",
+        "低压差线性稳压器",
+        "低压降稳压器",
+        "线性稳压器",
+        "低压差稳压器"
+      ],
+      "note": "可选参数（未进条件）：quiescent_current"
+    },
+    {
+      "id": "M-PWR-BUCK-001",
+      "module_name": "DC-DC降压转换器",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_professional_power_management_pmic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "V",
+          "reason": "RGB LED 模组明确要求 5V 供电，且系统主要功率负载（LED、Hub）均基于 5V VBUS。若输出非 5V，将无法直接驱动 LED 或需额外 DC-DC 转换，违背模块“高效率 Buck”直接供电的设计意图。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "output_current",
+          "op": ">=",
+          "value": 4.0,
+          "unit": "A",
+          "reason": "虽然整机平均电流受限，但单点负载（如 104 颗 RGB LED 全白瞬时电流可达 6.24A，或电机启动堵转电流 3.5A）要求电源具备极高的瞬态响应和短时过载能力。为确保在瞬态冲击下不触发过流保护或电压跌落导致 MCU 复位，Buck 芯片的连续电流额定值必须至少覆盖 4A，并具备足够的峰值电流能力（通常 >6A）。这是满足‘大电流’分类的关键约束。",
+          "source_parameter": "continuous_output_current"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.5,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "USB 供电可能存在压降或波动，器件必须能在最低 4.5V (留有余量) 到最高 5.5V 的范围内稳定工作且不损坏。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "topology",
+          "op": "is",
+          "value": "synchronous_buck",
+          "reason": "在非同步 Buck 中，续流二极管压降约 0.4-0.5V，在 4A 时产生 1.6-2W 的热耗散，效率远低于同步整流。同步整流使用 MOSFET，导通电阻低，适合大电流高效应用。",
+          "source_parameter": "topology"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "switching_frequency",
+          "op": "cover",
+          "value": [
+            300000.0,
+            1500000.0
+          ],
+          "unit": "Hz",
+          "reason": "较高的开关频率有助于缩小电感和电容的物理尺寸，适应键盘紧凑布局。但频率过高会增加开关损耗和 EMI 辐射，考虑到 CISPR 32 Class B 要求，频率不宜超过 1-2MHz，除非具有扩频功能。",
+          "source_parameter": "switching_frequency"
+        },
+        {
+          "field": "efficiency",
+          "op": ">=",
+          "value": 90.0,
+          "unit": "%",
+          "reason": "高能效意味着更少的发热，对于封闭或半封闭的键盘结构内部散热至关重要，同时也符合低功耗设计目标。",
+          "source_parameter": "efficiency"
+        }
+      ],
+      "keywords": [
+        "DC-DC Buck Converter",
+        "同步降压芯片",
+        "大电流 DC-DC",
+        "Step-down Converter",
+        "4A Buck Regulator",
+        "高效率降压IC"
+      ]
+    },
+    {
+      "id": "M-PWR-EFUSE-001",
+      "module_name": "电子保险丝",
+      "module_type": "保护器件",
+      "category": "保护器件",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.4,
+            5.25
+          ],
+          "unit": "V",
+          "reason": "模块直接连接 USB Type-C 输入端，必须承受标准 VBUS 电压范围。若器件耐压不足或欠压保护点过高，将导致无法工作或在过压时损坏。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "rated_current",
+          "op": "cover",
+          "value": [
+            1.0,
+            1.5
+          ],
+          "unit": "A",
+          "reason": "用户需求明确限制额定电流需匹配 USB 500mA~1A。系统峰值电流 < 1.0 A。器件需支持在此范围内精确限流，且不能因正常瞬态（如电机启动、LED全亮）而误触发锁定。建议设定在 1.0A - 1.5A 之间以提供余量并符合 USB 规范上限。",
+          "source_parameter": "rated_current"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "工作环境温度 0°C ~ 40°C。器件必须在整个温度范围内保证电气参数稳定，特别是限流精度和热关断阈值。工业级或扩展级器件更稳妥，但商业级通常也满足此范围。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "on_resistance",
+          "op": "<=",
+          "value": 0.05,
+          "unit": "Ω",
+          "reason": "在 1A 电流下，导通电阻直接影响功耗和温升。Rds(on) 越小，效率越高，发热越低。对于消费类电子，通常希望 Rds(on) < 50mΩ 以保持低压降。",
+          "source_parameter": "on_resistance"
+        }
+      ],
+      "keywords": [
+        "电子保险丝",
+        "eFuse",
+        "USB过流保护",
+        "集成断路器",
+        "智能保险丝",
+        "Overcurrent Protection IC"
+      ]
+    },
+    {
+      "id": "M-ENC-001",
+      "module_name": "磁编码器",
+      "module_type": "传感器",
+      "category": "传感器",
+      "leaf_code": "l_position_sensor",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "resolution",
+          "op": ">=",
+          "value": 14.0,
+          "unit": "bit",
+          "reason": "需求文档第3.1.3节明确要求FOC角度测量精度为±0.1°，且明确指定AS5047P的分辨率为14-bit。若分辨率低于14位（如12位），角度量化误差将显著增大，无法满足FOC闭环控制对转子位置的高精度要求，导致电机运行不平顺或效率降低。",
+          "source_parameter": "resolution"
+        },
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            2.3,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "系统逻辑域由 LDO 提供 3.3V 供电（SS-PWR-001）。AS5047P 通常工作在 3.3V 或 5V。器件必须能在 3.3V 下正常工作，且耐压需至少达到 5.5V 以容忍可能的 5V 容差波动或误接 5V 信号线（尽管本设计建议统一 3.3V 电平）。",
+          "source_parameter": "supply_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "magnetic_field_range",
+          "op": "cover",
+          "value": [
+            10.0,
+            150.0
+          ],
+          "unit": "mT",
+          "reason": "磁编码器依赖外部磁铁产生的磁场。AS5047P 具有宽动态范围的磁场检测能力。虽然具体值取决于机械装配，但器件必须具备足够的灵敏度范围和线性度来适应常见的钕铁硼磁铁配置。此参数影响安装公差和机械结构设计的自由度。",
+          "source_parameter": "magnetic_field_range"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -24.0,
+            -24.0
+          ],
+          "reason": "category_semantic_intent 明确指定 QFN-24。这决定了 PCB 的丝印、焊盘设计和组装工艺。若替换器件，必须确保封装兼容或重新设计 PCB。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "虽然应用场景为室内 (0-40°C)，但生产规范 (Ch4.1.2) 提到“暂按工业级设计以提高可靠性裕度”，且 BLDC 电机附近可能存在局部温升。选择工业级 (-40~85°C) 器件有助于满足 50,000 小时 MTBF 目标。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "磁编码器",
+        "Magnetic Encoder",
+        "AS5047P",
+        "SPI Encoder",
+        "I2C Encoder",
+        "角度传感器"
+      ],
+      "specified_device": {
+        "model": "AS5047P",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-MOTOR-DRV-001",
+      "module_name": "FOC电机驱动IC",
+      "module_type": "驱动器件",
+      "category": "驱动器件",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [],
+      "preferred_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.5,
+            24.0
+          ],
+          "unit": "V",
+          "reason": "系统输入为 USB 5V。虽然当前未确认电机电压，但 BLDC 电机常见额定电压为 6V-24V。若电机为 5V，器件需支持 5V 工作；若为更高电压，器件耐压需足够。考虑到 'Rated Voltage TBD'，选择一个宽范围或至少覆盖 5V-12V 的通用驱动 IC 更具工程可行性，避免后续更换。下限需低于 5V 以保证 USB 供电波动下的稳定性。",
+          "source_parameter": "supply_voltage_range"
+        }
+      ],
+      "keywords": [
+        "Motor Driver IC",
+        "BLDC Driver",
+        "FOC Controller",
+        "Integrated MOSFET",
+        "三相电机驱动",
+        "无刷直流电机驱动"
+      ]
+    },
+    {
+      "id": "M-MOTOR-001",
+      "module_name": "无刷直流电机",
+      "module_type": "机电件",
+      "category": "机电件",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 0.01,
+          "unit": "Ω",
+          "reason": "安规基本要求，防止漏电和短路风险，特别是在靠近人体接触区域（键盘旋钮）。",
+          "source_parameter": "insulation_resistance"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "BLDC Motor",
+        "无刷直流电机",
+        "Brushless DC Motor",
+        "小型电机",
+        "力反馈执行器"
+      ]
+    },
+    {
+      "id": "M-DISP-EINK-001",
+      "module_name": "电子墨水屏",
+      "module_type": "显示器件",
+      "category": "显示器件",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            3.0,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "模块通过FPC连接器与主MCU（STM32F103CBT6）相连，系统逻辑电源轨为3.3V。E-Ink模组内部驱动IC需在此电压下工作。",
+          "source_parameter": "supply_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            40.0
+          ],
+          "unit": "°C",
+          "reason": "系统应用环境为室内办公/家用，要求0°C ~ 40°C。E-Ink在低温下响应速度会变慢，高温下可能残留鬼影，需确保所选模组规格书覆盖此范围。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "resolution",
+          "op": "cover",
+          "value": [
+            296.0,
+            296.0
+          ],
+          "unit": "pixels",
+          "reason": "文档中未明确指定E-Ink的具体分辨率和尺寸，仅假设2.9寸。作为显示模组，分辨率是核心功能参数，需根据最终UI内容确定，此处标记为工程假设待确认。",
+          "source_parameter": "resolution"
+        }
+      ],
+      "keywords": [
+        "E-Ink Display",
+        "电子墨水屏",
+        "EPD",
+        "SPI Display",
+        "Waveshare",
+        "Good Display"
+      ]
+    },
+    {
+      "id": "M-DISP-OLED-001",
+      "module_name": "OLED显示屏",
+      "module_type": "显示器件",
+      "category": "显示器件",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            2.4,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "OLED 模组通常由逻辑电源域供电。根据电源拓扑说明，逻辑域由 LDO 提供 3.3V。大多数标准 0.96寸/1.3寸 I2C OLED 模组支持 2.4V-3.6V 或 3.3V 单电源。器件必须能在 3.3V 下稳定工作。",
+          "source_parameter": "supply_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作环境温度为 0°C ~ 40°C。OLED 液晶材料在低温下响应速度会变慢甚至失效，因此器件的工作温度下限应至少覆盖 0°C。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "OLED Display",
+        "I2C OLED",
+        "SSD1306",
+        "SH1106",
+        "128x64 OLED",
+        "有机发光二极管屏"
+      ]
+    },
+    {
+      "id": "M-TOUCH-001",
+      "module_name": "电容触摸条",
+      "module_type": "传感器",
+      "category": "传感器",
+      "leaf_code": "l_photoelectric_slot_sensor_phototransistor",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            3.0,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "系统逻辑域由 LDO 提供 3.3V 电源 (SS-PWR-001)。触摸控制器作为数字逻辑器件，其 VDD 引脚需兼容 3.3V 供电。虽然部分传感器支持 1.8V-3.6V，但为确保与 3.3V 系统稳定工作，目标器件应支持 3.3V 供电。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作环境温度为 0°C ~ 40°C。器件额定温度范围必须完全覆盖此区间。考虑到键盘可能长时间工作或环境温度变化，推荐选择 Tj max >= 70°C (Commercial) 或 -40~85°C (Industrial) 的器件以保证可靠性。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "esd_protection",
+          "op": "cover",
+          "value": [
+            61000000.0,
+            61000000.0
+          ],
+          "unit": "V",
+          "reason": "触摸条是直接人机交互界面，极易遭受人体静电放电。系统 EMC 要求为 ±8kV Air / ±6kV Contact。若器件无足够内置 ESD 保护，需额外增加 TVS 器件并优化布局，增加设计复杂度。具备高 ESD 耐受性的集成器件更优。",
+          "source_parameter": "esd_protection"
+        }
+      ],
+      "keywords": [
+        "电容式触摸控制器",
+        "Capacitive Touch Controller",
+        "Touch Bar IC",
+        "I2C Touch Sensor",
+        "手势识别芯片",
+        "多点触控IC"
+      ]
+    },
+    {
+      "id": "M-HUB-CTRL-001",
+      "module_name": "USB HUB控制器",
+      "module_type": "通信器件",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_usb_hub",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档 4.1.2 节元器件要求中提到“暂按工业级设计以提高可靠性裕度”，且环境约束为 0~40°C。考虑到 USB Hub 可能位于底座，散热条件可能较差，宽温范围更佳，但核心功能是 0~40°C 内稳定工作。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "USB Hub Controller",
+        "USB集线器控制器",
+        "USB 2.0 Hub IC",
+        "Hub芯片",
+        "USB Host/Device Switch"
+      ]
+    },
+    {
+      "id": "M-CONN-USBC-001",
+      "module_name": "USB Type-C 接口",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_usb_type_c_port_controller",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "USB Type-C Receptacle",
+          "reason": "模块明确定义为 USB Type-C 接口，且系统作为 Device 角色连接主机。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 16.0,
+          "reason": "标准 USB Type-C 连接器引脚数为 16 Pin，用于传输 DP/DN、VBUS、GND 及 CC1/CC2 等信号。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "isolation_voltage",
+          "op": ">=",
+          "value": 500.0,
+          "reason": "满足 USB Type-C 基本绝缘要求及安规隔离需求，防止高压击穿。",
+          "source_parameter": "isolation_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "SMD (Surface Mount)",
+          "reason": "系统整机厚度限制极严（≤40mm 含 10 块 PCB），SMD 封装高度最低，利于堆叠设计。",
+          "source_parameter": "mounting_style"
+        },
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 30.0,
+          "reason": "低接触电阻有助于减少 VBUS 路径上的压降和功耗，特别是在大电流瞬态下。",
+          "source_parameter": "contact_resistance"
+        }
+      ],
+      "keywords": [
+        "USB Type-C 插座",
+        "Type-C Receptacle",
+        "USB-C Connector",
+        "母座",
+        "16 Pin",
+        "USB Type-C"
+      ]
+    },
+    {
+      "id": "M-CONN-USBA-001",
+      "module_name": "USB Type-A 接口",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 2,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "USB Type-A Female",
+          "reason": "模块明确指定为 USB Type-A 母座，必须与标准 USB Type-A 插头物理兼容。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "current_rating",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "A",
+          "reason": "虽然 USB 2.0 标准端口限流通常为 500mA，但本系统设计峰值电流可达 1A（通过动态亮度管理等策略），且 eFuse 具备自动重启功能。连接器本身不能成为瓶颈，其额定电流需至少覆盖系统最大瞬态需求，通常 USB A 连接器额定为 1.5A - 3A，需确保不低于 1A 以支持可能的短时过载而不熔断或过热。",
+          "source_parameter": "current_rating"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "shielding",
+          "op": "is",
+          "value": "Shielded",
+          "reason": "USB 2.0 Full Speed 信号对噪声敏感，且系统要求 ESD ±8kV/±6kV。屏蔽外壳有助于提供低阻抗接地路径以泄放静电和抑制 EMI，符合 EMC Class B 要求。",
+          "source_parameter": "shielding"
+        },
+        {
+          "field": "mounting_type",
+          "op": "cover",
+          "value": [
+            3.5,
+            3.5
+          ],
+          "unit": "mm",
+          "reason": "虽然 SMT 更常见于高密度板，但考虑到整机厚度限制（≤40mm）及模块化堆叠结构，若采用 SMT 则需选择低剖面（Low Profile）封装；若采用 DIP/Through-hole 则需考虑 PCB 通孔加固。鉴于 HUB 底座可能作为扩展件，DIP 可提供更好的机械强度，但 SMT 更利于自动化生产和薄型化。此处根据通用性推荐 SMT 或 Low Profile DIP。",
+          "source_parameter": "mounting_style"
+        },
+        {
+          "field": "contact_material",
+          "op": "is",
+          "value": "Gold Plated Contacts",
+          "reason": "为了保证长期使用的接触可靠性并防止氧化导致的高阻值或连接断开，触点应镀金。虽然文档主要强调 PCB 表面处理，但连接器触点材质直接影响 USB 连接的稳定性。",
+          "source_parameter": "contact_material"
+        }
+      ],
+      "keywords": [
+        "USB Type-A Connector",
+        "USB A Female",
+        "Type-A Shrouded",
+        "USB Shielded Socket",
+        "USB A 接口",
+        "USB A 母座"
+      ]
+    },
+    {
+      "id": "M-PROT-TVS-001",
+      "module_name": "ESD保护阵列",
+      "module_type": "保护器件",
+      "category": "保护器件",
+      "leaf_code": "",
+      "quantity": 3,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 3.0,
+          "unit": "channels",
+          "reason": "必须同时保护USB Type-C上行接口和两个USB-A下行接口的差分数据线。Type-C需保护D+/-，每个USB-A需保护D+/-，共计至少3对差分线（6个信号通道）。若包含高速控制信号线，通道数需求更高。最低需支持3通道差分TVS阵列。",
+          "source_parameter": "channel_count"
+        },
+        {
+          "field": "peak_pulse_current_ipp",
+          "op": ">=",
+          "value": 30.0,
+          "unit": "A",
+          "reason": "Level 4接触放电对应的峰值电流约为30A-35A（取决于波形定义，通常测试仪设定）。器件必须能承受此瞬时能量而不发生开路或短路失效。",
+          "source_parameter": "peak_pulse_current_ipp"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "虽然应用环境为0-40°C，但为了确保长期可靠性（MTBF 50,000小时）并应对老化测试（45°C）及存储温度（-20~60°C），建议选用工业级或宽温商业级器件，确保在极端温度下参数漂移在允许范围内。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "keywords": [
+        "TVS Diode Array",
+        "ESD Protection",
+        "Low Capacitance",
+        "USB ESD Protector",
+        "Transient Voltage Suppressor",
+        "IEC 61000-4-2"
+      ]
+    },
+    {
+      "id": "M-CONN-FPC-001",
+      "module_name": "FPC连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 10.0,
+          "unit": "pins",
+          "reason": "Module ID M-CONN-FPC-001 明确指定为 '10-pin'，且用于连接 E-Ink 屏幕。引脚数量不匹配将导致无法物理安装或电气连接失败。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "dielectric_withstand_voltage",
+          "op": ">=",
+          "value": 500.0,
+          "unit": "V",
+          "reason": "安规基本要求，防止击穿。对于 3.3V/5V 逻辑系统，500VAC 是标准测试电压。",
+          "source_parameter": "dielectric_withstand_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -20.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作环境为室内办公/家用 (0~40°C)，连接器需在此范围内可靠工作。考虑到存储和运输可能遇到的极端温度，工业级或宽温规格更优，但最低必须满足商业级 (-20~70°C)。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "pitch",
+          "op": "cover",
+          "value": [
+            0.3,
+            0.5
+          ],
+          "unit": "mm",
+          "reason": "FPC 连接器的间距必须与目标 E-Ink 模组的排线间距完全一致，否则无法插入。虽然具体数值未在输入中给出，但这是选型的核心约束。工程上 0.5mm 最为常见，若为高分辨率小屏可能为 0.3mm 或 0.4mm。",
+          "source_parameter": "pitch"
+        },
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.05,
+          "unit": "Ω",
+          "reason": "E-Ink 驱动信号对噪声敏感，低接触电阻有助于保证 SPI/I2C 信号完整性及供电稳定性，减少发热。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "Ω",
+          "reason": "确保信号间及信号与地间的绝缘性能，防止漏电干扰低电平数字信号。",
+          "source_parameter": "insulation_resistance"
+        }
+      ],
+      "keywords": [
+        "FPC Connector",
+        "柔性排线插座",
+        "Bottom Insert",
+        "10-pin",
+        "ZIF Connector",
+        "E-Ink FPC"
+      ]
+    },
+    {
+      "id": "M-CONN-SUB-001",
+      "module_name": "子板连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 4,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 2.54,
+          "unit": "mm",
+          "reason": "模块分类及描述明确指定为 2.54mm Pitch Pin Header，这是与配套母座（Socket）或 PCB 焊盘配合的机械关键尺寸。",
+          "source_parameter": "pitch"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "['Through-Hole', 'Solder Pin']",
+          "reason": "排针用于板对板连接，承受机械应力，通常采用通孔 (Through-Hole) 以确保机械强度；若为 SMT 则需确认加固工艺。",
+          "source_parameter": "mounting_style"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            105.0
+          ],
+          "unit": "°C",
+          "reason": "要求文档规定工作温度 0-40°C，存储 -20-60°C。工业级排针 (-40 to 105°C) 是标准选择，确保在环境波动下不失效。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "rated_current",
+          "op": "cover",
+          "value": [
+            3.0,
+            5.0
+          ],
+          "unit": "A",
+          "reason": "系统峰值电流可达 1.0A~3.5A (电机/RGB)。虽然信号线电流小，但电源引脚可能承载大电流。为确保可靠性，排针单 pin 额定值应留有足够余量，通常 2.54mm 排针在 3-5A 范围较为常见且安全。",
+          "source_parameter": "current_rating_per_pin"
+        }
+      ],
+      "keywords": [
+        "Pin Header",
+        "排针",
+        "2.54mm Pitch",
+        "Solder Pin",
+        "Board-to-Board Connector",
+        "Male Pin"
+      ]
+    }
+  ]
+}

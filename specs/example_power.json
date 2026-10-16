@@ -1,0 +1,113 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-demo-0001",
+  "project": {
+    "name": "示例：24V 输入的多路电源板",
+    "summary": "演示器件选型链路：指定型号、按类别召回、证据缺失三种情况各一例"
+  },
+  "global_constraints": {
+    "budget_total_cny": 120,
+    "currency": "CNY",
+    "note": "价格只作参考，器件目录本身没有价格字段"
+  },
+  "selection_items": [
+    {
+      "id": "SEL-001",
+      "module_name": "24V 转 5V 降压电源",
+      "module_type": "电源管理",
+      "category": "dc_dc_power_converter_chip",
+      "leaf_code": "l_step_down_dc_dc_converter",
+      "quantity": 2,
+      "related_requirements": ["F01", "F02"],
+      "hard_conditions": [
+        {
+          "field": "topology",
+          "op": "contains",
+          "value": "Buck",
+          "reason": "必须是降压拓扑",
+          "related_requirement": "F01"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "output_current",
+          "op": ">=",
+          "value": 5,
+          "unit": "A",
+          "reason": "下游峰值电流 4A，留余量",
+          "related_requirement": "F02"
+        },
+        {
+          "field": "switching_frequency",
+          "op": ">=",
+          "value": 400,
+          "unit": "kHz",
+          "reason": "避开音频段，便于滤波",
+          "related_requirement": "F02"
+        }
+      ],
+      "specified_device": {
+        "model": "TPS5450DDAR",
+        "intent": "preferred"
+      }
+    },
+    {
+      "id": "SEL-002",
+      "module_name": "3.3V 线性稳压",
+      "module_type": "电源管理",
+      "category": "linear_regulator_ldo",
+      "leaf_code": "l_linear_regulator_ldo",
+      "quantity": 1,
+      "related_requirements": ["F03"],
+      "hard_conditions": [
+        {
+          "field": "output_voltage",
+          "op": "is",
+          "value": "3.3V",
+          "reason": "给 MCU 供电，固定 3.3V",
+          "related_requirement": "F03"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "output_current",
+          "op": ">=",
+          "value": 500,
+          "unit": "mA",
+          "reason": "MCU 加外设的峰值电流",
+          "related_requirement": "F03"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [4.75, 5.25],
+          "unit": "V",
+          "reason": "上游 5V 轨的偏差范围",
+          "related_requirement": "F03"
+        }
+      ],
+      "note": "这一项故意保留一个输入电压范围条件，用来观察证据缺失时如何标记"
+    },
+    {
+      "id": "SEL-003",
+      "module_name": "信号调理运算放大器",
+      "module_type": "信号链",
+      "category": "operational_amplifier",
+      "leaf_code": "l_amplifier",
+      "level2": "operational_amplifier",
+      "quantity": 2,
+      "related_requirements": ["F04"],
+      "keywords": ["LM358", "MCP602"],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "not_contains",
+          "value": "BGA",
+          "reason": "手工焊接优先，避免 BGA",
+          "related_requirement": "F04"
+        }
+      ],
+      "note": "没有指定型号，走关键词与类别召回"
+    }
+  ]
+}

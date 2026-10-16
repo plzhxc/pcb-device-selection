@@ -1,0 +1,831 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-case23-v1",
+  "project": {
+    "name": "case23（由历史选型产物转换）",
+    "summary": "来源 /share/home/zhengzhiqi/workspace/web/output/case23/console/stages/03_device_selection__a8564347.json"
+  },
+  "global_constraints": {
+    "budget_total_cny": null,
+    "currency": "CNY",
+    "note": "预算取自历史产物，仅供参考"
+  },
+  "selection_items": [
+    {
+      "id": "M-PWR-DCDC-001",
+      "module_name": "DC-DC降压转换器",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_step_down_dc_dc_converter",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            9.0,
+            48.0
+          ],
+          "unit": "V",
+          "reason": "工业现场供电可能达到48V，若器件绝对最大额定值（Absolute Maximum Rating）低于48V，将导致器件击穿损坏。必须覆盖整个工作输入范围并留有足够的安全裕量（Derating）。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "STM32F4及ESP32-S3等数字逻辑芯片通常工作在3.3V，输出电压偏差过大会导致系统无法启动或逻辑错误。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "output_current",
+          "op": ">=",
+          "value": 3.0,
+          "unit": "A",
+          "reason": "必须满足系统所有负载（MCU、WiFi模组、PHY、RS485隔离器等）在极端工况下的峰值电流需求，并保留至少20%-50%的降额余量以确保热稳定性和寿命。",
+          "source_parameter": "continuous_output_current"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "工业级应用强制要求，若器件仅支持商业级温度（0~70°C），在低温下可能启动失败或在高温下过热保护。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "switching_frequency",
+          "op": ">=",
+          "value": 500000.0,
+          "unit": "Hz",
+          "reason": "开关频率影响电感、电容的大小以及转换效率。500kHz是此类DC-DC的典型平衡点，需在PCB布局中考虑EMI抑制。",
+          "source_parameter": "switching_frequency"
+        },
+        {
+          "field": "efficiency",
+          "op": ">=",
+          "value": 85.0,
+          "unit": "%",
+          "reason": "高效率意味着更少的发热，有助于满足工业级环境温度下的散热要求，降低对散热器或铜皮面积的依赖。",
+          "source_parameter": "efficiency"
+        }
+      ],
+      "keywords": [
+        "同步降压转换器",
+        "DC-DC Buck Converter",
+        "Step-Down Converter",
+        "电源管理IC",
+        "TPS5430"
+      ],
+      "specified_device": {
+        "model": "TPS5430",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-PWR-PROT-001",
+      "module_name": "电源输入保护器件",
+      "module_type": "保护",
+      "category": "保护器件",
+      "leaf_code": "l_electrostatic_and_surge_protection_tvs_esd",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "peak_pulse_current",
+          "op": ">=",
+          "value": 20.0,
+          "unit": "A",
+          "reason": "TVS必须能够承受而不发生热失效（如开路或短路）的瞬时电流。若额定电流低于实际浪涌电流，保护器件将烧毁，失去保护作用。",
+          "source_parameter": "peak_pulse_current"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            125.0
+          ],
+          "unit": "°C",
+          "reason": "低温下TVS的击穿电压和响应时间特性可能变化，高温下散热能力下降。工业级应用强制要求宽温区可靠性。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "TVS",
+        "Transient Voltage Suppressor",
+        "ESD Protection Diode",
+        "Surge Protector",
+        "TVS Array",
+        "Input Protection"
+      ]
+    },
+    {
+      "id": "M-MCU-001",
+      "module_name": "主控制器",
+      "module_type": "主控计算",
+      "category": "微控制器",
+      "leaf_code": "l_microcontroller_mcu_mpu_soc",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_voltage",
+          "op": "cover",
+          "value": [
+            1.8,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "STM32F4 核心电压范围为 1.8V-3.6V，系统由 3.3V DC-DC 供电，器件必须兼容此逻辑电平。",
+          "source_parameter": "operating_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "clock_frequency",
+          "op": ">=",
+          "value": 168000000.0,
+          "unit": "Hz",
+          "reason": "STM32F4 系列典型最高主频为 168 MHz，需满足系统实时响应及协议栈处理需求。",
+          "source_parameter": "max_clock_frequency"
+        },
+        {
+          "field": "flash_memory",
+          "op": ">=",
+          "value": 1024.0,
+          "unit": "kB",
+          "reason": "系统包含复杂的协议栈、固件升级功能及配置数据存储，建议预留较大 Flash 空间。",
+          "source_parameter": "flash_memory"
+        }
+      ],
+      "keywords": [
+        "MCU",
+        "微控制器",
+        "ARM Cortex-M4",
+        "STM32F4",
+        "32-bit MCU",
+        "System on Chip"
+      ],
+      "specified_device": {
+        "model": "STM32F4",
+        "intent": "reference"
+      },
+      "note": "可选参数（未进条件）：package"
+    },
+    {
+      "id": "M-WIFI-001",
+      "module_name": "无线通信模组",
+      "module_type": "通信",
+      "category": "通信 IC",
+      "leaf_code": "l_wifi_module",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            3.0,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "ESP32-S3-WROOM-1U 模组内部 SoC 及射频前端由 3.3V 电源轨供电，系统电源管理模块 M-PWR-DCDC-001 (TPS5430) 输出为 3.3V。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统属于工业控制设备，需求文档明确要求工作温度 -40°C ～ +85°C。无线通信模组的射频性能在极端温度下可能漂移，必须选用工业级器件以确保 EMC 和功能可靠性。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "Wi-Fi 4",
+        "Bluetooth 5",
+        "SoC Module",
+        "ESP32-S3",
+        "无线通信芯片",
+        "双模射频"
+      ],
+      "specified_device": {
+        "model": "ESP32-S3-WROOM-1U",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-ETH-PHY-001",
+      "module_name": "以太网PHY芯片",
+      "module_type": "通信",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_cellular_2g_3g_4g_5g_module",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "data_rate",
+          "op": "cover",
+          "value": [
+            10.0,
+            100.0
+          ],
+          "unit": "Mbps",
+          "reason": "需求文档第 2.1.1 节明确为“百兆以太网”，且需兼容 HR911105A 连接器。速率低于 10M 或高于 100M（如千兆）均不符合功能定义。",
+          "source_parameter": "data_rate"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "项目概述第 1.3 节及性能指标第 3.2.1 节明确规定工作温度为 -40°C ～ +85°C。商业级器件在此温度范围内可能失效或参数漂移，导致系统不稳定。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "Ethernet PHY",
+        "PHY Transceiver",
+        "RMII PHY",
+        "百兆以太网芯片",
+        "LAN8720",
+        "DP83848"
+      ]
+    },
+    {
+      "id": "M-ETH-JACK-001",
+      "module_name": "RJ45连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ethernet_connector_rj45_rj11",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "cover",
+          "value": [
+            45.0,
+            45.0
+          ],
+          "reason": "模块定义为 RJ45 连接器，需与标准以太网电缆及外壳开孔兼容。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "data_rate",
+          "op": "is",
+          "value": "['10 Mbps', '100 Mbps']",
+          "reason": "系统需求明确为百兆以太网（100 Mbps），且 PHY 芯片通常为 10/100 自适应，连接器需支持相应频段的信号完整性。",
+          "source_parameter": "data_rate"
+        },
+        {
+          "field": "isolation_voltage",
+          "op": "cover",
+          "value": [
+            1500.0,
+            2000.0
+          ],
+          "unit": "Vrms",
+          "reason": "HR911105A 典型隔离电压为 1.5 kVrms。考虑到系统要求 IEC 61000-4-5 Level 3 Surge (±2kV) 防护，变压器隔离耐压是防止浪涌击穿的关键屏障，需确保足够余量。",
+          "source_parameter": "isolation_voltage"
+        },
+        {
+          "field": "shielding",
+          "op": "is",
+          "value": "Shielded",
+          "reason": "工业环境 EMC 要求高，屏蔽罩用于抑制辐射发射和抗扰度，并连接 PCB 地平面以降低共模噪声。",
+          "source_parameter": "shielding"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "Surface Mount (SMD)",
+          "reason": "用户指定型号 HR911105A 为 SMD 封装，且生产要求 SMT 为主。",
+          "source_parameter": "mounting_style"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统定义为工业级应用，明确要求工作温度 -40℃ ～ +85℃。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "RJ45连接器",
+        "以太网变压器",
+        "集成磁珠",
+        "Ethernet Jack with Transformer",
+        "带变压器接口",
+        "网络接口插座"
+      ],
+      "specified_device": {
+        "model": "HR911105A",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-RS485-ISO-001",
+      "module_name": "隔离式RS485收发器",
+      "module_type": "通信",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_isolated_rs485_422_transceiver_with_power_supply",
+      "quantity": 4,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "isolation_voltage",
+          "op": ">=",
+          "value": 3000.0,
+          "unit": "Vrms",
+          "reason": "系统需求明确指定全隔离RS485需满足≥3kVrms隔离耐压，以配合Surge Level 3 (±2kV)及工业EMC要求。若低于此值，无法满足安规隔离及浪涌防护的余量需求。",
+          "source_parameter": "isolation_voltage"
+        },
+        {
+          "field": "data_rate",
+          "op": "<=",
+          "value": 10.0,
+          "unit": "Mbps",
+          "reason": "RS485标准最大速率通常为10 Mbps（短距离）。模块需支持该速率以满足工业总线通信需求。常见型号如ISO3082/ADM3088均支持此速率。",
+          "source_parameter": "data_rate"
+        },
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "channel/device",
+          "reason": "单个器件必须包含完整的单路RS485收发功能（TX/RX/DE/RE及Bus A/B）。系统需要4路，因此数量为4颗，但每颗器件本身必须是单通道集成器件。",
+          "source_parameter": "channel_count"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统明确要求工业级应用，工作温度范围-40°C ～ +85°C。器件温度等级必须覆盖此范围，否则在极端环境下会失效。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "Isolated RS485 Transceiver",
+        "全隔离RS485",
+        "数字隔离器",
+        "RS-485",
+        "隔离收发器",
+        "ISO3082"
+      ]
+    },
+    {
+      "id": "M-RS485-TERM-001",
+      "module_name": "RS485终端匹配电阻",
+      "module_type": "被动件",
+      "category": "无源器件",
+      "leaf_code": "",
+      "quantity": 4,
+      "related_requirements": [],
+      "hard_conditions": [],
+      "preferred_conditions": [
+        {
+          "field": "power_rating",
+          "op": "cover",
+          "value": [
+            0.125,
+            0.25
+          ],
+          "unit": "W",
+          "reason": "RS485 总线电压通常为 ±9V 至 ±12V (峰值约 13V)。根据 P=V²/R，最大功率约为 13²/120 ≈ 1.4 W。但在正常通信中，总线处于高阻态或半双工切换，平均功耗较低。然而，考虑到浪涌保护器件动作时的瞬态能量吸收以及工业环境的高温降额，选择 1/4 W 或更高功率的电阻是工程最佳实践，避免使用过小的 1/8 W 电阻导致温升过高或阻值漂移。",
+          "source_parameter": "power_rating"
+        },
+        {
+          "field": "temperature_coefficient",
+          "op": "cover",
+          "value": [
+            100.0,
+            100.0
+          ],
+          "unit": "ppm/C",
+          "reason": "工业级应用要求元件在宽温范围内性能稳定。虽然 120Ω 是标称值，但温度变化会导致阻值漂移，影响阻抗匹配效果。薄膜电阻通常具有较低的 TCR。",
+          "source_parameter": "temperature_coefficient"
+        }
+      ],
+      "keywords": [
+        "终端电阻",
+        "TVS二极管",
+        "RS485匹配",
+        "120欧姆电阻",
+        "瞬态抑制",
+        "总线保护"
+      ],
+      "note": "可选参数（未进条件）：package"
+    },
+    {
+      "id": "M-ADC-EXT-001",
+      "module_name": "外部高精度ADC",
+      "module_type": "传感器",
+      "category": "数据转换器",
+      "leaf_code": "l_isolated_adc_with_power_supply",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "resolution",
+          "op": ">=",
+          "value": 16.0,
+          "unit": "bit",
+          "reason": "模块描述中明确提及示例型号 ADS1115（16-bit），且 notes 指出需满足工业精度要求。虽然 STM32F4 内置 ADC 为 12-bit，但需求文档在 5.2 节详细参数表中明确列出该外部 ADC 前端采集的分辨率为 16-bit，高于内置 ADC 的 12-bit 默认配置，因此作为独立高精度模块，必须提供 16-bit 分辨率以满足系统对测量精度的预算分配。",
+          "source_parameter": "resolution"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            2.0,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "系统数字电源轨为 3.3 V（由 TPS5430 生成）。典型高精度 ADC（如 ADS1115）工作电压范围为 2.0 V 至 5.5 V，能够兼容 3.3 V 供电。若使用 5 V 参考电压，输入范围可能扩展，但逻辑电平必须与 MCU 的 3.3 V I/O 兼容或具有可调参考能力。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档 1.3 节及 3.2.1 节明确规定工作温度为 -40°C ～ +85°C。所有关键器件必须为工业级（Industrial Grade）温度等级。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "sampling_rate",
+          "op": "cover",
+          "value": [
+            0.0,
+            860.0
+          ],
+          "unit": "SPS",
+          "reason": "需求文档 3.1.3 节指出采样率满足工业过程控制典型需求（< 100 kSPS，但对于 16-bit ADC 通常远低于此）。ADS1115 最高 860 SPS，足以满足大多数工业传感器（如温度、压力）的低频采集需求。过高的采样率会增加功耗和总线负载，非必需但属于常见能力。",
+          "source_parameter": "sampling_rate"
+        }
+      ],
+      "keywords": [
+        "ADC",
+        "Analog to Digital Converter",
+        "I2C ADC",
+        "SPI ADC",
+        "Sigma-Delta ADC",
+        "16-bit ADC"
+      ],
+      "note": "可选参数（未进条件）：package"
+    },
+    {
+      "id": "M-RELAY-DRV-001",
+      "module_name": "继电器驱动晶体管/光耦",
+      "module_type": "驱动",
+      "category": "分立半导体",
+      "leaf_code": "l_brushless_dc_bldc_motor_drive_chip",
+      "quantity": 4,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "isolation_voltage",
+          "op": ">=",
+          "value": 2500.0,
+          "unit": "Vrms",
+          "reason": "系统需求要求工业级 EMC 防护（Surge Level 3 ±2kV）。虽然继电器触点侧是高压/大电流侧，但驱动电路位于低压控制侧。为防止继电器侧的高压击穿或浪涌反窜至 MCU GPIO，必须在 MCU 与继电器线圈之间提供电气隔离。光耦或数字隔离器是首选，其隔离耐压应满足 IEC 61010 或类似工业标准的基本要求（通常 2.5kVrms 起步）。",
+          "source_parameter": "isolation_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 4.0,
+          "unit": "ch",
+          "reason": "模块 notes 明确指出 '假设4路控制'。因此需要 4 个独立的驱动通道。可以选择 4 颗单通道器件，或 1 颗四通道器件（如 ULN2003，但需注意 ULN2003 无隔离功能，若选则需额外隔离措施，故更倾向 4 颗光耦或 4 颗分立三极管+光耦组合）。",
+          "source_parameter": "channel_count"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -4.0,
+            -4.0
+          ],
+          "unit": "form_factor",
+          "reason": "系统采用 SMT 为主工艺。对于 4 路隔离驱动，SOP-4（单通道光耦）或 SOP-8（双通道光耦）是最常见的选择。若使用分立三极管方案，SOT-23 也是常见封装。需确保封装可自动贴装。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "继电器驱动三极管",
+        "光耦隔离器",
+        "NPN Transistor",
+        "Optocoupler",
+        "Solid State Relay Driver",
+        "GPIO Isolation"
+      ]
+    },
+    {
+      "id": "M-RELAY-001",
+      "module_name": "大功率继电器",
+      "module_type": "执行器与驱动",
+      "category": "继电器",
+      "leaf_code": "l_power_relay",
+      "quantity": 4,
+      "related_requirements": [],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "keywords": [
+        "Power Relay",
+        "大功率继电器",
+        "Omron G5Q",
+        "4路继电器",
+        "负载开关"
+      ],
+      "specified_device": {
+        "model": "G5Q-14",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-CLOCK-001",
+      "module_name": "有源晶振",
+      "module_type": "时钟源",
+      "category": "时钟器件",
+      "leaf_code": "l_clock_generator_frequency_synthesizer_pll",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "frequency",
+          "op": ">=",
+          "value": 25000000.0,
+          "unit": "Hz",
+          "reason": "以太网 PHY (如 LAN8720A/DP83848) 的 RMII 接口标准参考时钟频率为 25 MHz。若频率偏差过大，会导致以太网物理层无法同步或误码率极高。",
+          "source_parameter": "frequency"
+        },
+        {
+          "field": "output_type",
+          "op": "is",
+          "value": "['CMOS', 'LVCMOS']",
+          "reason": "STM32F4 和常见的百兆以太网 PHY (如 LAN8720A) 通常使用单端 CMOS/LVCMOS 时钟输入。虽然部分高端 PHY 支持差分 LVDS，但文档明确指出是 'Active Crystal' 且用于 STM32，单端是最通用且兼容的选择。若选用差分输出器件，需确认 MCU 和 PHY 是否同时支持差分接收，否则信号不兼容。鉴于文档未明确指定差分，单端为默认兼容项。",
+          "source_parameter": "output_type"
+        },
+        {
+          "field": "supply_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "系统核心电压轨 V_CORE_3V3 为 3.3 V。有源晶振的工作电压必须与供电网络一致。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档第 3.2.1 节明确规定工作温度为工业级 '-40 ℃ ～ +85 ℃'。器件在此范围外将失效或参数漂移超标。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "frequency_stability",
+          "op": "cover",
+          "value": [
+            -50.0,
+            50.0
+          ],
+          "unit": "ppm",
+          "reason": "以太网 100BASE-TX 标准要求时钟精度通常在 ±50 ppm 至 ±100 ppm 之间。±50 ppm 是工业级应用的常见高标准，确保长期稳定性及 EMC 性能。",
+          "source_parameter": "frequency_stability"
+        },
+        {
+          "field": "load_capacitance",
+          "op": "cover",
+          "value": [
+            0.0,
+            2e-11
+          ],
+          "unit": "F",
+          "reason": "有源晶振内部已包含振荡电路，外部通常只需去耦电容，无需负载电容匹配（Unlike 无源晶振）。但若器件规格书提供负载电容选项，选择低负载电容（如 10pF 或 15pF）可减少对外部寄生电容的敏感度，提高启动可靠性。此处主要关注其电气特性兼容性，通常有源晶振对负载电容不敏感，重点在于频率精度。",
+          "source_parameter": "load_capacitance"
+        }
+      ],
+      "keywords": [
+        "有源晶振",
+        "Active Crystal Oscillator",
+        "ACS",
+        "25MHz",
+        "时钟发生器",
+        "Clock Generator"
+      ],
+      "note": "可选参数（未进条件）：phase_jitter"
+    },
+    {
+      "id": "M-LED-001",
+      "module_name": "状态指示灯",
+      "module_type": "人机交互",
+      "category": "分立半导体",
+      "leaf_code": "l_light_emitting_diode_led",
+      "quantity": 4,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "forward_voltage",
+          "op": "cover",
+          "value": [
+            1.8,
+            3.6
+          ],
+          "reason": "系统核心电压为 3.3V。LED 正向压降 (Vf) 必须低于 3.3V 才能由 MCU GPIO 或 3.3V 电源直接驱动（通过限流电阻）。若 Vf > 3.3V 则无法点亮或需额外升压电路。常见红光/黄光 Vf~2V，蓝/白光 Vf~3V。",
+          "source_parameter": "forward_voltage"
+        },
+        {
+          "field": "reverse_voltage",
+          "op": ">=",
+          "value": 5.0,
+          "reason": "LED 通常为单向导通。当 GPIO 输出低电平时，LED 阴极接 GND，阳极通过电阻接 3.3V，此时 LED 承受反向电压接近 0V。但在故障情况或 MCU 引脚高阻态时，若电路设计存在反接风险，需一定反向耐压。标准 LED 反向击穿电压通常仅 5V，若 PCB 布线可能引入负电压噪声，需确保不击穿。此处作为电气安全底线。",
+          "source_parameter": "reverse_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统需求明确规定工作温度为 -40°C ～ +85°C。LED 在此范围内必须保持正常发光特性，无光衰失效或冷启动失败。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "forward_current",
+          "op": "<=",
+          "value": 20.0,
+          "reason": "标准指示 LED 典型驱动电流为 10-20 mA。考虑到工业环境可能需要较高亮度，器件额定值需支持 20 mA。同时，MCU GPIO 驱动能力有限（通常 ~20-25mA），且需考虑多路同时点亮时的功耗限制。",
+          "source_parameter": "forward_current"
+        }
+      ],
+      "keywords": [
+        "LED指示灯",
+        "Surface Mount LED",
+        "0603 LED",
+        "0805 LED",
+        "Status Indicator LED",
+        "发光二极管"
+      ],
+      "note": "可选参数（未进条件）：luminous_intensity"
+    },
+    {
+      "id": "M-DBG-001",
+      "module_name": "调试接口",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 20.0,
+          "unit": "pins",
+          "reason": "模块描述明确指定为 '2x10 Pin'。标准 ARM JTAG/SWD 接口通常使用 10-pin (2x5) 或 20-pin (2x10) 布局。此处明确要求 20 引脚以支持完整 JTAG 信号及可能的额外 UART/电源引脚。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "interface_type",
+          "op": "is",
+          "value": "['SWD', 'JTAG']",
+          "reason": "模块描述指出用于 'SWD/JTAG调试及串口打印输出'。排针本身是无源器件，但作为调试接口的物理载体，其引脚定义必须符合 ARM 标准的 SWD/JTAG 引脚排列（如 Pin 9=GND, Pin 7=SWCLK, Pin 8=SWDIO 等常见定义），以确保调试器能正确识别。",
+          "source_parameter": "interface_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统整体工作温度要求为工业级 (-40°C ～ +85°C)。连接器材料（塑料体、金属触点镀层）必须在整个温度范围内保持机械强度和电气稳定性，否则低温下塑料脆裂或高温下接触电阻增大会导致调试失败。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "A",
+          "reason": "虽然调试信号线电流极小，但该排针可能包含 VCC_3.3V 引脚供调试器供电或从板载取电。考虑到工业环境可靠性及潜在的峰值电流，接触额定值应满足常规连接器标准（通常 >0.5A）。",
+          "source_parameter": "contact_current_rating"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "through_hole",
+          "reason": "工业控制板通常面临振动环境。虽然 SMT 排针体积更小，但通孔 (Through-Hole) 提供更高的机械强度，符合 'IP20防护及工业级EMC设计' 中对可靠性的隐含要求。若空间受限选用 SMT，需确认是否有焊盘加固或点胶工艺。",
+          "source_parameter": "mounting_style"
+        }
+      ],
+      "keywords": [
+        "排针",
+        "Pin Header",
+        "2x10 Pin",
+        "2.54mm",
+        "调试接口",
+        "SWD/JTAG"
+      ],
+      "note": "可选参数（未进条件）：insulation_resistance"
+    },
+    {
+      "id": "M-PWR-IN-001",
+      "module_name": "电源输入端子",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "mm",
+          "reason": "模块分类及描述明确指定为 '5.0mm Pitch'，且依赖系统PCB布局。若间距不符将无法装配。",
+          "source_parameter": "pitch"
+        },
+        {
+          "field": "input_voltage_max",
+          "op": ">=",
+          "value": 48.0,
+          "unit": "V",
+          "reason": "需求文档第2章及第3章明确输入范围为 9-48V DC（修正后）。端子耐压必须覆盖此最大值，否则存在击穿或爬电距离不足的安全风险。",
+          "source_parameter": "input_voltage_max"
+        },
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "A",
+          "reason": "系统峰值电流估算为 1.5 A，但考虑到工业级可靠性余量（通常要求 2-3 倍）及模块清单中工程假设的 '≥ 5 A'，端子需具备足够的载流能力以防止过热失效。",
+          "source_parameter": "rated_current"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_type",
+          "op": "is",
+          "value": "['screw_terminal', 'push_in']",
+          "reason": "用于外部直流电源接入，Phoenix Contact Type 通常指代螺钉式或弹簧式（Push-in）接线端子，需兼容现场安装工艺。",
+          "source_parameter": "contact_type"
+        }
+      ],
+      "keywords": [
+        "接线端子",
+        "Terminal Block",
+        "PCB Terminal",
+        "5.0mm Pitch",
+        "电源输入端子",
+        "Phoenix Contact Type"
+      ]
+    }
+  ]
+}

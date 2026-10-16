@@ -1,0 +1,834 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>器件选型 · AI 辅助</title>
+<style>
+  :root {
+    --bg: #f5f6f8;
+    --panel: #ffffff;
+    --line: #e3e6ec;
+    --line-strong: #cdd3dd;
+    --text: #1c2230;
+    --muted: #6b7488;
+    --accent: #2f6df6;
+    --ok: #17864a;
+    --ok-bg: #e8f6ee;
+    --bad: #c0392b;
+    --bad-bg: #fdecea;
+    --warn: #9a6700;
+    --warn-bg: #fdf4e0;
+    --chip: #eef1f7;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font: 14px/1.55 -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: var(--text);
+    background: var(--bg);
+  }
+  header {
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    padding: 12px 20px; background: var(--panel); border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; z-index: 10;
+  }
+  header h1 { font-size: 16px; margin: 0; font-weight: 600; }
+  header .sub { color: var(--muted); font-size: 12px; }
+  .chips { display: flex; gap: 8px; margin-left: auto; flex-wrap: wrap; }
+  .chip {
+    background: var(--chip); border-radius: 999px; padding: 4px 11px;
+    font-size: 12px; color: var(--muted); white-space: nowrap;
+  }
+  .chip b { color: var(--text); font-weight: 600; }
+  .chip.good b { color: var(--ok); }
+  .chip.bad b { color: var(--bad); }
+  .chip.warn b { color: var(--warn); }
+
+  main { display: grid; grid-template-columns: 252px 340px minmax(0, 1fr); gap: 14px; padding: 14px; align-items: start; }
+  @media (max-width: 1400px) { main { grid-template-columns: 240px minmax(0, 1fr); } #chat { grid-column: 1; grid-row: 2; } }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; } #projects, #chat { position: static; } }
+
+  /* 项目列表 */
+  #projects { max-height: calc(100vh - 96px); overflow-y: auto; position: sticky; top: 76px; }
+  .pgroup { border-bottom: 1px solid var(--line); }
+  .pgroup > summary {
+    cursor: pointer; padding: 9px 12px; font-size: 12px; color: var(--muted);
+    display: flex; align-items: center; gap: 6px; user-select: none;
+  }
+  .pgroup > summary::-webkit-details-marker { display: none; }
+  .pgroup > summary::before { content: "▸"; font-size: 10px; transition: transform .15s; }
+  .pgroup[open] > summary::before { transform: rotate(90deg); }
+  .pgroup > summary b { color: var(--text); }
+  .pitem {
+    padding: 7px 12px 7px 20px; cursor: pointer; border-left: 3px solid transparent;
+    display: block; text-decoration: none; color: inherit;
+  }
+  .pitem:hover { background: #f4f7ff; }
+  .pitem.active { background: #eaf1ff; border-left-color: var(--accent); }
+  .pitem .t { font-size: 13px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pitem .m { font-size: 11px; color: var(--muted); display: block; margin-top: 1px; }
+  .pitem .m .ok { color: var(--ok); }
+  .pitem .m .warn { color: var(--warn); }
+  .pitem.running { opacity: .6; }
+  .pempty { padding: 14px; font-size: 12px; color: var(--muted); }
+
+  /* 运行条：选型由这里显式触发，不再点项目就自动跑 */
+  .runbar { margin-bottom: 14px; padding: 12px 14px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .runbar .grow { flex: 1; min-width: 200px; }
+  .runbar .rb-title { font-size: 14px; font-weight: 600; }
+  .runbar .rb-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .runbar button {
+    font: inherit; font-size: 13px; border-radius: 8px; padding: 8px 16px; cursor: pointer;
+    border: 1px solid var(--accent); background: var(--accent); color: #fff; white-space: nowrap;
+  }
+  .runbar button.ghost { background: #fff; color: var(--accent); }
+  .runbar button:disabled { opacity: .55; cursor: progress; }
+  .runbar .state { font-size: 12px; padding: 3px 10px; border-radius: 999px; background: var(--chip); color: var(--muted); }
+  .runbar .state.ok { background: var(--ok-bg); color: var(--ok); }
+  .runbar .state.warn { background: var(--warn-bg); color: var(--warn); }
+  .runbar .state.bad { background: var(--bad-bg); color: var(--bad); }
+
+  /* 可折叠的选型项 */
+  details.item > summary {
+    list-style: none; cursor: pointer; display: flex; align-items: center;
+    gap: 10px; padding: 12px 14px; flex-wrap: wrap;
+  }
+  details.item > summary::-webkit-details-marker { display: none; }
+  details.item > summary::before { content: "▾"; color: var(--muted); font-size: 11px; }
+  details.item:not([open]) > summary::before { content: "▸"; }
+  details.item:not([open]) > summary { border-bottom: 0; }
+
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; }
+  .panel > h2 {
+    font-size: 13px; margin: 0; padding: 12px 14px; border-bottom: 1px solid var(--line);
+    font-weight: 600; display: flex; align-items: center; gap: 8px;
+  }
+  .panel > h2 small { color: var(--muted); font-weight: 400; }
+
+  /* 对话 */
+  #chat { display: flex; flex-direction: column; height: calc(100vh - 96px); position: sticky; top: 76px; }
+  #messages { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .msg { max-width: 96%; padding: 9px 12px; border-radius: 10px; white-space: pre-wrap; word-break: break-word; }
+  .msg.user { align-self: flex-end; background: var(--accent); color: #fff; }
+  .msg.bot { align-self: flex-start; background: var(--chip); }
+  .msg.bot b { color: var(--text); }
+  .hints { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 8px; }
+  .hints button {
+    font: inherit; font-size: 12px; background: #fff; border: 1px solid var(--line-strong);
+    border-radius: 999px; padding: 3px 10px; cursor: pointer; color: var(--muted);
+  }
+  .hints button:hover { border-color: var(--accent); color: var(--accent); }
+  #chat form { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--line); }
+  #chat input {
+    flex: 1; font: inherit; padding: 8px 10px; border: 1px solid var(--line-strong);
+    border-radius: 8px; outline: none;
+  }
+  #chat input:focus { border-color: var(--accent); }
+  #chat button[type=submit] {
+    font: inherit; background: var(--accent); color: #fff; border: 0; border-radius: 8px; padding: 8px 14px; cursor: pointer;
+  }
+
+  /* 清单 */
+  .item { margin-bottom: 14px; }
+  .item-head {
+    display: flex; align-items: center; gap: 10px; padding: 12px 14px; flex-wrap: wrap;
+    border-bottom: 1px solid var(--line);
+  }
+  .item-head .id { font-weight: 600; }
+  .item-head .cat { color: var(--muted); font-size: 12px; }
+  .item-head .spacer { margin-left: auto; }
+  .badge { border-radius: 999px; padding: 2px 9px; font-size: 12px; white-space: nowrap; }
+  .badge.ok { background: var(--ok-bg); color: var(--ok); }
+  .badge.bad { background: var(--bad-bg); color: var(--bad); }
+  .badge.warn { background: var(--warn-bg); color: var(--warn); }
+  .badge.mute { background: var(--chip); color: var(--muted); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 500; font-size: 12px; background: #fafbfd; }
+  tbody tr:hover { background: #f8faff; }
+  td.model { font-weight: 600; white-space: nowrap; }
+  td.model small { display: block; color: var(--muted); font-weight: 400; }
+  ul.tight { margin: 0; padding-left: 16px; }
+  ul.tight li { margin: 1px 0; }
+  .ok-text { color: var(--ok); }
+  .bad-text { color: var(--bad); }
+  .warn-text { color: var(--warn); }
+  .muted { color: var(--muted); }
+
+  .actions { display: flex; gap: 4px; flex-wrap: wrap; }
+  .actions button {
+    font: inherit; font-size: 12px; border: 1px solid var(--line-strong); background: #fff;
+    border-radius: 6px; padding: 2px 8px; cursor: pointer; color: var(--muted);
+  }
+  .actions button:hover { border-color: var(--accent); color: var(--accent); }
+  .actions button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  details { border-top: 1px dashed var(--line); }
+  details > summary { cursor: pointer; padding: 8px 12px; color: var(--muted); font-size: 12px; }
+  .verdicts { padding: 4px 12px 14px; display: grid; gap: 6px; }
+  .verdict { display: grid; grid-template-columns: 74px 1fr; gap: 8px; font-size: 12px; }
+  .verdict .tag { border-radius: 4px; text-align: center; padding: 1px 0; }
+  .blocked { padding: 12px 14px; color: var(--bad); background: var(--bad-bg); font-size: 13px; }
+  .empty { padding: 24px; text-align: center; color: var(--muted); }
+  code { background: var(--chip); padding: 0 4px; border-radius: 4px; font-size: 12px; }
+  .handoff { margin-bottom: 14px; padding: 12px 14px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .handoff .grow { flex: 1; min-width: 220px; }
+  .handoff h2 { font-size: 13px; margin: 0 0 4px; }
+  .handoff p { margin: 0; color: var(--muted); font-size: 12px; }
+  .handoff button {
+    font: inherit; font-size: 13px; border: 1px solid var(--accent); background: var(--accent);
+    color: #fff; border-radius: 8px; padding: 7px 14px; cursor: pointer; white-space: nowrap;
+  }
+  .handoff button.ghost { background: #fff; color: var(--accent); }
+  .handoff button.on { background: #1b4fd0; border-color: #1b4fd0; color: #fff; }
+  .handoff button:disabled { opacity: .5; cursor: not-allowed; }
+  .out { margin-bottom: 14px; padding: 14px; }
+  .out[hidden] { display: none; }
+  .out h3 { font-size: 13px; margin: 0 0 10px; }
+  .verdict-line { display: flex; align-items: center; gap: 8px; font-size: 13px; margin-bottom: 12px; }
+  .verdict-line .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  .verdict-line.ok .dot { background: var(--ok); }
+  .verdict-line.bad .dot { background: var(--bad); }
+  .kpis { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+  .kpi { background: var(--chip); border-radius: 8px; padding: 6px 12px; font-size: 12px; color: var(--muted); }
+  .kpi b { color: var(--text); font-size: 15px; margin-left: 5px; }
+  .exp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .exp-table th, .exp-table td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+  .exp-table th { font-size: 12px; color: var(--muted); font-weight: 500; background: #fafbfd; }
+  .exp-note { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
+  .exp-note li { margin: 2px 0; }
+  details.raw { margin-top: 12px; }
+  details.raw summary { cursor: pointer; font-size: 12px; color: var(--muted); }
+  details.raw pre {
+    margin: 8px 0 0; padding: 12px; background: #0f1626; color: #d6e2f5;
+    border-radius: 8px; font-size: 12px; max-height: 300px; overflow: auto; white-space: pre-wrap;
+  }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1 id="project">器件选型</h1>
+    <div class="sub" id="project-sub">正在加载…</div>
+  </div>
+  <a id="back-link" href="http://localhost:8878/" target="_blank" rel="noopener"
+     style="font-size:12px;color:var(--accent);text-decoration:none;white-space:nowrap">
+     ← 回到需求分析工作台
+  </a>
+  <div class="chips" id="chips"></div>
+</header>
+
+<main>
+  <aside class="panel" id="projects">
+    <h2>项目 <small id="studio-state">连接中…</small></h2>
+    <div id="project-list"></div>
+  </aside>
+
+  <section class="panel" id="chat">
+    <h2>选型助手 <small>基于真实器件库作答</small></h2>
+    <div id="messages"></div>
+    <div class="hints" id="hints">
+      <button>总结一下当前清单</button>
+      <button>为什么选 TPS5450DDAR</button>
+      <button>查一下 LM358</button>
+      <button>预算改成 100</button>
+      <button>把 SEL-002 的输出电流改成 800mA</button>
+    </div>
+    <form id="chat-form">
+      <input id="chat-input" placeholder="描述需求，或问某个候选为什么被推荐" autocomplete="off" />
+      <button type="submit">发送</button>
+    </form>
+  </section>
+
+  <div>
+    <section class="panel runbar" id="runbar" hidden></section>
+    <section class="panel handoff">
+      <div class="grow">
+        <h2>交付与交接</h2>
+        <p id="handoff-status">先在下面的清单里做决定，再导出。</p>
+      </div>
+      <button id="btn-candidates" class="ghost">查看最终候选清单</button>
+      <button id="btn-handoff">导出下游交接文件</button>
+    </section>
+    <section class="panel out" id="handoff-out" hidden></section>
+    <section id="list"></section>
+  </div>
+</main>
+
+<script>
+const fitLabel = { recommended: "推荐", acceptable: "可接受", conditional: "有条件", unjudged: "未核对", excluded: "已淘汰" };
+const fitClass = { recommended: "ok", acceptable: "ok", conditional: "warn", unjudged: "mute", excluded: "bad" };
+const decisionLabel = { keep: "保留", exclude: "排除", discuss: "待讨论", confirmed: "已确认" };
+
+let state = { spec: null, result: null, decisions: {} };
+let workspace = { projects: [], current: "", remote: {} };
+let busyProject = "";
+
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+/** 成本单元格：单价已知就写清楚单价×数量=小计；未知就明说单价待确认、未计入合计。 */
+function costCell(c) {
+  const qty = Number(c.quantity || 1);
+  if (c.unit_price_cny === null || c.unit_price_cny === undefined) {
+    return `<span class="warn-text">单价待确认</span>`
+      + `<small class="muted">数量 ${qty} · 未计入合计</small>`;
+  }
+  const unit = "¥" + Number(c.unit_price_cny).toFixed(2);
+  const total = c.line_total_cny === null || c.line_total_cny === undefined
+    ? ""
+    : ` = ¥${Number(c.line_total_cny).toFixed(2)}`;
+  return `${unit}<small class="muted">× ${qty}${total}</small>`;
+}
+
+function verdictList(verdicts, cls, prefix) {
+  if (!verdicts.length) return '<span class="muted">—</span>';
+  return '<ul class="tight">' + verdicts.map((v) =>
+    `<li class="${cls}">${prefix} ${esc(v.field)}：${esc(v.device_value)}</li>`).join("") + "</ul>";
+}
+
+function candidateRow(item, c) {
+  const ev = c.evaluation;
+  const keyParams = (c.key_attributes || []).slice(0, 4)
+    .map((a) => `<li>${esc(a.name_zh)} ${esc(a.value_text || a.value_normalized)}</li>`).join("");
+
+  const pros = ev.satisfied.length
+    ? '<ul class="tight">' + ev.satisfied.map((v) =>
+        `<li class="ok-text">满足 ${esc(v.field)}（${esc(v.device_value)}）</li>`).join("") + "</ul>"
+    : '<span class="muted">—</span>';
+
+  const cons = [];
+  ev.violated.forEach((v) => cons.push(`<li class="bad-text">不满足 ${esc(v.field)}：${esc(v.device_value)}</li>`));
+  ev.unknown.forEach((v) => cons.push(`<li class="warn-text">待补证据 ${esc(v.field)}：${esc(v.note)}</li>`));
+  if (c.price_status !== "confirmed") cons.push('<li class="warn-text">成本缺少证据，按待确认处理</li>');
+  const consHtml = cons.length ? '<ul class="tight">' + cons.join("") + "</ul>" : '<span class="muted">—</span>';
+
+  const decisionKey = item.selection_item.id + "::" + c.model;
+  const decision = (state.decisions[decisionKey] || {}).decision || "";
+  const buttons = ["keep", "exclude", "discuss", "confirmed"].map((d) =>
+    `<button data-model="${esc(c.model)}" data-item="${esc(item.selection_item.id)}" data-decision="${d}"
+      class="${decision === d ? "on" : ""}">${decisionLabel[d]}</button>`).join("");
+
+  const detail = `
+    <details>
+      <summary>展开证据（${ev.satisfied.length + ev.violated.length + ev.unknown.length} 条判定 · 数据源 ${esc(c.leaf_name_zh || c.leaf_code)}）</summary>
+      <div class="verdicts">
+        ${[...ev.satisfied, ...ev.violated, ...ev.unknown].map((v) => {
+          const tag = v.state === "satisfied" ? "ok" : v.state === "violated" ? "bad" : "warn";
+          return `<div class="verdict">
+            <span class="tag badge ${tag}">${v.state === "satisfied" ? "满足" : v.state === "violated" ? "不满足" : "未知"}</span>
+            <span><b>${esc(v.field)}</b> · 需求 ${esc(v.op)} ${esc(v.required)}${esc(v.unit || "")}
+            → 器件 <b>${esc(v.device_value)}</b><br><span class="muted">${esc(v.note)}
+            ${v.related_requirement ? " · 来源 " + esc(v.related_requirement) : ""}</span></span>
+          </div>`;
+        }).join("") || '<div class="muted">没有条件需要判定。</div>'}
+        <div class="muted">器件记录：<code>device_id=${esc(c.device_id)}</code>
+          ${c.supplier_part ? ` · 立创 <code>${esc(c.supplier_part)}</code>` : ""}
+          ${c.milvus_locator ? ` · 手册 <code>${esc(c.milvus_locator)}</code>` : ""}</div>
+      </div>
+    </details>`;
+
+  return `<tr>
+    <td class="model">${esc(c.model)}<small>${esc(c.manufacturer || "厂商未记录")}</small></td>
+    <td>${keyParams ? '<ul class="tight">' + keyParams + "</ul>" : '<span class="muted">—</span>'}</td>
+    <td>${pros}</td>
+    <td>${consHtml}</td>
+    <td>${costCell(c)}</td>
+    <td><span class="badge ${fitClass[ev.fit]}">${fitLabel[ev.fit]}</span>
+        <small class="muted">证据 ${Math.round(ev.confidence * 100)}%</small></td>
+    <td><div class="actions">${buttons}</div></td>
+  </tr>
+  <tr><td colspan="7" style="padding:0">${detail}</td></tr>`;
+}
+
+function itemBlock(item) {
+  const si = item.selection_item;
+  const visible = item.candidates.filter((c) => !c.evaluation.excluded).slice(0, 3);
+  const excluded = item.candidates.filter((c) => c.evaluation.excluded);
+  const status = item.primary_candidates.length
+    ? (item.unverified
+        ? `<span class="badge mute">未核对（无判定条件）</span>`
+        : `<span class="badge ok">有推荐</span>`)
+    : `<span class="badge bad">阻塞</span>`;
+  const body = visible.length
+    ? `<table>
+        <thead><tr>
+          <th style="width:15%">器件型号</th><th style="width:22%">关键参数</th>
+          <th style="width:19%">优势</th><th style="width:22%">劣势与风险</th>
+          <th style="width:9%">成本</th><th style="width:9%">结论</th><th style="width:12%">你的决定</th>
+        </tr></thead>
+        <tbody>${visible.map((c) => candidateRow(item, c)).join("")}</tbody>
+      </table>`
+    : `<div class="blocked">${(item.blocked_by || ["没有可用候选"]).map(esc).join("<br>")}</div>`;
+
+  const excludedHtml = excluded.length
+    ? `<details><summary>已淘汰 ${excluded.length} 个候选（违反硬性条件，不参与推荐）</summary>
+        <div class="verdicts">${excluded.map((c) => `<div class="verdict">
+          <span class="tag badge bad">淘汰</span>
+          <span><b>${esc(c.model)}</b> · ${c.evaluation.violated.filter((v) => v.hard).map((v) => esc(v.field) + "：" + esc(v.device_value)).join("；")}</span>
+        </div>`).join("")}</div></details>`
+    : "";
+
+  return `<details class="panel item" open>
+    <summary class="item-head">
+      <span class="id">${esc(si.id)}</span>
+      <span class="cat">${esc(si.category || si.leaf_code || "未标类别")} · 数量 ${esc(si.quantity)}
+        ${si.related_requirements?.length ? " · 关联需求 " + si.related_requirements.map(esc).join("、") : ""}</span>
+      <span class="spacer"></span>
+      <span class="chip">召回方式 <b>${esc(item.recall)}</b></span>
+      <span class="chip">候选 <b>${item.candidate_count}</b></span>
+      ${status}
+    </summary>
+    ${body}
+    ${excludedHtml}
+  </details>`;
+}
+
+function render() {
+  const { spec, result } = state;
+  if (!result) return;
+  const current = (workspace.projects || []).find(
+    (p) => p.project_id === workspace.current
+  );
+  document.getElementById("project").textContent =
+    current?.title || (spec?.project?.name) || "器件选型";
+  document.getElementById("project-sub").textContent = current
+    ? `上游项目 ${workspace.current.slice(0, 8)} · 需求版本 v${current.version ?? "—"} · 本阶段已自动处理`
+    : `内置示例清单 · 需求版本 ${result.requirement_version || "未标注"}`;
+
+  const s = result.summary;
+  document.getElementById("chips").innerHTML = [
+    `<span class="chip">选型项 <b>${s.total_items}</b></span>`,
+    `<span class="chip good">有推荐 <b>${s.items_with_recommendation}</b></span>`,
+    `<span class="chip warn">未核对 <b>${s.items_unverified ?? 0}</b></span>`,
+    `<span class="chip ${s.items_blocked ? "bad" : ""}">阻塞 <b>${s.items_blocked}</b></span>`,
+    `<span class="chip warn">成本待确认 <b>${s.cost_unconfirmed_items.length}</b></span>`,
+    `<span class="chip">器件库 <b>${result.data_sources?.database?.database ? "已连接" : "未连接"}</b></span>`,
+  ].join("");
+
+  document.getElementById("list").innerHTML = result.items.map(itemBlock).join("")
+    || '<div class="panel empty">需求清单里还没有选型项。</div>';
+
+  document.querySelectorAll(".actions button").forEach((btn) => {
+    btn.onclick = async () => {
+      const model = btn.dataset.model;
+      const itemId = btn.dataset.item;
+      const decision = btn.dataset.decision;
+      const current = (state.decisions[itemId + "::" + model] || {}).decision;
+      const next = current === decision ? "" : decision;
+      const res = await fetch("/api/decision", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ model, decision: next, item_id: itemId }),
+      });
+      const data = await res.json();
+      if (data.decisions) state.decisions = data.decisions;
+      render();
+    };
+  });
+
+  const decided = Object.values(state.decisions || {});
+  const selected = decided.filter((d) => d.decision === "confirmed");
+  const shortlisted = decided.filter((d) => d.decision === "keep");
+  document.getElementById("handoff-status").textContent = decided.length
+    ? `已记录 ${decided.length} 条决定：已确认 ${selected.length} 个，保留待定 ${shortlisted.length} 个。`
+      + "只有「已确认」的器件会导出给下游，「保留」只是进候选短名单。"
+    : "还没有记录任何决定。点右边每行的按钮：保留＝进短名单继续比较，已确认＝最终选定（只有它会导出），待讨论＝有未知待补，排除＝不再考虑。";
+}
+
+let activeExport = null;   // 记住当前展开的是哪一块，再点同一个按钮就收起
+
+function rawDetails(data) {
+  return `<details class="raw"><summary>查看原始 JSON</summary>`
+    + `<pre>${esc(JSON.stringify(data, null, 2))}</pre></details>`;
+}
+
+/** 最终候选名单：按选型项给结论，细节留在下方主清单和原始 JSON 里。 */
+function renderCandidates(data) {
+  const s = data.decision_summary || {};
+  const statusMap = {
+    confirmed: ["ok", "已确认"],
+    selected: ["ok", "已选定"],
+    discussing: ["warn", "讨论中"],
+    undecided: ["mute", "未决定"],
+  };
+  const rows = (data.items || []).map((item) => {
+    const si = item.selection_item || {};
+    const candidates = item.candidates || [];
+    const picked = candidates.filter(
+      (c) => c.user_decision && c.user_decision.decision === "confirmed"
+    );
+    const shortlisted = candidates.filter(
+      (c) => c.user_decision && c.user_decision.decision === "keep"
+    );
+    const excluded = candidates.filter((c) => c.evaluation && c.evaluation.excluded).length;
+    const [cls, label] = statusMap[item.decision_status] || ["mute", item.decision_status || "—"];
+    const pickedHtml = picked.length
+      ? picked.map((c) => `<div>${esc(c.model)}`
+          + `<small class="muted"> ${esc(c.user_decision.label)}`
+          + `${c.supplier_part ? " · " + esc(c.supplier_part) : ""}</small></div>`).join("")
+      : '<span class="muted">未选定器件</span>';
+    const costHtml = picked.length
+      ? picked.map((c) => (c.unit_price_cny === null || c.unit_price_cny === undefined)
+          ? '<span class="warn-text">单价待确认</span>'
+          : `¥${Number(c.unit_price_cny).toFixed(2)} × ${c.quantity}`).join("<br>")
+      : '<span class="muted">—</span>';
+    return `<tr>
+      <td><b>${esc(si.module_name || si.category || si.id)}</b>
+          <small class="muted">${esc(si.id)} · 数量 ${esc(si.quantity)}</small></td>
+      <td><span class="badge ${cls}">${label}</span></td>
+      <td>${pickedHtml}${shortlisted.length
+        ? `<small class="muted">另有保留待确认：${shortlisted.map((c) => esc(c.model)).join("、")}</small>`
+        : ""}</td>
+      <td>${costHtml}</td>
+      <td><small class="muted">候选 ${candidates.length} 个，其中淘汰 ${excluded} 个</small></td>
+    </tr>`;
+  }).join("");
+
+  return `
+    <h3>最终候选名单（pcbagent.candidate_set.v1）</h3>
+    <div class="kpis">
+      <span class="kpi">选型项<b>${data.items?.length ?? 0}</b></span>
+      <span class="kpi">已记录决定<b>${s.recorded ?? 0}</b></span>
+      <span class="kpi">选定器件<b>${(s.selected_models || []).length}</b></span>
+      <span class="kpi">待决定选型项<b>${s.items_pending ?? 0}</b></span>
+    </div>
+    <table class="exp-table">
+      <thead><tr><th>选型项</th><th>状态</th><th>选定器件</th><th>成本</th><th>候选</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <p class="exp-note">候选的逐条判定依据在下方主清单里展开查看；成本为空表示器件库里没有价格证据，
+    按待确认处理，不计入合计。</p>
+    <p class="exp-note">完整的候选与逐条判定依据在下方的选型清单里，不在这里重复展开。</p>`;
+}
+
+/** 下游交接文件：先说能不能用，再说带了什么、漏了什么。 */
+function renderHandoff(data) {
+  const ok = data.validation === "passed";
+  const skipped = data.diagnostics?.skipped || [];
+  const modules = data.modules || [];
+  const rows = modules.map((entry) => {
+    const device = (entry.selected_devices || [])[0]?.device || {};
+    const matched = device.matched_requirements || [];
+    const risks = device.risks || [];
+    return `<tr>
+      <td><b>${esc(entry.module?.name || entry.module?.id)}</b>
+          <small class="muted">${esc(entry.module?.id)}</small></td>
+      <td>${esc(device.model || "—")}
+          <small class="muted">${esc(device.supplier_part || "无料号")}</small></td>
+      <td>${esc(device.verification_status || "—")}</td>
+      <td>${matched.length ? matched.map((m) => `<div>${esc(m)}</div>`).join("") : "—"}</td>
+      <td>${risks.length ? risks.map((r) => `<div class="warn-text">${esc(r)}</div>`).join("") : "—"}</td>
+    </tr>`;
+  }).join("");
+
+  return `
+    <h3>下游交接文件（pcbagent.netlist_input.v1）</h3>
+    <div class="verdict-line ${ok ? "ok" : "bad"}">
+      <span class="dot"></span>
+      <span>${ok
+        ? "已通过下游官方校验器，可以直接交给网表生成流程"
+        : "未通过校验：" + esc(data.validation_error || data.error || "原因未知")}</span>
+    </div>
+    <div class="kpis">
+      <span class="kpi">导出模块<b>${data.diagnostics?.exported_modules ?? modules.length}</b></span>
+      <span class="kpi">未导出选型项<b>${skipped.length}</b></span>
+    </div>
+    ${rows ? `<table class="exp-table">
+      <thead><tr><th>模块</th><th>器件</th><th>资料核验</th><th>满足的要求</th><th>风险</th></tr></thead>
+      <tbody>${rows}</tbody></table>` : ""}
+    ${skipped.length
+      ? `<p class="exp-note">以下选型项没有导出：</p>
+         <ul class="exp-note">${skipped.map((s) => `<li><b>${esc(s.item_id)}</b>：${esc(s.reason)}</li>`).join("")}</ul>`
+      : ""}
+    ${rawDetails(data)}`;
+}
+
+async function showExport(kind) {
+  const out = document.getElementById("handoff-out");
+  const buttons = {
+    handoff: document.getElementById("btn-handoff"),
+    candidates: document.getElementById("btn-candidates"),
+  };
+  const setActive = (active) => {
+    Object.values(buttons).forEach((b) => b.classList.remove("on"));
+    if (active) buttons[active].classList.add("on");
+  };
+
+  // 再点一次同一个按钮 = 收起
+  if (activeExport === kind) {
+    activeExport = null;
+    out.hidden = true;
+    out.innerHTML = "";
+    setActive(null);
+    return;
+  }
+
+  activeExport = kind;
+  setActive(kind);
+  out.hidden = false;
+  out.innerHTML = '<p class="exp-note">正在生成…</p>';
+  try {
+    const res = await fetch(kind === "handoff" ? "/api/export/handoff" : "/api/export/candidates");
+    const data = await res.json();
+    out.innerHTML = kind === "handoff" ? renderHandoff(data) : renderCandidates(data);
+  } catch (err) {
+    out.innerHTML = `<p class="exp-note">导出失败：${esc(err)}</p>`;
+  }
+}
+
+function pushMessage(role, text) {
+  const box = document.getElementById("messages");
+  const div = document.createElement("div");
+  div.className = "msg " + role;
+  div.textContent = text;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+  return div;
+}
+
+async function send(message) {
+  if (!message.trim()) return;
+  pushMessage("user", message);
+  const pending = pushMessage("bot", "正在处理…");
+  try {
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message }),
+    });
+    const data = await res.json();
+    pending.textContent = data.reply || "（没有回复）";
+    if (data.changed) await load();
+  } catch (err) {
+    pending.textContent = "请求失败：" + err;
+  }
+}
+
+async function load() {
+  const res = await fetch("/api/state");
+  const data = await res.json();
+  state = { spec: data.spec, result: data.result, decisions: data.decisions || {} };
+  workspace = data;
+  renderProjects();
+  renderRunbar();
+  render();
+}
+
+/** 项目列表：按「已处理 / 未处理」分组，组本身可折叠。 */
+function renderProjects() {
+  const box = document.getElementById("project-list");
+  const remote = workspace.remote || {};
+  const studio = document.getElementById("studio-state");
+  studio.textContent = remote.ok === false
+    ? "工作台未连接"
+    : remote.ok ? "已连接工作台" : "连接中…";
+  studio.style.color = remote.ok === false ? "var(--bad)" : "";
+
+  const rows = workspace.projects || [];
+  if (!rows.length) {
+    box.innerHTML = `<div class="pempty">${remote.ok === false
+      ? "读不到项目列表：" + esc(remote.error || "工作台未启动")
+      : "工作台还没有项目。"}</div>`;
+    return;
+  }
+  const done = rows.filter((r) => r.status === "ready" || r.status === "loaded");
+  const waiting = rows.filter((r) => r.status === "waiting");
+  const failed = rows.filter((r) => r.status === "error");
+  const todo = rows.filter(
+    (r) => !["ready", "loaded", "waiting", "error"].includes(r.status)
+  );
+
+  const rowHtml = (r) => {
+    const active = workspace.current === r.project_id ? " active" : "";
+    const running = busyProject === r.project_id ? " running" : "";
+    let meta;
+    if (r.status === "ready") {
+      meta = `选型项 ${r.items} · <span class="ok">推荐 ${r.recommended}</span>`
+        + (r.unverified ? ` · <span class="warn">未核对 ${r.unverified}</span>` : "");
+    } else if (r.status === "loaded") {
+      meta = `选型项 ${r.items} · 已就绪，按「开始选型」执行`;
+    } else if (r.status === "waiting") {
+      meta = `<span class="warn">等待上游完成需求分析</span>`;
+    } else if (r.status === "error") {
+      meta = `<span class="warn">处理出错</span>`;
+    } else if (r.status === "running") {
+      meta = "处理中…";
+    } else {
+      meta = `v${r.version ?? "—"} · 点一下载入交接件`;
+    }
+    return `<a class="pitem${active}${running}" data-project="${esc(r.project_id)}" title="${esc(r.title)}">
+      <span class="t">${esc(r.title)}</span>
+      <span class="m">${meta}</span>
+    </a>`;
+  };
+
+  box.innerHTML = `
+    <details class="pgroup" open>
+      <summary>已载入 <b>${done.length}</b></summary>
+      ${done.length ? done.map(rowHtml).join("") : '<div class="pempty">还没有载入过项目</div>'}
+    </details>
+    ${waiting.length ? `<details class="pgroup" open><summary>等待上游 <b>${waiting.length}</b></summary>${waiting.map(rowHtml).join("")}</details>` : ""}
+    <details class="pgroup">
+      <summary>未处理 <b>${todo.length}</b></summary>
+      ${todo.length ? todo.map(rowHtml).join("") : '<div class="pempty">没有待处理项目</div>'}
+    </details>
+    ${failed.length ? `<details class="pgroup"><summary>失败 <b>${failed.length}</b></summary>${failed.map(rowHtml).join("")}</details>` : ""}
+    <details class="pgroup">
+      <summary>示例</summary>
+      <a class="pitem${workspace.current ? "" : " active"}" data-project="__demo__">
+        <span class="t">内置示例清单</span>
+        <span class="m">不需要工作台，随时可看</span>
+      </a>
+    </details>`;
+
+  box.querySelectorAll(".pitem").forEach((node) => {
+    node.onclick = () => openProject(node.dataset.project);
+  });
+}
+
+/** 点项目：只把交接件取回来并切换过去，**不自动跑选型**。
+ *  反复自动跑会把对话区刷乱，所以选型改由运行条上的按钮显式触发。 */
+async function openProject(projectId) {
+  if (!projectId || busyProject) return;
+  if (projectId === "__demo__") {
+    await fetch("/api/projects/demo", { method: "POST" });
+    await load();
+    pushMessage("bot", "已切回内置示例清单。");
+    return;
+  }
+  busyProject = projectId;
+  renderProjects();
+  try {
+    const res = await fetch("/api/projects/open", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ project_id: projectId }),
+    });
+    const data = await res.json();
+    busyProject = "";
+    if (data.error) {
+      pushMessage("bot", "打开失败：" + data.error);
+      await load();
+      return;
+    }
+    await load();
+  } catch (err) {
+    busyProject = "";
+    pushMessage("bot", "打开失败：" + err);
+    renderProjects();
+  }
+}
+
+/** 显式触发选型。未跑过是「开始选型」，跑过是「重新选型」。 */
+async function runSelection(force) {
+  const projectId = workspace.current;
+  if (!projectId || busyProject) return;
+  busyProject = projectId;
+  renderRunbar();
+  const pending = pushMessage("bot", force ? "正在重新选型…" : "正在执行选型…");
+  try {
+    const res = await fetch("/api/projects/open", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ project_id: projectId, run: true, force: force }),
+    });
+    const data = await res.json();
+    busyProject = "";
+    if (data.error) {
+      pending.textContent = "选型失败：" + data.error;
+    } else {
+      const s = data.summary;
+      pending.textContent = s.status === "error"
+        ? `选型失败：${s.error}`
+        : s.status === "waiting"
+          ? `无法选型：${s.error}`
+          : `选型完成：选型项 ${s.items} 个，参数核对后给出推荐 ${s.recommended} 个，`
+            + `未核对 ${s.unverified} 个（共 ${s.elapsed_s} 秒）。`
+            + (s.unresolved ? `\n另有 ${s.unresolved} 条上游约束没能变成判定条件。` : "");
+    }
+    await load();
+  } catch (err) {
+    busyProject = "";
+    pending.textContent = "选型失败：" + err;
+    renderRunbar();
+  }
+}
+
+/** 运行条：说明当前项目状态，并提供选型按钮。 */
+function renderRunbar() {
+  const bar = document.getElementById("runbar");
+  const projectId = workspace.current;
+  if (!projectId) {
+    bar.hidden = true;
+    bar.innerHTML = "";
+    return;
+  }
+  const row = (workspace.projects || []).find((p) => p.project_id === projectId);
+  const entry = workspace.current_summary || {};
+  const status = entry.status || row?.status || "new";
+  const running = busyProject === projectId;
+
+  const label = {
+    ready: ["ok", "已选型"],
+    loaded: ["", "尚未选型"],
+    waiting: ["warn", "等待上游"],
+    running: ["", "选型中"],
+    error: ["bad", "出错"],
+  }[status] || ["", status];
+
+  let sub = "";
+  if (status === "waiting") sub = entry.error || "上游还没产出选型项";
+  else if (status === "loaded") sub = `选型项 ${entry.items || 0} 个 · 交接件已就绪，等待执行选型`;
+  else if (status === "ready") {
+    sub = `选型项 ${entry.items || 0} 个 · 推荐 ${entry.recommended || 0}`
+      + ` · 未核对 ${entry.unverified || 0}`;
+    if (entry.unresolved) sub += ` · ${entry.unresolved} 条上游约束无法判定`;
+  } else if (status === "error") sub = entry.error || "处理出错";
+
+  const canRun = status !== "waiting" && (entry.runnable ?? true);
+  bar.hidden = false;
+  bar.innerHTML = `
+    <div class="grow">
+      <div class="rb-title">${esc(row?.title || projectId.slice(0, 8))}</div>
+      <div class="rb-sub">${esc(sub)}</div>
+    </div>
+    <span class="state ${label[0]}">${esc(label[1])}</span>
+    ${status === "ready"
+      ? `<button class="ghost" id="btn-run" ${running ? "disabled" : ""}>${running ? "执行中…" : "重新选型"}</button>`
+      : `<button id="btn-run" ${canRun && !running ? "" : "disabled"}>${running ? "执行中…" : "开始选型"}</button>`}
+  `;
+  const button = document.getElementById("btn-run");
+  if (button) button.onclick = () => runSelection(status === "ready");
+}
+
+document.getElementById("chat-form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const input = document.getElementById("chat-input");
+  send(input.value);
+  input.value = "";
+});
+document.querySelectorAll("#hints button").forEach((btn) => {
+  btn.addEventListener("click", () => send(btn.textContent));
+});
+document.getElementById("btn-handoff").addEventListener("click", () => showExport("handoff"));
+document.getElementById("btn-candidates").addEventListener("click", () => showExport("candidates"));
+
+pushMessage("bot", "已连接真实器件库。你可以让我总结清单、解释某个候选为什么被推荐、改预算或改条件。所有结论都带出处，查不到的证据我会如实标成待补。");
+
+/** 从工作台点「器件选型」跳过来时带 ?project=<id>，直接载入该项目（不自动跑选型）。 */
+(async function bootstrap() {
+  const wanted = new URLSearchParams(location.search).get("project");
+  await load();
+  if (!wanted) return;
+  const known = (workspace.projects || []).some((p) => p.project_id === wanted);
+  if (!known) {
+    pushMessage("bot", `链接里的项目 ${wanted.slice(0, 8)} 不在当前列表里，可能已被删除。`);
+    return;
+  }
+  await openProject(wanted);
+  pushMessage("bot", "已从需求分析工作台跳转过来。确认交接件没问题后，按上方的「开始选型」执行。");
+})();
+</script>
+</body>
+</html>

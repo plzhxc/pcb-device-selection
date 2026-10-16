@@ -1,0 +1,305 @@
+{
+  "case": "case11",
+  "requirement_version": "req-case11-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-SW-001": {
+      "module_name": "USB负载开关",
+      "historical_selection": [
+        {
+          "model": "MT9700",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "MT9700",
+      "evaluation_source": ""
+    },
+    "M-PWR-LDO-POS-001": {
+      "module_name": "正压LDO稳压器",
+      "historical_selection": [
+        {
+          "model": "SPX3819",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "SPX3819",
+      "evaluation_source": ""
+    },
+    "M-PWR-INV-001": {
+      "module_name": "负压发生器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "LM2776",
+      "evaluation_source": ""
+    },
+    "M-PWR-LDO-NEG-001": {
+      "module_name": "负压LDO稳压器",
+      "historical_selection": [
+        {
+          "model": "TPS72301",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "TPS72301",
+      "evaluation_source": ""
+    },
+    "M-PWR-REF-001": {
+      "module_name": "精密电压基准源",
+      "historical_selection": [
+        {
+          "model": "MCP1501T-18",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "MCP1501T-18",
+      "evaluation_source": ""
+    },
+    "M-AFE-BUF-001": {
+      "module_name": "高阻抗缓冲放大器",
+      "historical_selection": [
+        {
+          "model": "AD8065",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "AD8065",
+      "evaluation_source": ""
+    },
+    "M-AFE-VGA-001": {
+      "module_name": "可变增益放大器",
+      "historical_selection": [
+        {
+          "model": "AD8337BCPZ",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "AD8337BCPZ",
+      "evaluation_source": ""
+    },
+    "M-AFE-DRV-001": {
+      "module_name": "差分ADC驱动器",
+      "historical_selection": [
+        {
+          "model": "AD8138ARZ",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "AD8138ARZ",
+      "evaluation_source": ""
+    },
+    "M-ADC-001": {
+      "module_name": "高速ADC",
+      "historical_selection": [
+        {
+          "model": "AD9288BSTZ-100",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "AD9288BSTZ-100",
+      "evaluation_source": ""
+    },
+    "M-MCU-001": {
+      "module_name": "USB控制器主控",
+      "historical_selection": [
+        {
+          "model": "CY7C68013A-56LTXC",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "CY7C68013A-56LTXC",
+      "evaluation_source": ""
+    },
+    "M-TRIG-COMP-001": {
+      "module_name": "高速比较器",
+      "historical_selection": [
+        {
+          "model": "TLV3501",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "TLV3501",
+      "evaluation_source": ""
+    },
+    "M-TRIG-SHP-001": {
+      "module_name": "触发整形运放",
+      "historical_selection": [
+        {
+          "model": "LMH6643",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "LMH6643",
+      "evaluation_source": ""
+    },
+    "M-COM-ETH-001": {
+      "module_name": "千兆以太网PHY",
+      "historical_selection": [
+        {
+          "model": "RTL8211EG-VB",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "RTL8211EG-VB",
+      "evaluation_source": ""
+    },
+    "M-COM-USB-DBG-001": {
+      "module_name": "USB转UART桥接器",
+      "historical_selection": [
+        {
+          "model": "CH340N",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "CH340N",
+      "evaluation_source": ""
+    },
+    "M-COM-LVL-001": {
+      "module_name": "双向电平转换器",
+      "historical_selection": [
+        {
+          "model": "74AVCH8T245",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "74AVCH8T245",
+      "evaluation_source": ""
+    },
+    "M-HMI-FPC-001": {
+      "module_name": "FPC显示屏连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HMI-BUZ-001": {
+      "module_name": "蜂鸣器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-STO-E2-001": {
+      "module_name": "I2C EEPROM",
+      "historical_selection": [
+        {
+          "model": "24LC64",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "24LC64",
+      "evaluation_source": ""
+    },
+    "M-DAC-OFF-001": {
+      "module_name": "程控偏置DAC",
+      "historical_selection": [
+        {
+          "model": "AD5304",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "AD5304",
+      "evaluation_source": ""
+    },
+    "M-EXT-BNC-001": {
+      "module_name": "BNC模拟输入连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-EXT-USBC-001": {
+      "module_name": "USB Type-C 连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-EXT-RJ45-001": {
+      "module_name": "RJ45以太网连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-EXT-JTAG-001": {
+      "module_name": "JTAG调试接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-EXT-IPEX-001": {
+      "module_name": "IPEX天线接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-EXT-REF-001": {
+      "module_name": "外部参考输出接口",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-EXT-REF-DAC-001": {
+      "module_name": "高速参考DAC",
+      "historical_selection": [
+        {
+          "model": "3PD5651",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "3PD5651",
+      "evaluation_source": ""
+    },
+    "M-RELAY-001": {
+      "module_name": "光耦固态继电器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "AQY282S",
+      "evaluation_source": ""
+    },
+    "M-PROT-TVS-001": {
+      "module_name": "ESD保护阵列",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

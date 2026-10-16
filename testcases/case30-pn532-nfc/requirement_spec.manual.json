@@ -1,0 +1,332 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "SPEC-95f3fa586ac84e71a763987388feae04-v12-d9",
+  "project": {
+    "name": "验收 dev-pair1 · CASE-09 · R1 · [已验证] PN532RFIDNFC调试器",
+    "summary": "面向实验室PC软件调试的RFID/NFC研发工具，必须保留PN5321A3HN。兼容目标明确为ISO14443A/B、ISO18092/NFCIP-1、Mifare Classic S50/S70、Ultralight、DESFire、FeliCa及NTAG21x；ISO18092按发起者角色与已知对端验证数据交换。其他列明卡型使用合法测试卡和已知权限验证读取、允许区域写入及读回一致。USB-C以5V连接电脑供电和串口通信；板载天线近距离可用即可，不设硬距离指标。器件实际支持范围及电源实现待资料和设计核验。"
+  },
+  "global_constraints": {
+    "currency": "CNY",
+    "note": "成本来自预设元件库参考价；需求侧未提供预算"
+  },
+  "selection_items": [
+    {
+      "id": "SEL-001",
+      "module_name": "NFC/RFID读写与协议处理",
+      "module_type": "无线收发模块",
+      "category": "无线收发模块",
+      "leaf_code": "l_bluetooth_module",
+      "leaf_codes": [
+        "l_bluetooth_module",
+        "l_cellular_2g_3g_4g_5g_module",
+        "l_lora_module",
+        "l_radio_frequency_card_chip",
+        "l_radio_frequency_module",
+        "l_rfid_module",
+        "l_wifi_module",
+        "l_wireless_transceiver_chip",
+        "l_zigbee_module"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-002",
+        "REQ-003",
+        "REQ-004",
+        "REQ-005",
+        "REQ-006",
+        "REQ-016"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [
+        {
+          "field": "feature",
+          "op": "contains",
+          "value": 5321.0,
+          "source_constraint_id": "new-device-constraint-5",
+          "related_requirement": "REQ-002",
+          "reason": "具体芯片支持限制应查资料并明确列为待核验；不能自行删掉目标协议。"
+        },
+        {
+          "field": "feature",
+          "op": "contains",
+          "value": 5321.0,
+          "source_constraint_id": "new-device-constraint-6",
+          "related_requirement": "REQ-002",
+          "reason": "协议兼容目标请明确展开成清单：ISO14443A/B、ISO18092/NFCIP-1、Mifare Classic的S50/S70、Ultralight、DESFire、FeliCa及NTAG21x。ISO18092本版按发起者角色与已知对端完成数据交换验证，不要求被动目标模拟或全面手机兼容；其余卡型使用合法测试卡和已知权限验证读取、允许区域写入及读回一致。全部协议是产品目标，PN532具体支持"
+        }
+      ],
+      "purpose": "承接13.56MHz卡片读写、Mifare Classic S50/S70、Ultralight、DESFire及FeliCa协议处理、NTAG21x标签读写、ISO14443A/B自动识别，以及ISO18092/NFCIP-1发起者角色下与已知对端的数据交换。",
+      "boundary": "确认采用无线收发模块，1个独立电路。PN5321A3HN对完整协议目标清单的实际支持须按手册与测试核验；具体器件用量、拓扑、物理引脚和PCB实现由设计阶段核对，并须满足已明确的产品要求。",
+      "chenxin_module_id": "MOD-001",
+      "chenxin_selection_item_id": "SEL-001",
+      "specified_device": {
+        "model": "PN5321A3HN",
+        "intent": "must"
+      },
+      "note": "PN5321A3HN的协议支持和芯片参数需按手册核验；不能凭输入描述认定全部协议已验证。",
+      "specified_reference_ids": [
+        "REF-001"
+      ]
+    },
+    {
+      "id": "SEL-002",
+      "module_name": "USB转UART通信模块",
+      "module_type": "USB转逻辑电平UART子模块",
+      "category": "USB转逻辑电平UART子模块",
+      "leaf_code": "l_bus_to_uart_converter",
+      "leaf_codes": [
+        "l_bus_to_uart_converter",
+        "l_protocol_bridge",
+        "l_rs232_chip",
+        "l_rs_485_rs_422_chip",
+        "l_serializer_deserializer",
+        "l_usb_conversion_chip"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-007"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [
+        {
+          "field": "feature",
+          "op": "contains",
+          "value": 11.0,
+          "source_constraint_id": "new-device-constraint-2",
+          "related_requirement": "REQ-007",
+          "reason": "目标为Windows11和常见Linux电脑，验收USB串口枚举、稳定基本通信；需要系统驱动时允许安装，不把即插即用免驱作为所有系统上的硬保证。"
+        }
+      ],
+      "purpose": "承接USB-C至实验室PC的串口通信；CH340N为优先实现方案。",
+      "boundary": "确认采用USB转逻辑电平UART子模块，1个独立电路。CH340N为优先方案；具体器件用量、拓扑、物理引脚和PCB实现由设计阶段核对，并须满足已明确的产品要求。",
+      "chenxin_module_id": "MOD-002",
+      "chenxin_selection_item_id": "SEL-002",
+      "specified_device": {
+        "model": "CH340N",
+        "intent": "preferred"
+      }
+    },
+    {
+      "id": "SEL-003",
+      "module_name": "USB-C外部接口",
+      "module_type": "接口模块",
+      "category": "接口模块",
+      "leaf_code": "l_ac_power_connector",
+      "leaf_codes": [
+        "l_ac_power_connector",
+        "l_audio_connector_headphones",
+        "l_automotive_connector",
+        "l_banana_plug_alligator_clip",
+        "l_barrier_terminal_block",
+        "l_blade_shrapnel_contacts_the_battery_connector",
+        "l_board_to_board_and_backplane_connectors",
+        "l_button_and_strip_battery_connector",
+        "l_circular_cable_connector",
+        "l_circular_din_connector",
+        "l_cold_pressed_terminal",
+        "l_d_sub_vga_connector",
+        "l_dc_power_connector",
+        "l_din41612_connector",
+        "l_displayport_dp_connector",
+        "l_dvi_connector",
+        "l_ethernet_connector_rj45_rj11",
+        "l_feed_rf_insulator",
+        "l_female_connector",
+        "l_ffc_connector_flexible_flat_cable",
+        "l_ffc_fpc_connector",
+        "l_gold_finger_connector",
+        "l_hard_disk_connector_sas_sata_m_2",
+        "l_hdmi_connector",
+        "l_ic_transistor_socket",
+        "l_idc_pierceable_connector_bull_horn_simplified_bull",
+        "l_ieee_1394_firewire_connector",
+        "l_lotus_connector_rca_connector",
+        "l_memory_module_connector_ddr",
+        "l_micro_match_connector",
+        "l_optical_module_connector",
+        "l_pci_pcie_connector",
+        "l_pin_header",
+        "l_plug_in_terminal_block",
+        "l_pogo_pin_spring_probe_connector",
+        "l_rf_coaxial_connector",
+        "l_rubber_shell_wire_to_board_wire_to_wire",
+        "l_screw_terminal_block",
+        "l_sd_card_memory_card_connector",
+        "l_shorting_cap_jumper_cap",
+        "l_sim_card_connector",
+        "l_spring_loaded_terminal_block",
+        "l_telecommunication_interface_ic",
+        "l_test_point_test_loop",
+        "l_usb_connector",
+        "l_usb_conversion_chip",
+        "l_usb_hub",
+        "l_usb_type_c_port_controller",
+        "l_wire_to_board_pin_header"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-007",
+        "REQ-008"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [
+        {
+          "field": "feature",
+          "op": "contains",
+          "value": 11.0,
+          "source_constraint_id": "new-device-constraint-2",
+          "related_requirement": "REQ-007",
+          "reason": "目标为Windows11和常见Linux电脑，验收USB串口枚举、稳定基本通信；需要系统驱动时允许安装，不把即插即用免驱作为所有系统上的硬保证。"
+        }
+      ],
+      "purpose": "提供连接实验室PC的供电和串口通信接口。",
+      "boundary": "确认采用接口模块，1个独立电路。具体器件用量、拓扑、物理引脚和PCB实现由设计阶段核对，并须满足已明确的产品要求。",
+      "chenxin_module_id": "MOD-003",
+      "chenxin_selection_item_id": "SEL-003",
+      "note": "约束没有 field_key，无法对应器件字段"
+    },
+    {
+      "id": "SEL-004",
+      "module_name": "板内稳压供电模块",
+      "module_type": "电源转换模块",
+      "category": "电源转换模块",
+      "leaf_code": "l_ac_dc_controller_and_voltage_regulator",
+      "leaf_codes": [
+        "l_ac_dc_controller_and_voltage_regulator",
+        "l_charge_pump",
+        "l_dc_dc_power_module",
+        "l_dc_dc_pwm_controller",
+        "l_linear_regulator_ldo",
+        "l_nonisolated_dc_dc_power_module",
+        "l_professional_power_management_pmic",
+        "l_step_down_dc_dc_converter",
+        "l_step_up_buck_boost_converter"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-002",
+        "REQ-008",
+        "REQ-009"
+      ],
+      "hard_conditions": [
+        {
+          "field": "output_voltage",
+          "op": "==",
+          "value": 3.3,
+          "reason": "原文：由RT9013双路LDO（1.2V内核+3.3V IO）提供低噪声稳压电源管理",
+          "unit": "V"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "feature",
+          "op": "contains",
+          "value": 5321.0,
+          "source_constraint_id": "new-device-constraint-5",
+          "related_requirement": "REQ-002",
+          "reason": "具体芯片支持限制应查资料并明确列为待核验；不能自行删掉目标协议。"
+        },
+        {
+          "field": "feature",
+          "op": "contains",
+          "value": 5321.0,
+          "source_constraint_id": "new-device-constraint-6",
+          "related_requirement": "REQ-002",
+          "reason": "协议兼容目标请明确展开成清单：ISO14443A/B、ISO18092/NFCIP-1、Mifare Classic的S50/S70、Ultralight、DESFire、FeliCa及NTAG21x。ISO18092本版按发起者角色与已知对端完成数据交换验证，不要求被动目标模拟或全面手机兼容；其余卡型使用合法测试卡和已知权限验证读取、允许区域写入及读回一致。全部协议是产品目标，PN532具体支持"
+        }
+      ],
+      "purpose": "从USB-C 5V输入生成PN532实际需要的电源轨；RT9013为优先实现方案。",
+      "boundary": "确认采用电源转换模块，1个独立电路。RT9013为优先方案，实际电源轨和实现按PN532要求核对；具体器件用量、拓扑、物理引脚和PCB实现由设计阶段核对，并须满足已明确的产品要求。",
+      "chenxin_module_id": "MOD-004",
+      "chenxin_selection_item_id": "SEL-004",
+      "specified_device": {
+        "model": "RT9013",
+        "intent": "preferred"
+      },
+      "note": "约束没有 field_key，无法对应器件字段；PN5321A3HN的协议支持和芯片参数需按手册核验；不能凭输入描述认定全部协议已验证。；原双路稳压描述不作为已确认的输出电压约束；实际电源轨由设计按PN532手册核定。"
+    },
+    {
+      "id": "SEL-005",
+      "module_name": "4Pin调试接口",
+      "module_type": "调试烧录与测试接口子模块",
+      "category": "调试烧录与测试接口子模块",
+      "leaf_code": "l_cryptographic_coprocessor",
+      "leaf_codes": [
+        "l_cryptographic_coprocessor",
+        "l_digital_signal_processor_dsp_dsc",
+        "l_microcontroller_mcu_mpu_soc",
+        "l_programmable_logic_device_cpld_fpga",
+        "l_secure_authenticator",
+        "l_secure_element",
+        "l_trusted_platform_module"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-010"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "purpose": "提供板载调试排针扩展。",
+      "boundary": "确认采用调试烧录与测试接口子模块，1个独立电路。具体器件用量、拓扑、物理引脚和PCB实现由设计阶段核对，并须满足已明确的产品要求。",
+      "chenxin_module_id": "MOD-005",
+      "chenxin_selection_item_id": "SEL-005"
+    },
+    {
+      "id": "SEL-006",
+      "module_name": "板载PCB天线与射频路径",
+      "module_type": "天线接口模块",
+      "category": "天线接口模块",
+      "leaf_code": "l_antenna",
+      "leaf_codes": [
+        "l_antenna",
+        "l_balun",
+        "l_rf_coaxial_connector",
+        "l_rf_connecting_cable",
+        "l_rf_transformer"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-003",
+        "REQ-011"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "purpose": "承接NFC/RFID卡片近距离感应和读写所需的板载天线功能。",
+      "boundary": "确认采用天线接口模块，1个独立电路。近距离可用且不设硬性距离指标；具体器件用量、拓扑、物理引脚和PCB实现由设计阶段核对，并须满足已明确的产品要求。",
+      "chenxin_module_id": "MOD-006",
+      "chenxin_selection_item_id": "SEL-006"
+    },
+    {
+      "id": "SEL-007",
+      "module_name": "红蓝双色LED状态指示",
+      "module_type": "数码管与点阵显示模块",
+      "category": "数码管与点阵显示模块",
+      "leaf_code": "l_digital_tube_driver",
+      "leaf_codes": [
+        "l_digital_tube_driver",
+        "l_led_digital_display",
+        "l_led_dot_matrix_screen",
+        "l_led_driver"
+      ],
+      "quantity": 1,
+      "related_requirements": [
+        "REQ-012"
+      ],
+      "hard_conditions": [],
+      "preferred_conditions": [],
+      "purpose": "承接工作状态可视指示需求。",
+      "boundary": "确认采用数码管与点阵显示模块类别，1个独立电路，用于红蓝双色LED状态指示。具体器件用量、拓扑、物理引脚和PCB实现由设计阶段核对，并须满足已明确的产品要求。",
+      "chenxin_module_id": "MOD-007",
+      "chenxin_selection_item_id": "SEL-007"
+    }
+  ],
+  "source": {
+    "system": "requirements_studio",
+    "schema_version": "pcbagent.requirement-spec/1.0",
+    "spec_id": "SPEC-95f3fa586ac84e71a763987388feae04-v12-d9",
+    "project_id": "95f3fa586ac84e71a763987388feae04",
+    "requirement_version": 12,
+    "review_status": "approved",
+    "handoff_status": "ready_with_open_items"
+  }
+}

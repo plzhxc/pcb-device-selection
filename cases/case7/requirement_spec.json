@@ -1,0 +1,740 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-case7-v1",
+  "project": {
+    "name": "case7（由历史选型产物转换）",
+    "summary": "来源 /share/home/zhengzhiqi/workspace/web/output/case7/console/stages/03_device_selection__9edf86db.json"
+  },
+  "global_constraints": {
+    "budget_total_cny": 200.0,
+    "currency": "CNY",
+    "note": "预算取自历史产物，仅供参考"
+  },
+  "selection_items": [
+    {
+      "id": "M-PWR-DCDC-001",
+      "module_name": "TPS54360 DC-DC 降压芯片",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_step_down_dc_dc_converter",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.5,
+            60.0
+          ],
+          "unit": "V",
+          "reason": "需求文档明确指定输入电压范围为 4.5V~60V。TPS54360 的数据手册规格为最高 60V 输入，若实际电路存在瞬态过压或测量误差，需确保耐压余量。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            125.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档第 3.2.1 节规定工作温度为 -40°C ～ +85°C。器件等级需至少为此规格，通常选择 Industrial Grade (Tj max 125°C 或 150°C)。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "DC-DC 转换器",
+        "Buck Converter",
+        "同步整流",
+        "降压芯片",
+        "TPS54360",
+        "TI"
+      ],
+      "specified_device": {
+        "model": "TPS54360",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-PWR-LDO-001",
+      "module_name": "LM1117GS-3.3 LDO",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_linear_regulator_ldo",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "模块名称及描述明确指定为 LM1117GS-3.3，用于将中间电压稳压至 3.3V。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "output_current",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "A",
+          "reason": "模块分类关键词包含 '1A'，且需为 MCU、ADC/DAC 及运放提供电源。虽然典型工作电流 < 1A，但 LDO 选型通常需具备 1A 能力以应对瞬态峰值或设计裕量，且型号后缀暗示其电流等级。",
+          "source_parameter": "max_output_current"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.5,
+            15.0
+          ],
+          "unit": "V",
+          "reason": "LDO 上游为 TPS54360 DC-DC。根据需求文档分析，TPS54360 输出建议设为 5V 或 12V。LM1117 系列典型最大输入电压为 15V。因此 LDO 必须支持至少到 12V+ 的输入范围，且最小输入需高于 3.3V + Dropout Voltage。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -263.0,
+            -220.0
+          ],
+          "reason": "型号中 'GS' 通常对应 TO-263 (D2PAK) 封装。鉴于可能存在的较大压差（如输入 12V 时），必须使用具有良好散热能力的功率封装，否则器件会过热保护或损坏。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            125.0
+          ],
+          "unit": "°C",
+          "reason": "系统要求工业级温度范围 -40°C ~ +85°C。LDO 在高功耗工况下结温会显著高于环境温度，需确保器件在高温环境下仍能正常工作且不触发热关断。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "dropout_voltage",
+          "op": ">=",
+          "value": 1.3,
+          "unit": "V",
+          "reason": "LM1117 是低压差稳压器。若 TPS54360 输出设为推荐的 5V，则压差为 1.7V；若设为 12V，压差过大导致效率极低和发热严重。因此需要低 dropout 特性以适配 5V 输入场景，提高整体电源效率。",
+          "source_parameter": "dropout_voltage"
+        }
+      ],
+      "keywords": [
+        "LDO",
+        "低压差线性稳压器",
+        "Linear Regulator",
+        "3.3V",
+        "1A",
+        "固定输出"
+      ],
+      "specified_device": {
+        "model": "LM1117GS-3.3",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-PWR-REF-001",
+      "module_name": "LN33X61Q1 精密电压基准",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_professional_power_management_pmic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "基准电压直接决定 DAC 输出量程和 ADC 采样范围。若电压不匹配（如提供 2.5V 而非 3.3V），将导致测量精度下降或无法覆盖全量程，违反 ±0.1% FS 的精度要求。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "temperature_coefficient",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "ppm/°C",
+          "reason": "工业级工作温度范围为 -40°C ~ +85°C，跨度 125°C。若温漂较大（如 >10 ppm/°C），总漂移可能超过 1250 ppm (0.125%)，这将直接破坏 ±0.1% 的系统精度指标。因此低温漂是满足高精度要求的硬性约束。",
+          "source_parameter": "temperature_coefficient"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "工业现场环境恶劣，器件必须在整个温度范围内保持指定的精度和温漂性能。商业级器件（0~70°C）在低温下可能失效或精度严重恶化，无法满足产品规格。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "noise",
+          "op": ">=",
+          "value": 20.0,
+          "unit": "µVpp",
+          "reason": "SC81440 DAC 和 GS8552-SR 运放构成的反馈环路对电源和参考源的噪声敏感。高噪声基准会直接耦合到输出电流中，影响小信号测量的信噪比和稳定性。需确保峰峰值噪声足够低（通常 < 10-20 µVpp @ 0.1-10Hz 或宽带噪声密度低）。",
+          "source_parameter": "noise"
+        },
+        {
+          "field": "quiescent_current",
+          "op": ">=",
+          "value": 0.01,
+          "unit": "A",
+          "reason": "虽然基准源电流绝对值不大（通常几 mA 到几十 mA），但在低功耗设计中，低静态电流有助于满足整体待机功耗预算，并减少 LDO 的热负荷。",
+          "source_parameter": "quiescent_current"
+        }
+      ],
+      "keywords": [
+        "Voltage Reference",
+        "精密电压基准源",
+        "Low Noise Voltage Reference",
+        "Bandgap Reference",
+        "REF IC",
+        "低噪声基准"
+      ],
+      "note": "可选参数（未进条件）：package"
+    },
+    {
+      "id": "M-MCU-001",
+      "module_name": "AT32F403AVGT7 主控",
+      "module_type": "主控计算",
+      "category": "微控制器",
+      "leaf_code": "l_microcontroller_mcu_mpu_soc",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档 Ch 3.2.1 明确规定工作温度为 -40°C ～ +85°C（工业级规格）。MCU 必须在此范围内可靠工作。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -100.0,
+            -100.0
+          ],
+          "unit": "package",
+          "reason": "需求文档 Ch 4.1.2 明确指出主控 MCU 封装类型为 LQFP100。这是物理装配的关键约束。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "MCU",
+        "Microcontroller Unit",
+        "Cortex-M4",
+        "ARM MCU",
+        "AT32F403",
+        "USB MCU"
+      ],
+      "specified_device": {
+        "model": "AT32F403AVGT7",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-DIG-DAC-001",
+      "module_name": "SC81440 多通道 DAC",
+      "module_type": "主控计算",
+      "category": "数模转换器 (DAC)",
+      "leaf_code": "l_digital_to_analog_converter_chip_dac",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "resolution",
+          "op": ">=",
+          "value": 12.0,
+          "unit": "bit",
+          "reason": "系统要求电流/电压测量精度 ±0.1% FS，且 MCU 内置 ADC 为 12-bit。DAC 分辨率若低于 12-bit（如 10-bit），其量化误差将直接限制闭环控制的调节步长和最终精度，无法满足 ±0.1% FS 的系统级指标。",
+          "source_parameter": "resolution"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "DAC",
+        "数模转换器",
+        "SPI Interface",
+        "Multi-channel",
+        "Precision",
+        "Analog Output"
+      ],
+      "note": "可选参数（未进条件）：package"
+    },
+    {
+      "id": "M-ANA-AMP-001",
+      "module_name": "GS8552-SR 精密双通道零漂移运放",
+      "module_type": "传感器",
+      "category": "运算放大器",
+      "leaf_code": "l_precision_operational_amplifier",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_offset_voltage",
+          "op": ">=",
+          "value": 1e-05,
+          "unit": "V",
+          "reason": "需求文档第2.2.3节明确指定GS8552-SR的Max Vos为10 μV，这是实现±0.1% FS电流测量精度的核心前提。零漂移/斩波稳定架构是抑制低温漂和小信号失调的关键。",
+          "source_parameter": "input_offset_voltage_max"
+        },
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            2.7,
+            36.0
+          ],
+          "unit": "V",
+          "reason": "系统由LM1117提供3.3V模拟电源(VDDA)。运放需在此单电源下工作。考虑到输入端可能存在的共模电压摆幅及工业环境噪声余量，器件需支持至少3.3V供电，且推荐具有Rail-to-Rail输出能力以最大化ADC动态范围。",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "output_voltage_range",
+          "op": "is",
+          "value": "Rail-to-Rail",
+          "reason": "为了将分流电阻上的微小压降（接近0V）准确放大并送入MCU ADC（参考地），运放必须具备真正的Rail-to-Rail输出能力，否则在低电流采样时会产生显著的量化误差或截断失真。",
+          "source_parameter": "output_voltage_range"
+        },
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 2.0,
+          "unit": "ch",
+          "reason": "模块ID M-ANA-AMP-001 描述为“Dual Channel”，且confirmed_device GS8552-SR 确认为双通道器件。虽然当前功能仅使用一路进行电流采样，但双通道封装是器件本身的物理属性约束。",
+          "source_parameter": "channel_count"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档第3.2.1节规定工作温度为-40°C～+85°C。精密运放的失调电压和温漂随温度变化显著，必须在整个工业温度范围内满足精度指标。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -8.0,
+            -8.0
+          ],
+          "unit": "pkg",
+          "reason": "需求文档第4.1.2节元器件要求中明确指定运放封装为SOIC-8。这影响了PCB布局、散热设计及自动化贴装工艺。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "Op Amp",
+        "Precision Operational Amplifier",
+        "Zero-Drift",
+        "Dual Channel",
+        "Auto-Zero",
+        "Chopper Stabilized"
+      ],
+      "specified_device": {
+        "model": "GS8552-SR",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-COM-CH340N-001",
+      "module_name": "CH340N USB 转 UART 桥接芯片",
+      "module_type": "通信",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_cellular_2g_3g_4g_5g_module",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.4,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "CH340N 通常由 USB 总线供电 (5V)。系统电源轨 LM1117 输出 3.3V，但 USB 端口提供 5V。器件需能在 USB 标准的 5V±5% 范围内工作。",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统要求工作温度 -40°C ～ +85°C (Section 3.2.1)。作为核心通信部件，CH340N 必须满足此工业级规格以保证全天候运行可靠性。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "USB to UART",
+        "USB-UART Bridge",
+        "CH340N",
+        "串口转换芯片",
+        "FTDI 兼容",
+        "TTL 转 USB"
+      ],
+      "note": "可选参数（未进条件）：package"
+    },
+    {
+      "id": "M-CONN-USB-001",
+      "module_name": "USB Type-C/Micro-B 连接器",
+      "module_type": "通信",
+      "category": "连接器",
+      "leaf_code": "l_usb_type_c_port_controller",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "['USB Type-C', 'Micro-B']",
+          "reason": "模块名称明确为 'USB Type-C/Micro-B 连接器'，且需求文档指出该接口用于连接主机（CH340N）。由于 Type-C 和 Micro-B 物理引脚定义不同，器件必须明确是单一路径还是双路径。考虑到 CH340N 通常配合单一 USB 端口使用，此处约束为‘具备 Type-C 或 Micro-B 中的一种或两者’的能力，具体取决于最终 PCB 布局确定的物理插座形式。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "shielding",
+          "op": "is",
+          "value": "是",
+          "reason": "需求文档第 3.2.4 节明确要求 IEC 61000-4-2 Level 4 ESD 防护，且第 4.1.1 节提到 USB 差分线阻抗控制。金属屏蔽壳有助于满足 EMC 要求并提供机械强度，防止插拔时引脚断裂。",
+          "source_parameter": "shielding"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "USB Connector",
+        "Type-C",
+        "Micro-B",
+        "USB物理接口",
+        "板载连接器",
+        "USB Host Port"
+      ]
+    },
+    {
+      "id": "M-HMI-OLED-001",
+      "module_name": "OLED 显示屏模块",
+      "module_type": "人机交互",
+      "category": "显示器件",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            2.7,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "OLED模块通过系统3.3V LDO供电，且I2C逻辑电平需与MCU的3.3V兼容。器件必须支持3.3V单电源供电，且绝对最大额定值需覆盖可能的瞬态过压。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统定义为工业级设备，工作温度范围-40°C ~ +85°C。OLED模组作为关键HMI部件，必须在此范围内正常工作，否则低温下响应迟缓或高温下寿命骤减。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "OLED Display",
+        "OLED 屏幕",
+        "SSD1306",
+        "I2C Display",
+        "128x64 OLED",
+        "图形显示器"
+      ]
+    },
+    {
+      "id": "M-HMI-ENC-001",
+      "module_name": "编码器旋钮",
+      "module_type": "人机交互",
+      "category": "传感器",
+      "leaf_code": "l_photoelectric_slot_sensor_phototransistor",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            3.3,
+            24.0
+          ],
+          "unit": "V",
+          "reason": "编码器直接连接至 3.3V 供电的 AT32F403 MCU GPIO。虽然机械开关无电压极性要求，但内部若有滤波电容或集成上拉电阻时，耐压需覆盖 3.3V 系统电压。标准工业编码器通常兼容 5V/12V/24V，但必须确保在 3.3V 下能可靠被 MCU 识别为高电平（或配合外部上拉）。",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统定义为工业级应用，所有组件必须满足该温度范围，否则低温下润滑脂凝固或高温下塑料变形会导致卡死或接触不良。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.05,
+          "unit": "Ω",
+          "reason": "虽然主要信号是脉冲，但接触电阻不稳定可能导致去抖困难或误触发。对于高精度仪器的 HMI，稳定的接触电阻有助于减少噪声。",
+          "source_parameter": "contact_resistance"
+        }
+      ],
+      "keywords": [
+        "旋转编码器",
+        "Rotary Encoder",
+        "带开关编码器",
+        "Incremental Encoder",
+        "旋钮开关",
+        "Position Sensor"
+      ]
+    },
+    {
+      "id": "M-ACT-FAN-DRV-001",
+      "module_name": "风扇驱动 MOSFET",
+      "module_type": "执行器与驱动",
+      "category": "分立半导体",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "continuous_drain_current_id",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "A",
+          "reason": "若 Id 不足，MOSFET 过热烧毁或无法完全导通导致发热严重。需覆盖最大风扇启动及运行电流。",
+          "source_parameter": "continuous_drain_current_id"
+        },
+        {
+          "field": "channel_type",
+          "op": "is",
+          "value": "N-Channel",
+          "reason": "电路拓扑固定为低侧驱动，必须使用 N 沟道以利用 MCU 地参考和逻辑电平优势。P 沟道需高侧驱动，控制复杂。",
+          "source_parameter": "channel_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "Celsius",
+          "reason": "器件必须在整个系统工作温度范围内保证电气参数（特别是 Vgs(th) 和 Rds(on)）不超出安全范围。商业级器件可能在低温下无法开启或在高温下过流。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "is",
+          "value": "['SOT-23', 'SOT-323']",
+          "reason": "封装决定装配方式和散热能力。SOT-23 或 SOT-323 是此类小功率开关的标准封装，适合高密度 PCB。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "N-MOSFET",
+        "逻辑电平MOSFET",
+        "Power MOSFET",
+        "开关管",
+        "N-channel MOSFET",
+        "Logic Level FET"
+      ]
+    },
+    {
+      "id": "M-PROT-ESD-001",
+      "module_name": "ESD 保护阵列",
+      "module_type": "保护",
+      "category": "保护器件",
+      "leaf_code": "l_electrostatic_and_surge_protection_tvs_esd",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 8.0,
+          "unit": "channels",
+          "reason": "模块需同时保护 USB D+/D- (2 lines), I2C SDA/SCL (2 lines), 以及 SPI 信号线 (至少 MOSI, SCLK, CS, MISO，共4 lines)。总计至少需要 8 个通道。若考虑 OLED 或 GPIO 扩展口的额外保护，可能需要更多。最低必须覆盖这 8 根关键高速/敏感线。",
+          "source_parameter": "channel_count"
+        },
+        {
+          "field": "breakdown_voltage",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "V",
+          "reason": "系统逻辑电平为 3.3 V。TVS 的击穿电压 (V_BR) 或关断电压必须高于最高工作电压加上一定的裕量，以防止正常工作时漏电或误触发。对于 3.3V 系统，通常选择 Working Voltage (V_C) 略高于 3.3V (如 3.6V-5.5V)，对应的 Breakdown Voltage 通常在 5V-6V 左右。不能低于 3.3V，否则会在正常工作期间导通。",
+          "source_parameter": "breakdown_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": ">=",
+          "value": -40.0,
+          "unit": "°C",
+          "reason": "产品定义为工业级测试测量设备，明确要求工作温度 -40°C ～ +85°C。所有有源器件必须符合此范围以保证可靠性。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            70.0,
+            70.0
+          ],
+          "unit": "package",
+          "reason": "PCB 采用 SMT 全自动贴片工艺，且板层数为 4 层，布局密度较高 (309 pcs)。ESD 阵列应选用小型化表面贴装封装以节省 PCB 面积并适应高密度布局。常见的 ESD 阵列封装包括 SC70-6, X2WN, QFN 等。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "ESD 保护",
+        "TVS Array",
+        "静电放电保护",
+        "低电容 TVS",
+        "I2C/SPI ESD",
+        "USB ESD Protection"
+      ]
+    },
+    {
+      "id": "M-CONN-GPIO-001",
+      "module_name": "GPIO 排针扩展接口",
+      "module_type": "保护",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 2.54,
+          "unit": "mm",
+          "reason": "category_semantic_intent 明确指定为 2.54mm 间距排针。若间距不匹配，无法与标准杜邦线或调试探头配合使用，导致物理不可连接。",
+          "source_parameter": "pitch"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "through_hole",
+          "reason": "Ch 4.1.3 明确指出“排针等机械强度要求高的连接件”采用 DIP 插件工艺。排针作为外部交互接口，需承受频繁插拔的机械应力，贴片 (SMT) 版本在抗拉强度和抗震性上通常不足以满足工业设备要求。",
+          "source_parameter": "mounting_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "requirement_docs Ch 3.2.1 明确规定工作温度为工业级 -40°C ～ +85°C。连接器材料（塑料、镀层）在此温度范围内需保持机械性能和导电性稳定。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 3.0,
+          "unit": "A",
+          "reason": "该接口引出系统电源（VCC）及地。系统最大工作电流可达 3.5 A（TPS54360 极限），虽然 GPIO 信号本身电流极小，但电源引脚需承载系统总电流。为确保长期可靠性并符合工业级设计惯例，接触额定值应覆盖峰值需求并留有余量。",
+          "source_parameter": "contact_current_rating"
+        },
+        {
+          "field": "pin_count",
+          "op": "cover",
+          "value": [
+            8.0,
+            20.0
+          ],
+          "unit": "pins",
+          "reason": "description 指出“数量取决于剩余 GPIO 资源”。AT32F403AVGT7 拥有大量 GPIO，减去已分配的 SPI/I2C/UART/PWM/Encoder 等，预计剩余可用 GPIO 在 10-15 个左右，加上必要的 GND/VCC 引脚，通常配置为 2x8 (16 pin), 2x10 (20 pin) 或类似双排排针。具体数值需 PCB Layout 确认，但必须在检索时",
+          "source_parameter": "pin_count"
+        }
+      ],
+      "keywords": [
+        "排针",
+        "Pin Header",
+        "2.54mm",
+        "间距排针",
+        "扩展接口",
+        "GPIO Connector"
+      ]
+    },
+    {
+      "id": "M-CONV-LVL-001",
+      "module_name": "BSS138 电平转换 MOSFET",
+      "module_type": "保护",
+      "category": "分立半导体",
+      "leaf_code": "l_electrostatic_and_surge_protection_tvs_esd",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "degC",
+          "reason": "需求文档第 3.2.1 节明确规定工作温度为 -40°C ~ +85°C。所有关键器件必须符合此工业级规格。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "N-MOSFET",
+        "逻辑电平MOS",
+        "Level Shifting FET",
+        "BSS138",
+        "双向电平转换",
+        "I2C Level Shifter"
+      ]
+    }
+  ]
+}

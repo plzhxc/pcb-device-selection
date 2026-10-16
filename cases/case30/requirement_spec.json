@@ -1,0 +1,620 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-case30-v1",
+  "project": {
+    "name": "case30（由历史选型产物转换）",
+    "summary": "来源 /share/home/zhengzhiqi/workspace/web/output/case30/console/stages/03_device_selection__9b36ffcf.json"
+  },
+  "global_constraints": {
+    "budget_total_cny": 50.0,
+    "currency": "CNY",
+    "note": "预算取自历史产物，仅供参考"
+  },
+  "selection_items": [
+    {
+      "id": "M-LDO-001",
+      "module_name": "双路LDO稳压器",
+      "module_type": "电源管理",
+      "category": "电源管理 IC",
+      "leaf_code": "l_linear_regulator_ldo",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.75,
+            5.5
+          ],
+          "unit": "V",
+          "reason": "LDO 必须支持 USB 输入的完整电压范围，包括瞬态波动。若输入下限高于 4.75V，则在电池或劣质适配器供电时可能无法启动；若上限低于 5.25V，则可能在标准 USB 端口过压时损坏。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "dropout_voltage",
+          "op": "cover",
+          "value": [
+            1.5,
+            1.5
+          ],
+          "unit": "V",
+          "reason": "输入最低 4.75V，输出最高 3.3V，压差至少 1.45V。LDO 必须在 1.5V 左右压差下仍能提供满载电流且保持稳定，否则低压输入时输出电压会跌落。",
+          "source_parameter": "dropout_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "应用环境为室内办公，明确限定 0°C ~ +40°C。商业级（Commercial Grade, 0~70°C）器件完全覆盖此范围，无需工业级成本。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "LDO",
+        "Linear Regulator",
+        "Dual Output",
+        "Low Dropout",
+        "Power Management",
+        "RT9013"
+      ],
+      "specified_device": {
+        "model": "RT9013",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-MCU-001",
+      "module_name": "NFC读写主控芯片",
+      "module_type": "主控计算",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_radio_frequency_card_chip",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            4.75,
+            5.25
+          ],
+          "unit": "V",
+          "reason": "USB-C 输入标准电压范围为 4.75V~5.25V，器件必须在此范围内稳定工作且不损坏。",
+          "source_parameter": "input_voltage_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "is",
+          "value": "QFN",
+          "reason": "模块清单中指定 PN532 采用 QFN 封装，这决定了 PCB 布局和散热设计。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            40.0
+          ],
+          "unit": "°C",
+          "reason": "应用场景为室内办公/实验室，要求工作温度 0~40°C。选用商业级（0~70°C）器件可满足需求并提供一定余量。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "NFC Controller",
+        "NFC读写器",
+        "近场通信芯片",
+        "RFID Reader",
+        "13.56MHz NFC",
+        "ISO14443"
+      ],
+      "specified_device": {
+        "model": "PN5321A3HN",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-USB-UART-001",
+      "module_name": "USB转UART控制器",
+      "module_type": "主控计算",
+      "category": "接口/通信 IC",
+      "leaf_code": "l_usb_conversion_chip",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [],
+      "preferred_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            -24.0,
+            -24.0
+          ],
+          "reason": "电路模块清单中明确指定 CH340N 采用 QFN-24 封装。虽然功能上可替换其他封装型号，但为满足现有 PCB 布局约束（隐含在模块分解中），QFN-24 是首选。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "生产与测试考虑章节 4.1.2 明确规定关键器件需为商业级（Commercial Grade, 0℃～70℃）。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "keywords": [
+        "USB转串口芯片",
+        "USB to UART Bridge Controller",
+        "USB-UART Converter",
+        "CH340",
+        "CP2102",
+        "FT232"
+      ],
+      "specified_device": {
+        "model": "CH340N",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-XTAL-001",
+      "module_name": "13.56MHz晶振",
+      "module_type": "时钟源",
+      "category": "时钟器件",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "frequency",
+          "op": ">=",
+          "value": 13560000.0,
+          "unit": "Hz",
+          "reason": "PN532 射频前端及 NFC 协议（ISO14443A/B, FeliCa）严格依赖 13.56 MHz 载波频率。任何偏差将导致无法调制解调或通信失败。",
+          "source_parameter": "frequency"
+        },
+        {
+          "field": "load_capacitance",
+          "op": ">=",
+          "value": 1.2e-11,
+          "unit": "F",
+          "reason": "模块 critical_passives 明确指定负载电容为 12pF。晶振的 CL 参数必须与外部并联的两个负载电容（各约 24pF，考虑寄生电容后等效为 12pF）匹配，否则频率漂移超出允许范围。",
+          "source_parameter": "load_capacitance"
+        },
+        {
+          "field": "frequency_stability",
+          "op": "cover",
+          "value": [
+            -20.0,
+            20.0
+          ],
+          "unit": "ppm",
+          "reason": "虽然系统级时钟精度要求为 ±50 ppm (Ch3.1.3)，但晶振作为唯一时钟源，其自身精度需留有足够余量给 PN532 内部校准及 PCB 寄生影响。±20 ppm 是工业标准且能确保满足系统级的 ±50 ppm 约束。若使用高成本 ±10 ppm 晶振更好，但 ±20 ppm 为最低可接受值。",
+          "source_parameter": "frequency_stability"
+        },
+        {
+          "field": "package",
+          "op": "is",
+          "value": "['SMD', 'Surface Mount']",
+          "reason": "PCB 设计要求全板 SMT 工艺 (Ch4.1.3)，且未提及通孔元件。常见封装如 HC-49U 不适用，需选择 SMD 封装如 HCSP-4L, SM-8P, 或类似小尺寸封装。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档规定工作温度为 0°C ~ 40°C，存储温度 -10°C ~ 50°C。通常选用商业级 (Commercial Grade, 0~70°C) 晶振即可满足，部分低成本型号可能仅支持 0~50°C，建议选 0~70°C 以提供热裕量。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "keywords": [
+        "晶振",
+        "Crystal Oscillator",
+        "13.56MHz",
+        "RF Clock",
+        "PN532 Clock Source",
+        "SMD Crystal"
+      ]
+    },
+    {
+      "id": "M-TVS-USB-001",
+      "module_name": "USB数据线TVS保护",
+      "module_type": "保护",
+      "category": "保护器件",
+      "leaf_code": "l_electrostatic_and_surge_protection_tvs_esd",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "breakdown_voltage_min",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "V",
+          "reason": "USB D+/D- 线路在空闲状态下接近 3.3V，但在连接主机时可能承受瞬态电压。为防止TVS在正常通信中误触发导通导致信号失真或短路，其击穿电压(Vbr)必须高于系统最高工作电压(5.25V)并留有余量。若Vbr过低，会导致数据线直流偏置异常或功耗增加。",
+          "source_parameter": "breakdown_voltage_min"
+        },
+        {
+          "field": "clamping_voltage",
+          "op": ">=",
+          "value": 20.0,
+          "unit": "V",
+          "reason": "IEC 61000-4-2 Level 4要求能承受8kV空气放电或6kV接触放电。根据能量估算，峰值脉冲电流(Ipp)通常在15A-30A之间。TVS钳位电压(Vc)必须低于CH340N和PN532的IO引脚最大耐受电压（通常为VDD+0.5V即3.8V左右，但考虑到瞬态耐受能力，通常要求钳位电压在几伏以内以确保安全，或者通过串联电阻分压。然而，对于直接并联的TVS，若Vc过高（如>5V），可能",
+          "source_parameter": "clamping_voltage_max_15a"
+        },
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 2.0,
+          "unit": "lines",
+          "reason": "USB接口包含D+和D-两条差分数据线，TVS必须同时保护这两条线以维持差分平衡和共模抑制比。分立器件需成对使用且参数高度匹配，阵列器件更佳。",
+          "source_parameter": "channel_count"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "虽然系统工作温度为0~40°C，但元器件选型通常遵循工业级标准(-40~85°C)以保证足够的温度余量和供应链稳定性。若仅选商业级(0~70°C)，在夏季高温环境或靠近发热元件（如LDO）附近可能存在风险。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "keywords": [
+        "TVS二极管",
+        "ESD Protection",
+        "USB Data Line",
+        "Low Capacitance",
+        "Transient Voltage Suppressor",
+        "差分线保护"
+      ]
+    },
+    {
+      "id": "M-TVS-EXT-001",
+      "module_name": "扩展I/O ESD保护",
+      "module_type": "保护",
+      "category": "保护器件",
+      "leaf_code": "l_electrostatic_and_surge_protection_tvs_esd",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 4.0,
+          "unit": "ch",
+          "reason": "模块描述明确指出用于“4Pin调试排针”保护，且依赖 M-CONN-DBG-001。排针定义包含 GND, VCC_3V3, TX, RX 四个信号/电源引脚，需独立保护通道以防止串扰和单点失效。",
+          "source_parameter": "channel_count"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度为 0°C ~ 40°C (Ch1.3)。虽然商业级器件 (0~70°C) 理论上可用，但考虑到存储温度 (-10~50°C) 和生产老化测试 (50°C, Ch4.2.2)，以及可能的环境温度波动，选择宽温或工业级 (40°C/85°C) 器件更具鲁棒性且成本差异不大。若仅选商业级，需确保 85°C 不是必须的，但 0°C 下限是必须的。鉴于 Ch4.1.2 提到“商业级 (0~70",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "keywords": [
+        "ESD Protection Array",
+        "TVS Diode Array",
+        "静电保护",
+        "瞬态抑制",
+        "Multi-channel TVS",
+        "I/O Protection"
+      ]
+    },
+    {
+      "id": "M-ANT-001",
+      "module_name": "PCB天线",
+      "module_type": "传感器/射频",
+      "category": "射频无源器件",
+      "leaf_code": "l_antenna",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "resonant_frequency",
+          "op": ">=",
+          "value": 13560000.0,
+          "unit": "Hz",
+          "reason": "NFC 通信标准（ISO14443A/B, FeliCa）强制要求工作频率为 13.56 MHz。模块描述明确指出天线与 PN532 内部网络谐振于此频率。若频率偏移过大，将导致耦合效率急剧下降或无法建立通信。",
+          "source_parameter": "resonant_frequency"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            40.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档第 1.3 节约束条件明确工作温度为 0°C ～ +40°C。虽然被动元件对温度不敏感，但环境温度影响 PN532 的性能及标签芯片的工作范围，天线设计需适应此范围内的热胀冷缩引起的微小尺寸变化。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "keywords": [
+        "PCB天线",
+        "NFC天线",
+        "13.56MHz Antenna",
+        "RFID Coil",
+        "Inductive Coupling",
+        "Printed Antenna"
+      ]
+    },
+    {
+      "id": "M-LED-RED-001",
+      "module_name": "红色状态LED",
+      "module_type": "人机交互",
+      "category": "分立半导体",
+      "leaf_code": "l_rgb_led_with_built_in_ic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "forward_current_if",
+          "op": "cover",
+          "value": [
+            0.002,
+            0.03
+          ],
+          "unit": "A",
+          "reason": "LED额定电流必须允许通过标准限流电阻（330Ω-1kΩ）在3.3V供电下获得足够的指示亮度（通常>2mA即可见），同时不能超过PN532单个GPIO引脚的最大灌电流能力（通常为10-20mA），以防损坏主控芯片。",
+          "source_parameter": "forward_current_if"
+        },
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            603.0,
+            603.0
+          ],
+          "unit": "mm",
+          "reason": "物理尺寸约束。PCB设计已基于0603封装进行布局，若器件封装不符将无法装配。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            0.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "环境适应性。器件必须在指定的室内办公及实验室环境温度范围内保持正常发光特性，不出现色偏或失效。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "LED",
+        "发光二极管",
+        "Indicator LED",
+        "0603 LED",
+        "Red LED",
+        "Surface Mount LED"
+      ],
+      "note": "可选参数（未进条件）：luminous_intensity"
+    },
+    {
+      "id": "M-LED-BLU-001",
+      "module_name": "蓝色状态LED",
+      "module_type": "人机交互",
+      "category": "分立半导体",
+      "leaf_code": "l_rgb_led_with_built_in_ic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "package",
+          "op": "cover",
+          "value": [
+            603.0,
+            603.0
+          ],
+          "unit": "metric_size",
+          "reason": "需求文档明确指定为“0603 LED”，且模块分类中关键词包含“0603封装”。若封装不符，无法通过PCB装配或替换其他同位器件。",
+          "source_parameter": "package_type"
+        },
+        {
+          "field": "reverse_voltage",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "V",
+          "reason": "当GPIO输出低电平(0V)时，LED阴极电位接近0V，阳极通过限流电阻接3.3V或更高潜在电位（虽本处直接接IO，但需考虑反向漏电及可能的静电干扰）。标准LED反向耐压通常为5V，足以应对3.3V系统的反向偏置风险。",
+          "source_parameter": "reverse_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "forward_voltage",
+          "op": "cover",
+          "value": [
+            2.8,
+            4.0
+          ],
+          "unit": "V",
+          "reason": "蓝色LED典型正向压降(Vf)通常在3.0V-3.6V之间。需确保器件Vf在限流电阻设计范围内，保证在3.3V供电下能提供足够的亮度（通常5mA）。若Vf过高可能导致电流不足不亮，过低可能电流过大损坏LED。",
+          "source_parameter": "forward_voltage"
+        },
+        {
+          "field": "forward_current",
+          "op": "cover",
+          "value": [
+            0.005,
+            0.02
+          ],
+          "unit": "A",
+          "reason": "作为状态指示灯，典型工作电流设为5mA可提供良好亮度且功耗低。器件额定最大连续正向电流(I_F(max))至少需≥20mA以提供安全余量，防止瞬态过流损坏。",
+          "source_parameter": "forward_current"
+        }
+      ],
+      "keywords": [
+        "LED",
+        "发光二极管",
+        "Light Emitting Diode",
+        "蓝色 LED",
+        "0603 LED",
+        "指示用 LED"
+      ],
+      "note": "可选参数（未进条件）：luminous_intensity"
+    },
+    {
+      "id": "M-CONN-USB-001",
+      "module_name": "USB-C连接器",
+      "module_type": "调试与连接",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "connector_type",
+          "op": "is",
+          "value": "USB Type-C Receptacle",
+          "reason": "需求文档明确指定为 USB-C 接口，且系统框图及模块描述均指向 Type-C 母座。",
+          "source_parameter": "connector_type"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "SMD (Surface Mount)",
+          "reason": "PCB 制造工艺要求全板 SMT，无 DIP 插件，且连接器需配合底部接触或侧面焊接以节省空间。",
+          "source_parameter": "mounting_style"
+        },
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 16.0,
+          "unit": "pins",
+          "reason": "USB Type-C Rev 2.0 标准定义至少 16 个引脚以支持 VBUS, GND, D+, D-, CC1, CC2, SBU1, SBU2 等完整功能。虽然本设计仅用部分信号，但标准母座通常为 16Pin。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "shielding",
+          "op": "is",
+          "value": "是",
+          "reason": "USB 差分线需要良好的接地屏蔽以减少 EMI，特别是靠近 13.56MHz 射频区域。金属屏蔽外壳也是 USB Type-C 连接器的标准配置，用于提供 ESD 接地路径。",
+          "source_parameter": "shielding"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -20.0,
+            70.0
+          ],
+          "unit": "°C",
+          "reason": "系统工作温度 0~40°C，存储温度 -10~50°C。连接器作为物理器件，其材料（塑料、金属）需在系统环境范围内保持机械性能和电气性能。商业级连接器通常覆盖 -20~70°C 或 -40~85°C，需覆盖系统范围。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "USB Type-C Connector",
+        "USB-C Receptacle",
+        "Type-C母座",
+        "SMD USB-C",
+        "Bottom Contact",
+        "USB 3.1 Connector"
+      ]
+    },
+    {
+      "id": "M-CONN-DBG-001",
+      "module_name": "4Pin调试排针",
+      "module_type": "调试与连接",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 4.0,
+          "unit": "pins",
+          "reason": "模块描述明确指定为1x4 Pin Header，用于引出GND, 3.3V, TX, RX四个信号。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "pitch",
+          "op": ">=",
+          "value": 2.54,
+          "unit": "mm",
+          "reason": "标准PCB调试接口间距，决定PCB焊盘布局及连接器兼容性。",
+          "source_parameter": "pitch"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "through-hole",
+          "reason": "模块分类明确标注为Through-hole（直插），需选择带定位脚或长引脚的直插式排针以配合SMT工艺后的通孔焊接。",
+          "source_parameter": "mounting_type"
+        },
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 3.0,
+          "unit": "A",
+          "reason": "Pin 2提供3.3V电源。系统峰值电流可达120mA，虽然远低于排针额定值，但作为电源引脚需具备足够的载流能力以应对瞬态冲击和温升，通常3A是此类排针的标准保守额定值。",
+          "source_parameter": "current_rating_per_pin"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_material",
+          "op": "is",
+          "value": "phosphor_bronze",
+          "reason": "调试排针需频繁插拔逻辑分析仪探头或转接线，磷青铜具有优良的弹性和导电性，保证长期接触可靠性。",
+          "source_parameter": "contact_material"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "degC",
+          "reason": "设备工作温度为0~40°C，存储温度-10~50°C。选用工业级或宽温材料(-40~85°C)可提供更可靠的热稳定性，符合商业级产品的常规选型策略。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "keywords": [
+        "排针",
+        "Pin Header",
+        "2.54mm",
+        "Through-hole",
+        "1x4",
+        "单排直插"
+      ]
+    }
+  ]
+}

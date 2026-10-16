@@ -1,0 +1,102 @@
+{
+  "case": "case30",
+  "requirement_version": "req-case30-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-LDO-001": {
+      "module_name": "双路LDO稳压器",
+      "historical_selection": [
+        {
+          "model": "RT9013",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "RT9013",
+      "evaluation_source": ""
+    },
+    "M-MCU-001": {
+      "module_name": "NFC读写主控芯片",
+      "historical_selection": [
+        {
+          "model": "PN5321A3HN",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "PN5321A3HN",
+      "evaluation_source": ""
+    },
+    "M-USB-UART-001": {
+      "module_name": "USB转UART控制器",
+      "historical_selection": [
+        {
+          "model": "CH340N",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "CH340N",
+      "evaluation_source": ""
+    },
+    "M-XTAL-001": {
+      "module_name": "13.56MHz晶振",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-TVS-USB-001": {
+      "module_name": "USB数据线TVS保护",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-TVS-EXT-001": {
+      "module_name": "扩展I/O ESD保护",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-ANT-001": {
+      "module_name": "PCB天线",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-LED-RED-001": {
+      "module_name": "红色状态LED",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-LED-BLU-001": {
+      "module_name": "蓝色状态LED",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-USB-001": {
+      "module_name": "USB-C连接器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-DBG-001": {
+      "module_name": "4Pin调试排针",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

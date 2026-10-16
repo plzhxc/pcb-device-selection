@@ -1,0 +1,89 @@
+{
+  "case": "case6",
+  "requirement_version": "req-case6-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-SW-001": {
+      "module_name": "PCIe Switch Core",
+      "historical_selection": [
+        {
+          "model": "PEX8796_AAAB",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "PEX8796_AAAB",
+      "evaluation_source": ""
+    },
+    "M-PWR-001": {
+      "module_name": "Core Power Controller",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PWR-002": {
+      "module_name": "Auxiliary Regulator P1V8",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PWR-003": {
+      "module_name": "Auxiliary Regulator P5V",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CLK-001": {
+      "module_name": "Clock Buffer Array",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-001": {
+      "module_name": "Upstream Gold Finger",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-002": {
+      "module_name": "Downstream SlimSAS Connectors",
+      "historical_selection": [
+        {
+          "model": "U10A474240T",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "U10A474240T",
+      "evaluation_source": ""
+    },
+    "M-CTL-001": {
+      "module_name": "PERST Reset Buffers",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CTL-002": {
+      "module_name": "Level Translator",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HMI-001": {
+      "module_name": "Port Status Indicators",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}

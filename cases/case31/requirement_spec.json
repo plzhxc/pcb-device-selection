@@ -1,0 +1,585 @@
+{
+  "schema": "pcbagent.requirement_spec.v1",
+  "requirement_version": "req-case31-v1",
+  "project": {
+    "name": "case31（由历史选型产物转换）",
+    "summary": "来源 /share/home/zhengzhiqi/workspace/web/output/case31/console/stages/03_device_selection__34d1f44e.json"
+  },
+  "global_constraints": {
+    "budget_total_cny": 8.0,
+    "currency": "CNY",
+    "note": "预算取自历史产物，仅供参考"
+  },
+  "selection_items": [
+    {
+      "id": "M-PWR-001",
+      "module_name": "PW5100 同步升压芯片",
+      "module_type": "电源IC",
+      "category": "电源管理 IC",
+      "leaf_code": "l_professional_power_management_pmic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            0.9,
+            1.5
+          ],
+          "unit": "V",
+          "reason": "系统由单节干电池供电，文档明确指定输入电压范围为0.9V~1.5V。器件必须支持从最低0.9V（低电量/低温）启动并在此范围内稳定工作。",
+          "source_parameter": "input_voltage_range"
+        },
+        {
+          "field": "output_voltage",
+          "op": ">=",
+          "value": 3.3,
+          "unit": "V",
+          "reason": "系统所有数字逻辑（CX588, C10S01X）及模拟部分均依赖3.3V供电。输出电压偏差过大会导致MCU复位或触摸芯片误判。",
+          "source_parameter": "output_voltage"
+        },
+        {
+          "field": "quiescent_current",
+          "op": "<=",
+          "value": 1e-05,
+          "unit": "A",
+          "reason": "整机待机功耗要求<20μA。PW5100作为主电源，其静态电流必须极低（通常<10μA），否则无法满足整机休眠下的电池寿命要求（数月以上）。",
+          "source_parameter": "quiescent_current"
+        },
+        {
+          "field": "peak_output_current",
+          "op": ">=",
+          "value": 0.4,
+          "unit": "A",
+          "reason": "系统峰值电流估算为400mA（Ch3.1.1），且需驱动CX588内置功放瞬时大电流需求。器件额定电流必须留有裕量，防止饱和或过热保护。",
+          "source_parameter": "peak_output_current"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            40.0
+          ],
+          "unit": "°C",
+          "reason": "玩具使用环境定义为-10℃～+40℃。器件必须在整个温度范围内保证电气参数（特别是启动电压和效率）不失效。工业级(-40~85)更优但非强制，需确保低温下0.9V启动能力。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "topology",
+          "op": "is",
+          "value": "synchronous_boost",
+          "reason": "模块名称及分类明确为“同步升压”。同步拓扑相比异步拓扑具有更高的效率和更低的纹波，符合低功耗和高效率要求。",
+          "source_parameter": "topology"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "efficiency",
+          "op": ">=",
+          "value": 90.0,
+          "unit": "%",
+          "reason": "虽然器件标称效率可能>94%，但系统级功耗预算（待机<5μA，工作峰值电流受限）要求系统整体效率不低于90%以延长电池寿命。高效率直接降低发热并提升续航。",
+          "source_parameter": "efficiency"
+        },
+        {
+          "field": "package",
+          "op": "is",
+          "value": "small_SMD",
+          "reason": "PCB尺寸限制严格(≤40x60mm)，且总元器件数量少(约22颗)。器件封装应尽可能小，以节省PCB面积用于其他组件和布局。",
+          "source_parameter": "package_type"
+        }
+      ],
+      "keywords": [
+        "同步升压",
+        "DC-DC Boost",
+        "Step-up Converter",
+        "电源管理芯片",
+        "PW5100",
+        "低压输入升压"
+      ],
+      "specified_device": {
+        "model": "PW5100",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-MCU-001",
+      "module_name": "CX588 OTP语音MCU",
+      "module_type": "主控IC",
+      "category": "微控制器",
+      "leaf_code": "l_microcontroller_mcu_mpu_soc",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "input_voltage_range",
+          "op": "cover",
+          "value": [
+            2.0,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "系统由 PW5100 升压芯片提供 3.3V 电源（允许 ±5% 波动，即 3.135V~3.465V）。CX588 作为主控 IC，其 VCC 引脚必须兼容此电压。输入文档描述提及“集成...OTP语音播放芯片”，通常此类单片 OTP MCU 工作电压为 2.0V-3.6V 或 1.8V-3.6V。若器件最高耐压低于 3.3V+容差，将导致过压损坏。",
+          "source_parameter": "supply_voltage_range"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            40.0
+          ],
+          "unit": "degC",
+          "reason": "环境约束要求工作温度 -10℃ ～ +40℃。器件必须在低温下可靠启动（特别是配合升压芯片的冷启动特性）并在高温下稳定工作。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "OTP语音芯片",
+        "语音控制IC",
+        "MCU with DAC",
+        "Voice Playback MCU",
+        "CX588",
+        "音频控制MCU"
+      ],
+      "specified_device": {
+        "model": "CX588",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-SENS-001",
+      "module_name": "C10S01X 触摸感应芯片",
+      "module_type": "传感器IC",
+      "category": "传感器",
+      "leaf_code": "l_photoelectric_slot_sensor_phototransistor",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "supply_voltage",
+          "op": "cover",
+          "value": [
+            2.0,
+            3.6
+          ],
+          "unit": "V",
+          "reason": "模块由 PW5100 升压芯片提供 3.3V 电源（Ch 2.2.2），器件额定电压需兼容该总线且具备一定余量，典型 CMOS/TTL 逻辑 IC 上限通常为 3.6V。",
+          "source_parameter": "supply_voltage"
+        },
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "ch",
+          "reason": "需求文档明确指出为“单通道”触摸检测（Category: 单通道电容式触摸感应控制器；Ch 2.2.2），用于替代物理按键或作为独立触发源。",
+          "source_parameter": "channel_count"
+        },
+        {
+          "field": "standby_current",
+          "op": "<=",
+          "value": 1e-06,
+          "unit": "A",
+          "reason": "整机待机功耗要求 < 5 μA（Ch 1.3），考虑到 CX588 和其他外围也有漏电流，触摸芯片自身待机电流必须极小（估算 < 1 μA）才能满足系统级约束。",
+          "source_parameter": "standby_current"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            40.0
+          ],
+          "unit": "°C",
+          "reason": "Ch 3.2.1 规定工作温度为 -10°C ～ +40°C，依据 GB 6675 玩具标准。虽然工业级 (-40~85) 更优，但最低要求必须覆盖此范围以保证低温启动和灵敏度稳定性。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "response_time",
+          "op": "<=",
+          "value": 0.5,
+          "unit": "s",
+          "reason": "Ch 2.1.1 性能指标要求触摸响应时间 < 500ms，确保用户体验流畅。",
+          "source_parameter": "response_time"
+        }
+      ],
+      "keywords": [
+        "触摸感应芯片",
+        "Capacitive Touch Controller",
+        "CTC",
+        "Touch Sensor IC",
+        "单通道触摸",
+        "C10S01X"
+      ],
+      "specified_device": {
+        "model": "C10S01X",
+        "intent": "reference"
+      }
+    },
+    {
+      "id": "M-KPAD-001",
+      "module_name": "物理微动开关矩阵",
+      "module_type": "机械开关",
+      "category": "开关",
+      "leaf_code": "l_signal_switch_codec_multiplexer",
+      "quantity": 5,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 0.1,
+          "unit": "Ω",
+          "reason": "机械开关标准绝缘性能，防止按键未按下时GPIO引脚漏电导致误触发或增加待机功耗。",
+          "source_parameter": "insulation_resistance"
+        },
+        {
+          "field": "rated_voltage_dc",
+          "op": "<=",
+          "value": 12.0,
+          "unit": "V_DC",
+          "reason": "系统供电为3.3V。虽然3.3V远低于常规开关耐压，但为符合通用工业标准及安规隔离余量，通常选型额定电压至少12V或24V的开关。",
+          "source_parameter": "rated_voltage_dc"
+        },
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 0.05,
+          "unit": "A",
+          "reason": "按键仅传输微弱GPIO信号（通常<10mA），但考虑到焊接工艺电流承受能力及通用选型规范，50mA是SMT轻触开关的常见最低额定值。",
+          "source_parameter": "rated_current"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档规定工作温度-10℃～+40℃。开关机械结构在低温下需保持正常按压手感，高温下塑料件不软化变形。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.05,
+          "unit": "Ω",
+          "reason": "参考同系统电源开关座的接触电阻要求，按键作为GPIO输入检测，低接触电阻可确保电平跳变清晰，减少误触。",
+          "source_parameter": "contact_resistance"
+        }
+      ],
+      "keywords": [
+        "轻触开关",
+        "Tactile Switch",
+        "按键开关",
+        "Push Button Switch",
+        "SMT Tact Switch",
+        "微动开关"
+      ],
+      "note": "可选参数（未进条件）：isolation_voltage"
+    },
+    {
+      "id": "M-SPK-001",
+      "module_name": "扬声器接口端子",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "pin_count",
+          "op": ">=",
+          "value": 2.0,
+          "unit": "Pin",
+          "reason": "扬声器为单声道输出，需正极（信号）和负极（GND）两个连接点。",
+          "source_parameter": "pin_count"
+        },
+        {
+          "field": "current_rating",
+          "op": ">=",
+          "value": 1.5,
+          "unit": "A",
+          "reason": "CX588内置功放最大输出功率1.2W（8Ω负载），峰值电流可达 I = sqrt(P/R) ≈ 0.39A。考虑到启动冲击、低阻抗瞬间及工程余量（Derating），连接器额定电流需显著高于平均工作电流，建议至少1.5A以确保长期可靠性且不发热。",
+          "source_parameter": "current_rating"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            40.0
+          ],
+          "unit": "°C",
+          "reason": "产品规格书明确要求工作温度范围为-10°C至+40°C。连接器材料在此温度范围内必须保持机械强度和电气性能稳定。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.05,
+          "unit": "Ω",
+          "reason": "较低的接触电阻有助于减少音频信号传输中的功率损耗和热噪声，特别是在大电流驱动扬声器时，保证电压降在可接受范围内。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "insulation_resistance",
+          "op": ">=",
+          "value": 0.1,
+          "unit": "Ω",
+          "reason": "防止音频信号通过绝缘层漏电导致失真或功耗增加，符合一般电子连接器标准。",
+          "source_parameter": "insulation_resistance"
+        }
+      ],
+      "keywords": [
+        "扬声器连接器",
+        "Speaker Connector",
+        "PCB Terminal",
+        "Audio Output Jack",
+        "2-Pin Header",
+        "Solder Pad"
+      ]
+    },
+    {
+      "id": "M-LED-001",
+      "module_name": "LED状态指示灯",
+      "module_type": "发光器件",
+      "category": "分立半导体",
+      "leaf_code": "l_rgb_led_with_built_in_ic",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "forward_voltage",
+          "op": "cover",
+          "value": [
+            1.8,
+            3.0
+          ],
+          "unit": "V",
+          "reason": "LED正向压降直接决定限流电阻的阻值计算及GPIO负载能力。若VF过高（接近3.3V），可能导致驱动电流不足或无法点亮；若过低，需极小电阻易过流。必须覆盖红/绿光典型范围以确保电路可设计。",
+          "source_parameter": "forward_voltage"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -40.0,
+            85.0
+          ],
+          "unit": "°C",
+          "reason": "玩具需在 -10℃～+40℃ 环境下工作。LED必须在整个温度范围内正常发光且不发生光衰异常或失效。工业级温度范围是基本保障。",
+          "source_parameter": "operating_temperature"
+        },
+        {
+          "field": "reverse_voltage",
+          "op": ">=",
+          "value": 5.0,
+          "unit": "V",
+          "reason": "LED反向击穿电压通常很低（~5V）。虽然电路中串联了电阻且由GPIO控制，但在GPIO配置为高阻态或上电瞬间可能存在反向电压风险。器件本身需具备基本的反向耐压能力以防止意外损坏。",
+          "source_parameter": "reverse_voltage"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "forward_current",
+          "op": "cover",
+          "value": [
+            0.001,
+            0.02
+          ],
+          "unit": "A",
+          "reason": "CX588 GPIO通常提供几mA至十几mA驱动能力。为保护MCU引脚并确保亮度适中（不刺眼），单路电流应限制在10mA以内。同时需保证在最低供电电压（3.135V）下仍有足够亮度。",
+          "source_parameter": "forward_current"
+        },
+        {
+          "field": "luminous_intensity",
+          "op": "cover",
+          "value": [
+            2.0,
+            20.0
+          ],
+          "unit": "mcd",
+          "reason": "需求要求'亮度适中，不刺眼'且'符合儿童玩具安全标准'。过高的亮度可能伤害儿童视力或造成不适，过低则不可见。需要中等亮度等级。",
+          "source_parameter": "luminous_intensity"
+        }
+      ],
+      "keywords": [
+        "LED",
+        "发光二极管",
+        "指示灯 LED",
+        "Indicator LED",
+        "5mm LED",
+        "0805 LED"
+      ]
+    },
+    {
+      "id": "M-BAT-001",
+      "module_name": "电池连接器",
+      "module_type": "连接器",
+      "category": "连接器",
+      "leaf_code": "l_ieee_1394_firewire_connector",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            50.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档 Ch 3.2.1 规定工作温度为 -10°C ~ +40°C。连接器材料（通常为 PBT 或 PA66）和金属弹片的弹性需在低温下保持不脆断，在高温下保持夹紧力。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 1.0,
+          "unit": "A",
+          "reason": "虽然平均工作电流 < 300 mA，但系统峰值电流估算为 400 mA（Ch 3.1.1）。考虑到电池内阻随电量下降及冷启动瞬间电流，连接器触点电阻和载流能力需足够大，避免过热或压降过大影响 PW5100 启动。工程上通常选用 1A-2A 级别的电池座。",
+          "source_parameter": "rated_current"
+        },
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.02,
+          "unit": "Ω",
+          "reason": "低接触电阻有助于减少电池端的功率损耗（I²R），特别是在电池电压较低（0.9V）时，额外的压降会显著缩短有效使用时间并增加发热。",
+          "source_parameter": "contact_resistance"
+        }
+      ],
+      "keywords": [
+        "电池连接器",
+        "Battery Connector",
+        "AA Battery Holder",
+        "AAA Battery Clip",
+        "单节电池座",
+        "Kinkless Terminal"
+      ],
+      "note": "可选参数（未进条件）：insulation_resistance"
+    },
+    {
+      "id": "M-SW-001",
+      "module_name": "电源开关座",
+      "module_type": "机械开关",
+      "category": "开关",
+      "leaf_code": "l_signal_switch_codec_multiplexer",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "switch_type",
+          "op": "is",
+          "value": "['self-locking', 'non-locking']",
+          "reason": "模块描述明确指出为“板载电源通断控制开关”，且分类包含“自锁开关”和“无锁开关”。作为主电源开关，通常优先选用自锁（ON-OFF）以明确指示电源状态，防止意外开启或关闭导致数据丢失或电池耗尽，但需求文档未强制指定类型，故两者皆可，需工程确认。",
+          "source_parameter": "switch_type"
+        },
+        {
+          "field": "rated_current",
+          "op": ">=",
+          "value": 0.5,
+          "unit": "A",
+          "reason": "系统峰值工作电流估算 < 300 mA（需求文档第1章），但在 PW5100 冷启动瞬间或扬声器驱动瞬间可能存在尖峰电流。考虑到干电池内阻在低电量时增加，开关触点需能承受此瞬时大电流而不发生熔焊或过度温升。0.5 A 是满足 300 mA 系统需求并留有合理余量的最低安全阈值。",
+          "source_parameter": "rated_current"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            40.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档明确规定工作环境温度为 -10°C ～ +40°C。开关材料（塑料、金属触点）在此温度范围内必须保持正常的机械性能和电气性能，特别是低温下的触弹力变化和高温下的老化加速。",
+          "source_parameter": "operating_temperature"
+        }
+      ],
+      "preferred_conditions": [
+        {
+          "field": "contact_resistance",
+          "op": "<=",
+          "value": 0.05,
+          "unit": "Ω",
+          "reason": "该开关串联在电池与升压芯片之间。较高的接触电阻会导致额外的电压降和功耗，特别是在电池电压低至 0.9 V 时，过大的压降可能影响 PW5100 的输入电压裕度，进而影响升压效率或导致低压保护。参考电路模块清单中的典型值设定。",
+          "source_parameter": "contact_resistance"
+        },
+        {
+          "field": "mounting_type",
+          "op": "is",
+          "value": "SMD",
+          "reason": "PCB 尺寸限制为 ≤ 40 mm × 60 mm，且元器件数量约 22 颗，属于小型高密度布局。此外，可制造性章节提到“全板自动化贴片”，SMD 开关更利于 SMT 工艺并节省空间。若结构限制必须使用插件，则需特别标注，但默认推荐 SMD。",
+          "source_parameter": "mounting_style"
+        }
+      ],
+      "keywords": [
+        "电源开关",
+        "自锁开关",
+        "无锁开关",
+        "拨动开关",
+        "Tactile Switch",
+        "Slide Switch"
+      ]
+    },
+    {
+      "id": "M-ESD-001",
+      "module_name": "ESD静电保护器件",
+      "module_type": "保护器件",
+      "category": "保护器件",
+      "leaf_code": "",
+      "quantity": 1,
+      "related_requirements": [],
+      "hard_conditions": [
+        {
+          "field": "channel_count",
+          "op": ">=",
+          "value": 6.0,
+          "unit": "ch",
+          "reason": "模块 notes 明确覆盖触摸信号线及按键GPIO线。系统包含1路触摸输出(C10S01X)和5路物理按键(GPIO)，共计6条需要防护的信号线。若通道数不足，部分I/O将无保护，违反Level 3 ESD要求。",
+          "source_parameter": "channel_count"
+        },
+        {
+          "field": "clamping_voltage_max",
+          "op": ">=",
+          "value": 15.0,
+          "unit": "V",
+          "reason": "下游主控CX588工作电压为3.3V，通常IO耐压为5.5V或3.6V。为防止ESD瞬态高压损坏MCU，TVS钳位电压必须足够低。参考电路模块表5.2中ESD_PROT参数建议<15V，且需确保在8kV空气放电下钳位后剩余电压不击穿下游芯片。",
+          "source_parameter": "clamping_voltage_max"
+        },
+        {
+          "field": "operating_temperature",
+          "op": "cover",
+          "value": [
+            -10.0,
+            40.0
+          ],
+          "unit": "°C",
+          "reason": "需求文档第3.2.1章规定工作温度为 -10℃ ～ +40℃。器件在此范围内必须保持电气特性稳定，特别是ESD保护二极管的反向漏电流和击穿电压不能发生漂移导致失效。",
+          "source_parameter": "operating_temperature_range"
+        }
+      ],
+      "preferred_conditions": [],
+      "keywords": [
+        "ESD Protection Array",
+        "静电保护二极管",
+        "TVS Diode Array",
+        "ESD Suppressors",
+        "I/O Protection",
+        "多通道防护"
+      ]
+    }
+  ]
+}

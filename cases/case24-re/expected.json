@@ -1,0 +1,246 @@
+{
+  "case": "case24_re",
+  "requirement_version": "req-case24-re-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-BUCK-SY8113": {
+      "module_name": "SY8113BADC 主降压转换器",
+      "historical_selection": [
+        {
+          "model": "SY8113BADC",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "SY8113BADC",
+      "evaluation_source": ""
+    },
+    "M-PWR-BUCK-SY8089": {
+      "module_name": "SY8089AAAC 核心降压转换器",
+      "historical_selection": [
+        {
+          "model": "SY8089AAAC",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "SY8089AAAC",
+      "evaluation_source": ""
+    },
+    "M-PWR-LDO-SY7201": {
+      "module_name": "SY7201ABC 辅助降压/LDO",
+      "historical_selection": [
+        {
+          "model": "SY7201ABC",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "SY7201ABC",
+      "evaluation_source": ""
+    },
+    "M-PWR-LDO-RELAY": {
+      "module_name": "继电器驱动独立稳压源",
+      "historical_selection": [
+        {
+          "model": "LD1117S33TR",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PWR-SW-MT9700": {
+      "module_name": "MT9700-N USB限流负载开关",
+      "historical_selection": [
+        {
+          "model": "MT9700-N",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "MT9700-N",
+      "evaluation_source": ""
+    },
+    "M-COMM-PHY-RTL8211": {
+      "module_name": "RTL8211F-CG 千兆以太网PHY",
+      "historical_selection": [
+        {
+          "model": "RTL8211F-CG",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "RTL8211F-CG",
+      "evaluation_source": ""
+    },
+    "M-COMM-RS485-SP3485": {
+      "module_name": "SP3485 RS485收发器",
+      "historical_selection": [
+        {
+          "model": "SP3485",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "SP3485",
+      "evaluation_source": ""
+    },
+    "M-STOR-FLASH-W25Q": {
+      "module_name": "W25Q128JVSIQ SPI NOR Flash",
+      "historical_selection": [
+        {
+          "model": "W25Q128JVSIQ",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "W25Q128JVSIQ",
+      "evaluation_source": ""
+    },
+    "M-STOR-TF-MMC": {
+      "module_name": "Micro SD Card Slot",
+      "historical_selection": [
+        {
+          "model": "MMC-SDFST-KB3",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HMI-HDMI-MICRO": {
+      "module_name": "Micro HDMI Type-D Connector",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HMI-FPC-MIPI": {
+      "module_name": "MIPI CSI/DSI FPC Connectors",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HMI-AUDIO-PJ393": {
+      "module_name": "PJ-393 3.5mm Audio Jack",
+      "historical_selection": [
+        {
+          "model": "PJ-393",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "PJ-393",
+      "evaluation_source": ""
+    },
+    "M-HMI-LED": {
+      "module_name": "Status LEDs",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HMI-KEY": {
+      "module_name": "ADC Keys",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-ACT-OPTO-PC817": {
+      "module_name": "PC817 Optocoupler",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-ACT-TRANS-SS8050": {
+      "module_name": "SS8050 NPN Transistor",
+      "historical_selection": [
+        {
+          "model": "SS8050",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "SS8050",
+      "evaluation_source": ""
+    },
+    "M-PROT-TVSN-ARRAY": {
+      "module_name": "ESD TVS Diode Array",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-FUSE-MFR": {
+      "module_name": "MF-R075 Self-Reset Fuse",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-ZIF-260": {
+      "module_name": "260Pin Gold Finger Socket",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-GPIO-40P": {
+      "module_name": "40Pin GPIO Header",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-CONN-RTC-BR": {
+      "module_name": "CR1220 RTC Battery Holder",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-LOGIC-LVL-74LVC1T45": {
+      "module_name": "74LVC1T45 Level Translator",
+      "historical_selection": [
+        {
+          "model": "74LVC1T45",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "74LVC1T45",
+      "evaluation_source": ""
+    },
+    "M-LOGIC-BUF-74LVC1G125": {
+      "module_name": "74LVC1G125 Buffer",
+      "historical_selection": [
+        {
+          "model": "74LVC1G125",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "74LVC1G125",
+      "evaluation_source": ""
+    }
+  }
+}

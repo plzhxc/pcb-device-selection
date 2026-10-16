@@ -1,0 +1,192 @@
+{
+  "case": "case8",
+  "requirement_version": "req-case8-v1",
+  "note": "historical_selection 是当时那次运行选中的器件，用来做对照基线，不等于唯一正确答案。",
+  "modules": {
+    "M-PWR-BUCK-001": {
+      "module_name": "SYW-1912 DC-DC降压芯片",
+      "historical_selection": [
+        {
+          "model": "SYW-1912",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PWR-LDO-001": {
+      "module_name": "ME6211C33 LDO稳压器",
+      "historical_selection": [
+        {
+          "model": "ME6211C33",
+          "supplier_part": "C56789",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "ME6211C33",
+      "evaluation_source": ""
+    },
+    "M-PWR-BOOST-001": {
+      "module_name": "ME3116AM6G DC-DC升压芯片",
+      "historical_selection": [
+        {
+          "model": "ME3116AM6G",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PWR-USB-001": {
+      "module_name": "LPW5209AB5F USB限流开关",
+      "historical_selection": [
+        {
+          "model": "LPW5209AB5F",
+          "supplier_part": "C98765",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "LPW5209AB5F",
+      "evaluation_source": ""
+    },
+    "M-MCU-001": {
+      "module_name": "ESP32-C3FH4 主控芯片",
+      "historical_selection": [
+        {
+          "model": "ESP32-C3FH4",
+          "supplier_part": "C10688",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "recommended",
+      "confirmed_device": "ESP32-C3FH4",
+      "evaluation_source": ""
+    },
+    "M-COM-LTE-001": {
+      "module_name": "WH-GM800TF 4G模组",
+      "historical_selection": [
+        {
+          "model": "WH-GM800TF",
+          "supplier_part": "C22848",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "recommended",
+      "confirmed_device": "WH-GM800TF",
+      "evaluation_source": ""
+    },
+    "M-COM-GPS-001": {
+      "module_name": "ATGM336H GPS模组",
+      "historical_selection": [
+        {
+          "model": "ATGM336H",
+          "supplier_part": "C185672",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "ATGM336H",
+      "evaluation_source": ""
+    },
+    "M-COM-SIM-001": {
+      "module_name": "Nano SIM卡座",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-IF-USB-001": {
+      "module_name": "CH340G USB-UART桥接芯片",
+      "historical_selection": [
+        {
+          "model": "CH340G",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-IF-LVL-001": {
+      "module_name": "RS0102YH8 电平转换器",
+      "historical_selection": [
+        {
+          "model": "RS0102YH8",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "RS0102YH8",
+      "evaluation_source": ""
+    },
+    "M-HMI-BZ-001": {
+      "module_name": "有源蜂鸣器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HMI-LED-001": {
+      "module_name": "状态指示LED",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-HMI-KP-001": {
+      "module_name": "按键开关",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-DRV-OPTO-001": {
+      "module_name": "EL3H7 光耦隔离器",
+      "historical_selection": [
+        {
+          "model": "EL3H7",
+          "supplier_part": "C112233",
+          "verification_status": "confirmed"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "EL3H7",
+      "evaluation_source": ""
+    },
+    "M-DRV-ULN-001": {
+      "module_name": "ULN2802 达林顿阵列",
+      "historical_selection": [
+        {
+          "model": "ULN2802",
+          "supplier_part": "",
+          "verification_status": "unverified"
+        }
+      ],
+      "historical_fit": "conditional",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-FUSE-001": {
+      "module_name": "输入熔断器",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    },
+    "M-PROT-TVS-001": {
+      "module_name": "TVS阵列",
+      "historical_selection": [],
+      "historical_fit": "",
+      "confirmed_device": "",
+      "evaluation_source": ""
+    }
+  }
+}
