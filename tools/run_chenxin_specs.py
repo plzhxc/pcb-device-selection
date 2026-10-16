@@ -27,6 +27,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from src.chenxin import apply_result, to_selection_spec, validate_with_chenxin  # noqa: E402
+from src.catalog import DeviceCatalog  # noqa: E402
 from src.db import Database  # noqa: E402
 from src.milvus import DatasheetLibrary  # noqa: E402
 from src.service import SelectionService  # noqa: E402
@@ -73,7 +74,7 @@ def main(argv: Iterable[str] | None = None) -> int:
     for path in files:
         try:
             spec = json.loads(Path(path).read_text(encoding="utf-8"))
-            mine, diag = to_selection_spec(spec)
+            mine, diag = to_selection_spec(spec, catalog=DeviceCatalog(service.db))
             result = service.run(mine)
         except Exception as exc:  # noqa: BLE001 - 单份失败不中断
             print(f"跳过 {Path(path).name}：{type(exc).__name__}: {exc}")

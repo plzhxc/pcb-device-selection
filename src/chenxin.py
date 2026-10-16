@@ -112,11 +112,52 @@ def _looks_numeric(text: str) -> bool:
 
 
 def _reference_model(reference: Mapping[str, Any]) -> str:
+    """不核验的取法：优先用它给的身份，其次用原文写法。"""
+
     identity = reference.get("identity") or {}
     model = str(identity.get("model") or "").strip()
     if model:
         return model
     return str(reference.get("mention") or "").strip()
+
+
+def _reverify_identity(
+    reference: Mapping[str, Any],
+    catalog: Any,
+) -> tuple[str, str]:
+    """复核上游给出的器件身份是否真实存在。
+
+    上游的 `resolution_status` 标「matched」不等于这个型号真的在目录里——
+    实测有把 `FMMT593`、`AO3401A` 标成已定位、但库里根本没有的情况。
+    盲目沿用会让我这边跟着用错身份，所以这里一律拿目录复验一遍。
+
+    返回 (采用的型号, 结论)：
+
+    * `confirmed` —— 上游给的身份在目录里确实存在；
+    * `corrected` —— 上游给的身份查不到，但原文写法能查到，改用原文写法；
+    * `unresolved` —— 两边都查不到，保留原文写法并标未确认；
+    * `absent` —— 上游没给身份也没给原文写法。
+    """
+
+    identity = reference.get("identity") or {}
+    claimed = str(identity.get("model") or "").strip()
+    mention = str(reference.get("mention") or "").strip()
+
+    if claimed and catalog.exact(claimed) is not None:
+        return claimed, "confirmed"
+
+    # 上游给的身份不可信，退到原文写法。
+    #
+    # 这里**只用精确匹配**，不做前缀解析。上游标「系列约束，型号待选」时给的是
+    # 系列名（RT9013、ESP32-WROOM-32），如果拿前缀把它钉成一个具体型号
+    # （RT9013 → RT9013-33GB），召回会从"一批同类"缩成"一个"，反而把本来能过的
+    # 选型项卡死。系列名就该原样保留，交给召回层按类别去铺开。
+    if mention:
+        if catalog.exact(mention) is not None:
+            return mention, "corrected" if claimed else "confirmed"
+        return claimed or mention, "unresolved"
+
+    return claimed, "confirmed" if claimed else "absent"
 
 
 def _first_requirement(
@@ -132,8 +173,16 @@ def _first_requirement(
     return {}
 
 
-def to_selection_spec(spec: Mapping[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
-    """他们的 RequirementSpec → 本阶段输入。返回 (我的 spec, 转换诊断)。"""
+def to_selection_spec(
+    spec: Mapping[str, Any],
+    catalog: Any = None,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """他们的 RequirementSpec → 本阶段输入。返回 (我的 spec, 转换诊断)。
+
+    传入 `catalog`（`DeviceCatalog`）时会**复核每一个器件身份**：上游标
+    「matched」不等于那个型号真的在目录里，实测有把库里根本没有的型号标成已定位的
+    情况（`FMMT593`、`AO3401A`）。复核结论记在诊断里，可追溯。
+    """
 
     schema = str(spec.get("schema_version") or "")
     if schema != CHENXIN_SCHEMA:
@@ -154,6 +203,11 @@ def to_selection_spec(spec: Mapping[str, Any]) -> tuple[dict[str, Any], dict[str
         "specified": 0,
         "preferred": 0,
         "reference_only": 0,
+        "identity_confirmed": 0,
+        "identity_corrected": 0,
+        "identity_unresolved": 0,
+        "identity_corrections": [],
+        "mention_hints": 0,
         "notes": [],
     }
 
@@ -223,6 +277,21 @@ def to_selection_spec(spec: Mapping[str, Any]) -> tuple[dict[str, Any], dict[str
         specified = [str(x) for x in (item.get("specified_references") or [])]
         prefer_refs = [str(x) for x in (item.get("preferred_references") or [])]
         ref_only = [str(x) for x in (item.get("reference_only") or [])]
+
+        # 上游把器件分成「指定 / 优先 / 仅参考」三类，但还有一类没进这三个数组：
+        # `family`（系列约束，具体型号待选）和 `ambiguous`（存在不同候选）。
+        # 这类用户其实说了型号或系列名（如 RT9013、ESP32-WROOM-32），只是没定到具体料号。
+        # 以前这些提及被完全丢掉，召回只能靠类别；现在把它们作为**召回关键词**用起来，
+        # 但只作提示，不作硬性约束。
+        hint_mentions: list[str] = []
+        for rid in item.get("reference_ids") or []:
+            if str(rid) in specified or str(rid) in prefer_refs or str(rid) in ref_only:
+                continue
+            reference = references.get(str(rid)) or {}
+            mention = str(reference.get("mention") or "").strip()
+            if mention and mention not in hint_mentions:
+                hint_mentions.append(mention)
+
         diag["specified"] += len(specified)
         diag["preferred"] += len(prefer_refs)
         diag["reference_only"] += len(ref_only)
@@ -230,9 +299,32 @@ def to_selection_spec(spec: Mapping[str, Any]) -> tuple[dict[str, Any], dict[str
         chosen_pool = specified or prefer_refs or ref_only
         model = ""
         intent = ""
+        identity_verdict = ""
         if chosen_pool:
             reference = references.get(chosen_pool[0]) or {}
-            model = _reference_model(reference)
+            if catalog is not None:
+                model, identity_verdict = _reverify_identity(reference, catalog)
+                diag[f"identity_{identity_verdict}"] = (
+                    diag.get(f"identity_{identity_verdict}", 0) + 1
+                )
+                claimed = str((reference.get("identity") or {}).get("model") or "").strip()
+                if identity_verdict in ("corrected", "unresolved") and len(
+                    diag["identity_corrections"]
+                ) < 40:
+                    diag["identity_corrections"].append(
+                        {
+                            "item_id": str(item.get("id") or ""),
+                            "claimed": claimed,
+                            "mention": str(reference.get("mention") or ""),
+                            "used": model,
+                            "verdict": identity_verdict,
+                            "upstream_status": str(
+                                reference.get("resolution_status") or ""
+                            ),
+                        }
+                    )
+            else:
+                model = _reference_model(reference)
             intent = "reference" if ref_only and not specified else (
                 "must" if specified else "preferred"
             )
@@ -253,8 +345,15 @@ def to_selection_spec(spec: Mapping[str, Any]) -> tuple[dict[str, Any], dict[str
             "chenxin_module_id": str(item.get("module_id") or ""),
             "chenxin_selection_item_id": str(item.get("id") or ""),
         }
+        if hint_mentions:
+            # 与显式给的关键词合并，交给召回层按前缀/关键词去找
+            entry["keywords"] = hint_mentions[:4]
+            entry["mention_hints"] = hint_mentions[:4]
+            diag["mention_hints"] += len(hint_mentions[:4])
         if model:
             entry["specified_device"] = {"model": model, "intent": intent}
+        if identity_verdict:
+            entry["identity_verdict"] = identity_verdict
         if notes:
             entry["note"] = "；".join(dict.fromkeys(notes))[:600]
         if specified:

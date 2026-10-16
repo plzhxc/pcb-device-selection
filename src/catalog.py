@@ -99,6 +99,23 @@ class DeviceCatalog:
         self.db = database or Database()
 
     # ---------------------------------------------------------------- 精确
+    def exact(self, model: str) -> DeviceRow | None:
+        """只认精确命中，不做任何前缀回退。
+
+        用来复核上游给出的器件身份是否真实存在——带前缀回退的话，
+        `FMMT593` 这种库里根本没有的型号可能被"近似"到别的器件上，反而掩盖问题。
+        """
+
+        text = str(model or "").strip()
+        if not text:
+            return None
+        rows = self.db.query(
+            f"SELECT {_COLUMNS} FROM {_SEARCH_VIEW}"
+            " WHERE part_number_normalized = %s OR part_number_raw = %s LIMIT 1",
+            (text, text),
+        )
+        return _row(rows[0]) if rows else None
+
     def find_by_model(self, model: str, *, limit: int = 5) -> list[DeviceRow]:
         """按型号精确查身份，附带前缀兜底（型号常带后缀差异）。"""
 

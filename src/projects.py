@@ -24,6 +24,7 @@ import sys
 from typing import Any, Callable, Mapping
 
 from .chenxin import apply_result, to_selection_spec, validate_with_chenxin
+from .catalog import DeviceCatalog
 from .decisions import DecisionStore
 from .service import SelectionService
 
@@ -97,6 +98,8 @@ class ProjectStore:
         self.root = Path(root)
         self.root.mkdir(parents=True, exist_ok=True)
         self.service = service
+        # 复核上游给的器件身份时要用（标「matched」不等于真的在目录里）
+        self.catalog = DeviceCatalog(service.db)
         self.remote_lister = remote_lister
         self.fetcher = fetcher
         self._entries: dict[str, ProjectEntry] = {}
@@ -206,7 +209,7 @@ class ProjectStore:
             entry.remote_version = int(raw_spec.get("requirement_version") or 0)
             entry.remote_revision = int(raw_spec.get("domain_revision") or 0)
 
-            selection_spec, diag = to_selection_spec(raw_spec)
+            selection_spec, diag = to_selection_spec(raw_spec, catalog=self.catalog)
             entry.spec = selection_spec
             entry.opened_at = _now()
             entry.source_meta = {

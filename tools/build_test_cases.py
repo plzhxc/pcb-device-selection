@@ -212,7 +212,7 @@ def to_selection_input(sample: dict[str, Any]) -> dict[str, Any]:
 
     from src.chenxin import to_selection_spec  # noqa: PLC0415
 
-    converted, _ = to_selection_spec(sample)
+    converted, _ = to_selection_spec(sample, catalog=DeviceCatalog(Database()))
     return converted
 
 

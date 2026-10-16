@@ -202,13 +202,15 @@ def run(
     decisions: dict[str, dict[str, Any]],
 ) -> dict[str, Any]:
     from src.chenxin import apply_result, to_selection_spec, validate_with_chenxin  # noqa: PLC0415
+    from src.catalog import DeviceCatalog  # noqa: PLC0415
     from src.service import SelectionService  # noqa: PLC0415
 
     out_dir = out_root / project_id[:12]
     spec, meta = fetch_spec(client, project_id, out_dir)
 
-    mine, diag = to_selection_spec(spec)
-    result = SelectionService().run(mine)
+    service = SelectionService()
+    mine, diag = to_selection_spec(spec, catalog=DeviceCatalog(service.db))
+    result = service.run(mine)
     (out_dir / "candidate-set.json").write_text(
         json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8"
     )
