@@ -38,7 +38,9 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-DEFAULT_STUDIO = "/share/home/chenxin/work/01_PCBAgent"
+from src.config import studio_root  # noqa: E402
+
+DEFAULT_STUDIO = str(studio_root())
 DEFAULT_BASE = "http://[::1]:8878"
 DEFAULT_OUT = ROOT / "output" / "bridge"
 

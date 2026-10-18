@@ -20,11 +20,12 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from src.db import Database  # noqa: E402
+from src.config import pcbagent_root  # noqa: E402
 from src.decisions import DecisionStore  # noqa: E402
 from src.handoff import build_handoff, contract_only, validate_with_downstream  # noqa: E402
 from src.service import SelectionService, demo_spec, load_spec  # noqa: E402
 
-PCBAgent_ROOT = ROOT.parent / "01_PCBAgent"
+PCBAgent_ROOT = pcbagent_root()
 
 
 def _dump(payload: object, out: str | None) -> None:

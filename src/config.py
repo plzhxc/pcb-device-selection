@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import os
+from pathlib import Path
 from typing import Mapping
 
 DEFAULT_SOCKET = "/share/home/chenxin/my-database/run/mysql.sock"
@@ -17,6 +18,40 @@ DEFAULT_DATABASE = "device_parameters_dev"
 # 官方文档确认的两个远端入口
 DEFAULT_REMOTE_HOSTS = ("10.131.254.102", "10.0.0.102")
 DEFAULT_REMOTE_PORT = 3308
+
+PACKAGE_ROOT = Path(__file__).resolve().parent.parent
+
+
+def pcbagent_root() -> Path:
+    """主工程根目录（含 `netlist_end_to_end`）。
+
+    兼容两种摆放：
+
+    * 合并树：`<root>/device_selection/` 与 `<root>/netlist_end_to_end/` 同级；
+    * 独立树：`workspace/device_selection/` 与 `workspace/01_PCBAgent/` 同级。
+
+    可用 `DEVICE_SELECTION_PCBAGENT_ROOT` 显式指定。
+    """
+
+    override = os.environ.get("DEVICE_SELECTION_PCBAGENT_ROOT", "").strip()
+    if override:
+        return Path(override)
+    for candidate in (PACKAGE_ROOT.parent, PACKAGE_ROOT.parent / "01_PCBAgent"):
+        if (candidate / "netlist_end_to_end").is_dir():
+            return candidate
+    return PACKAGE_ROOT.parent / "01_PCBAgent"
+
+
+def studio_root() -> Path:
+    """需求分析工作台的代码根（含 `requirements_studio/`）。"""
+
+    override = os.environ.get("DEVICE_SELECTION_STUDIO_ROOT", "").strip()
+    if override:
+        return Path(override)
+    for candidate in (PACKAGE_ROOT.parent, PACKAGE_ROOT.parent / "01_PCBAgent"):
+        if (candidate / "requirements_studio").is_dir():
+            return candidate
+    return Path("/share/home/chenxin/work/01_PCBAgent")
 
 
 def _env(environ: Mapping[str, str], name: str, default: str) -> str:

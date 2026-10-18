@@ -34,6 +34,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from src.db import Database  # noqa: E402
+from src.config import pcbagent_root, studio_root  # noqa: E402
 from src.datasheet import lookup as datasheet_lookup  # noqa: E402
 from src.decisions import DecisionStore  # noqa: E402
 from src.handoff import build_handoff, contract_only, validate_with_downstream  # noqa: E402
@@ -48,11 +49,9 @@ STATIC = Path(__file__).resolve().parent / "static"
 DEFAULT_SPEC = ROOT / "specs" / "example_power.json"
 DEFAULT_DECISIONS = ROOT / "output" / "decisions.json"
 DEFAULT_PROJECTS = ROOT / "output" / "projects"
-PCBAgent_ROOT = ROOT.parent / "01_PCBAgent"
+PCBAgent_ROOT = pcbagent_root()
 STUDIO_BASE = os.environ.get("DEVICE_SELECTION_STUDIO", "http://[::1]:8878")
-STUDIO_ROOT = os.environ.get(
-    "DEVICE_SELECTION_STUDIO_ROOT", "/share/home/chenxin/work/01_PCBAgent"
-)
+STUDIO_ROOT = studio_root()
 
 DECISIONS = ("keep", "exclude", "discuss", "confirmed")
 
