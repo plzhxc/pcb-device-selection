@@ -1,0 +1,163 @@
+{
+  "schema_version": "1.0",
+  "template_id": "common.passive.resistor_array",
+  "version": "1.0.0",
+  "status": "implemented",
+  "family": "passive",
+  "kind": "primitive",
+  "description": "相同标称阻值、互相独立的电阻阵列端子契约；a/b 为逐单元向量，不支持隐含共端。",
+  "parameters_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "element_count": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "独立电阻单元数量，无量纲整数，必填且不可 null；同时决定 a 与 b 的逻辑位宽。"
+      },
+      "resistance_ohm": {
+        "type": "number",
+        "minimum": 0,
+        "description": "每个独立单元相同的标称电阻，SI 单位 Ω，必填且不可 null；允许 0 Ω。"
+      },
+      "tolerance_ratio": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "description": "各单元标称值的相对容差，无量纲 0～1；可省略或 null。此值不声明单元间匹配精度。",
+        "minimum": 0,
+        "maximum": 1
+      }
+    },
+    "required": [
+      "element_count",
+      "resistance_ohm"
+    ],
+    "additionalProperties": false
+  },
+  "ports": [
+    {
+      "id": "a",
+      "direction": "passive",
+      "domain": "electrical",
+      "width_parameter": "element_count"
+    },
+    {
+      "id": "b",
+      "direction": "passive",
+      "domain": "electrical",
+      "width_parameter": "element_count"
+    }
+  ],
+  "body": {
+    "representation": "terminal_contract",
+    "description": "每个 i 在 0..element_count-1 范围内代表一只独立电阻 a[i]—b[i]；不同 i 之间没有模板隐含电连接。物理实例仍为一个阵列器件，不能自动拆分封装统计。"
+  },
+  "rules": [
+    {
+      "id": "explicit_endpoint_binding",
+      "severity": "error",
+      "description": "每个逻辑端口的每一位必须恰好绑定一个示例引脚，每个引脚恰好被覆盖一次；端口名、引脚名、列表顺序均不替代显式绑定。"
+    },
+    {
+      "id": "net_identity",
+      "severity": "error",
+      "description": "同一实例作用域中只有相同的非空网名表示相同网络；null 表示已知未连接，不与其他 null 自动互连。"
+    },
+    {
+      "id": "physical_binding_missing",
+      "severity": "unresolved",
+      "description": "logical 示例仅证明逻辑连接已声明。需要物理导出时，必须提供全部实际引脚及来源，不得把 a、b 等逻辑 ID 当作真实脚号。"
+    },
+    {
+      "id": "vector_coverage",
+      "severity": "error",
+      "description": "a、b 分别覆盖位 0..element_count-1；必须具有 2 × element_count 个互异的绑定引脚，不得跳位、越界或复用引脚。"
+    },
+    {
+      "id": "independent_elements",
+      "severity": "error",
+      "description": "每个 a[i] 只与对应 b[i] 构成电阻单元，模板不短接不同 i；若外部显式指定相同网名，则按该连接保留。"
+    },
+    {
+      "id": "not_bussed_array",
+      "severity": "error",
+      "description": "具有内部公共端的排阻不能套用本模板；不得用重复的 pin_id 伪造公共端。"
+    },
+    {
+      "id": "physical_pairing_evidence",
+      "severity": "unresolved",
+      "description": "实际封装每一对脚属于哪个单元必须由输入资料明确，不能按相邻脚或奇偶编号猜测。"
+    }
+  ],
+  "sources": [
+    {
+      "kind": "design_contract",
+      "reference": "00_Project-SPEC/netlist_design/NETLIST_GENERATION_DESIGN.md"
+    }
+  ],
+  "example": {
+    "parameters": {
+      "element_count": 2,
+      "resistance_ohm": 10000,
+      "tolerance_ratio": null
+    },
+    "pin_space": "logical",
+    "pin_bindings": [
+      {
+        "port": "a",
+        "bit": 0,
+        "pin_id": "a0"
+      },
+      {
+        "port": "b",
+        "bit": 0,
+        "pin_id": "b0"
+      },
+      {
+        "port": "a",
+        "bit": 1,
+        "pin_id": "a1"
+      },
+      {
+        "port": "b",
+        "bit": 1,
+        "pin_id": "b1"
+      }
+    ],
+    "pins": [
+      {
+        "id": "a0",
+        "name": "a[0]",
+        "net": "CONTROL_0"
+      },
+      {
+        "id": "b0",
+        "name": "b[0]",
+        "net": "BIAS"
+      },
+      {
+        "id": "a1",
+        "name": "a[1]",
+        "net": "CONTROL_1"
+      },
+      {
+        "id": "b1",
+        "name": "b[1]",
+        "net": "BIAS"
+      }
+    ],
+    "expected": {
+      "status": "logical_ready",
+      "notes": "两个独立单元的 b 端由示例显式接入同一 BIAS 网络；这不声明器件内部具有公共端。逻辑 a0/b0/a1/b1 不是封装脚号。"
+    }
+  },
+  "device_type": "resistor_array",
+  "designator_prefix": "RN",
+  "abstract_description": "排阻",
+  "value_spec": {
+    "parameter": "resistance_ohm",
+    "unit": "Ω"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "instances": [
+    {
+      "instance_id": "channel_a",
+      "template_ref": {
+        "template_id": "common.circuit.filtered_divider",
+        "version": "1.0.0"
+      },
+      "parameters": {
+        "upper_ohm": 10000,
+        "lower_ohm": 10000,
+        "filter_ohm": 1000,
+        "capacitance_f": 1e-07
+      },
+      "connections": {
+        "input": "VIN",
+        "output": "OUT_A",
+        "reference": "GND"
+      }
+    },
+    {
+      "instance_id": "channel_b",
+      "template_ref": {
+        "template_id": "common.circuit.filtered_divider",
+        "version": "1.0.0"
+      },
+      "parameters": {
+        "upper_ohm": 10000,
+        "lower_ohm": 10000,
+        "filter_ohm": 1000,
+        "capacitance_f": 1e-07
+      },
+      "connections": {
+        "input": "VIN",
+        "output": "OUT_B",
+        "reference": "GND"
+      }
+    }
+  ]
+}

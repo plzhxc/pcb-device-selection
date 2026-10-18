@@ -1,0 +1,1 @@
+knowledge.pins只保留原物理编号与名称。catalog_annotations仅是有当前逐字段回执、已核对原文引用的目录注释；引文认证不自动证明该值由原文蕴含，须按来源完整条件核查，不能据此补授typed contract未证的role、mode、driver、范围、NC或required。catalog_annotation_coverage列出的未鉴证字段原值只保留在冻结记录，不是缺失的厂家原文，不得猜补。catalog来源键仅定位器件身份与库存，不是整件器件电气保证；设计依据应引用实际原文。

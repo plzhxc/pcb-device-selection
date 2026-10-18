@@ -1,0 +1,127 @@
+{
+  "schema_version": "1.0",
+  "template_id": "common.circuit.filtered_divider",
+  "version": "1.0.0",
+  "status": "implemented",
+  "family": "circuit",
+  "kind": "composite",
+  "description": "嵌套分压及滤波连接",
+  "parameters_schema": {
+    "type": "object",
+    "properties": {
+      "upper_ohm": {
+        "type": "number",
+        "exclusiveMinimum": 0
+      },
+      "lower_ohm": {
+        "type": "number",
+        "exclusiveMinimum": 0
+      },
+      "filter_ohm": {
+        "type": "number",
+        "exclusiveMinimum": 0
+      },
+      "capacitance_f": {
+        "type": "number",
+        "exclusiveMinimum": 0
+      }
+    },
+    "required": [
+      "upper_ohm",
+      "lower_ohm",
+      "filter_ohm",
+      "capacitance_f"
+    ],
+    "additionalProperties": false
+  },
+  "ports": [
+    {
+      "id": "input",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    },
+    {
+      "id": "output",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    },
+    {
+      "id": "reference",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    }
+  ],
+  "body": {
+    "representation": "composite",
+    "instances": [
+      {
+        "instance_id": "divider",
+        "template_ref": {
+          "template_id": "common.circuit.resistor_divider",
+          "version": "1.0.0"
+        },
+        "parameters": {
+          "upper_ohm": {
+            "parameter": "upper_ohm"
+          },
+          "lower_ohm": {
+            "parameter": "lower_ohm"
+          }
+        },
+        "connections": {
+          "input": {
+            "port": "input"
+          },
+          "output": {
+            "net": "tap"
+          },
+          "reference": {
+            "port": "reference"
+          }
+        }
+      },
+      {
+        "instance_id": "filter",
+        "template_ref": {
+          "template_id": "common.circuit.rc_lowpass",
+          "version": "1.0.0"
+        },
+        "parameters": {
+          "resistance_ohm": {
+            "parameter": "filter_ohm"
+          },
+          "capacitance_f": {
+            "parameter": "capacitance_f"
+          }
+        },
+        "connections": {
+          "input": {
+            "net": "tap"
+          },
+          "output": {
+            "port": "output"
+          },
+          "reference": {
+            "port": "reference"
+          }
+        }
+      }
+    ]
+  },
+  "rules": [
+    {
+      "id": "electrical_performance",
+      "severity": "unresolved",
+      "description": "仅声明连接；负载、偏置、额定与工作条件须另行验证，不保证理想电路响应。"
+    }
+  ],
+  "sources": [
+    {
+      "kind": "design_contract",
+      "reference": "00_Project-SPEC/netlist_design/COMMON_DEVICE_IMPLEMENTATION.md"
+    }
+  ]
+}

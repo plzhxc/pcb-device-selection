@@ -1,0 +1,1 @@
+device.value must be one complete scalar quantity with an explicit unit. Preserve the independently selected SI parameter; put qualifiers in their explicit parameters. Alternatively set only the redundant scalar to null so the existing typed-value normalization can represent that same selected value.

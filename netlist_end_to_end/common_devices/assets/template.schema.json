@@ -1,0 +1,650 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Offline common-device and composite template contract",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "template_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^common\\.(passive|clock|circuit)\\.[a-z][a-z0-9_]*$"
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "status": {
+      "const": "implemented"
+    },
+    "family": {
+      "enum": [
+        "passive",
+        "clock",
+        "circuit"
+      ]
+    },
+    "kind": {
+      "enum": [
+        "primitive",
+        "composite"
+      ]
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parameters_schema": {
+      "type": "object"
+    },
+    "ports": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "direction": {
+            "const": "passive"
+          },
+          "domain": {
+            "enum": [
+              "electrical",
+              "resonator"
+            ]
+          },
+          "width": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "width_parameter": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "direction",
+          "domain"
+        ],
+        "additionalProperties": false,
+        "oneOf": [
+          {
+            "required": [
+              "width"
+            ],
+            "not": {
+              "required": [
+                "width_parameter"
+              ]
+            }
+          },
+          {
+            "required": [
+              "width_parameter"
+            ],
+            "not": {
+              "required": [
+                "width"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "body": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "representation": {
+              "const": "terminal_contract"
+            },
+            "description": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "representation",
+            "description"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "representation": {
+              "const": "composite"
+            },
+            "instances": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 10000,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "instance_id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*$"
+                  },
+                  "template_ref": {
+                    "type": "object",
+                    "properties": {
+                      "template_id": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^common\\.(passive|clock|circuit)\\.[a-z][a-z0-9_]*$"
+                      },
+                      "version": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+                      }
+                    },
+                    "required": [
+                      "template_id",
+                      "version"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "parameter": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "parameter"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "literal": {}
+                          },
+                          "required": [
+                            "literal"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  },
+                  "connections": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "port": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "port"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "net": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "net"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "unconnected": {
+                              "const": true
+                            }
+                          },
+                          "required": [
+                            "unconnected"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "instance_id",
+                  "template_ref",
+                  "parameters",
+                  "connections"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "representation",
+            "instances"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "severity": {
+            "enum": [
+              "error",
+              "unresolved",
+              "warning"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "severity",
+          "description"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "enum": [
+              "design_contract",
+              "manufacturer_reference"
+            ]
+          },
+          "reference": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "kind",
+          "reference"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "example": {
+      "type": "object",
+      "properties": {
+        "parameters": {
+          "type": "object"
+        },
+        "pin_space": {
+          "const": "logical"
+        },
+        "pin_bindings": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "port": {
+                "type": "string",
+                "minLength": 1
+              },
+              "bit": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "pin_id": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "port",
+              "bit",
+              "pin_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "pins": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "net": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "net"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "expected": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "logical_ready"
+            },
+            "notes": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "status",
+            "notes"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "parameters",
+        "pin_space",
+        "pin_bindings",
+        "pins",
+        "expected"
+      ],
+      "additionalProperties": false
+    },
+    "device_type": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "not": {
+        "enum": [
+          "ic",
+          "common_device"
+        ]
+      }
+    },
+    "designator_prefix": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9]*$"
+    },
+    "abstract_description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "value_spec": {
+      "type": "object",
+      "properties": {
+        "parameter": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "parameter",
+        "unit"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "template_id",
+    "version",
+    "status",
+    "family",
+    "kind",
+    "description",
+    "parameters_schema",
+    "ports",
+    "body",
+    "rules",
+    "sources"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "primitive"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "device_type",
+          "designator_prefix",
+          "abstract_description",
+          "example"
+        ],
+        "properties": {
+          "body": {
+            "type": "object",
+            "properties": {
+              "representation": {
+                "const": "terminal_contract"
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "representation",
+              "description"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "body": {
+            "type": "object",
+            "properties": {
+              "representation": {
+                "const": "composite"
+              },
+              "instances": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 10000,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "instance_id": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*$"
+                    },
+                    "template_ref": {
+                      "type": "object",
+                      "properties": {
+                        "template_id": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "^common\\.(passive|clock|circuit)\\.[a-z][a-z0-9_]*$"
+                        },
+                        "version": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+                        }
+                      },
+                      "required": [
+                        "template_id",
+                        "version"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "parameters": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "parameter": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "parameter"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "literal": {}
+                            },
+                            "required": [
+                              "literal"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      }
+                    },
+                    "connections": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "port": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "port"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "net": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "net"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "unconnected": {
+                                "const": true
+                              }
+                            },
+                            "required": [
+                              "unconnected"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "instance_id",
+                    "template_ref",
+                    "parameters",
+                    "connections"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "representation",
+              "instances"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "device_type"
+              ]
+            },
+            {
+              "required": [
+                "designator_prefix"
+              ]
+            },
+            {
+              "required": [
+                "abstract_description"
+              ]
+            },
+            {
+              "required": [
+                "value_spec"
+              ]
+            },
+            {
+              "required": [
+                "example"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

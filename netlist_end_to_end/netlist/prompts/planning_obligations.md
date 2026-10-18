@@ -1,0 +1,9 @@
+可选obligations把本阶段尚未完成的具体任务交给后续验证，不得用文字自称完成。
+每项必须有唯一id、module、该模块固定devices aliases、source_refs、description及闭集kind。
+module_realization的devices是该任务关注的真实固定实例子集；有固定实例的模块至少列一个，纯common模块可空。代码另行冻结整个模块全部fixed与最终common为required_coverage，最终所有实际元件仍执行原静态检查；模型不得提供或缩小required_coverage。
+internal_operating_selection另给field，仅限已审核source selection_options支持的内部选择；不授权宿主、环境、电压或关闭必需接口。
+existing_source_rule另给真实physical pin和已有rule_id，最终必须由现有来源规则检查器评估。
+external_boundary/fixed_identity/missing_source保持架构阻塞，不能改个kind把缺失事实变成许可。
+不允许模型提供status、discharged、证明或检查器结果。source_refs仅指已有来源键，不因作为任务引用就成为新事实。
+旧unresolved字符串仍全部阻塞。已完成范围以外的RF法规、波形、布局等记assumptions并明确unassessed，
+这不会关闭任何所需静态角色、供电、绝缘或必接检查；必要外部范围/负载/身份和来源缺项仍如实阻塞。

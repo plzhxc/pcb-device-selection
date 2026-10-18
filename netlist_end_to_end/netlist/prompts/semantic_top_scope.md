@@ -1,0 +1,1 @@
+top-level has only cross-module module_port endpoints; no device handles, physical pin calls, local circuit code or domain declarations

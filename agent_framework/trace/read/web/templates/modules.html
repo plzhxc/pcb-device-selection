@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% import "macros.html" as ui %}
+
+{% block content %}
+  <h1>PCB Module View</h1>
+  <div class="sub"><code>{{ tree.workflow_run_id }}</code></div>
+
+  <section class="card">
+    <h2 class="card-header">兼容状态</h2>
+    {{ ui.empty(
+      "当前 Trace 没有 PCB 模块快照",
+      "旧 Web 从独立的 module_decomposition 事件投影模块树；当前八张表只保存 Workflow、Stage、Step、Agent、Session 与 LLM 的运行信息，因此这里不显示空图，也不读取旧平台代码或旧表。"
+    ) }}
+  </section>
+
+  <section class="card">
+    <h2 class="card-header">可用的执行层级</h2>
+    {% if not tree.stages %}
+      {{ ui.empty("该 Workflow 尚无 Stage 记录") }}
+    {% else %}
+      <div class="table-wrap"><table>
+        <thead><tr>
+          <th>#</th><th>stage</th><th>stage id</th>
+          <th>status</th><th>steps</th><th>agents</th>
+        </tr></thead>
+        <tbody>
+          {% for stage in tree.stages %}
+            <tr>
+              <td>{{ stage.seq or 0 }}</td>
+              <td><strong>{{ stage.name or "—" }}</strong></td>
+              <td>{{ ui.id_link("stage", stage.stage_run_id, 16) }}</td>
+              <td>{{ ui.status(stage.status) }}</td>
+              <td>{{ stage.steps or 0 }}</td>
+              <td>{{ stage.agent_runs or 0 }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table></div>
+    {% endif %}
+    <div class="card-body">
+      <a href="{{ path_for("flow", tree.workflow_run_id) }}">返回 Workflow 执行详情</a>
+    </div>
+  </section>
+{% endblock %}

@@ -1,0 +1,1 @@
+source_index条目中的value_pointer只表示本条消息JSON内已有原文的位置：/requirements/N指向requirements数组第N项（从0计数），/request指向request原文。读取该位置的完整内容作为原value，身份、条件、引用和来源含义均不改变。这不是文件路径、URL或新事实来源，无需调用工具；source_refs仍引用原source_index键，不得将value_pointer字符串作为新的source_ref。

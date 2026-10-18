@@ -1,0 +1,1 @@
+Use an existing source-supported context. Analog internal nodes may leave domain null only where their authenticated role permits it; null does not establish a known signal voltage. Power and digital-interface domain requirements remain in force.

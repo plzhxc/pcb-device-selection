@@ -1,0 +1,36 @@
+# Agent Framework Trace storage for the PCBAgent deployment profile.
+name: pcbagent-v2-trace
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: pcbagent-v2-trace-mysql
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${PCBAGENT_V2_TRACE_MYSQL_PORT:-3310}:3306"
+    environment:
+      MYSQL_DATABASE: ${PCBAGENT_V2_TRACE_MYSQL_DATABASE:-pcb_trace_v2}
+      MYSQL_USER: ${PCBAGENT_V2_TRACE_MYSQL_USER:-pcbagent_trace_v2}
+      MYSQL_PASSWORD: ${PCBAGENT_V2_TRACE_MYSQL_PASSWORD:?set Trace MySQL password}
+      MYSQL_ROOT_PASSWORD: ${PCBAGENT_V2_TRACE_MYSQL_ROOT_PASSWORD:?set Trace MySQL root password}
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --innodb-flush-log-at-trx-commit=2
+      - --sync-binlog=0
+    volumes:
+      - pcbagent-v2-trace-mysql-data:/var/lib/mysql
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          mysqladmin ping -h 127.0.0.1
+          -u"$${MYSQL_USER}" -p"$${MYSQL_PASSWORD}" --silent
+      interval: 2s
+      timeout: 5s
+      retries: 90
+      start_period: 20s
+
+volumes:
+  pcbagent-v2-trace-mysql-data:
+    name: pcbagent-v2-trace-mysql-data

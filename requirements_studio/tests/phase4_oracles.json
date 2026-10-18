@@ -1,0 +1,734 @@
+{
+  "CASE-01": {
+    "models": [
+      "VPS8702",
+      "SGM8061XN5",
+      "BL1551B",
+      "ME6211C25",
+      "SGM2209-ADJ",
+      "TL432",
+      "JC3H7C"
+    ],
+    "facts": [
+      "100\\s*MHz",
+      "差分",
+      "BNC",
+      "USB.?C",
+      "衰减|量程",
+      "LED"
+    ],
+    "approx_bom": 190,
+    "intents": {
+      "VPS8702": "reference"
+    }
+  },
+  "CASE-02": {
+    "models": [
+      "ESP32-C3FH4",
+      "WH-GM800TF",
+      "ATGM336H",
+      "SYW-1912",
+      "ME6211C33",
+      "ME3116AM6G",
+      "LPW5209AB5F",
+      "ULN2802",
+      "EL3H7",
+      "RS0102YH8"
+    ],
+    "facts": [
+      "9\\s*路.*继电|继电.*9\\s*路",
+      "4G",
+      "GPS.*北斗|北斗.*GPS",
+      "Wi.?Fi|WiFi",
+      "蓝牙",
+      "Nano.?SIM|SIM.*Nano",
+      "IPEX",
+      "SMA",
+      "蜂鸣|报警"
+    ],
+    "approx_bom": 140,
+    "intents": {
+      "SYW-1912": "reference",
+      "ME3116AM6G": "prefer"
+    }
+  },
+  "CASE-03": {
+    "models": [
+      "AD9363",
+      "STM32F411CEU6",
+      "MP2236GJ",
+      "ADP1755",
+      "ME6217C33",
+      "ME6211C18",
+      "RTL8211F-CG",
+      "USB3320",
+      "CH343P",
+      "CH334P",
+      "TXS0102DQER"
+    ],
+    "facts": [
+      "70\\s*MHz",
+      "6\\s*GHz",
+      "8.{0,8}SMA|SMA.{0,8}8",
+      "千兆|1000.?M|1.?Gbps",
+      "一拖四|1.{0,2}4|4.{0,6}Hub|Hub.{0,6}4",
+      "100\\s*Pin",
+      "80\\s*Pin",
+      "4路|4 路"
+    ],
+    "approx_bom": 274,
+    "intents": {
+      "AD9363": "prefer"
+    }
+  },
+  "CASE-04": {
+    "models": [
+      "PEX8724",
+      "JMB585",
+      "STM32G030C8T6",
+      "TPS56520",
+      "TPS56C230",
+      "LMK00301",
+      "PCA9306",
+      "P25Q40",
+      "2N7002"
+    ],
+    "facts": [
+      "PCIe.*Gen3|Gen3.*PCIe",
+      "5.{0,8}SATA|SATA.{0,8}5",
+      "2.{0,8}风扇|风扇.{0,8}2",
+      "6\\s*G|6\\s*Gbps",
+      "LED"
+    ],
+    "approx_bom": 476
+  },
+  "CASE-05": {
+    "models": [
+      "STM32F446ZET6",
+      "TMC2209",
+      "TPS5450",
+      "ME6211C33",
+      "HD50N06D",
+      "AO3400",
+      "MCP2542FD",
+      "INA826",
+      "AT24C32D",
+      "SN74HC125",
+      "74HCT365D",
+      "74LVC1G125",
+      "EL357C"
+    ],
+    "facts": [
+      "9.{0,10}轴|九轴",
+      "4.{0,10}加热|加热.{0,10}4",
+      "6.{0,8}风扇|风扇.{0,8}6",
+      "CAN\\s*FD",
+      "PT100",
+      "9.{0,8}DIAG|DIAG.{0,8}9",
+      "3.{0,8}BLTouch|BLTouch.{0,8}3",
+      "36",
+      "21",
+      "18.{0,8}LED|LED.{0,8}18",
+      "共振补偿",
+      "压力提前"
+    ],
+    "approx_bom": 383,
+    "reference_quantities": {
+      "TMC2209": 9
+    }
+  },
+  "CASE-06": {
+    "models": [
+      "STM32F407VET6",
+      "TPS62933",
+      "ME6211C33",
+      "W25Q128JVSIQ",
+      "B0505S-3WR3",
+      "TJA1051T/3",
+      "THVD1420DR",
+      "MAX3232IDRG4",
+      "CA-IS3722LS",
+      "PC817",
+      "PESD3V3L2BT"
+    ],
+    "facts": [
+      "2.{0,8}CAN|CAN.{0,8}2",
+      "2.{0,8}RS.?485|RS.?485.{0,8}2",
+      "RS.?232",
+      "隔离",
+      "4.{0,8}GH1.25|GH1.25.{0,8}4",
+      "XT30PW",
+      "USB.?C"
+    ],
+    "approx_bom": 177
+  },
+  "CASE-07": {
+    "models": [
+      "ESP32-S3-WROOM-1U",
+      "TPS5430",
+      "HR911105A",
+      "G5Q-14"
+    ],
+    "facts": [
+      "百兆|100.?Mbps",
+      "ADC|模拟.*采集",
+      "隔离.*RS.?485|RS.?485.*隔离",
+      "继电器",
+      "有源晶振|有源时钟|时钟",
+      "LED"
+    ],
+    "approx_bom": 323
+  },
+  "CASE-08": {
+    "models": [
+      "STM32F407VET6",
+      "AGM6014A",
+      "W25Q256JVEIQ",
+      "LR7533",
+      "TMP102",
+      "LMV321",
+      "MX5050T",
+      "XR2318",
+      "AGM15P13E"
+    ],
+    "facts": [
+      "恒压|CV",
+      "恒流|CC",
+      "示波",
+      "万用",
+      "通断",
+      "任意波形",
+      "正弦",
+      "三角",
+      "BNC",
+      "香蕉",
+      "编码器|旋钮",
+      "40\\s*Pin"
+    ],
+    "approx_bom": 385,
+    "intents": {
+      "MX5050T": "reference"
+    }
+  },
+  "CASE-09": {
+    "models": [
+      "PN5321A3HN",
+      "CH340N",
+      "RT9013"
+    ],
+    "facts": [
+      "13.56\\s*MHz",
+      "ISO\\s*14443\\s*A|ISO14443A/B",
+      "18092",
+      "Mifare|MIFARE",
+      "Desfire|DESFire",
+      "FeliCa",
+      "NTAG",
+      "PCB.{0,8}天线|板载.{0,8}天线",
+      "红.*蓝|双色",
+      "USB.?C"
+    ],
+    "approx_bom": 64,
+    "intents": {
+      "PN5321A3HN": "must",
+      "CH340N": "prefer",
+      "RT9013": "prefer"
+    }
+  },
+  "CASE-10": {
+    "models": [
+      "CY7C68013A-56LTXC",
+      "AD9288BSTZ-100",
+      "AD8138ARZ",
+      "AD8337BCPZ",
+      "TPS72301",
+      "SPX3819",
+      "LM2776",
+      "MCP1501T-18",
+      "TLV3501",
+      "AD5304",
+      "OPA692",
+      "AD8065",
+      "RTL8211EG-VB",
+      "3PD5651",
+      "74AVCH8T245",
+      "CH340N",
+      "24LC64",
+      "AQY282S",
+      "LMH6643",
+      "MT9700"
+    ],
+    "facts": [
+      "四通道|4.{0,3}通道",
+      "100\\s*MSPS",
+      "100\\s*MHz",
+      "触发",
+      "差分|模拟前端",
+      "千兆",
+      "50\\s*Pin",
+      "IPEX",
+      "JTAG",
+      "校准",
+      "量程"
+    ],
+    "approx_bom": 424,
+    "reference_quantities": {
+      "AD9288BSTZ-100": 2
+    }
+  },
+  "CASE-11": {
+    "models": [
+      "IP5568",
+      "RUH30D20H",
+      "RU20P7C",
+      "BSS84",
+      "SE2N7002E",
+      "TM-005-D-02"
+    ],
+    "facts": [
+      "18\\s*W",
+      "10\\s*W",
+      "Qi",
+      "QC3|QC\\s*3",
+      "PD",
+      "18650",
+      "四段|4段|4 段",
+      "USB.?A",
+      "唤醒"
+    ],
+    "approx_bom": 109
+  },
+  "CASE-12": {
+    "models": [
+      "STM32F407VET6",
+      "XL4016E1",
+      "LM1117IMPX-3.3",
+      "CH224K",
+      "DRV8870",
+      "LSM6DS3TR-C",
+      "TMB12A03",
+      "BSS138"
+    ],
+    "facts": [
+      "4.{0,8}电机|电机.{0,8}4|四.{0,8}电机",
+      "4.{0,8}舵机|舵机.{0,8}4|四.{0,8}舵机",
+      "PWM",
+      "姿态|IMU",
+      "5V|5\\s*/\\s*9",
+      "9V|9\\s*/\\s*12",
+      "12V|12\\s*V",
+      "备用",
+      "LED"
+    ],
+    "approx_bom": 123
+  },
+  "CASE-13": {
+    "models": [
+      "ESP32-WROOM-32E",
+      "E32-433T30D",
+      "SX1278",
+      "TP4056X",
+      "SX1308",
+      "IP3005A",
+      "SPX3819",
+      "S8050",
+      "AO3401A"
+    ],
+    "facts": [
+      "433\\s*MHz",
+      "LoRa",
+      "透明传输|透明收发",
+      "Wi.?Fi|WiFi",
+      "蓝牙",
+      "18650",
+      "四段|4段|4 段",
+      "USB.?C",
+      "IPEX"
+    ],
+    "approx_bom": 82
+  },
+  "CASE-14": {
+    "models": [
+      "STM32G431RBT6",
+      "NCE7560K",
+      "FMMT593",
+      "W25Q16JVUXIQ",
+      "RS624XQ",
+      "TJA1051TK/3",
+      "GS4157B",
+      "LM321",
+      "TS-KG02S"
+    ],
+    "facts": [
+      "三相",
+      "BLDC",
+      "PMSM",
+      "无感|无传感",
+      "滑模",
+      "CAN",
+      "3S",
+      "6S",
+      "编码器",
+      "霍尔",
+      "MR30PW",
+      "XT30PW"
+    ],
+    "approx_bom": 334
+  },
+  "CASE-15": {
+    "models": [
+      "STM32F405RGT6",
+      "RP2040",
+      "TPS54540",
+      "ME6212C33",
+      "MPU6500",
+      "MAX3051EKA+T",
+      "CH340N",
+      "2N3904"
+    ],
+    "facts": [
+      "双路|2.{0,4}路",
+      "CAN\\s*FD",
+      "ISOBUS",
+      "4.{0,10}控制接口|4.{0,8}电机|4.{0,8}泵|4.{0,6}路",
+      "2.{0,8}传感|2.{0,8}限位",
+      "XT30PW",
+      "USB.?C",
+      "蜂鸣|报警"
+    ],
+    "approx_bom": 98,
+    "intents": {
+      "MAX3051EKA+T": "reference"
+    }
+  },
+  "CASE-16": {
+    "models": [
+      "EG1163S",
+      "EG2132",
+      "IRFP4568",
+      "CRSS042N10N",
+      "LM5164",
+      "MBR120150WT",
+      "SLT130125T103MTB",
+      "EGS002"
+    ],
+    "facts": [
+      "2\\s*kW|2000\\s*W|2KW",
+      "220\\s*V",
+      "50\\s*Hz",
+      "3\\s*%",
+      "正弦",
+      "恒流|CC",
+      "恒压|CV",
+      "切换",
+      "隔离",
+      "USB.?C"
+    ],
+    "approx_bom": 350,
+    "intents": {
+      "EG1163S": "reference"
+    }
+  },
+  "CASE-17": {
+    "models": [
+      "ESP32-C3",
+      "ES8311",
+      "NS4150B",
+      "W25Q128JVSIQ",
+      "RT9013-33GB",
+      "SI1304BDL",
+      "AO3401A",
+      "TP4057",
+      "ZTS6216",
+      "RFANT3216120A5T"
+    ],
+    "facts": [
+      "Wi.?Fi|WiFi",
+      "蓝牙",
+      "云",
+      "全双工",
+      "回声消除",
+      "3\\s*W",
+      "I2S",
+      "MEMS|麦克风",
+      "USB.?C",
+      "调试"
+    ],
+    "approx_bom": 82
+  },
+  "CASE-18": {
+    "models": [
+      "GD32F470ZIT6",
+      "ADS1298IPA",
+      "B88069X1640T902",
+      "DTC114EE",
+      "SK34",
+      "IRLML6402",
+      "GC8838",
+      "CH340C"
+    ],
+    "facts": [
+      "12.{0,3}导联|十二导联",
+      "24.{0,3}位|24.{0,3}bit",
+      "RLD|右腿",
+      "呼吸",
+      "脱落",
+      "打印|走纸",
+      "28\\s*Pin",
+      "XT60",
+      "锂电|电池",
+      "蜂鸣|报警"
+    ],
+    "approx_bom": 347,
+    "reference_quantities": {
+      "ADS1298IPA": 2
+    }
+  },
+  "CASE-19": {
+    "models": [
+      "CX588",
+      "C10S01X",
+      "PW5100"
+    ],
+    "facts": [
+      "6.{0,4}键|六.{0,4}键",
+      "语音|音效",
+      "0.9\\s*V|0.9.{0,4}1.5\\s*V",
+      "1.5\\s*V",
+      "3.3\\s*V",
+      "触摸",
+      "唤醒",
+      "8\\s*Ω|8\\s*欧",
+      "2\\s*W",
+      "LED"
+    ],
+    "approx_bom": 22,
+    "intents": {
+      "CX588": "must",
+      "C10S01X": "must",
+      "PW5100": "must"
+    }
+  },
+  "CASE-20": {
+    "models": [
+      "AT32F403AVGT7",
+      "TPS54360",
+      "LM1117GS-3.3",
+      "GS8552-SR",
+      "SC81440",
+      "LN33X61Q1",
+      "BSS138",
+      "CH340N"
+    ],
+    "facts": [
+      "恒流",
+      "DAC",
+      "ADC",
+      "PID|闭环",
+      "电流",
+      "电压",
+      "OLED",
+      "上位机",
+      "编码器|旋钮",
+      "风扇",
+      "温控"
+    ],
+    "approx_bom": 309
+  },
+  "CASE-21": {
+    "models": [
+      "TPA3255",
+      "NE5532",
+      "HFD4/5-S",
+      "S8050"
+    ],
+    "facts": [
+      "双声道|2.{0,3}声道|立体声",
+      "BTL",
+      "蓝牙",
+      "AAC",
+      "aptX",
+      "3.5mm|3.5\\s*mm",
+      "RCA",
+      "低音",
+      "高音",
+      "24.{0,4}48\\s*V|24V.*48V"
+    ],
+    "approx_bom": 200
+  },
+  "CASE-22": {
+    "models": [
+      "STM32F405RGT6",
+      "AHT10",
+      "QMC5883L",
+      "BMP280",
+      "MAX3485ECSA",
+      "2N7002",
+      "TC6291B",
+      "TP5000"
+    ],
+    "facts": [
+      "温湿|温度.*湿度",
+      "地磁",
+      "气压",
+      "MODBUS",
+      "RS.?485",
+      "TF",
+      "RTC",
+      "CR1220",
+      "USB.?C",
+      "报警|蜂鸣",
+      "0.3",
+      "2\\s*%\\s*RH|2%RH"
+    ],
+    "approx_bom": 139,
+    "intents": {
+      "TC6291B": "prefer",
+      "TP5000": "prefer"
+    }
+  },
+  "CASE-23": {
+    "models": [
+      "ESP32-WROOM-32",
+      "MPU6500",
+      "ME6118A33",
+      "AO3416"
+    ],
+    "facts": [
+      "四轴|4.{0,3}轴",
+      "720",
+      "PWM",
+      "图传",
+      "App|APP",
+      "姿态",
+      "PID",
+      "气压|定高",
+      "1S|单节",
+      "3.7\\s*V"
+    ],
+    "approx_bom": 53
+  },
+  "CASE-24": {
+    "models": [
+      "STM32U5A9NJH6Q",
+      "LSM6DSV16X",
+      "LPS22HB",
+      "HTS221",
+      "MX25UM51245GXDI00",
+      "TXS0108EPWR"
+    ],
+    "facts": [
+      "640.{0,3}400",
+      "近眼|AR",
+      "9轴|九轴",
+      "气压",
+      "TF",
+      "USB.?C",
+      "MIPI|DSI",
+      "温湿|温度.*湿度"
+    ],
+    "approx_bom": 145,
+    "intents": {
+      "STM32U5A9NJH6Q": "reference",
+      "LSM6DSV16X": "reference",
+      "LPS22HB": "reference",
+      "HTS221": "reference",
+      "MX25UM51245GXDI00": "reference",
+      "TXS0108EPWR": "reference"
+    }
+  },
+  "CASE-25": {
+    "models": [
+      "RK3566",
+      "RK809-5",
+      "SY8113BADC",
+      "SY8089AAAC",
+      "SY7201ABC",
+      "MT9700-N",
+      "W25Q128JVSIQ",
+      "74LVC1T45",
+      "74LVC1G125",
+      "RTL8211F-CG",
+      "SP3485",
+      "SS8050"
+    ],
+    "facts": [
+      "260\\s*Pin",
+      "29",
+      "79",
+      "HDMI",
+      "4K",
+      "60",
+      "1080",
+      "MIPI.*DSI|DSI.*MIPI",
+      "CSI",
+      "DVP",
+      "千兆",
+      "512\\s*GB",
+      "eMMC",
+      "USB.*3.0|USB.*3",
+      "RS.?485",
+      "4.{0,10}继电|继电.{0,10}4",
+      "40\\s*Pin",
+      "RTC"
+    ],
+    "approx_bom": 772,
+    "intents": {
+      "SY7201ABC": "reference"
+    }
+  },
+  "CASE-26": {
+    "models": [
+      "IAP15F2K61S2-28I-LQFP44",
+      "CH340C",
+      "SN74HC573ADWR",
+      "TCT40-16T",
+      "DS18B20",
+      "S8050",
+      "SI2301"
+    ],
+    "facts": [
+      "8051",
+      "一键|自动下载",
+      "共阴",
+      "共阳",
+      "4.{0,2}4|4×4",
+      "独立按键",
+      "ADC",
+      "超声",
+      "红外",
+      "8.{0,8}LED|LED.{0,8}8",
+      "20\\s*Pin",
+      "16\\s*Pin",
+      "6\\s*Pin",
+      "USB.?B"
+    ],
+    "approx_bom": 167
+  },
+  "CASE-27": {
+    "models": [
+      "AT24C16D",
+      "LP3220",
+      "S8550",
+      "MMBT3904",
+      "G6S-2",
+      "PLT133/T10W",
+      "FL26T2"
+    ],
+    "facts": [
+      "STM32",
+      "4K.{0,3}30|4K30",
+      "EDID",
+      "SPDIF",
+      "光纤",
+      "3.5\\s*mm",
+      "USB",
+      "键盘|键鼠",
+      "鼠标|键鼠",
+      "独立",
+      "同步|联动",
+      "5\\s*V"
+    ],
+    "approx_bom": 398
+  }
+}

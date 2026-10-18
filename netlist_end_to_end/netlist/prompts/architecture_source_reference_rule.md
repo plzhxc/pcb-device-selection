@@ -1,0 +1,1 @@
+Use source_index keys, not value_pointer locations; each cited source must support the stated claim. Available keys are navigation aids, not replacement citations or proof of the claim.

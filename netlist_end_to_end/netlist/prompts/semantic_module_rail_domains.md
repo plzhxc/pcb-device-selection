@@ -1,0 +1,1 @@
+检查module_plan的每个port：domain_binding=rail要求该module_port和对应connector触点真实连到voltage_domain句柄；只把connector接到未供电的外部port不满足供电。domain_binding=logic只表达信号逻辑电压上下文，绝不能将信号脚直接连到电源句柄。逐项检查核心supply/ground pin_usage.domain与厂家供电符号，所有必需实体电源线由本模块SCL完成。

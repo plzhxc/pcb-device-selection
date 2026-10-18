@@ -1,0 +1,125 @@
+{
+  "schema_version": "1.0",
+  "template_id": "common.passive.photoresistor",
+  "version": "1.0.0",
+  "status": "implemented",
+  "family": "passive",
+  "kind": "primitive",
+  "description": "表达二端光敏电阻与一个明确条件下的参考阻值，不把光电二极管、光电晶体管或带电路的光传感模块归入本模板。",
+  "parameters_schema": {
+    "type": "object",
+    "properties": {
+      "resistance_at_reference_ohm": {
+        "type": "number",
+        "description": "参考照度及测量条件下的阻值，Ω。",
+        "exclusiveMinimum": 0
+      },
+      "reference_illuminance_lux": {
+        "type": "number",
+        "description": "参考照度，lx；0可表达暗条件，但须在测量条件中明确。",
+        "minimum": 0
+      },
+      "measurement_conditions": {
+        "type": "string",
+        "minLength": 1,
+        "description": "该参考点的照明与测量条件说明；不是任意型号的普适条件。"
+      },
+      "response_curve_ref": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1,
+        "description": "阻值与光照响应曲线依据；null表示未提供。"
+      }
+    },
+    "required": [
+      "resistance_at_reference_ohm",
+      "reference_illuminance_lux",
+      "measurement_conditions",
+      "response_curve_ref"
+    ],
+    "additionalProperties": false
+  },
+  "ports": [
+    {
+      "id": "a",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    },
+    {
+      "id": "b",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    }
+  ],
+  "body": {
+    "representation": "terminal_contract",
+    "description": "保留两个独立端点及器件实例；由显式pin_bindings建立角色和引脚的对应，不推断商品脚序或自动合并网络。"
+  },
+  "rules": [
+    {
+      "id": "reference_conditions",
+      "severity": "error",
+      "description": "阻值、照度和测量条件需要同时提供；不能由R类位号推测它是普通电阻。"
+    },
+    {
+      "id": "curve_missing",
+      "severity": "unresolved",
+      "description": "无响应曲线时不能把照度按线性关系换算为阻值；光谱和温度影响也不能默认已知。"
+    },
+    {
+      "id": "terminal_mapping",
+      "severity": "error",
+      "description": "端点a/b映射到实例引脚须有来源，不能使用网名推脚号。"
+    }
+  ],
+  "sources": [
+    {
+      "kind": "design_contract",
+      "reference": "00_Project-SPEC/netlist_design/NETLIST_GENERATION_DESIGN.md"
+    }
+  ],
+  "example": {
+    "parameters": {
+      "resistance_at_reference_ohm": 5000,
+      "reference_illuminance_lux": 100,
+      "measurement_conditions": "人工示例参考点；无商品对应，不用于性能预测",
+      "response_curve_ref": null
+    },
+    "pin_space": "logical",
+    "pin_bindings": [
+      {
+        "port": "a",
+        "bit": 0,
+        "pin_id": "a"
+      },
+      {
+        "port": "b",
+        "bit": 0,
+        "pin_id": "b"
+      }
+    ],
+    "pins": [
+      {
+        "id": "a",
+        "name": "a",
+        "net": "N_SENSE"
+      },
+      {
+        "id": "b",
+        "name": "b",
+        "net": "N_RETURN"
+      }
+    ],
+    "expected": {
+      "status": "logical_ready",
+      "notes": "人工逻辑示例，仅连接信息就绪；可空性能参数仍为未知，未确认物理脚号或电气验证。"
+    }
+  },
+  "device_type": "photoresistor",
+  "designator_prefix": "RL",
+  "abstract_description": "光敏电阻"
+}

@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.0",
+  "template_id": "common.passive.thermistor",
+  "version": "1.0.0",
+  "status": "implemented",
+  "family": "passive",
+  "kind": "primitive",
+  "description": "表达二端热敏电阻及其参考阻值、温度条件；NTC/PTC 必须明确，不能把它作为与温度无关的普通电阻。",
+  "parameters_schema": {
+    "type": "object",
+    "properties": {
+      "coefficient": {
+        "type": "string",
+        "enum": [
+          "ntc",
+          "ptc"
+        ],
+        "description": "温度系数类别；仅在资料适用温区内解释。"
+      },
+      "resistance_at_reference_ohm": {
+        "type": "number",
+        "description": "参考温度下阻值，Ω；不可将其他温度下的阻值混用。",
+        "exclusiveMinimum": 0
+      },
+      "reference_temperature_k": {
+        "type": "number",
+        "description": "参考温度，K；原始摄氏温度应明确换算并保留来源。",
+        "exclusiveMinimum": 0
+      },
+      "rt_curve_ref": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1,
+        "description": "R(T)曲线或参数模型的依据；null表示尚无温度行为模型。"
+      }
+    },
+    "required": [
+      "coefficient",
+      "resistance_at_reference_ohm",
+      "reference_temperature_k",
+      "rt_curve_ref"
+    ],
+    "additionalProperties": false
+  },
+  "ports": [
+    {
+      "id": "a",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    },
+    {
+      "id": "b",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    }
+  ],
+  "body": {
+    "representation": "terminal_contract",
+    "description": "保留两个独立端点及器件实例；由显式pin_bindings建立角色和引脚的对应，不推断商品脚序或自动合并网络。"
+  },
+  "rules": [
+    {
+      "id": "condition_required",
+      "severity": "error",
+      "description": "阻值必须与参考温度一起保存；NTC/PTC类别未知时不能自动选择。"
+    },
+    {
+      "id": "rt_missing",
+      "severity": "unresolved",
+      "description": "rt_curve_ref 为 null 时可表达连接，但不能计算其他温度下阻值或判定过温保护。"
+    },
+    {
+      "id": "keep_terminals",
+      "severity": "error",
+      "description": "保留两个端点及实例；不得因参考阻值相同而合并多个器件。"
+    }
+  ],
+  "sources": [
+    {
+      "kind": "design_contract",
+      "reference": "00_Project-SPEC/netlist_design/NETLIST_GENERATION_DESIGN.md"
+    }
+  ],
+  "example": {
+    "parameters": {
+      "coefficient": "ntc",
+      "resistance_at_reference_ohm": 10000,
+      "reference_temperature_k": 298.15,
+      "rt_curve_ref": null
+    },
+    "pin_space": "logical",
+    "pin_bindings": [
+      {
+        "port": "a",
+        "bit": 0,
+        "pin_id": "a"
+      },
+      {
+        "port": "b",
+        "bit": 0,
+        "pin_id": "b"
+      }
+    ],
+    "pins": [
+      {
+        "id": "a",
+        "name": "a",
+        "net": "N_SENSE"
+      },
+      {
+        "id": "b",
+        "name": "b",
+        "net": "N_RETURN"
+      }
+    ],
+    "expected": {
+      "status": "logical_ready",
+      "notes": "人工逻辑示例，仅连接信息就绪；可空性能参数仍为未知，未确认物理脚号或电气验证。"
+    }
+  },
+  "device_type": "thermistor",
+  "designator_prefix": "RT",
+  "abstract_description": "热敏电阻"
+}

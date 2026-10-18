@@ -1,0 +1,3 @@
+-r requirements.txt
+# Validates the actual strict transport schema, including nested numeric unions.
+jsonschema>=4.18,<5

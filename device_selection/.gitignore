@@ -1,0 +1,23 @@
+# 运行产物：选型结果、决定、项目缓存、回归报告
+output/
+
+# 归档还原的现有代码：只作本地参考，正式来源见 Worklib/backup/
+# （预置元件库已复制到 assets/，不再依赖这里）
+legacy/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# 虚拟环境
+.venv/
+venv/
+
+# 编辑器与系统
+.vscode/
+.idea/
+.DS_Store
+
+# 本地凭据：模型接口配置文件不入库
+*.local.env

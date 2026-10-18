@@ -1,0 +1,1 @@
+Complete chunks cited by supplied contracts or canonical supply symbols, including cross-device citations; no inferred facts or truncated chunks.

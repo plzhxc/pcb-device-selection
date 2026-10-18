@@ -1,0 +1,163 @@
+{
+  "schema_version": "1.0",
+  "template_id": "common.passive.potentiometer",
+  "version": "1.0.0",
+  "status": "implemented",
+  "family": "passive",
+  "kind": "primitive",
+  "description": "单联三端电位器的逻辑端子契约；总阻值必需，滑动位置允许明确未知，不能虚构中点。",
+  "parameters_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "resistance_ohm": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "description": "两个固定端 a 与 b 之间的标称总电阻，SI 单位 Ω，必填且不可 null，严格大于 0。"
+      },
+      "wiper_ratio": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "description": "理想电阻分配比例 R(a,wiper)/R(a,b)，无量纲 0～1，必填但可 null；null 表示未指定滑动端电气位置，不等于 0.5，也不声明机械角度。",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "tolerance_ratio": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "description": "总电阻相对容差，无量纲 0～1；可省略或 null，不代表滑动接触精度。",
+        "minimum": 0,
+        "maximum": 1
+      }
+    },
+    "required": [
+      "resistance_ohm",
+      "wiper_ratio"
+    ],
+    "additionalProperties": false
+  },
+  "ports": [
+    {
+      "id": "a",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    },
+    {
+      "id": "b",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    },
+    {
+      "id": "wiper",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    }
+  ],
+  "body": {
+    "representation": "terminal_contract",
+    "description": "固定端 a、b 与滑动端 wiper 是三个独立端点。wiper_ratio 已知时可描述理想的电阻分配；未知时只生成端点连接，不生成确定分压或机械位置。"
+  },
+  "rules": [
+    {
+      "id": "explicit_endpoint_binding",
+      "severity": "error",
+      "description": "每个逻辑端口的每一位必须恰好绑定一个示例引脚，每个引脚恰好被覆盖一次；端口名、引脚名、列表顺序均不替代显式绑定。"
+    },
+    {
+      "id": "net_identity",
+      "severity": "error",
+      "description": "同一实例作用域中只有相同的非空网名表示相同网络；null 表示已知未连接，不与其他 null 自动互连。"
+    },
+    {
+      "id": "physical_binding_missing",
+      "severity": "unresolved",
+      "description": "logical 示例仅证明逻辑连接已声明。需要物理导出时，必须提供全部实际引脚及来源，不得把 a、b 等逻辑 ID 当作真实脚号。"
+    },
+    {
+      "id": "three_terminal_preservation",
+      "severity": "error",
+      "description": "始终保留 a、b、wiper 三个端点。作为可变电阻使用时也必须显式说明未使用端的连接，不删除第三端。"
+    },
+    {
+      "id": "unknown_wiper_position",
+      "severity": "unresolved",
+      "description": "wiper_ratio 为 null 时，如请求确定的电阻分配或位置相关结果则保持未决；已明确的三端逻辑连接仍可为 logical_ready。"
+    },
+    {
+      "id": "no_automatic_wiper_tie",
+      "severity": "error",
+      "description": "不得自动将滑动端与任一固定端短接；若设计需要该连接，应在引脚网名中显式体现。"
+    },
+    {
+      "id": "ratio_is_not_voltage",
+      "severity": "warning",
+      "description": "wiper_ratio 只描述所声明的理想电阻比例；没有供电、负载和接触条件时，不能直接宣布输出电压已确定。"
+    }
+  ],
+  "sources": [
+    {
+      "kind": "design_contract",
+      "reference": "00_Project-SPEC/netlist_design/NETLIST_GENERATION_DESIGN.md"
+    }
+  ],
+  "example": {
+    "parameters": {
+      "resistance_ohm": 10000,
+      "wiper_ratio": null,
+      "tolerance_ratio": null
+    },
+    "pin_space": "logical",
+    "pin_bindings": [
+      {
+        "port": "a",
+        "bit": 0,
+        "pin_id": "a"
+      },
+      {
+        "port": "b",
+        "bit": 0,
+        "pin_id": "b"
+      },
+      {
+        "port": "wiper",
+        "bit": 0,
+        "pin_id": "wiper"
+      }
+    ],
+    "pins": [
+      {
+        "id": "a",
+        "name": "fixed_a",
+        "net": "REFERENCE_LOW"
+      },
+      {
+        "id": "b",
+        "name": "fixed_b",
+        "net": "REFERENCE_HIGH"
+      },
+      {
+        "id": "wiper",
+        "name": "wiper",
+        "net": "ADJUST"
+      }
+    ],
+    "expected": {
+      "status": "logical_ready",
+      "notes": "示例三端连接已明确，wiper_ratio 为 null 表示位置未知；不填充默认中点，不声明输出电压或物理脚序。"
+    }
+  },
+  "device_type": "potentiometer",
+  "designator_prefix": "RV",
+  "abstract_description": "电位器",
+  "value_spec": {
+    "parameter": "resistance_ohm",
+    "unit": "Ω"
+  }
+}

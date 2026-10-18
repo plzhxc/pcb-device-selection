@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% import "macros.html" as ui %}
+
+{% block content %}
+  <h1>Workflow Runs</h1>
+  <div class="sub">
+    最近的工作流执行记录，数据来自 <code>workflow_run_info</code>。
+  </div>
+
+  <section class="metrics" aria-label="最近运行汇总">
+    <div class="metric">
+      <div class="label">最近 runs</div>
+      <div class="value">{{ summary.total }}</div>
+    </div>
+    <div class="metric">
+      <div class="label">success</div>
+      <div class="value value-ok">{{ summary.succeeded }}</div>
+    </div>
+    <div class="metric">
+      <div class="label">running</div>
+      <div class="value value-running">{{ summary.running }}</div>
+    </div>
+    <div class="metric">
+      <div class="label">failed</div>
+      <div class="value value-error">{{ summary.failed }}</div>
+    </div>
+    <div class="metric">
+      <div class="label">最近运行</div>
+      <div class="value compact">{{ summary.last_run|timestamp }}</div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="workflow-list-title">
+    <h2 class="card-header" id="workflow-list-title">Workflow 列表</h2>
+    {% if not workflows %}
+      {{ ui.empty(
+        "还没有 Workflow Trace",
+        "运行一次已启用 Trace 的 Workflow 后，记录会出现在这里。"
+      ) }}
+    {% else %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>run id</th>
+              <th>workflow</th>
+              <th>status</th>
+              <th>stages</th>
+              <th>tokens</th>
+              <th>started</th>
+              <th>duration</th>
+              <th>failure</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in workflows %}
+              {% set failure = item.error or item.failed_stage or "" %}
+              <tr>
+                <td>{{ ui.id_link("flow", item.workflow_run_id, 13) }}</td>
+                <td><strong>{{ item.name or "—" }}</strong></td>
+                <td>{{ ui.status(item.status) }}</td>
+                <td>{{ item.stages_done or 0 }}/{{ item.stages_total or 0 }}</td>
+                <td>{{ item.total_tokens|number }}</td>
+                <td class="short">{{ item.created_at|timestamp }}</td>
+                <td class="short">{{ item.duration_ms|duration_ms }}</td>
+                <td class="json-cell" title="{{ failure }}">
+                  {{ failure|shorten(80) if failure else "—" }}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

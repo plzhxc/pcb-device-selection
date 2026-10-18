@@ -1,0 +1,152 @@
+{
+  "schema_version": "1.0",
+  "template_id": "common.passive.gas_discharge_tube",
+  "version": "1.0.0",
+  "status": "implemented",
+  "family": "passive",
+  "kind": "primitive",
+  "description": "表达二电极GDT边界及可选击穿测试条件。所有性能参数未知时仍可准确记录两个端点，但没有可用的保护行为模型。",
+  "parameters_schema": {
+    "type": "object",
+    "properties": {
+      "electrode_count": {
+        "const": 2,
+        "description": "首版只支持二电极结构。"
+      },
+      "dc_sparkover_voltage_v": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "description": "指定测试条件下的直流击穿标称值，V；未知为null。",
+        "exclusiveMinimum": 0
+      },
+      "test_ramp_v_per_s": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "description": "直流击穿测试的电压上升速率，V/s；未知为null。",
+        "exclusiveMinimum": 0
+      },
+      "impulse_spec_ref": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1,
+        "description": "冲击击穿、电流及波形依据；未知为null。"
+      }
+    },
+    "required": [
+      "electrode_count",
+      "dc_sparkover_voltage_v",
+      "test_ramp_v_per_s",
+      "impulse_spec_ref"
+    ],
+    "additionalProperties": false,
+    "oneOf": [
+      {
+        "properties": {
+          "dc_sparkover_voltage_v": {
+            "type": "null"
+          },
+          "test_ramp_v_per_s": {
+            "type": "null"
+          }
+        }
+      },
+      {
+        "properties": {
+          "dc_sparkover_voltage_v": {
+            "type": "number"
+          },
+          "test_ramp_v_per_s": {
+            "type": "number"
+          }
+        }
+      }
+    ]
+  },
+  "ports": [
+    {
+      "id": "a",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    },
+    {
+      "id": "b",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    }
+  ],
+  "body": {
+    "representation": "terminal_contract",
+    "description": "保留两个独立端点及器件实例；由显式pin_bindings建立角色和引脚的对应，不推断商品脚序或自动合并网络。"
+  },
+  "rules": [
+    {
+      "id": "electrode_topology",
+      "severity": "error",
+      "description": "三电极管不能套用本二端模板或丢弃第三端；必须新建明确拓扑。"
+    },
+    {
+      "id": "sparkover_condition",
+      "severity": "error",
+      "description": "击穿电压与其上升速率测试条件同时提供或同时为null。"
+    },
+    {
+      "id": "impulse_unknown",
+      "severity": "unresolved",
+      "description": "未提供冲击、续流及配合资料时，不得从直流击穿值推断冲击钳位或恢复行为。"
+    }
+  ],
+  "sources": [
+    {
+      "kind": "design_contract",
+      "reference": "00_Project-SPEC/netlist_design/NETLIST_GENERATION_DESIGN.md"
+    }
+  ],
+  "example": {
+    "parameters": {
+      "electrode_count": 2,
+      "dc_sparkover_voltage_v": null,
+      "test_ramp_v_per_s": null,
+      "impulse_spec_ref": null
+    },
+    "pin_space": "logical",
+    "pin_bindings": [
+      {
+        "port": "a",
+        "bit": 0,
+        "pin_id": "a"
+      },
+      {
+        "port": "b",
+        "bit": 0,
+        "pin_id": "b"
+      }
+    ],
+    "pins": [
+      {
+        "id": "a",
+        "name": "a",
+        "net": "N_SENSE"
+      },
+      {
+        "id": "b",
+        "name": "b",
+        "net": "N_RETURN"
+      }
+    ],
+    "expected": {
+      "status": "logical_ready",
+      "notes": "人工逻辑示例，仅连接信息就绪；可空性能参数仍为未知，未确认物理脚号或电气验证。"
+    }
+  },
+  "device_type": "gas_discharge_tube",
+  "designator_prefix": "GDT",
+  "abstract_description": "气体放电管"
+}

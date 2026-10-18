@@ -1,0 +1,158 @@
+{
+  "schema_version": "1.0",
+  "template_id": "common.clock.passive_crystal",
+  "version": "1.0.0",
+  "status": "implemented",
+  "family": "clock",
+  "kind": "primitive",
+  "description": "无源晶体的两个谐振端子及频率参数契约，不把晶体当作数字时钟源。",
+  "parameters_schema": {
+    "type": "object",
+    "properties": {
+      "resonant_frequency_hz": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "description": "输入资料明确给出的标称谐振频率，单位 Hz；必填不可 null，具体频率条件由 resonance_mode 及来源声明。"
+      },
+      "resonance_mode": {
+        "type": "string",
+        "enum": [
+          "series",
+          "load_specified",
+          "unknown"
+        ],
+        "description": "标称频率条件，无量纲；必填不可 null。series 表示串联谐振条件，load_specified 表示给定负载电容条件，unknown 表示未知。"
+      },
+      "load_capacitance_f": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "exclusiveMinimum": 0,
+        "description": "资料给定的负载电容，单位 F；可省略或 null 表示未知；load_specified 模式下必须非 null。"
+      },
+      "max_drive_power_w": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "exclusiveMinimum": 0,
+        "description": "资料给定的最大驱动功率，单位 W；可省略或 null 表示未知。"
+      },
+      "esr_max_ohm": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "minimum": 0,
+        "description": "资料给定的等效串联电阻上限，单位 Ω；可省略或 null 表示未知。"
+      }
+    },
+    "required": [
+      "resonant_frequency_hz",
+      "resonance_mode"
+    ],
+    "additionalProperties": false
+  },
+  "ports": [
+    {
+      "id": "xtal_a",
+      "direction": "passive",
+      "domain": "resonator",
+      "width": 1
+    },
+    {
+      "id": "xtal_b",
+      "direction": "passive",
+      "domain": "resonator",
+      "width": 1
+    }
+  ],
+  "body": {
+    "representation": "terminal_contract",
+    "description": "xtal_a 与 xtal_b 是同一无源晶体的两个谐振端点；该实例自身不提供数字时钟驱动，也不自动展开外围振荡电路。"
+  },
+  "rules": [
+    {
+      "id": "resonance_condition",
+      "severity": "unresolved",
+      "description": "resonance_mode 为 unknown 时，频率条件及对振荡接口的适配验证保持未决；不能默认为 series 或某一负载。"
+    },
+    {
+      "id": "load_value_required",
+      "severity": "error",
+      "description": "resonance_mode 为 load_specified 时必须提供非 null 的 load_capacitance_f；series 模式下若另给负载值，须另有明确含义，当前版本不接受。"
+    },
+    {
+      "id": "terminal_binding",
+      "severity": "error",
+      "description": "xtal_a、xtal_b 各绑定一个不同的引脚 ID；两个端子均不能被重命名为数字时钟输出角色。"
+    },
+    {
+      "id": "extra_source_pins",
+      "severity": "error",
+      "description": "保真导入须保留所有外壳、接地、NC 等原始引脚；未覆盖时补显式附加契约或保持未决，不可丢脚。"
+    },
+    {
+      "id": "no_automatic_load_capacitors",
+      "severity": "error",
+      "description": "不得直接把 load_capacitance_f 复制为两个外接电容值，外围电路需独立需求及证据。"
+    },
+    {
+      "id": "oscillation_not_proven",
+      "severity": "unresolved",
+      "description": "仅有频率和连线不能判定起振、驱动功率、稳定度或负载匹配已经满足；相关验证需要完整振荡电路及参数。"
+    }
+  ],
+  "sources": [
+    {
+      "kind": "design_contract",
+      "reference": "00_Project-SPEC/netlist_design/NETLIST_GENERATION_DESIGN.md"
+    }
+  ],
+  "example": {
+    "parameters": {
+      "resonant_frequency_hz": 16000000,
+      "resonance_mode": "load_specified",
+      "load_capacitance_f": 1.2e-11,
+      "max_drive_power_w": null,
+      "esr_max_ohm": null
+    },
+    "pin_space": "logical",
+    "pin_bindings": [
+      {
+        "port": "xtal_a",
+        "bit": 0,
+        "pin_id": "xtal_a"
+      },
+      {
+        "port": "xtal_b",
+        "bit": 0,
+        "pin_id": "xtal_b"
+      }
+    ],
+    "pins": [
+      {
+        "id": "xtal_a",
+        "name": "xtal_a",
+        "net": "RESONATOR_A"
+      },
+      {
+        "id": "xtal_b",
+        "name": "xtal_b",
+        "net": "RESONATOR_B"
+      }
+    ],
+    "expected": {
+      "status": "logical_ready",
+      "notes": "16 MHz 与 12 pF 均为逻辑示例输入；没有自动添加负载电容、振荡放大器、供电脚或数字时钟输出。"
+    }
+  },
+  "device_type": "crystal",
+  "designator_prefix": "Y",
+  "abstract_description": "晶体",
+  "value_spec": {
+    "parameter": "resonant_frequency_hz",
+    "unit": "Hz"
+  }
+}

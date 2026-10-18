@@ -1,0 +1,1 @@
+本次输出闭合的architecture boundary patch，而非完整架构。只在module_ports/voltage_domains提出实际需要的边界变更；不输出模块身份、原obligations或原unresolved。host将逐字保留原模块归属、旧义务行、全部历史未决，并追加new_assumptions/new_unresolved/new_obligations。新增义务不得复用旧ID。不存在完成/删除未决的操作。profile_ref只能选择board.static_environment.sources的实际ID；不得猜来源或修改条件以通过。所有提案须重新通过原始架构、来源和电气门禁。

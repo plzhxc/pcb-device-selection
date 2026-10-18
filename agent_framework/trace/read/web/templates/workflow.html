@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% import "macros.html" as ui %}
+
+{% block content %}
+  <h1>Workflow <code>{{ tree.name or "—" }}</code></h1>
+  <div class="sub"><code>{{ tree.workflow_run_id }}</code></div>
+
+  <section class="card">
+    <h2 class="card-header">元信息</h2>
+    <div class="table-wrap">
+      <table class="kv"><tbody>
+        <tr><th>workflow_run_id</th><td><code>{{ tree.workflow_run_id }}</code></td></tr>
+        <tr><th>trace_id</th><td>{{ ui.short(tree.trace_id, 28) }}</td></tr>
+        <tr><th>status</th><td>{{ ui.status(tree.status) }}</td></tr>
+        <tr><th>started_at</th><td class="short">{{ tree.created_at|timestamp }}</td></tr>
+        <tr><th>ended_at</th><td class="short">{{ tree.ended_at|timestamp }}</td></tr>
+        <tr><th>duration</th><td class="short">{{ tree.duration_ms|duration_ms }}</td></tr>
+        <tr><th>stage progress</th><td>{{ tree.stages_done or 0 }} / {{ tree.stages_total or 0 }}</td></tr>
+        <tr><th>input tokens</th><td>{{ tree.total_input_tokens|number }}</td></tr>
+        <tr><th>output tokens</th><td>{{ tree.total_output_tokens|number }}</td></tr>
+        <tr><th>cached tokens</th><td>{{ tree.cached_tokens|number }}</td></tr>
+        <tr><th>reasoning tokens</th><td>{{ tree.reasoning_tokens|number }}</td></tr>
+        <tr><th>total tokens</th><td>{{ tree.total_tokens|number }}</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="card-header">调用输入</h2>
+    <div class="card-body">{{ ui.json_block(tree.inputs or {}) }}</div>
+  </section>
+
+  <section class="card">
+    <h2 class="card-header">Stage 执行链</h2>
+    {% if not tree.stages %}
+      {{ ui.empty(
+        "尚未写入 Stage",
+        "Workflow 行存在，但 stage_run_info 中没有关联记录。"
+      ) }}
+    {% else %}
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>#</th><th>stage</th><th>stage id</th><th>status</th>
+            <th>steps</th><th>agents</th><th>tokens</th>
+            <th>started</th><th>duration</th>
+          </tr></thead>
+          <tbody>
+            {% for stage in tree.stages %}
+              <tr>
+                <td>{{ stage.seq or 0 }}</td>
+                <td><strong>{{ stage.name or "—" }}</strong></td>
+                <td>{{ ui.id_link("stage", stage.stage_run_id, 14) }}</td>
+                <td>{{ ui.status(stage.status) }}</td>
+                <td>{{ stage.steps or 0 }}</td>
+                <td>{{ stage.agent_runs or 0 }}</td>
+                <td>{{ stage.total_tokens|number }}</td>
+                <td class="short">{{ stage.created_at|timestamp }}</td>
+                <td class="short">{{ stage.duration_ms|duration_ms }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+  </section>
+
+  {% if tree.failed_stages or tree.error %}
+    <section class="card">
+      <h2 class="card-header">失败信息</h2>
+      <div class="card-body">
+        {% if tree.failed_stages %}
+          <p>失败 Stage：{{ ui.data_cell(tree.failed_stages) }}</p>
+        {% endif %}
+        {% if tree.error %}<pre class="error-text">{{ tree.error }}</pre>{% endif %}
+      </div>
+    </section>
+  {% endif %}
+
+  <section class="card">
+    <h2 class="card-header">PCB 模块视图</h2>
+    <div class="card-body">
+      <div class="flow-note">
+        当前 8 张通用 Trace 表不保存旧版 PCB
+        <code>module_decomposition</code> 专属快照；执行层级已由上面的
+        Workflow → Stage → Agent → LLM 视图完整替代。
+      </div>
+      <a href="{{ path_for("flow", tree.workflow_run_id) }}/modules">查看兼容说明</a>
+    </div>
+  </section>
+{% endblock %}

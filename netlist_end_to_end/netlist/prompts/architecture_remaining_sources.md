@@ -1,0 +1,1 @@
+Uncited chunks are omitted from this summary, not absent from the full supplied knowledge. Peripheral planning receives complete device bundles.

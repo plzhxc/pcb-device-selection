@@ -1,0 +1,7 @@
+fastapi>=0.110,<1
+pydantic>=2.6,<3
+uvicorn>=0.30,<1
+httpx>=0.27,<1
+# Versions verified against the existing read-only dataS / Milvus deployment.
+mysql-connector-python==26.7.0
+pymilvus==2.5.18

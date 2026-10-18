@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% import "macros.html" as ui %}
+
+{% block content %}
+  <h1>LLM Call <code>{{ call.model or "—" }}</code></h1>
+  <div class="sub"><code>{{ call.llm_call_id }}</code></div>
+
+  <section class="card">
+    <h2 class="card-header">元信息</h2>
+    <div class="table-wrap"><table class="kv"><tbody>
+      <tr><th>provider</th><td><code>{{ call.provider or "—" }}</code></td></tr>
+      <tr><th>model</th><td><code>{{ call.model or "—" }}</code></td></tr>
+      <tr><th>status</th><td>{{ ui.status(status) }}</td></tr>
+      <tr><th>workflow</th><td>{{ ui.id_link("flow", call.flow_id, 18) }}</td></tr>
+      <tr><th>stage</th><td>{{ ui.id_link("stage", call.stage_id, 18) }}</td></tr>
+      <tr><th>agent</th><td>{{ ui.id_link("agent", call.agent_id, 18) }}</td></tr>
+      <tr><th>trace_id</th><td>{{ ui.short(call.trace_id, 28) }}</td></tr>
+      <tr><th>started_at</th><td class="short">{{ call.created_at|timestamp }}</td></tr>
+      <tr><th>duration</th><td>{{ call.duration_ms|duration_ms }}</td></tr>
+      <tr><th>input tokens</th><td>{{ call.total_input_tokens|number }}</td></tr>
+      <tr><th>output tokens</th><td>{{ call.total_output_tokens|number }}</td></tr>
+      <tr><th>cached tokens</th><td>{{ call.cached_tokens|number }}</td></tr>
+      <tr><th>reasoning tokens</th><td>{{ call.reasoning_tokens|number }}</td></tr>
+      <tr><th>total tokens</th><td>{{ call.total_tokens|number }}</td></tr>
+      <tr><th>retry count</th><td>{{ call.retry_count|number }}</td></tr>
+      <tr><th>usage complete</th><td>{{ call.usage_complete }}</td></tr>
+    </tbody></table></div>
+  </section>
+
+  <section class="card">
+    <h2 class="card-header">完整请求</h2>
+    <div class="card-body">{{ ui.json_block(call.request or {}) }}</div>
+  </section>
+
+  <section class="card">
+    <h2 class="card-header">完整事件序列</h2>
+    {% if not records %}
+      {{ ui.empty("没有 LLM 生命周期事件", "llm_call_info 存在，但事件表没有关联行。") }}
+    {% else %}
+      <div class="table-wrap"><table>
+        <thead><tr>
+          <th>#</th><th>event</th><th>attempt</th><th>level</th>
+          <th>duration</th><th>timestamp</th><th>payload</th>
+        </tr></thead>
+        <tbody>
+          {% for record in records %}
+            <tr class="event-row">
+              <td>{{ record.seq|number }}</td>
+              <td><code>{{ record.event_type or "—" }}</code></td>
+              <td>{{ record.attempt_no or "—" }}</td>
+              <td>{{ record.level or "—" }}</td>
+              <td>{{ record.duration_ms|duration_ms }}</td>
+              <td class="short">{{ record.recorded_at|timestamp }}</td>
+              <td class="data-cell">{{ ui.data_cell(record.payload or {}) }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table></div>
+    {% endif %}
+  </section>
+{% endblock %}

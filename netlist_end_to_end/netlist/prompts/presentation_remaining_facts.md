@@ -1,0 +1,1 @@
+Original full records remain in frozen knowledge and peripheral planning. Display omission is neither unknown nor a permission; independent checks consume the original records.

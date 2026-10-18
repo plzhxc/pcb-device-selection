@@ -1,0 +1,3629 @@
+{
+  "version": "51",
+  "nodes": [
+    {
+      "category_code": "D01",
+      "display_name_zh": "控制、计算与存储",
+      "node_type": "DOMAIN",
+      "node_status": "CONFIRMED",
+      "parent_id": null,
+      "category_id": 29058
+    },
+    {
+      "category_code": "D02",
+      "display_name_zh": "模拟、转换与时序",
+      "node_type": "DOMAIN",
+      "node_status": "CONFIRMED",
+      "parent_id": null,
+      "category_id": 29059
+    },
+    {
+      "category_code": "D03",
+      "display_name_zh": "电源、驱动与隔离",
+      "node_type": "DOMAIN",
+      "node_status": "CONFIRMED",
+      "parent_id": null,
+      "category_id": 29060
+    },
+    {
+      "category_code": "D04",
+      "display_name_zh": "通信、射频与模块",
+      "node_type": "DOMAIN",
+      "node_status": "CONFIRMED",
+      "parent_id": null,
+      "category_id": 29061
+    },
+    {
+      "category_code": "D05",
+      "display_name_zh": "传感、光电与人机输出",
+      "node_type": "DOMAIN",
+      "node_status": "CONFIRMED",
+      "parent_id": null,
+      "category_id": 29062
+    },
+    {
+      "category_code": "D06",
+      "display_name_zh": "分立半导体与电路保护",
+      "node_type": "DOMAIN",
+      "node_status": "CONFIRMED",
+      "parent_id": null,
+      "category_id": 29063
+    },
+    {
+      "category_code": "D07",
+      "display_name_zh": "磁性、频率与滤波",
+      "node_type": "DOMAIN",
+      "node_status": "CONFIRMED",
+      "parent_id": null,
+      "category_id": 29064
+    },
+    {
+      "category_code": "D08",
+      "display_name_zh": "互连与机电器件",
+      "node_type": "DOMAIN",
+      "node_status": "CONFIRMED",
+      "parent_id": null,
+      "category_id": 29065
+    },
+    {
+      "category_code": "F01",
+      "display_name_zh": "处理器与可编程控制器",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29058,
+      "category_id": 29066
+    },
+    {
+      "category_code": "F02",
+      "display_name_zh": "逻辑器件",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29058,
+      "category_id": 29067
+    },
+    {
+      "category_code": "F03",
+      "display_name_zh": "存储器件",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29058,
+      "category_id": 29068
+    },
+    {
+      "category_code": "F04",
+      "display_name_zh": "放大器与比较器",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29059,
+      "category_id": 29069
+    },
+    {
+      "category_code": "F05",
+      "display_name_zh": "数据转换与混合信号",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29059,
+      "category_id": 29070
+    },
+    {
+      "category_code": "F06",
+      "display_name_zh": "时钟与时序",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29059,
+      "category_id": 29071
+    },
+    {
+      "category_code": "F07",
+      "display_name_zh": "电源管理芯片",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29060,
+      "category_id": 29072
+    },
+    {
+      "category_code": "F08",
+      "display_name_zh": "电源模块",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29060,
+      "category_id": 29073
+    },
+    {
+      "category_code": "F09",
+      "display_name_zh": "电机与功率级驱动器",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29060,
+      "category_id": 29074
+    },
+    {
+      "category_code": "F10",
+      "display_name_zh": "显示与照明驱动器",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29060,
+      "category_id": 29075
+    },
+    {
+      "category_code": "F11",
+      "display_name_zh": "信号隔离器",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29060,
+      "category_id": 29076
+    },
+    {
+      "category_code": "F12",
+      "display_name_zh": "光耦合器",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29060,
+      "category_id": 29077
+    },
+    {
+      "category_code": "F13",
+      "display_name_zh": "通信与信号接口芯片",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29061,
+      "category_id": 29078
+    },
+    {
+      "category_code": "F14",
+      "display_name_zh": "射频芯片与器件",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29061,
+      "category_id": 29079
+    },
+    {
+      "category_code": "F15",
+      "display_name_zh": "通信模块",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29061,
+      "category_id": 29080
+    },
+    {
+      "category_code": "F16",
+      "display_name_zh": "功能模块",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29061,
+      "category_id": 29081
+    },
+    {
+      "category_code": "F17",
+      "display_name_zh": "通用传感器",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29062,
+      "category_id": 29082
+    },
+    {
+      "category_code": "F18",
+      "display_name_zh": "磁传感器",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29062,
+      "category_id": 29083
+    },
+    {
+      "category_code": "F19",
+      "display_name_zh": "光电子器件",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29062,
+      "category_id": 29084
+    },
+    {
+      "category_code": "F20",
+      "display_name_zh": "显示器件",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29062,
+      "category_id": 29085
+    },
+    {
+      "category_code": "F21",
+      "display_name_zh": "音频与触觉器件",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29062,
+      "category_id": 29086
+    },
+    {
+      "category_code": "F22",
+      "display_name_zh": "晶体管与晶闸管",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29063,
+      "category_id": 29087
+    },
+    {
+      "category_code": "F23",
+      "display_name_zh": "二极管与整流器",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29063,
+      "category_id": 29088
+    },
+    {
+      "category_code": "F24",
+      "display_name_zh": "碳化硅器件",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29063,
+      "category_id": 29089
+    },
+    {
+      "category_code": "F25",
+      "display_name_zh": "氮化镓器件",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29063,
+      "category_id": 29090
+    },
+    {
+      "category_code": "F26",
+      "display_name_zh": "电路保护器件",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29063,
+      "category_id": 29091
+    },
+    {
+      "category_code": "F27",
+      "display_name_zh": "振荡器与谐振器",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29064,
+      "category_id": 29092
+    },
+    {
+      "category_code": "F28",
+      "display_name_zh": "电感、线圈与变压器",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29064,
+      "category_id": 29093
+    },
+    {
+      "category_code": "F29",
+      "display_name_zh": "滤波与EMI器件",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29064,
+      "category_id": 29094
+    },
+    {
+      "category_code": "F30",
+      "display_name_zh": "连接器",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29065,
+      "category_id": 29095
+    },
+    {
+      "category_code": "F31",
+      "display_name_zh": "开关与人工输入",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29065,
+      "category_id": 29096
+    },
+    {
+      "category_code": "F32",
+      "display_name_zh": "继电器",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29065,
+      "category_id": 29097
+    },
+    {
+      "category_code": "F33",
+      "display_name_zh": "基础无源器件",
+      "node_type": "FAMILY",
+      "node_status": "CONFIRMED",
+      "parent_id": 29064,
+      "category_id": 29098
+    },
+    {
+      "category_code": "l_ac_dc_controller_and_voltage_regulator",
+      "display_name_zh": "交流直流控制器电压稳压器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29099
+    },
+    {
+      "category_code": "l_ac_dc_power_module",
+      "display_name_zh": "交流直流电源模块",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29073,
+      "category_id": 29100
+    },
+    {
+      "category_code": "l_ac_power_connector",
+      "display_name_zh": "交流电源连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29101
+    },
+    {
+      "category_code": "l_active_crystal_oscillator",
+      "display_name_zh": "有源晶体振荡器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29092,
+      "category_id": 29102
+    },
+    {
+      "category_code": "l_active_filter",
+      "display_name_zh": "有源滤波器",
+      "node_type": "LEAF",
+      "node_status": "TRANSITIONAL",
+      "parent_id": 29094,
+      "category_id": 29103
+    },
+    {
+      "category_code": "l_adjustable_inductor",
+      "display_name_zh": "可调电感",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29093,
+      "category_id": 29104
+    },
+    {
+      "category_code": "l_ambient_light_sensor",
+      "display_name_zh": "环境光传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29105
+    },
+    {
+      "category_code": "l_analog_front_end_afe",
+      "display_name_zh": "模拟前端（AFE）",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29070,
+      "category_id": 29106
+    },
+    {
+      "category_code": "l_analog_switch_multiplexer",
+      "display_name_zh": "模拟开关多路复用器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29107
+    },
+    {
+      "category_code": "l_analog_switch_special_purpose",
+      "display_name_zh": "模拟开关特殊用途",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29108
+    },
+    {
+      "category_code": "l_analog_to_digital_conversion_chip_adc",
+      "display_name_zh": "模数转换器（ADC）",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29070,
+      "category_id": 29109
+    },
+    {
+      "category_code": "l_antenna",
+      "display_name_zh": "天线",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29110
+    },
+    {
+      "category_code": "l_attitude_sensor_gyroscope",
+      "display_name_zh": "姿态传感器陀螺仪",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29111
+    },
+    {
+      "category_code": "l_audio_and_video_module",
+      "display_name_zh": "音频视频模块",
+      "node_type": "LEAF",
+      "node_status": "TRANSITIONAL",
+      "parent_id": 29081,
+      "category_id": 29112
+    },
+    {
+      "category_code": "l_audio_connector_headphones",
+      "display_name_zh": "音频连接器耳机",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29113
+    },
+    {
+      "category_code": "l_audio_interface_chip",
+      "display_name_zh": "音频接口芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29114
+    },
+    {
+      "category_code": "l_audio_power_amplifier",
+      "display_name_zh": "音频功率放大器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29069,
+      "category_id": 29115
+    },
+    {
+      "category_code": "l_audio_transformer",
+      "display_name_zh": "音频变压器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29093,
+      "category_id": 29116
+    },
+    {
+      "category_code": "l_automobile_fuse",
+      "display_name_zh": "汽车保险丝",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29091,
+      "category_id": 29117
+    },
+    {
+      "category_code": "l_automotive_connector",
+      "display_name_zh": "汽车连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29118
+    },
+    {
+      "category_code": "l_automotive_relay",
+      "display_name_zh": "汽车继电器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29097,
+      "category_id": 29119
+    },
+    {
+      "category_code": "l_balun",
+      "display_name_zh": "巴伦",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29120
+    },
+    {
+      "category_code": "l_banana_plug_alligator_clip",
+      "display_name_zh": "香蕉插头与鳄鱼夹",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29121
+    },
+    {
+      "category_code": "l_barrier_terminal_block",
+      "display_name_zh": "栅栏式端子模块",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29122
+    },
+    {
+      "category_code": "l_battery_management",
+      "display_name_zh": "电池管理",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29123
+    },
+    {
+      "category_code": "l_bipolar_junction_transistor_bjt",
+      "display_name_zh": "双极型结型晶体管BJT",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29087,
+      "category_id": 29124
+    },
+    {
+      "category_code": "l_blade_shrapnel_contacts_the_battery_connector",
+      "display_name_zh": "刀片弹片触点电池连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29125
+    },
+    {
+      "category_code": "l_bluetooth_module",
+      "display_name_zh": "蓝牙模块",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29080,
+      "category_id": 29126
+    },
+    {
+      "category_code": "l_board_to_board_and_backplane_connectors",
+      "display_name_zh": "板对板与背板连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29127
+    },
+    {
+      "category_code": "l_brush_dc_motor_drive_chip",
+      "display_name_zh": "有刷直流电机驱动芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29074,
+      "category_id": 29128
+    },
+    {
+      "category_code": "l_brushless_dc_bldc_motor_drive_chip",
+      "display_name_zh": "无刷直流BLDC电机驱动芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29074,
+      "category_id": 29129
+    },
+    {
+      "category_code": "l_buffer_driver_transceiver",
+      "display_name_zh": "逻辑缓冲器、驱动器与收发器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29067,
+      "category_id": 29130
+    },
+    {
+      "category_code": "l_bus_to_uart_converter",
+      "display_name_zh": "总线UART转换器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29131
+    },
+    {
+      "category_code": "l_button_and_strip_battery_connector",
+      "display_name_zh": "按钮条形电池连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29132
+    },
+    {
+      "category_code": "l_button_switch",
+      "display_name_zh": "按钮开关",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29096,
+      "category_id": 29133
+    },
+    {
+      "category_code": "l_buzzer",
+      "display_name_zh": "蜂鸣器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29086,
+      "category_id": 29134
+    },
+    {
+      "category_code": "l_can_bus_module",
+      "display_name_zh": "CAN总线模块",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29080,
+      "category_id": 29135
+    },
+    {
+      "category_code": "l_can_controller",
+      "display_name_zh": "CAN控制器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29136
+    },
+    {
+      "category_code": "l_can_transceiver",
+      "display_name_zh": "CAN收发器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29137
+    },
+    {
+      "category_code": "l_capacitive_sensor_ic",
+      "display_name_zh": "电容式传感器IC",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29138
+    },
+    {
+      "category_code": "l_capacitive_touch_sensor_ic",
+      "display_name_zh": "电容触摸传感芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29139
+    },
+    {
+      "category_code": "l_cellular_2g_3g_4g_5g_module",
+      "display_name_zh": "2G/3G/4G/5G蜂窝通信模块",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29080,
+      "category_id": 29140
+    },
+    {
+      "category_code": "l_ceramic_filter",
+      "display_name_zh": "陶瓷滤波器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29094,
+      "category_id": 29141
+    },
+    {
+      "category_code": "l_ceramic_resonator_passive",
+      "display_name_zh": "陶瓷谐振器无源",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29092,
+      "category_id": 29142
+    },
+    {
+      "category_code": "l_charge_pump",
+      "display_name_zh": "电荷泵",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29143
+    },
+    {
+      "category_code": "l_circular_cable_connector",
+      "display_name_zh": "圆形线缆连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29144
+    },
+    {
+      "category_code": "l_circular_din_connector",
+      "display_name_zh": "圆形DIN连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29145
+    },
+    {
+      "category_code": "l_clock_buffer_driver_distributor",
+      "display_name_zh": "时钟缓冲器、驱动器与分配器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29071,
+      "category_id": 29146
+    },
+    {
+      "category_code": "l_clock_debounce",
+      "display_name_zh": "时钟去抖",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29071,
+      "category_id": 29147
+    },
+    {
+      "category_code": "l_clock_delay",
+      "display_name_zh": "时钟延迟",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29071,
+      "category_id": 29148
+    },
+    {
+      "category_code": "l_clock_extraction_and_data_recovery",
+      "display_name_zh": "时钟与数据恢复器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29071,
+      "category_id": 29149
+    },
+    {
+      "category_code": "l_clock_generator_frequency_synthesizer_pll",
+      "display_name_zh": "时钟发生器频率合成器PLL",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29071,
+      "category_id": 29150
+    },
+    {
+      "category_code": "l_clock_multiplier",
+      "display_name_zh": "时钟乘法器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29071,
+      "category_id": 29151
+    },
+    {
+      "category_code": "l_cold_pressed_terminal",
+      "display_name_zh": "冷压压接端子",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29152
+    },
+    {
+      "category_code": "l_color_ring_plug_in_inductor",
+      "display_name_zh": "色环插件电感",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29093,
+      "category_id": 29153
+    },
+    {
+      "category_code": "l_common_mode_filter",
+      "display_name_zh": "共模滤波器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29094,
+      "category_id": 29154
+    },
+    {
+      "category_code": "l_comparator",
+      "display_name_zh": "比较器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29069,
+      "category_id": 29155
+    },
+    {
+      "category_code": "l_converter_level_shifter",
+      "display_name_zh": "逻辑电平转换器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29067,
+      "category_id": 29156
+    },
+    {
+      "category_code": "l_counter_frequency_divider",
+      "display_name_zh": "计数器与分频器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29067,
+      "category_id": 29157
+    },
+    {
+      "category_code": "l_crystal_filter",
+      "display_name_zh": "晶体滤波器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29094,
+      "category_id": 29158
+    },
+    {
+      "category_code": "l_current_sensing_amplifier",
+      "display_name_zh": "电流检测放大器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29069,
+      "category_id": 29159
+    },
+    {
+      "category_code": "l_current_sensor",
+      "display_name_zh": "电流传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29083,
+      "category_id": 29160
+    },
+    {
+      "category_code": "l_current_source_constant_current_source",
+      "display_name_zh": "电流源与恒流源",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29161
+    },
+    {
+      "category_code": "l_d_sub_vga_connector",
+      "display_name_zh": "D-Sub/VGA连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29162
+    },
+    {
+      "category_code": "l_darlington_transistor",
+      "display_name_zh": "达林顿晶体管",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29087,
+      "category_id": 29163
+    },
+    {
+      "category_code": "l_darlington_transistor_array",
+      "display_name_zh": "达林顿晶体管阵列",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29087,
+      "category_id": 29164
+    },
+    {
+      "category_code": "l_dc_ac_module_inverter",
+      "display_name_zh": "直流交流模块反相器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29073,
+      "category_id": 29165
+    },
+    {
+      "category_code": "l_dc_dc_power_module",
+      "display_name_zh": "直流直流电源模块",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29073,
+      "category_id": 29166
+    },
+    {
+      "category_code": "l_dc_power_connector",
+      "display_name_zh": "直流电源连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29167
+    },
+    {
+      "category_code": "l_ddr_sdram",
+      "display_name_zh": "DDRSDRAM",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29168
+    },
+    {
+      "category_code": "l_dedicated_clock_timer",
+      "display_name_zh": "专用时钟定时器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29071,
+      "category_id": 29169
+    },
+    {
+      "category_code": "l_differential_operational_amplifier",
+      "display_name_zh": "差分运算放大器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29069,
+      "category_id": 29170
+    },
+    {
+      "category_code": "l_digital_comparator",
+      "display_name_zh": "数字比较器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29067,
+      "category_id": 29171
+    },
+    {
+      "category_code": "l_digital_isolator",
+      "display_name_zh": "数字隔离器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29172
+    },
+    {
+      "category_code": "l_digital_isolator_with_power_supply",
+      "display_name_zh": "集成隔离电源的数字隔离器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29173
+    },
+    {
+      "category_code": "l_digital_potentiometer",
+      "display_name_zh": "数字电位器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29070,
+      "category_id": 29174
+    },
+    {
+      "category_code": "l_digital_signal_processor_dsp_dsc",
+      "display_name_zh": "数字信号处理器（DSP/DSC）",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29066,
+      "category_id": 29175
+    },
+    {
+      "category_code": "l_digital_to_analog_converter_chip_dac",
+      "display_name_zh": "数模转换器（DAC）",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29070,
+      "category_id": 29176
+    },
+    {
+      "category_code": "l_digital_transistor",
+      "display_name_zh": "数字晶体管",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29087,
+      "category_id": 29177
+    },
+    {
+      "category_code": "l_digital_tube_driver",
+      "display_name_zh": "数码管驱动器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29075,
+      "category_id": 29178
+    },
+    {
+      "category_code": "l_digitally_controlled_oscillator_dco",
+      "display_name_zh": "数字式受控振荡器DCO",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29092,
+      "category_id": 29179
+    },
+    {
+      "category_code": "l_din41612_connector",
+      "display_name_zh": "DIN41612连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29180
+    },
+    {
+      "category_code": "l_dip_switch",
+      "display_name_zh": "拨码开关",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29096,
+      "category_id": 29181
+    },
+    {
+      "category_code": "l_direct_digital_frequency_synthesis_dds",
+      "display_name_zh": "直接数字频率合成器（DDS）",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29070,
+      "category_id": 29182
+    },
+    {
+      "category_code": "l_direct_key_switch",
+      "display_name_zh": "直接按键开关",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29096,
+      "category_id": 29183
+    },
+    {
+      "category_code": "l_displayport_dp_connector",
+      "display_name_zh": "DisplayPortDP连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29184
+    },
+    {
+      "category_code": "l_disposable_fuse",
+      "display_name_zh": "一次性保险丝",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29091,
+      "category_id": 29185
+    },
+    {
+      "category_code": "l_dram_memory",
+      "display_name_zh": "DRAM存储器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29186
+    },
+    {
+      "category_code": "l_dry_reed_switch",
+      "display_name_zh": "干簧开关",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29083,
+      "category_id": 29187
+    },
+    {
+      "category_code": "l_duplexer",
+      "display_name_zh": "双工器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29188
+    },
+    {
+      "category_code": "l_dvi_connector",
+      "display_name_zh": "DVI连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29189
+    },
+    {
+      "category_code": "l_eeprom",
+      "display_name_zh": "EEPROM",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29190
+    },
+    {
+      "category_code": "l_electric_energy_metering_chip",
+      "display_name_zh": "电能计量芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29070,
+      "category_id": 29191
+    },
+    {
+      "category_code": "l_electrostatic_and_surge_protection_tvs_esd",
+      "display_name_zh": "静电浪涌保护TVSESD",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29091,
+      "category_id": 29192
+    },
+    {
+      "category_code": "l_emc_filter",
+      "display_name_zh": "EMC滤波器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29094,
+      "category_id": 29193
+    },
+    {
+      "category_code": "l_emi_filter_rc_lc_network",
+      "display_name_zh": "EMI滤波器RCLC网络",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29094,
+      "category_id": 29194
+    },
+    {
+      "category_code": "l_emmc",
+      "display_name_zh": "eMMC",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29195
+    },
+    {
+      "category_code": "l_ethernet_connector_rj45_rj11",
+      "display_name_zh": "以太网连接器RJ45RJ11",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29196
+    },
+    {
+      "category_code": "l_ethernet_controller",
+      "display_name_zh": "以太网控制器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29197
+    },
+    {
+      "category_code": "l_ethernet_module",
+      "display_name_zh": "以太网模块",
+      "node_type": "LEAF",
+      "node_status": "TRANSITIONAL",
+      "parent_id": 29080,
+      "category_id": 29198
+    },
+    {
+      "category_code": "l_ethernet_switch",
+      "display_name_zh": "以太网开关",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29199
+    },
+    {
+      "category_code": "l_ethernet_transceiver",
+      "display_name_zh": "以太网收发器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29200
+    },
+    {
+      "category_code": "l_fast_charging_protocol_chip",
+      "display_name_zh": "快充协议芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29201
+    },
+    {
+      "category_code": "l_fast_recovery_high_efficiency_diode",
+      "display_name_zh": "快恢复/高效整流二极管",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29088,
+      "category_id": 29202
+    },
+    {
+      "category_code": "l_feed_rf_insulator",
+      "display_name_zh": "馈通射频绝缘子",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29203
+    },
+    {
+      "category_code": "l_feed_through_capacitor_filter",
+      "display_name_zh": "穿心电容滤波器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29094,
+      "category_id": 29204
+    },
+    {
+      "category_code": "l_female_connector",
+      "display_name_zh": "母座连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29205
+    },
+    {
+      "category_code": "l_ferroelectric_random_access_memory_fram",
+      "display_name_zh": "铁电随机访问存储器FRAM",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29206
+    },
+    {
+      "category_code": "l_fet_input_operational_amplifier",
+      "display_name_zh": "FET输入运算放大器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29069,
+      "category_id": 29207
+    },
+    {
+      "category_code": "l_ffc_connector_flexible_flat_cable",
+      "display_name_zh": "FFC连接器柔性扁平线缆",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29208
+    },
+    {
+      "category_code": "l_ffc_fpc_connector",
+      "display_name_zh": "FFC/FPC连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29209
+    },
+    {
+      "category_code": "l_fiber_optic_laser_sensor",
+      "display_name_zh": "光纤光学激光传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29210
+    },
+    {
+      "category_code": "l_fiber_optic_transceiver",
+      "display_name_zh": "光纤收发器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29084,
+      "category_id": 29211
+    },
+    {
+      "category_code": "l_field_effect_transistor_mosfet",
+      "display_name_zh": "金属氧化物半导体场效应晶体管（MOSFET）",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29087,
+      "category_id": 29212
+    },
+    {
+      "category_code": "l_fifo_memory",
+      "display_name_zh": "FIFO存储器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29213
+    },
+    {
+      "category_code": "l_flip_flop",
+      "display_name_zh": "触发器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29067,
+      "category_id": 29214
+    },
+    {
+      "category_code": "l_font_chip",
+      "display_name_zh": "字库芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29215
+    },
+    {
+      "category_code": "l_force_sensor_and_load_cell",
+      "display_name_zh": "力传感器称重传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29216
+    },
+    {
+      "category_code": "l_fpga_configuration_memory",
+      "display_name_zh": "FPGA配置存储器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29217
+    },
+    {
+      "category_code": "l_fuse_holder_box",
+      "display_name_zh": "保险丝座盒",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29091,
+      "category_id": 29218
+    },
+    {
+      "category_code": "l_gallium_nitride_transistor_gan_hemt",
+      "display_name_zh": "氮化镓晶体管（GaN HEMT）",
+      "node_type": "LEAF",
+      "node_status": "TRANSITIONAL",
+      "parent_id": 29090,
+      "category_id": 29219
+    },
+    {
+      "category_code": "l_gas_discharge_tube_gdt",
+      "display_name_zh": "气体放电管（GDT）",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29091,
+      "category_id": 29220
+    },
+    {
+      "category_code": "l_gas_flow_sensor",
+      "display_name_zh": "气体流量传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29221
+    },
+    {
+      "category_code": "l_gas_sensor",
+      "display_name_zh": "气体传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29222
+    },
+    {
+      "category_code": "l_gate_drive_optocoupler",
+      "display_name_zh": "栅极驱动光耦",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29077,
+      "category_id": 29223
+    },
+    {
+      "category_code": "l_gate_driver_chip",
+      "display_name_zh": "栅极驱动器芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29074,
+      "category_id": 29224
+    },
+    {
+      "category_code": "l_glass_discharge_tube",
+      "display_name_zh": "玻璃放电管",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29091,
+      "category_id": 29225
+    },
+    {
+      "category_code": "l_gold_finger_connector",
+      "display_name_zh": "金手指连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29226
+    },
+    {
+      "category_code": "l_hall_switch",
+      "display_name_zh": "霍尔开关",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29083,
+      "category_id": 29227
+    },
+    {
+      "category_code": "l_hard_disk_connector_sas_sata_m_2",
+      "display_name_zh": "SAS、SATA与M.2连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29228
+    },
+    {
+      "category_code": "l_hdmi_connector",
+      "display_name_zh": "HDMI连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29229
+    },
+    {
+      "category_code": "l_heart_rate_sensor",
+      "display_name_zh": "心率速率传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29230
+    },
+    {
+      "category_code": "l_high_frequency_rf_relay",
+      "display_name_zh": "高频/射频继电器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29097,
+      "category_id": 29231
+    },
+    {
+      "category_code": "l_human_body_sensor",
+      "display_name_zh": "人体本体传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29232
+    },
+    {
+      "category_code": "l_i_o_expander",
+      "display_name_zh": "输入输出扩展器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29233
+    },
+    {
+      "category_code": "l_ic_transistor_socket",
+      "display_name_zh": "IC晶体管插座",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29234
+    },
+    {
+      "category_code": "l_idc_pierceable_connector_bull_horn_simplified_bull",
+      "display_name_zh": "IDC刺破式与牛角连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29235
+    },
+    {
+      "category_code": "l_ideal_diode_oring_controller",
+      "display_name_zh": "理想二极管或门控制器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29236
+    },
+    {
+      "category_code": "l_ieee_1394_firewire_connector",
+      "display_name_zh": "IEEE1394FireWire连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29237
+    },
+    {
+      "category_code": "l_igbt_tube_module",
+      "display_name_zh": "绝缘栅双极型晶体管（IGBT）",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29087,
+      "category_id": 29238
+    },
+    {
+      "category_code": "l_image_sensor",
+      "display_name_zh": "图像传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29239
+    },
+    {
+      "category_code": "l_infrared_emitter_tube",
+      "display_name_zh": "红外发光二极管",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29084,
+      "category_id": 29240
+    },
+    {
+      "category_code": "l_infrared_remote_control_receiver_module_irm",
+      "display_name_zh": "红外遥控控制接收器模块红外接收模块",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29084,
+      "category_id": 29241
+    },
+    {
+      "category_code": "l_instrumentation_amplifier",
+      "display_name_zh": "仪表放大器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29069,
+      "category_id": 29242
+    },
+    {
+      "category_code": "l_intelligent_power_module_ipm",
+      "display_name_zh": "智能功率模块（IPM）",
+      "node_type": "LEAF",
+      "node_status": "TRANSITIONAL",
+      "parent_id": 29087,
+      "category_id": 29243
+    },
+    {
+      "category_code": "l_inverter",
+      "display_name_zh": "反相器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29067,
+      "category_id": 29244
+    },
+    {
+      "category_code": "l_irda_infrared_transceiver_module",
+      "display_name_zh": "IrDA红外收发器模块",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29084,
+      "category_id": 29245
+    },
+    {
+      "category_code": "l_isolated_adc",
+      "display_name_zh": "隔离ADC",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29246
+    },
+    {
+      "category_code": "l_isolated_adc_with_power_supply",
+      "display_name_zh": "集成隔离电源的隔离式ADC",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29247
+    },
+    {
+      "category_code": "l_isolated_amplifier",
+      "display_name_zh": "隔离放大器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29248
+    },
+    {
+      "category_code": "l_isolated_amplifier_with_power_supply",
+      "display_name_zh": "集成隔离电源的隔离放大器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29249
+    },
+    {
+      "category_code": "l_isolated_can_transceiver",
+      "display_name_zh": "隔离CAN收发器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29250
+    },
+    {
+      "category_code": "l_isolated_can_transceiver_with_power_supply",
+      "display_name_zh": "集成隔离电源的CAN收发器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29251
+    },
+    {
+      "category_code": "l_isolated_comparator",
+      "display_name_zh": "隔离比较器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29252
+    },
+    {
+      "category_code": "l_isolated_dc_dc_converter",
+      "display_name_zh": "隔离直流直流转换器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29073,
+      "category_id": 29253
+    },
+    {
+      "category_code": "l_isolated_gate_driver",
+      "display_name_zh": "隔离栅极驱动器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29074,
+      "category_id": 29254
+    },
+    {
+      "category_code": "l_isolated_i2c",
+      "display_name_zh": "隔离I2C",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29255
+    },
+    {
+      "category_code": "l_isolated_i2c_with_power_supply",
+      "display_name_zh": "集成隔离电源的I2C隔离器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29256
+    },
+    {
+      "category_code": "l_isolated_lvds_buffer",
+      "display_name_zh": "隔离LVDS缓冲器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29257
+    },
+    {
+      "category_code": "l_isolated_power_supply_module",
+      "display_name_zh": "隔离电源模块",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29073,
+      "category_id": 29258
+    },
+    {
+      "category_code": "l_isolated_rs485_422_transceiver",
+      "display_name_zh": "隔离RS485422收发器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29259
+    },
+    {
+      "category_code": "l_isolated_rs485_422_transceiver_with_power_supply",
+      "display_name_zh": "集成隔离电源的RS-485/RS-422收发器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29260
+    },
+    {
+      "category_code": "l_isolated_rs_232_transceiver",
+      "display_name_zh": "隔离RS232收发器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29261
+    },
+    {
+      "category_code": "l_isolated_rs_232_transceiver_with_power_supply",
+      "display_name_zh": "集成隔离电源的RS-232收发器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29262
+    },
+    {
+      "category_code": "l_isolated_spi",
+      "display_name_zh": "隔离SPI",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29263
+    },
+    {
+      "category_code": "l_isolated_spi_with_power_supply",
+      "display_name_zh": "集成隔离电源的SPI隔离器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29264
+    },
+    {
+      "category_code": "l_isolated_usb_chip",
+      "display_name_zh": "隔离USB芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29265
+    },
+    {
+      "category_code": "l_isolated_usb_chip_with_power_supply",
+      "display_name_zh": "集成隔离电源的USB隔离器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29266
+    },
+    {
+      "category_code": "l_isolation_di_do",
+      "display_name_zh": "隔离数字输入数字输出",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29267
+    },
+    {
+      "category_code": "l_isolation_solid_state_relay",
+      "display_name_zh": "隔离固态继电器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29268
+    },
+    {
+      "category_code": "l_junction_field_effect_transistor_jfet",
+      "display_name_zh": "结型场效应晶体管（JFET）",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29087,
+      "category_id": 29269
+    },
+    {
+      "category_code": "l_l_3d_magnetic_sensor",
+      "display_name_zh": "三维磁传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29083,
+      "category_id": 29270
+    },
+    {
+      "category_code": "l_l_555_timer_chronometer",
+      "display_name_zh": "555定时器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29071,
+      "category_id": 29271
+    },
+    {
+      "category_code": "l_laser_diode",
+      "display_name_zh": "激光二极管",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29084,
+      "category_id": 29272
+    },
+    {
+      "category_code": "l_laser_drive",
+      "display_name_zh": "激光驱动",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29075,
+      "category_id": 29273
+    },
+    {
+      "category_code": "l_latch_device",
+      "display_name_zh": "锁存器器件",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29067,
+      "category_id": 29274
+    },
+    {
+      "category_code": "l_lcd_display_screen",
+      "display_name_zh": "LCD显示屏",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29085,
+      "category_id": 29275
+    },
+    {
+      "category_code": "l_lcd_driver",
+      "display_name_zh": "LCD驱动器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29075,
+      "category_id": 29276
+    },
+    {
+      "category_code": "l_leakage_protection_chip",
+      "display_name_zh": "漏电保护芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29277
+    },
+    {
+      "category_code": "l_led_digital_display",
+      "display_name_zh": "LED数码管",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29085,
+      "category_id": 29278
+    },
+    {
+      "category_code": "l_led_dot_matrix_screen",
+      "display_name_zh": "LED点阵显示屏",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29085,
+      "category_id": 29279
+    },
+    {
+      "category_code": "l_led_driver",
+      "display_name_zh": "LED驱动器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29075,
+      "category_id": 29280
+    },
+    {
+      "category_code": "l_led_protection",
+      "display_name_zh": "LED保护",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29091,
+      "category_id": 29281
+    },
+    {
+      "category_code": "l_light_emitting_diode_led",
+      "display_name_zh": "发光二极管（LED）",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29084,
+      "category_id": 29282
+    },
+    {
+      "category_code": "l_lighting_driver",
+      "display_name_zh": "照明驱动器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29075,
+      "category_id": 29283
+    },
+    {
+      "category_code": "l_lin_transceiver",
+      "display_name_zh": "LIN收发器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29284
+    },
+    {
+      "category_code": "l_linear_analog_multiplier_divider",
+      "display_name_zh": "线性模拟乘法器/除法器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29069,
+      "category_id": 29285
+    },
+    {
+      "category_code": "l_linear_hall_sensor",
+      "display_name_zh": "线性霍尔传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29083,
+      "category_id": 29286
+    },
+    {
+      "category_code": "l_linear_regulator_ldo",
+      "display_name_zh": "线性稳压器LDO",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29287
+    },
+    {
+      "category_code": "l_liquid_level_sensor",
+      "display_name_zh": "液体电平传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29288
+    },
+    {
+      "category_code": "l_logic_gate",
+      "display_name_zh": "逻辑栅极",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29067,
+      "category_id": 29289
+    },
+    {
+      "category_code": "l_logic_output_optocoupler",
+      "display_name_zh": "逻辑输出光耦",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29077,
+      "category_id": 29290
+    },
+    {
+      "category_code": "l_lora_module",
+      "display_name_zh": "LoRa模块",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29080,
+      "category_id": 29291
+    },
+    {
+      "category_code": "l_lotus_connector_rca_connector",
+      "display_name_zh": "RCA莲花连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29292
+    },
+    {
+      "category_code": "l_loudspeaker_speaker",
+      "display_name_zh": "扬声器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29086,
+      "category_id": 29293
+    },
+    {
+      "category_code": "l_lvds_chip",
+      "display_name_zh": "LVDS芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29294
+    },
+    {
+      "category_code": "l_magnetic_angle_sensor",
+      "display_name_zh": "磁角度传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29083,
+      "category_id": 29295
+    },
+    {
+      "category_code": "l_magnetic_latching_relay",
+      "display_name_zh": "磁保持继电器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29097,
+      "category_id": 29296
+    },
+    {
+      "category_code": "l_mechanical_keyboard_switch",
+      "display_name_zh": "机械键盘开关",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29096,
+      "category_id": 29297
+    },
+    {
+      "category_code": "l_memory_controller",
+      "display_name_zh": "存储器控制器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29298
+    },
+    {
+      "category_code": "l_memory_module_connector_ddr",
+      "display_name_zh": "存储器模块连接器DDR",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29299
+    },
+    {
+      "category_code": "l_mems_microphone",
+      "display_name_zh": "MEMS麦克风",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29086,
+      "category_id": 29300
+    },
+    {
+      "category_code": "l_metal_dome",
+      "display_name_zh": "锅仔片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29096,
+      "category_id": 29301
+    },
+    {
+      "category_code": "l_micro_match_connector",
+      "display_name_zh": "微型匹配连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29302
+    },
+    {
+      "category_code": "l_microcontroller_mcu_mpu_soc",
+      "display_name_zh": "微控制器、微处理器与SoC",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29066,
+      "category_id": 29303
+    },
+    {
+      "category_code": "l_microphone_head_microphone",
+      "display_name_zh": "麦克风插头麦克风",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29086,
+      "category_id": 29304
+    },
+    {
+      "category_code": "l_monitoring_and_reset_chip",
+      "display_name_zh": "监控复位芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29305
+    },
+    {
+      "category_code": "l_monostable_multivibrator",
+      "display_name_zh": "单稳态多谐振荡器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29067,
+      "category_id": 29306
+    },
+    {
+      "category_code": "l_motor_drive_chip",
+      "display_name_zh": "电机驱动芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29074,
+      "category_id": 29307
+    },
+    {
+      "category_code": "l_multi_chip_package_memory",
+      "display_name_zh": "多芯片封装存储器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29308
+    },
+    {
+      "category_code": "l_multi_way_switch",
+      "display_name_zh": "多功能路开关",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29096,
+      "category_id": 29309
+    },
+    {
+      "category_code": "l_multifunction_switch",
+      "display_name_zh": "多功能开关",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29096,
+      "category_id": 29310
+    },
+    {
+      "category_code": "l_nand_flash",
+      "display_name_zh": "NANDFlash",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29311
+    },
+    {
+      "category_code": "l_network_clock_synchronization_synce_ieee_1588",
+      "display_name_zh": "网络时钟同步SyncEIEEE1588",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29071,
+      "category_id": 29312
+    },
+    {
+      "category_code": "l_network_port_transformer",
+      "display_name_zh": "网络端口变压器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29093,
+      "category_id": 29313
+    },
+    {
+      "category_code": "l_non_volatile_memory_rom",
+      "display_name_zh": "非易失性存储器ROM",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29314
+    },
+    {
+      "category_code": "l_nor_flash",
+      "display_name_zh": "NORFlash",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29315
+    },
+    {
+      "category_code": "l_ntc_thermistor",
+      "display_name_zh": "NTC热敏电阻",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29316
+    },
+    {
+      "category_code": "l_nvsram_non_volatile_sram",
+      "display_name_zh": "nvSRAM非易失性SRAM",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29317
+    },
+    {
+      "category_code": "l_oled_display_screen",
+      "display_name_zh": "OLED显示屏",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29085,
+      "category_id": 29318
+    },
+    {
+      "category_code": "l_oled_driver",
+      "display_name_zh": "OLED驱动器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29075,
+      "category_id": 29319
+    },
+    {
+      "category_code": "l_operational_amplifier",
+      "display_name_zh": "运算放大器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29069,
+      "category_id": 29320
+    },
+    {
+      "category_code": "l_optical_module_connector",
+      "display_name_zh": "光学模块连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29321
+    },
+    {
+      "category_code": "l_optocoupler_simulator_replaceable_optocoupler",
+      "display_name_zh": "光耦模拟器可更换光耦",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29076,
+      "category_id": 29322
+    },
+    {
+      "category_code": "l_oven_controlled_crystal_oscillator_ocxo",
+      "display_name_zh": "恒温受控晶体振荡器OCXO",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29092,
+      "category_id": 29323
+    },
+    {
+      "category_code": "l_parity_generator_checker",
+      "display_name_zh": "奇偶校验发生器与校验器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29067,
+      "category_id": 29324
+    },
+    {
+      "category_code": "l_passive_crystal_oscillator",
+      "display_name_zh": "无源晶体振荡器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29092,
+      "category_id": 29325
+    },
+    {
+      "category_code": "l_pci_pcie_connector",
+      "display_name_zh": "PCI/PCIe连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29326
+    },
+    {
+      "category_code": "l_pci_pcie_interface",
+      "display_name_zh": "PCIPCIe接口",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29327
+    },
+    {
+      "category_code": "l_photodiode",
+      "display_name_zh": "光电二极管",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29084,
+      "category_id": 29328
+    },
+    {
+      "category_code": "l_photoelectric_slot_sensor_phototransistor",
+      "display_name_zh": "光电插槽传感器光电晶体管",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29084,
+      "category_id": 29329
+    },
+    {
+      "category_code": "l_photosensitive_resistor",
+      "display_name_zh": "光敏电阻",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29330
+    },
+    {
+      "category_code": "l_phototransistor",
+      "display_name_zh": "光电晶体管",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29084,
+      "category_id": 29331
+    },
+    {
+      "category_code": "l_pin_diode",
+      "display_name_zh": "PIN二极管",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29088,
+      "category_id": 29332
+    },
+    {
+      "category_code": "l_pin_header",
+      "display_name_zh": "排针连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29333
+    },
+    {
+      "category_code": "l_plug_in_terminal_block",
+      "display_name_zh": "插拔式接线端子",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29334
+    },
+    {
+      "category_code": "l_pogo_pin_spring_probe_connector",
+      "display_name_zh": "Pogo Pin弹簧针连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29335
+    },
+    {
+      "category_code": "l_position_sensor",
+      "display_name_zh": "位置传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29336
+    },
+    {
+      "category_code": "l_power_electronic_switch",
+      "display_name_zh": "电源电子开关",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29337
+    },
+    {
+      "category_code": "l_power_factor_correction_pfc_controller",
+      "display_name_zh": "功率因数校正（PFC）控制器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29338
+    },
+    {
+      "category_code": "l_power_over_ethernet_poe_controller",
+      "display_name_zh": "以太网供电（PoE）控制器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29339
+    },
+    {
+      "category_code": "l_power_relay",
+      "display_name_zh": "电源继电器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29097,
+      "category_id": 29340
+    },
+    {
+      "category_code": "l_power_sequence_control",
+      "display_name_zh": "电源时序控制",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29341
+    },
+    {
+      "category_code": "l_power_transformer",
+      "display_name_zh": "电源变压器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29093,
+      "category_id": 29342
+    },
+    {
+      "category_code": "l_pre_programmed_oscillator",
+      "display_name_zh": "预可编程振荡器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29092,
+      "category_id": 29343
+    },
+    {
+      "category_code": "l_precision_operational_amplifier",
+      "display_name_zh": "精密运算放大器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29069,
+      "category_id": 29344
+    },
+    {
+      "category_code": "l_pressure_sensor",
+      "display_name_zh": "压力传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29345
+    },
+    {
+      "category_code": "l_professional_power_management_pmic",
+      "display_name_zh": "专用电源管理芯片（PMIC）",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29346
+    },
+    {
+      "category_code": "l_programmable_logic_device_cpld_fpga",
+      "display_name_zh": "可编程逻辑器件（CPLD/FPGA）",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29066,
+      "category_id": 29347
+    },
+    {
+      "category_code": "l_programmable_variable_gain_amplifier_pga_vga",
+      "display_name_zh": "可编程/可变增益放大器（PGA/VGA）",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29069,
+      "category_id": 29348
+    },
+    {
+      "category_code": "l_proximity_sensor",
+      "display_name_zh": "接近传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29349
+    },
+    {
+      "category_code": "l_psram_pseudo_static_random_access_memory",
+      "display_name_zh": "PSRAM伪静态随机访问存储器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29350
+    },
+    {
+      "category_code": "l_ptc_thermistor",
+      "display_name_zh": "PTC热敏电阻",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29351
+    },
+    {
+      "category_code": "l_pulse_transformer",
+      "display_name_zh": "脉冲变压器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29093,
+      "category_id": 29352
+    },
+    {
+      "category_code": "l_radio_frequency_card_chip",
+      "display_name_zh": "射频频率卡芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29353
+    },
+    {
+      "category_code": "l_radio_frequency_front_end_chip",
+      "display_name_zh": "射频频率前端端芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29354
+    },
+    {
+      "category_code": "l_radio_frequency_low_noise_amplifier",
+      "display_name_zh": "射频频率低噪声噪声放大器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29355
+    },
+    {
+      "category_code": "l_radio_frequency_module",
+      "display_name_zh": "射频频率模块",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29080,
+      "category_id": 29356
+    },
+    {
+      "category_code": "l_radio_frequency_power_amplifier",
+      "display_name_zh": "射频频率电源放大器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29357
+    },
+    {
+      "category_code": "l_random_access_memory_ram",
+      "display_name_zh": "随机访问存储器RAM",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29358
+    },
+    {
+      "category_code": "l_real_time_clock_rtc",
+      "display_name_zh": "实时时钟（RTC）",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29071,
+      "category_id": 29359
+    },
+    {
+      "category_code": "l_rectifier_bridge",
+      "display_name_zh": "整流桥",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29088,
+      "category_id": 29360
+    },
+    {
+      "category_code": "l_reed_relay",
+      "display_name_zh": "干簧继电器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29097,
+      "category_id": 29361
+    },
+    {
+      "category_code": "l_reflective_photoelectric_switch",
+      "display_name_zh": "反射式光电开关",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29084,
+      "category_id": 29362
+    },
+    {
+      "category_code": "l_relay_coil_driver_chip",
+      "display_name_zh": "继电器线圈驱动器芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29074,
+      "category_id": 29363
+    },
+    {
+      "category_code": "l_rf_amplifier",
+      "display_name_zh": "射频放大器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29364
+    },
+    {
+      "category_code": "l_rf_attenuator",
+      "display_name_zh": "射频衰减器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29365
+    },
+    {
+      "category_code": "l_rf_coaxial_connector",
+      "display_name_zh": "射频同轴连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29366
+    },
+    {
+      "category_code": "l_rf_connecting_cable",
+      "display_name_zh": "射频连接线缆",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29367
+    },
+    {
+      "category_code": "l_rf_coupler",
+      "display_name_zh": "射频耦合器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29368
+    },
+    {
+      "category_code": "l_rf_detector",
+      "display_name_zh": "射频检测器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29369
+    },
+    {
+      "category_code": "l_rf_filter",
+      "display_name_zh": "射频滤波器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29094,
+      "category_id": 29370
+    },
+    {
+      "category_code": "l_rf_mixer",
+      "display_name_zh": "射频混频器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29371
+    },
+    {
+      "category_code": "l_rf_modulator_and_demodulator",
+      "display_name_zh": "射频调制器解调器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29372
+    },
+    {
+      "category_code": "l_rf_power_divider_combiner",
+      "display_name_zh": "射频电源分频器合路器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29373
+    },
+    {
+      "category_code": "l_rf_switch",
+      "display_name_zh": "射频开关",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29374
+    },
+    {
+      "category_code": "l_rfid_module",
+      "display_name_zh": "RFID模块",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29080,
+      "category_id": 29375
+    },
+    {
+      "category_code": "l_rgb_led",
+      "display_name_zh": "RGB LED",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29084,
+      "category_id": 29376
+    },
+    {
+      "category_code": "l_rgb_led_with_built_in_ic",
+      "display_name_zh": "内置控制芯片的RGB LED",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29084,
+      "category_id": 29377
+    },
+    {
+      "category_code": "l_rocker_switch",
+      "display_name_zh": "船形开关",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29096,
+      "category_id": 29378
+    },
+    {
+      "category_code": "l_rotary_coding_switch",
+      "display_name_zh": "旋转编码开关",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29096,
+      "category_id": 29379
+    },
+    {
+      "category_code": "l_rotary_encoder",
+      "display_name_zh": "旋转编码器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29096,
+      "category_id": 29380
+    },
+    {
+      "category_code": "l_rotary_switch",
+      "display_name_zh": "旋转开关",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29096,
+      "category_id": 29381
+    },
+    {
+      "category_code": "l_rs232_bus_module",
+      "display_name_zh": "RS232总线模块",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29080,
+      "category_id": 29382
+    },
+    {
+      "category_code": "l_rs232_chip",
+      "display_name_zh": "RS232芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29383
+    },
+    {
+      "category_code": "l_rs485_bus_module",
+      "display_name_zh": "RS485总线模块",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29080,
+      "category_id": 29384
+    },
+    {
+      "category_code": "l_rs_485_rs_422_chip",
+      "display_name_zh": "RS485RS422芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29385
+    },
+    {
+      "category_code": "l_rubber_shell_wire_to_board_wire_to_wire",
+      "display_name_zh": "导电胶外壳线板线线",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29386
+    },
+    {
+      "category_code": "l_sample_hold_amplifier",
+      "display_name_zh": "采样保持放大器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29069,
+      "category_id": 29387
+    },
+    {
+      "category_code": "l_satellite_positioning_module",
+      "display_name_zh": "卫星定位模块",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29080,
+      "category_id": 29388
+    },
+    {
+      "category_code": "l_saw_oscillator_active",
+      "display_name_zh": "声表面波振荡器有源",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29092,
+      "category_id": 29389
+    },
+    {
+      "category_code": "l_saw_resonator_passive",
+      "display_name_zh": "声表面波谐振器无源",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29092,
+      "category_id": 29390
+    },
+    {
+      "category_code": "l_screw_terminal_block",
+      "display_name_zh": "螺钉式接线端子",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29391
+    },
+    {
+      "category_code": "l_sd_card_memory_card_connector",
+      "display_name_zh": "SD卡存储器卡连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29392
+    },
+    {
+      "category_code": "l_self_resetting_fuse",
+      "display_name_zh": "自恢复保险丝",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29091,
+      "category_id": 29393
+    },
+    {
+      "category_code": "l_semiconductor_discharge_tube_tss",
+      "display_name_zh": "半导体放电管（TSS）",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29091,
+      "category_id": 29394
+    },
+    {
+      "category_code": "l_sensor_module",
+      "display_name_zh": "传感器模块",
+      "node_type": "LEAF",
+      "node_status": "TRANSITIONAL",
+      "parent_id": 29082,
+      "category_id": 29395
+    },
+    {
+      "category_code": "l_serializer_deserializer",
+      "display_name_zh": "串行器解串器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29396
+    },
+    {
+      "category_code": "l_shift_register",
+      "display_name_zh": "移位寄存器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29067,
+      "category_id": 29397
+    },
+    {
+      "category_code": "l_shorting_cap_jumper_cap",
+      "display_name_zh": "短接帽跳线帽",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29398
+    },
+    {
+      "category_code": "l_signal_buffer_repeater_distributor",
+      "display_name_zh": "信号缓冲器中继器分配器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29399
+    },
+    {
+      "category_code": "l_signal_relay",
+      "display_name_zh": "信号继电器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29097,
+      "category_id": 29400
+    },
+    {
+      "category_code": "l_signal_switch_codec_multiplexer",
+      "display_name_zh": "信号开关、编码器、译码器与多路复用器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29067,
+      "category_id": 29401
+    },
+    {
+      "category_code": "l_silicon_carbide_diode",
+      "display_name_zh": "碳化硅二极管",
+      "node_type": "LEAF",
+      "node_status": "TRANSITIONAL",
+      "parent_id": 29089,
+      "category_id": 29402
+    },
+    {
+      "category_code": "l_silicon_carbide_field_effect_transistor_mosfet",
+      "display_name_zh": "碳化硅MOSFET",
+      "node_type": "LEAF",
+      "node_status": "TRANSITIONAL",
+      "parent_id": 29089,
+      "category_id": 29403
+    },
+    {
+      "category_code": "l_sim_card_connector",
+      "display_name_zh": "SIM卡连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29404
+    },
+    {
+      "category_code": "l_slide_switch",
+      "display_name_zh": "滑动开关",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29096,
+      "category_id": 29405
+    },
+    {
+      "category_code": "l_slot_type_photoelectric_switch_logic_output",
+      "display_name_zh": "插槽类型光电开关逻辑输出",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29406
+    },
+    {
+      "category_code": "l_solid_state_relay_mos_output",
+      "display_name_zh": "固态继电器MOS输出",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29097,
+      "category_id": 29407
+    },
+    {
+      "category_code": "l_solid_state_relay_scr_output",
+      "display_name_zh": "固态继电器晶闸管输出",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29077,
+      "category_id": 29408
+    },
+    {
+      "category_code": "l_special_function_amplifier",
+      "display_name_zh": "特殊功能放大器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29069,
+      "category_id": 29409
+    },
+    {
+      "category_code": "l_spread_spectrum_oscillator",
+      "display_name_zh": "扩频振荡器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29092,
+      "category_id": 29410
+    },
+    {
+      "category_code": "l_spring_loaded_terminal_block",
+      "display_name_zh": "弹簧式接线端子",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29411
+    },
+    {
+      "category_code": "l_sram_memory",
+      "display_name_zh": "SRAM存储器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29412
+    },
+    {
+      "category_code": "l_ssram_synchronous_static_ram",
+      "display_name_zh": "SSRAM同步静态RAM",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29413
+    },
+    {
+      "category_code": "l_stepper_motor_driver_chip",
+      "display_name_zh": "步进电机驱动器芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29074,
+      "category_id": 29414
+    },
+    {
+      "category_code": "l_super_barrier_rectifier_sbr",
+      "display_name_zh": "超级势垒整流器（SBR）",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29088,
+      "category_id": 29415
+    },
+    {
+      "category_code": "l_surface_acoustic_wave_filter_saw",
+      "display_name_zh": "声表面波滤波器（SAW）",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29094,
+      "category_id": 29416
+    },
+    {
+      "category_code": "l_surge_protector",
+      "display_name_zh": "浪涌保护器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29417
+    },
+    {
+      "category_code": "l_switched_capacitor_filter",
+      "display_name_zh": "开关式电容器滤波器",
+      "node_type": "LEAF",
+      "node_status": "TRANSITIONAL",
+      "parent_id": 29094,
+      "category_id": 29418
+    },
+    {
+      "category_code": "l_synchronous_dynamic_random_access_memory_sdram",
+      "display_name_zh": "同步动态随机访问存储器SDRAM",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29419
+    },
+    {
+      "category_code": "l_synchronous_rectification_controller",
+      "display_name_zh": "同步整流控制器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29420
+    },
+    {
+      "category_code": "l_tactile_switch",
+      "display_name_zh": "轻触开关",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29096,
+      "category_id": 29421
+    },
+    {
+      "category_code": "l_telecommunication_interface_ic",
+      "display_name_zh": "通信接口IC",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29422
+    },
+    {
+      "category_code": "l_temperature_and_humidity_sensor",
+      "display_name_zh": "温度湿度传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29423
+    },
+    {
+      "category_code": "l_temperature_compensated_crystal_oscillator_tcxo",
+      "display_name_zh": "温度补偿晶体振荡器TCXO",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29092,
+      "category_id": 29424
+    },
+    {
+      "category_code": "l_temperature_control_switch",
+      "display_name_zh": "温度控制开关",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29425
+    },
+    {
+      "category_code": "l_temperature_sensor",
+      "display_name_zh": "温度传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29426
+    },
+    {
+      "category_code": "l_test_point_test_loop",
+      "display_name_zh": "测试点与测试环",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29427
+    },
+    {
+      "category_code": "l_thermal_cut_out_tco",
+      "display_name_zh": "温度保险丝（TCO）",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29091,
+      "category_id": 29428
+    },
+    {
+      "category_code": "l_resistor",
+      "display_name_zh": "电阻器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29098,
+      "category_id": 29507
+    },
+    {
+      "category_code": "l_thermal_resonator_passive",
+      "display_name_zh": "热谐振器无源",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29092,
+      "category_id": 29429
+    },
+    {
+      "category_code": "l_capacitor",
+      "display_name_zh": "电容器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29098,
+      "category_id": 29508
+    },
+    {
+      "category_code": "l_thyristor_output_optocoupler",
+      "display_name_zh": "晶闸管输出光耦",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29077,
+      "category_id": 29430
+    },
+    {
+      "category_code": "l_inductor",
+      "display_name_zh": "电感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29098,
+      "category_id": 29509
+    },
+    {
+      "category_code": "l_thyristor_silicon_controlled_rectifier_module",
+      "display_name_zh": "晶闸管与双向可控硅",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29087,
+      "category_id": 29431
+    },
+    {
+      "category_code": "l_potentiometer",
+      "display_name_zh": "电位器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29098,
+      "category_id": 29510
+    },
+    {
+      "category_code": "l_timer_chronometer",
+      "display_name_zh": "定时器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29071,
+      "category_id": 29432
+    },
+    {
+      "category_code": "l_toggle_switch",
+      "display_name_zh": "拨动开关",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29096,
+      "category_id": 29433
+    },
+    {
+      "category_code": "l_touch_screen_controller",
+      "display_name_zh": "触摸屏控制器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29070,
+      "category_id": 29434
+    },
+    {
+      "category_code": "l_transformer",
+      "display_name_zh": "变压器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29093,
+      "category_id": 29435
+    },
+    {
+      "category_code": "l_transformer_driver",
+      "display_name_zh": "变压器驱动器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29436
+    },
+    {
+      "category_code": "l_transistor_output_optocoupler",
+      "display_name_zh": "晶体管输出光耦",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29077,
+      "category_id": 29437
+    },
+    {
+      "category_code": "l_travel_switch",
+      "display_name_zh": "行程开关",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29096,
+      "category_id": 29438
+    },
+    {
+      "category_code": "l_trigger_diode",
+      "display_name_zh": "触发二极管",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29088,
+      "category_id": 29439
+    },
+    {
+      "category_code": "l_tunable_filter",
+      "display_name_zh": "可调滤波器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29094,
+      "category_id": 29440
+    },
+    {
+      "category_code": "l_ufs",
+      "display_name_zh": "UFS",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29441
+    },
+    {
+      "category_code": "l_ultrasonic_transceiver",
+      "display_name_zh": "超声波收发器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29442
+    },
+    {
+      "category_code": "l_ultraviolet_led_uvled",
+      "display_name_zh": "紫外LEDUV LED",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29084,
+      "category_id": 29443
+    },
+    {
+      "category_code": "l_usb_connector",
+      "display_name_zh": "USB连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29444
+    },
+    {
+      "category_code": "l_usb_conversion_chip",
+      "display_name_zh": "USB转换芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29445
+    },
+    {
+      "category_code": "l_usb_conversion_module",
+      "display_name_zh": "USB转换模块",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29080,
+      "category_id": 29446
+    },
+    {
+      "category_code": "l_usb_hub",
+      "display_name_zh": "USB集线器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29447
+    },
+    {
+      "category_code": "l_v_f_and_f_v_conversion_chip",
+      "display_name_zh": "电压/频率与频率/电压转换器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29070,
+      "category_id": 29448
+    },
+    {
+      "category_code": "l_varactor_diode",
+      "display_name_zh": "变容二极管",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29088,
+      "category_id": 29449
+    },
+    {
+      "category_code": "l_varistor",
+      "display_name_zh": "压敏电阻",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29091,
+      "category_id": 29450
+    },
+    {
+      "category_code": "l_vfd_drive",
+      "display_name_zh": "VFD驱动",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29075,
+      "category_id": 29451
+    },
+    {
+      "category_code": "l_vibration_motor",
+      "display_name_zh": "振动电机",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29086,
+      "category_id": 29452
+    },
+    {
+      "category_code": "l_vibration_sensor",
+      "display_name_zh": "振动传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29453
+    },
+    {
+      "category_code": "l_video_amplifier",
+      "display_name_zh": "视频放大器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29069,
+      "category_id": 29454
+    },
+    {
+      "category_code": "l_video_interface_chip",
+      "display_name_zh": "视频接口芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29455
+    },
+    {
+      "category_code": "l_voc_sensor",
+      "display_name_zh": "VOC传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29456
+    },
+    {
+      "category_code": "l_voltage_controlled_crystal_oscillator_vcxo",
+      "display_name_zh": "电压受控晶体振荡器VCXO",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29092,
+      "category_id": 29457
+    },
+    {
+      "category_code": "l_voltage_controlled_oscillator_vco",
+      "display_name_zh": "电压受控振荡器VCO",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29092,
+      "category_id": 29458
+    },
+    {
+      "category_code": "l_voltage_controlled_tcxo",
+      "display_name_zh": "电压受控TCXO",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29092,
+      "category_id": 29459
+    },
+    {
+      "category_code": "l_voltage_reference_chip",
+      "display_name_zh": "电压基准芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29460
+    },
+    {
+      "category_code": "l_wifi_module",
+      "display_name_zh": "Wi-Fi模块",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29080,
+      "category_id": 29461
+    },
+    {
+      "category_code": "l_wire_to_board_pin_header",
+      "display_name_zh": "线对板排针连接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29095,
+      "category_id": 29462
+    },
+    {
+      "category_code": "l_wireless_charging_and_discharging_chip",
+      "display_name_zh": "无线充电放电芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29463
+    },
+    {
+      "category_code": "l_wireless_charging_coil",
+      "display_name_zh": "无线充电线圈",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29093,
+      "category_id": 29464
+    },
+    {
+      "category_code": "l_wireless_transceiver_chip",
+      "display_name_zh": "无线收发器芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29465
+    },
+    {
+      "category_code": "l_zener_diode",
+      "display_name_zh": "稳压二极管",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29088,
+      "category_id": 29466
+    },
+    {
+      "category_code": "l_zigbee_module",
+      "display_name_zh": "Zigbee模块",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29080,
+      "category_id": 29467
+    },
+    {
+      "category_code": "l_audio_codec",
+      "display_name_zh": "音频编解码器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29070,
+      "category_id": 29471
+    },
+    {
+      "category_code": "l_binary_arithmetic_logic",
+      "display_name_zh": "二进制算术逻辑器件",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29067,
+      "category_id": 29470
+    },
+    {
+      "category_code": "l_cryptographic_coprocessor",
+      "display_name_zh": "密码协处理器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29066,
+      "category_id": 29500
+    },
+    {
+      "category_code": "l_crystal_oscillator_driver",
+      "display_name_zh": "晶体与陶瓷谐振器振荡驱动器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29071,
+      "category_id": 29469
+    },
+    {
+      "category_code": "l_data_acquisition_system",
+      "display_name_zh": "数据采集系统",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29070,
+      "category_id": 29481
+    },
+    {
+      "category_code": "l_dc_dc_pwm_controller",
+      "display_name_zh": "DC-DC PWM控制器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29504
+    },
+    {
+      "category_code": "l_environmental_multi_sensor",
+      "display_name_zh": "多参数环境传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29478
+    },
+    {
+      "category_code": "l_i2c_bus_switch",
+      "display_name_zh": "I2C总线开关",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29486
+    },
+    {
+      "category_code": "l_ignition_timing_controller",
+      "display_name_zh": "点火正时控制器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29074,
+      "category_id": 29474
+    },
+    {
+      "category_code": "l_inductive_capacitive_sensing_interface",
+      "display_name_zh": "电感与电容传感接口",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29475
+    },
+    {
+      "category_code": "l_industrial_bus_transceiver",
+      "display_name_zh": "工业现场总线收发器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29488
+    },
+    {
+      "category_code": "l_industrial_signal_converter",
+      "display_name_zh": "工业模拟信号转换器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29070,
+      "category_id": 29479
+    },
+    {
+      "category_code": "l_mmwave_radar_sensor_ic",
+      "display_name_zh": "毫米波雷达传感器芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29477
+    },
+    {
+      "category_code": "l_nonisolated_dc_dc_power_module",
+      "display_name_zh": "非隔离DC-DC电源模块",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29073,
+      "category_id": 29505
+    },
+    {
+      "category_code": "l_pin_electronics_driver_comparator",
+      "display_name_zh": "测试引脚驱动器与窗口比较器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29069,
+      "category_id": 29472
+    },
+    {
+      "category_code": "l_protocol_bridge",
+      "display_name_zh": "协议桥接器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29487
+    },
+    {
+      "category_code": "l_radar_transmitter_ic",
+      "display_name_zh": "雷达发射芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29495
+    },
+    {
+      "category_code": "l_relay_socket_accessory",
+      "display_name_zh": "继电器插座与附件",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29097,
+      "category_id": 29468
+    },
+    {
+      "category_code": "l_resolver_to_digital_converter",
+      "display_name_zh": "旋转变压器数字转换器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29070,
+      "category_id": 29483
+    },
+    {
+      "category_code": "l_rf_bias_tee",
+      "display_name_zh": "射频偏置器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29493
+    },
+    {
+      "category_code": "l_rf_isolator",
+      "display_name_zh": "射频隔离器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29494
+    },
+    {
+      "category_code": "l_rf_limiter",
+      "display_name_zh": "射频限幅器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29492
+    },
+    {
+      "category_code": "l_rf_phase_shifter",
+      "display_name_zh": "射频移相器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29491
+    },
+    {
+      "category_code": "l_rf_termination",
+      "display_name_zh": "射频终端负载",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29079,
+      "category_id": 29496
+    },
+    {
+      "category_code": "l_rf_transformer",
+      "display_name_zh": "射频变压器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29093,
+      "category_id": 29497
+    },
+    {
+      "category_code": "l_schottky_bus_termination_array",
+      "display_name_zh": "肖特基总线终端二极管阵列",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29088,
+      "category_id": 29473
+    },
+    {
+      "category_code": "l_sdio_port_expander",
+      "display_name_zh": "SDIO端口扩展与切换器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29506
+    },
+    {
+      "category_code": "l_secure_authenticator",
+      "display_name_zh": "安全认证器件",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29066,
+      "category_id": 29498
+    },
+    {
+      "category_code": "l_secure_element",
+      "display_name_zh": "安全元件",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29066,
+      "category_id": 29501
+    },
+    {
+      "category_code": "l_secure_memory",
+      "display_name_zh": "安全存储器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29502
+    },
+    {
+      "category_code": "l_sensor_measurement_converter",
+      "display_name_zh": "传感测量转换器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29070,
+      "category_id": 29480
+    },
+    {
+      "category_code": "l_silicon_serial_number",
+      "display_name_zh": "硅序列号器件",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29068,
+      "category_id": 29503
+    },
+    {
+      "category_code": "l_smart_card_interface",
+      "display_name_zh": "智能卡接口芯片",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29489
+    },
+    {
+      "category_code": "l_step_down_dc_dc_converter",
+      "display_name_zh": "降压型DC-DC转换器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29484
+    },
+    {
+      "category_code": "l_step_up_buck_boost_converter",
+      "display_name_zh": "升压与升降压DC-DC转换器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29072,
+      "category_id": 29485
+    },
+    {
+      "category_code": "l_tilt_sensor",
+      "display_name_zh": "倾斜传感器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29082,
+      "category_id": 29476
+    },
+    {
+      "category_code": "l_time_to_digital_converter",
+      "display_name_zh": "时间数字转换器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29070,
+      "category_id": 29482
+    },
+    {
+      "category_code": "l_trusted_platform_module",
+      "display_name_zh": "可信平台模块",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29066,
+      "category_id": 29499
+    },
+    {
+      "category_code": "l_usb_type_c_port_controller",
+      "display_name_zh": "USB Type-C端口控制器",
+      "node_type": "LEAF",
+      "node_status": "CONFIRMED",
+      "parent_id": 29078,
+      "category_id": 29490
+    }
+  ]
+}

@@ -1,0 +1,179 @@
+{
+  "schema_version": "1.0",
+  "template_id": "common.passive.common_mode_choke",
+  "version": "1.0.0",
+  "status": "implemented",
+  "family": "passive",
+  "kind": "primitive",
+  "description": "两绕组四端共模扼流圈连接契约，逐路保持电气路径，相对极性和测试条件单独记录。",
+  "parameters_schema": {
+    "type": "object",
+    "properties": {
+      "relative_polarity": {
+        "type": "string",
+        "enum": [
+          "same_a",
+          "opposite_a",
+          "unknown"
+        ],
+        "description": "两路 a 端相对同名端关系，无量纲；必填不可 null。same_a 为 line1_a 与 line2_a 同名，opposite_a 为 line1_a 与 line2_b 同名，unknown 为资料未知。"
+      },
+      "common_mode_impedance_ohm": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "exclusiveMinimum": 0,
+        "description": "给定测试条件下共模阻抗幅值，单位 Ω；可省略或 null 表示未知，非 null 时必须同时给频率。"
+      },
+      "impedance_frequency_hz": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "exclusiveMinimum": 0,
+        "description": "共模阻抗所对应频率，单位 Hz；可省略或 null 表示未知，须与阻抗同时有值或同时未知。"
+      },
+      "rated_current_per_line_a": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "exclusiveMinimum": 0,
+        "description": "每一路已知条件下的额定电流，单位 A；可省略或 null 表示未知。"
+      }
+    },
+    "required": [
+      "relative_polarity"
+    ],
+    "additionalProperties": false
+  },
+  "ports": [
+    {
+      "id": "line1_a",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    },
+    {
+      "id": "line1_b",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    },
+    {
+      "id": "line2_a",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    },
+    {
+      "id": "line2_b",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    }
+  ],
+  "body": {
+    "representation": "terminal_contract",
+    "description": "line1_a、line1_b 属于第一绕组，line2_a、line2_b 属于第二绕组；保持两条路径，不自动跨路并网，不以磁耦合代替导电连线。"
+  },
+  "rules": [
+    {
+      "id": "two_winding_scope",
+      "severity": "error",
+      "description": "首版限两绕组四端；超过两路、抽头或额外电气结构需要新契约，禁止丢脚。"
+    },
+    {
+      "id": "terminal_binding",
+      "severity": "error",
+      "description": "四个端口与四个引脚 ID 一一对应。"
+    },
+    {
+      "id": "relative_polarity_known",
+      "severity": "unresolved",
+      "description": "relative_polarity 为 unknown 时保留未知，依赖绕向或同名端的功能检查不得通过。"
+    },
+    {
+      "id": "impedance_pair",
+      "severity": "error",
+      "description": "common_mode_impedance_ohm 与 impedance_frequency_hz 必须同时非 null 或同时缺失/为 null，禁止仅给一个数值却宣称完整标称阻抗。"
+    },
+    {
+      "id": "separate_line_paths",
+      "severity": "error",
+      "description": "不得因 common_mode 名称自动短接 line1 与 line2；外部跨接只接受明确输入。"
+    },
+    {
+      "id": "no_filter_guarantee",
+      "severity": "unresolved",
+      "description": "缺少测试条件、工作条件或必要参数时，共模衰减和差模行为验证保持未决；不把四端拓扑当作性能证明。"
+    }
+  ],
+  "sources": [
+    {
+      "kind": "design_contract",
+      "reference": "00_Project-SPEC/netlist_design/NETLIST_GENERATION_DESIGN.md"
+    }
+  ],
+  "example": {
+    "parameters": {
+      "relative_polarity": "same_a",
+      "common_mode_impedance_ohm": null,
+      "impedance_frequency_hz": null,
+      "rated_current_per_line_a": null
+    },
+    "pin_space": "logical",
+    "pin_bindings": [
+      {
+        "port": "line1_a",
+        "bit": 0,
+        "pin_id": "line1_a"
+      },
+      {
+        "port": "line1_b",
+        "bit": 0,
+        "pin_id": "line1_b"
+      },
+      {
+        "port": "line2_a",
+        "bit": 0,
+        "pin_id": "line2_a"
+      },
+      {
+        "port": "line2_b",
+        "bit": 0,
+        "pin_id": "line2_b"
+      }
+    ],
+    "pins": [
+      {
+        "id": "line1_a",
+        "name": "line1_a",
+        "net": "LINE1_A"
+      },
+      {
+        "id": "line1_b",
+        "name": "line1_b",
+        "net": "LINE1_B"
+      },
+      {
+        "id": "line2_a",
+        "name": "line2_a",
+        "net": "LINE2_A"
+      },
+      {
+        "id": "line2_b",
+        "name": "line2_b",
+        "net": "LINE2_B"
+      }
+    ],
+    "expected": {
+      "status": "logical_ready",
+      "notes": "示例显式声明两个 a 端同名，四个端点分别连接；阻抗与电流能力未知，不据此声称已满足滤波指标。"
+    }
+  },
+  "device_type": "common_mode_choke",
+  "designator_prefix": "LC",
+  "abstract_description": "共模电感"
+}

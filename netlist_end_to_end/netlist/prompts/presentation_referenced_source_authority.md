@@ -1,0 +1,1 @@
+Complete already-supplied source text for this stage's explicit references, under its original owner and claim scope. Body delivery is not field entailment, an operating selection, a new permission, or proof that a circuit satisfies the source. Missing and ambiguous references remain unresolved; index presence alone is not body delivery.

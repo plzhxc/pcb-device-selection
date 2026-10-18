@@ -1,0 +1,133 @@
+{
+  "schema_version": "1.0",
+  "status": "implemented",
+  "definition_schema": "template.schema.json",
+  "templates": [
+    {
+      "template_id": "common.passive.resistor",
+      "version": "1.0.0",
+      "definition": "passive/01_resistor.json",
+      "documentation": "00_Project-SPEC/netlist_design/templates/passive/01_resistor.md",
+      "definition_sha256": "1d2fd62e9958a24ebc5523498e11310333bfff15a31a0fc54bb782eae566687f"
+    },
+    {
+      "template_id": "common.passive.capacitor",
+      "version": "1.0.0",
+      "definition": "passive/02_capacitor.json",
+      "documentation": "00_Project-SPEC/netlist_design/templates/passive/02_capacitor.md",
+      "definition_sha256": "2b1f9aac443bd8353764ca62dd6270ae2211082f81b475a1be812993f5e6329d"
+    },
+    {
+      "template_id": "common.passive.inductor",
+      "version": "1.0.0",
+      "definition": "passive/03_inductor.json",
+      "documentation": "00_Project-SPEC/netlist_design/templates/passive/03_inductor.md",
+      "definition_sha256": "a0e58e80c63f322eb924c7742cad086f807ff6126c486257dbb081ccde93ed77"
+    },
+    {
+      "template_id": "common.passive.resistor_array",
+      "version": "1.0.0",
+      "definition": "passive/04_resistor_array.json",
+      "documentation": "00_Project-SPEC/netlist_design/templates/passive/04_resistor_array.md",
+      "definition_sha256": "09ee4b047c02ae55c512b108a4aeebebfdbb5c286907e4849d7a6371a74710d2"
+    },
+    {
+      "template_id": "common.passive.potentiometer",
+      "version": "1.0.0",
+      "definition": "passive/05_potentiometer.json",
+      "documentation": "00_Project-SPEC/netlist_design/templates/passive/05_potentiometer.md",
+      "definition_sha256": "9367cdd0c4296a5bcabb98e813c509fac7564cd12007cb790bcdec065337153f"
+    },
+    {
+      "template_id": "common.passive.thermistor",
+      "version": "1.0.0",
+      "definition": "passive/06_thermistor.json",
+      "documentation": "00_Project-SPEC/netlist_design/templates/passive/06_thermistor.md",
+      "definition_sha256": "cc9a8a23287d54c5494692bc1607ada6d2dfee387e5ea4eb271ed40617b6791f"
+    },
+    {
+      "template_id": "common.passive.photoresistor",
+      "version": "1.0.0",
+      "definition": "passive/07_photoresistor.json",
+      "documentation": "00_Project-SPEC/netlist_design/templates/passive/07_photoresistor.md",
+      "definition_sha256": "04f8d96094025571c3e5d71e3a457b55fdf474210743b06da4004defa61ffdbe"
+    },
+    {
+      "template_id": "common.passive.variable_capacitor",
+      "version": "1.0.0",
+      "definition": "passive/08_variable_capacitor.json",
+      "documentation": "00_Project-SPEC/netlist_design/templates/passive/08_variable_capacitor.md",
+      "definition_sha256": "ea468ee8b98eec74c676c6111e2574947974c10b6630c16b547282bd50f1a39e"
+    },
+    {
+      "template_id": "common.passive.ferrite_bead",
+      "version": "1.0.0",
+      "definition": "passive/09_ferrite_bead.json",
+      "documentation": "00_Project-SPEC/netlist_design/templates/passive/09_ferrite_bead.md",
+      "definition_sha256": "36855c67bc614222608e14b574222f80b9818352ce3663e2ad4701f3f999ed35"
+    },
+    {
+      "template_id": "common.passive.transformer",
+      "version": "1.0.0",
+      "definition": "passive/10_transformer.json",
+      "documentation": "00_Project-SPEC/netlist_design/templates/passive/10_transformer.md",
+      "definition_sha256": "8a905439fe5de1977cfc62f88772693fa95007f7581b157747d6ba6d3f84bebd"
+    },
+    {
+      "template_id": "common.passive.common_mode_choke",
+      "version": "1.0.0",
+      "definition": "passive/11_common_mode_choke.json",
+      "documentation": "00_Project-SPEC/netlist_design/templates/passive/11_common_mode_choke.md",
+      "definition_sha256": "ccb4f11d03f5302d685e43278ae77d985b3d8a61dd8f8868d758ae5b4aa56fd5"
+    },
+    {
+      "template_id": "common.clock.passive_crystal",
+      "version": "1.0.0",
+      "definition": "passive/12_passive_crystal.json",
+      "documentation": "00_Project-SPEC/netlist_design/templates/passive/12_passive_crystal.md",
+      "definition_sha256": "f034fe5989e713124979ee48de5bd5b0c38b2449bf3e01d799f2f232f9b11f04"
+    },
+    {
+      "template_id": "common.passive.fuse",
+      "version": "1.0.0",
+      "definition": "passive/13_fuse.json",
+      "documentation": "00_Project-SPEC/netlist_design/templates/passive/13_fuse.md",
+      "definition_sha256": "69623cf838d767758e487b32faae7944b334afa47d0e18c5ab28dc8304440505"
+    },
+    {
+      "template_id": "common.passive.varistor",
+      "version": "1.0.0",
+      "definition": "passive/14_varistor.json",
+      "documentation": "00_Project-SPEC/netlist_design/templates/passive/14_varistor.md",
+      "definition_sha256": "1cdd156e1252e82748507b8e972806080a84f93034c8c8a2c54c83a920e2e8da"
+    },
+    {
+      "template_id": "common.passive.gas_discharge_tube",
+      "version": "1.0.0",
+      "definition": "passive/15_gas_discharge_tube.json",
+      "documentation": "00_Project-SPEC/netlist_design/templates/passive/15_gas_discharge_tube.md",
+      "definition_sha256": "817a3a469f81f2e97365caf7d918273b01d8a1e68e2937812d18952674fd89a5"
+    },
+    {
+      "template_id": "common.circuit.resistor_divider",
+      "version": "1.0.0",
+      "definition": "circuits/resistor_divider.json",
+      "documentation": "00_Project-SPEC/netlist_design/templates/circuits/resistor_divider.md",
+      "definition_sha256": "0d87abe70a2b89cb042f2be9c3469dae237ad22c2768f2c19060db4df487194e"
+    },
+    {
+      "template_id": "common.circuit.rc_lowpass",
+      "version": "1.0.0",
+      "definition": "circuits/rc_lowpass.json",
+      "documentation": "00_Project-SPEC/netlist_design/templates/circuits/rc_lowpass.md",
+      "definition_sha256": "611d407ed1b8a69f30c04f93b825ee20155134d65d4b43bbc1103a13c8c096d1"
+    },
+    {
+      "template_id": "common.circuit.filtered_divider",
+      "version": "1.0.0",
+      "definition": "circuits/filtered_divider.json",
+      "documentation": "00_Project-SPEC/netlist_design/templates/circuits/filtered_divider.md",
+      "definition_sha256": "288ce4153181c6e9b3a3e5fe2ea01947680a031b7127a51f3a8af746c15e7911"
+    }
+  ]
+}

@@ -1,0 +1,375 @@
+{
+  "$defs": {
+    "Requirement": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "category": {
+          "title": "Category",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "string"
+        },
+        "unit": {
+          "title": "Unit",
+          "type": "string"
+        },
+        "priority": {
+          "enum": [
+            "must",
+            "should",
+            "could"
+          ],
+          "title": "Priority",
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "stated",
+            "suggested",
+            "tbd",
+            "conflict",
+            "not_applicable"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "implementation": {
+          "title": "Implementation",
+          "type": "string"
+        },
+        "source_message_id": {
+          "title": "Source Message Id",
+          "type": "string"
+        },
+        "source_quote": {
+          "title": "Source Quote",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "category",
+        "name",
+        "value",
+        "unit",
+        "priority",
+        "state",
+        "implementation",
+        "source_message_id",
+        "source_quote"
+      ],
+      "title": "Requirement",
+      "type": "object"
+    },
+    "SelectionItem": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "module_id": {
+          "title": "Module Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "type_id": {
+          "title": "Type Id",
+          "type": "string"
+        },
+        "type_name": {
+          "title": "Type Name",
+          "type": "string"
+        },
+        "purpose": {
+          "title": "Purpose",
+          "type": "string"
+        },
+        "boundary": {
+          "title": "Boundary",
+          "type": "string"
+        },
+        "requirement_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Requirement Ids",
+          "type": "array"
+        },
+        "circuit_quantity": {
+          "minimum": 1,
+          "title": "Circuit Quantity",
+          "type": "integer"
+        },
+        "component_quantity": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Component Quantity"
+        },
+        "quantity_state": {
+          "enum": [
+            "known",
+            "design_stage"
+          ],
+          "title": "Quantity State",
+          "type": "string"
+        },
+        "reference_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reference Ids",
+          "type": "array"
+        },
+        "object_kind": {
+          "const": "circuit_need",
+          "title": "Object Kind",
+          "type": "string"
+        },
+        "catalog_mapping": {
+          "additionalProperties": true,
+          "title": "Catalog Mapping",
+          "type": "object"
+        },
+        "constraints": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Constraints",
+          "type": "array"
+        },
+        "specified_references": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Specified References",
+          "type": "array"
+        },
+        "preferred_references": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Preferred References",
+          "type": "array"
+        },
+        "reference_only": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reference Only",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "module_id",
+        "name",
+        "type_id",
+        "type_name",
+        "purpose",
+        "boundary",
+        "requirement_ids",
+        "circuit_quantity",
+        "component_quantity",
+        "quantity_state",
+        "reference_ids",
+        "object_kind",
+        "catalog_mapping",
+        "constraints",
+        "specified_references",
+        "preferred_references",
+        "reference_only"
+      ],
+      "title": "SelectionItem",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "pcbagent.requirement-spec/1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "spec_id": {
+      "title": "Spec Id",
+      "type": "string"
+    },
+    "project_id": {
+      "title": "Project Id",
+      "type": "string"
+    },
+    "requirement_version": {
+      "minimum": 0,
+      "title": "Requirement Version",
+      "type": "integer"
+    },
+    "domain_revision": {
+      "minimum": 0,
+      "title": "Domain Revision",
+      "type": "integer"
+    },
+    "review_status": {
+      "enum": [
+        "draft",
+        "ready",
+        "approved"
+      ],
+      "title": "Review Status",
+      "type": "string"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "summary": {
+      "title": "Summary",
+      "type": "string"
+    },
+    "template": {
+      "additionalProperties": true,
+      "title": "Template",
+      "type": "object"
+    },
+    "requirements": {
+      "items": {
+        "$ref": "#/$defs/Requirement"
+      },
+      "title": "Requirements",
+      "type": "array"
+    },
+    "constraints": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Constraints",
+      "type": "array"
+    },
+    "modules": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Modules",
+      "type": "array"
+    },
+    "module_links": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Module Links",
+      "type": "array"
+    },
+    "workflow": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Workflow",
+      "type": "array"
+    },
+    "selection_items": {
+      "items": {
+        "$ref": "#/$defs/SelectionItem"
+      },
+      "title": "Selection Items",
+      "type": "array"
+    },
+    "device_references": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Device References",
+      "type": "array"
+    },
+    "evidence_refs": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Evidence Refs",
+      "type": "array"
+    },
+    "source_messages": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Source Messages",
+      "type": "array"
+    },
+    "acceptance_criteria": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Acceptance Criteria",
+      "type": "array"
+    },
+    "open_items": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Open Items",
+      "type": "array"
+    },
+    "handoff_status": {
+      "enum": [
+        "ready",
+        "ready_with_open_items",
+        "blocked"
+      ],
+      "title": "Handoff Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "spec_id",
+    "project_id",
+    "requirement_version",
+    "domain_revision",
+    "review_status",
+    "title",
+    "summary",
+    "template",
+    "requirements",
+    "constraints",
+    "modules",
+    "module_links",
+    "workflow",
+    "selection_items",
+    "device_references",
+    "evidence_refs",
+    "source_messages",
+    "acceptance_criteria",
+    "open_items",
+    "handoff_status"
+  ],
+  "title": "RequirementSpec",
+  "type": "object"
+}

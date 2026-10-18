@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "netlist-end-to-end"
+version = "0.1.0"
+description = "Integrated PCBAgent source: workflow, Agent runtime, datasheet automation, validation, and Web Console"
+requires-python = ">=3.10"
+dependencies = [
+    "aiohttp>=3.9",
+    "beautifulsoup4>=4.12",
+    "colorama>=0.4.6",
+    "ddgs==9.14.4",
+    "jsonschema>=4.19",
+    "milvus-lite>=2.4,<3",
+    "mysql-connector-python>=8.4",
+    "openai>=1.0",
+    "Pillow>=10.0",
+    "pymilvus>=2.5,<2.6",
+    "pydantic>=2.7",
+    "pypdfium2>=4.30",
+    "PyYAML>=6.0",
+    "requests>=2.31",
+]
+
+[project.scripts]
+pcbagent = "pcbagent_runtime.cli:main"
+netlist-end-to-end = "pcbagent_runtime.cli:workflow_main"
+pcbagent-web = "pcbagent_runtime.cli:web_main"
+datasheet-automation = "pcbagent_runtime.cli:datasheet_main"
+validation-platform = "pcbagent_runtime.cli:validation_main"
+pcbagent-trace = "pcbagent_runtime.cli:trace_main"
+
+[project.optional-dependencies]
+api = ["fastapi>=0.115", "uvicorn>=0.30"]
+web = ["fastapi>=0.115", "jinja2>=3.1", "uvicorn>=0.30"]
+topology = ["networkx>=3.2", "jinja2>=3.1"]
+trace = ["mysql-connector-python>=8.4"]
+proxy = ["socksio>=1.0"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+namespaces = false
+include = [
+    "agent_framework*",
+    "datasheet_automation*",
+    "netlist_end_to_end*",
+    "pcbagent_runtime*",
+    "validation_platform*",
+    "web_console*",
+]
+exclude = ["web_console.frontend*", "web_console.static*"]
+
+[tool.setuptools.package-data]
+"netlist_end_to_end.netlist.prompts" = ["*.md"]
+"netlist_end_to_end.common_devices" = ["assets/*.json", "assets/passive/*.json", "assets/circuits/*.json", "assets/examples/*.json"]
+web_console = ["static/index.html", "static/assets/*", "static/schematic/index.html", "static/schematic/assets/*"]
+"agent_framework.trace.read.web" = [
+    "templates/*.html",
+    "static/*.css",
+    "static/*.js",
+    "static/*.txt",
+]
+"datasheet_automation.lcsc" = ["*.js"]
+"agent_framework.trace" = ["deployment/compose.yaml"]

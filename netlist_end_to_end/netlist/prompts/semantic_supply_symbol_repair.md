@@ -1,0 +1,1 @@
+This instance has no registered manufacturer supply symbols. Omit its unregistered supply_bindings entries; an empty array is allowed. Do not infer a mapping from pin names or roles.

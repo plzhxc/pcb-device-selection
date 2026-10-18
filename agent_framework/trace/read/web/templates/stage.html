@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% import "macros.html" as ui %}
+
+{% block content %}
+  <h1>Stage <code>{{ stage.name or "—" }}</code></h1>
+  <div class="sub"><code>{{ stage.stage_run_id }}</code></div>
+
+  <section class="card">
+    <h2 class="card-header">元信息</h2>
+    <div class="table-wrap">
+      <table class="kv"><tbody>
+        <tr><th>workflow</th><td>{{ ui.id_link("flow", stage.workflow_run_id, 18) }}</td></tr>
+        <tr><th>sequence</th><td>{{ stage.seq|number }}</td></tr>
+        <tr><th>status</th><td>{{ ui.status(stage.status) }}</td></tr>
+        <tr><th>started_at</th><td class="short">{{ stage.created_at|timestamp }}</td></tr>
+        <tr><th>ended_at</th><td class="short">{{ stage.ended_at|timestamp }}</td></tr>
+        <tr><th>duration</th><td>{{ stage.duration_ms|duration_ms }}</td></tr>
+        <tr><th>steps</th><td>{{ stage.steps|number }}</td></tr>
+        <tr><th>skipped / failed</th><td>{{ stage.skipped_steps|number }} / {{ stage.failed_steps|number }}</td></tr>
+        <tr><th>agent runs</th><td>{{ stage.agent_runs|number }}</td></tr>
+        <tr><th>total tokens</th><td>{{ stage.total_tokens|number }}</td></tr>
+        <tr><th>workflow name</th><td>{{ (stage.workflow or {}).name or "—" }}</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="card-header">实际 Agent DAG</h2>
+    <div class="card-body">
+      {% if mermaid_source %}
+        <div class="diagram-shell" data-trace-diagram>
+          <div class="diagram-toolbar">
+            <div class="diagram-hint">
+              滚轮缩放 · 拖拽平移 · 双击复位
+            </div>
+            <div class="diagram-controls" role="group" aria-label="执行关系图缩放控制">
+              <button
+                class="diagram-control"
+                type="button"
+                data-diagram-action="zoom-out"
+                aria-label="缩小执行关系图"
+                title="缩小（-）"
+                disabled
+              >−</button>
+              <output
+                class="diagram-scale"
+                data-diagram-scale
+                aria-live="polite"
+                aria-label="当前缩放比例"
+              >—</output>
+              <button
+                class="diagram-control"
+                type="button"
+                data-diagram-action="zoom-in"
+                aria-label="放大执行关系图"
+                title="放大（+）"
+                disabled
+              >+</button>
+              <button
+                class="diagram-control diagram-control-wide"
+                type="button"
+                data-diagram-action="reset"
+                title="恢复完整视图（0）"
+                disabled
+              >适应窗口</button>
+            </div>
+          </div>
+          <div
+            class="diagram-viewport"
+            data-diagram-viewport
+            tabindex="0"
+            aria-label="执行关系图。使用滚轮或加减号缩放，按住拖拽或使用方向键平移，按 0 复位。"
+          >
+            <div class="mermaid">{{ mermaid_source }}</div>
+          </div>
+        </div>
+      {% else %}
+        {{ ui.empty(
+          "此记录没有 Stage DAG",
+          "旧记录不会根据 Step 时间或 sequence 伪造依赖边；请运行新版 Stage 生成实际 DAG。"
+        ) }}
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="card-header">Stage 数据交接</h2>
+    <div class="card-body">
+      <h3>Stage 开始输入</h3>
+      {{ ui.json_block(stage.inputs or {}) }}
+      <h3>Stage 结束输出</h3>
+      {{ ui.json_block(stage.outputs or {}) }}
+      {% if stage.error %}
+        <h3>Error</h3>
+        <pre class="error-text">{{ stage.error }}</pre>
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="card-header">Agent 调用清单</h2>
+    {% if not agents %}
+      {{ ui.empty("该 Stage 没有 Agent 调用", "普通代码 Step 可以不调用 Agent。") }}
+    {% else %}
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>agent run id</th><th>agent</th><th>task type</th><th>status</th>
+            <th>tokens</th><th>duration</th>
+          </tr></thead>
+          <tbody>
+            {% for run in agents %}
+              <tr>
+                <td>{{ ui.id_link("agent", run.agent_run_id, 14) }}</td>
+                <td><code>{{ run.agent or "—" }}</code></td>
+                <td>{{ run.task_type or "—" }}</td>
+                <td>{{ ui.status(run.status) }}</td>
+                <td>{{ run.total_tokens|number }}</td>
+                <td>{{ run.duration_ms|duration_ms }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

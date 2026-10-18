@@ -1,0 +1,1 @@
+Domain names, equal values and a zero-voltage declaration do not authenticate a shared physical ground; all existing cycle, wiring and electrical checks still apply.

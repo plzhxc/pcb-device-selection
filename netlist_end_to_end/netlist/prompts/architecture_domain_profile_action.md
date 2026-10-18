@@ -1,0 +1,1 @@
+Use only an existing board.static_environment.sources ID. A requirement citation or natural-language range does not create a source profile. Preserve unresolved source facts; do not substitute a nominal voltage or invent a source to silence this diagnostic.

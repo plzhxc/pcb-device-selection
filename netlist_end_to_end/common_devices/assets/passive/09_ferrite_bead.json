@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.0",
+  "template_id": "common.passive.ferrite_bead",
+  "version": "1.0.0",
+  "status": "implemented",
+  "family": "passive",
+  "kind": "primitive",
+  "description": "两端磁珠连接契约，标称阻抗与其参考频率成对记录，不替代为固定电感。",
+  "parameters_schema": {
+    "type": "object",
+    "properties": {
+      "impedance_ohm": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "description": "参考频率处的标称阻抗幅值，单位 Ω；必填且不可为 null。"
+      },
+      "impedance_frequency_hz": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "description": "标称阻抗对应参考频率，单位 Hz；必填且不可为 null。"
+      },
+      "dc_resistance_max_ohm": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "minimum": 0,
+        "description": "直流电阻上限，单位 Ω；可省略或 null 表示未知。"
+      },
+      "rated_current_a": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "exclusiveMinimum": 0,
+        "description": "已知条件下额定电流，单位 A；可省略或 null 表示未知，具体条件另附证据。"
+      }
+    },
+    "required": [
+      "impedance_ohm",
+      "impedance_frequency_hz"
+    ],
+    "additionalProperties": false
+  },
+  "ports": [
+    {
+      "id": "a",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    },
+    {
+      "id": "b",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    }
+  ],
+  "body": {
+    "representation": "terminal_contract",
+    "description": "a、b 属于同一个两端磁珠的两侧；元件路径不是可以合并网名的理想导线。"
+  },
+  "rules": [
+    {
+      "id": "impedance_pair",
+      "severity": "unresolved",
+      "description": "缺少阻抗数值或对应频率时，不可报告完整的磁珠标称参数；新建完整实例须满足 parameters_schema 的两个必填项。"
+    },
+    {
+      "id": "no_constant_inductor",
+      "severity": "error",
+      "description": "不得把 impedance_ohm 换算后作为恒定 inductance_h 或恒定 resistance_ohm 替代该器件。"
+    },
+    {
+      "id": "terminal_binding",
+      "severity": "error",
+      "description": "a、b 一一绑定到两个不同的引脚 ID。"
+    },
+    {
+      "id": "rating_evidence",
+      "severity": "unresolved",
+      "description": "需要电流或直流压降验证时，缺少额定电流、直流电阻或其条件的相关验证保持未决。"
+    },
+    {
+      "id": "same_net_review",
+      "severity": "warning",
+      "description": "两侧是同一 net 时记录该实例被旁路供审阅，保真导入不自动拆网。"
+    }
+  ],
+  "sources": [
+    {
+      "kind": "design_contract",
+      "reference": "00_Project-SPEC/netlist_design/NETLIST_GENERATION_DESIGN.md"
+    }
+  ],
+  "example": {
+    "parameters": {
+      "impedance_ohm": 120,
+      "impedance_frequency_hz": 100000000,
+      "dc_resistance_max_ohm": null,
+      "rated_current_a": null
+    },
+    "pin_space": "logical",
+    "pin_bindings": [
+      {
+        "port": "a",
+        "bit": 0,
+        "pin_id": "a"
+      },
+      {
+        "port": "b",
+        "bit": 0,
+        "pin_id": "b"
+      }
+    ],
+    "pins": [
+      {
+        "id": "a",
+        "name": "a",
+        "net": "POWER_IN"
+      },
+      {
+        "id": "b",
+        "name": "b",
+        "net": "POWER_FILTERED"
+      }
+    ],
+    "expected": {
+      "status": "logical_ready",
+      "notes": "120 Ω @ 100 MHz 是示例输入；不是固定电阻或全频段阻抗，额定能力未核实。"
+    }
+  },
+  "device_type": "ferrite_bead",
+  "designator_prefix": "FB",
+  "abstract_description": "磁珠"
+}

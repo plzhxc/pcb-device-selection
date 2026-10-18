@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "instances": [
+    {
+      "instance_id": "channel_a",
+      "template_ref": {
+        "template_id": "common.circuit.resistor_divider",
+        "version": "1.0.0"
+      },
+      "parameters": {
+        "upper_ohm": 10000,
+        "lower_ohm": 10000
+      },
+      "connections": {
+        "input": "VIN",
+        "output": "OUT_A",
+        "reference": "GND"
+      }
+    }
+  ]
+}

@@ -1,0 +1,278 @@
+{
+  "schema_version": "1.0",
+  "template_id": "common.passive.capacitor",
+  "version": "1.0.0",
+  "status": "implemented",
+  "family": "passive",
+  "kind": "primitive",
+  "description": "单个二端电容的逻辑端子契约，以显式参数区分无极性与有极性模式，不猜测实际脚序。",
+  "parameters_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "capacitance_f": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "description": "标称电容量，SI 单位 F，必填且不可 null，严格大于 0。"
+      },
+      "polarization": {
+        "type": "string",
+        "enum": [
+          "non_polarized",
+          "polarized"
+        ],
+        "description": "必填模式：non_polarized 为无极性，polarized 为有极性；不可 null，不依据名称或脚号猜测。"
+      },
+      "positive_port": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "a",
+          "b",
+          null
+        ],
+        "description": "必填逻辑正端标识；有极性模式明确为 a 或 b，另一端为负端；无极性模式只能为 null。不是实物脚号。"
+      },
+      "rated_voltage_v": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "description": "额定电压，SI 单位 V；已知时严格大于 0，可省略或 null。缺少工作条件时不能据此宣告耐压校验通过。",
+        "exclusiveMinimum": 0
+      },
+      "tolerance_ratio": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "description": "相对容差，无量纲；已知时为 0～1，可省略或 null。",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "regulator_application": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "Optional selected abstract capacitor procurement guarantees for all declared static voltage and ambient-temperature conditions; not a manufacturer claim.",
+        "required": [
+          "effective_f",
+          "esr_ohm",
+          "voltage_abs_max_v",
+          "temperature_c",
+          "dielectric"
+        ],
+        "properties": {
+          "effective_f": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "minimum",
+              "maximum"
+            ],
+            "properties": {
+              "minimum": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "maximum": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            }
+          },
+          "esr_ohm": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "minimum",
+              "maximum"
+            ],
+            "properties": {
+              "minimum": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "maximum": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            }
+          },
+          "voltage_abs_max_v": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "temperature_c": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "minimum",
+              "maximum"
+            ],
+            "properties": {
+              "minimum": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "maximum": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            }
+          },
+          "dielectric": {
+            "const": "ceramic"
+          }
+        }
+      }
+    },
+    "required": [
+      "capacitance_f",
+      "polarization",
+      "positive_port"
+    ],
+    "additionalProperties": false,
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "polarization": {
+              "const": "polarized"
+            }
+          },
+          "required": [
+            "polarization"
+          ]
+        },
+        "then": {
+          "properties": {
+            "positive_port": {
+              "type": "string",
+              "enum": [
+                "a",
+                "b"
+              ]
+            }
+          }
+        },
+        "else": {
+          "properties": {
+            "positive_port": {
+              "type": "null"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "ports": [
+    {
+      "id": "a",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    },
+    {
+      "id": "b",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    }
+  ],
+  "body": {
+    "representation": "terminal_contract",
+    "description": "a、b 是两个独立逻辑端点；polarization 与 positive_port 决定是否及如何赋予正负角色。角色只影响约束，不建立隐含连线。"
+  },
+  "rules": [
+    {
+      "id": "explicit_endpoint_binding",
+      "severity": "error",
+      "description": "每个逻辑端口的每一位必须恰好绑定一个示例引脚，每个引脚恰好被覆盖一次；端口名、引脚名、列表顺序均不替代显式绑定。"
+    },
+    {
+      "id": "net_identity",
+      "severity": "error",
+      "description": "同一实例作用域中只有相同的非空网名表示相同网络；null 表示已知未连接，不与其他 null 自动互连。"
+    },
+    {
+      "id": "physical_binding_missing",
+      "severity": "unresolved",
+      "description": "logical 示例仅证明逻辑连接已声明。需要物理导出时，必须提供全部实际引脚及来源，不得把 a、b 等逻辑 ID 当作真实脚号。"
+    },
+    {
+      "id": "polarization_explicit",
+      "severity": "error",
+      "description": "polarized 时 positive_port 必须为 a 或 b；non_polarized 时必须为 null。不能把 GND 网名当成极性证据。"
+    },
+    {
+      "id": "voltage_polarity_check",
+      "severity": "unresolved",
+      "description": "有极性模式如需验证实际工作电压方向，必须有两端电压关系及适用条件；网名和绑定完整不能代替电压校核。"
+    },
+    {
+      "id": "no_supply_shortcut",
+      "severity": "error",
+      "description": "不得因电容被描述为去耦而自行将任一端接地或接电源；两端网络均由实例指定。"
+    }
+  ],
+  "sources": [
+    {
+      "kind": "design_contract",
+      "reference": "00_Project-SPEC/netlist_design/NETLIST_GENERATION_DESIGN.md"
+    }
+  ],
+  "example": {
+    "parameters": {
+      "capacitance_f": 1e-05,
+      "polarization": "polarized",
+      "positive_port": "b",
+      "rated_voltage_v": null,
+      "tolerance_ratio": null
+    },
+    "pin_space": "logical",
+    "pin_bindings": [
+      {
+        "port": "a",
+        "bit": 0,
+        "pin_id": "a"
+      },
+      {
+        "port": "b",
+        "bit": 0,
+        "pin_id": "b"
+      }
+    ],
+    "pins": [
+      {
+        "id": "a",
+        "name": "negative",
+        "net": "RETURN"
+      },
+      {
+        "id": "b",
+        "name": "positive",
+        "net": "BIAS"
+      }
+    ],
+    "expected": {
+      "status": "logical_ready",
+      "notes": "人为示例明确逻辑端口 b 为正端，不代表某封装的第 2 脚。连接声明就绪，未验证工作电压方向或耐压。"
+    }
+  },
+  "device_type": "capacitor",
+  "designator_prefix": "C",
+  "abstract_description": "电容",
+  "value_spec": {
+    "parameter": "capacitance_f",
+    "unit": "F"
+  }
+}

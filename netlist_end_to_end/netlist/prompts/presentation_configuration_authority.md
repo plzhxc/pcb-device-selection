@@ -1,0 +1,1 @@
+Input selections already fix their stated fields. Only actual contract options authorize an internal choice; schema field names create no option or source permission.

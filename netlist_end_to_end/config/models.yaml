@@ -1,0 +1,36 @@
+# 模型强度配置。业务代码不写具体模型名：Agent 用档位（tier）表达"这一步需要多强的模型"，
+# 这里把档位映射到具体模型，并可按角色覆盖。加载顺序：本文件 < PCBAGENT_MODEL_CONFIG 指向的外部 YAML
+# （外部文件只需写要改的键）。API key 只从 QWEN_API_KEY / DASHSCOPE_API_KEY 读，不得写入此处。
+version: 1
+
+# 档位 → 具体模型（DashScope 兼容接口的模型 id）
+tiers:
+  strong: qwen3.7-max
+  standard: qwen3.7-plus
+  fast: qwen3.7-flash
+
+# 所有角色的默认值；档位在这里解析成 params.model，Agent 类上的 model_tier 可覆盖它
+defaults:
+  tier: strong
+  reasoning: false
+  timeout_s: 180
+
+# 按角色覆盖（键 = AgentRole 值）。可写 tier / reasoning / temperature / max_tokens / timeout_s。
+# 优先级：ctx.model(...) > 这里的 tier > Agent 类上的 model_tier > defaults。
+roles:
+  # netlist：规划、生成、合并、修复用 strong；预构建、参考指引、lint、规范化用 standard
+  netlist_prebuilder: {tier: standard}
+  reference_guidance: {tier: standard}
+  netlist_planner: {tier: strong}
+  netlist_worker: {tier: strong}
+  netlist_merger: {tier: strong}
+  netlist_linter: {tier: standard}
+  netlist_repairer: {tier: strong}
+  netlist_normalizer: {tier: standard}
+  # top_port：边界识别、成对匹配、lint 用 standard；规划、分片、聚合用 strong
+  top_port_boundary: {tier: standard}
+  top_port_planner: {tier: strong}
+  top_port_pair: {tier: standard}
+  top_port_shard: {tier: strong}
+  top_port_aggregator: {tier: strong}
+  top_port_linter: {tier: standard}

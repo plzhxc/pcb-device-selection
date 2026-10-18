@@ -1,0 +1,1 @@
+本次只负责frozen_architecture.module的外围规划。原样保留该模块id/label/intent/core_instances/ports和全局voltage_domains，modules数组只返回它一个模块。core_pool是该模块的全部固定核心实例。只补该模块common_devices/pin_usage/supply_bindings；其他模块不在本次范围。架构缺必要事实时列unresolved，不静默改写边界。

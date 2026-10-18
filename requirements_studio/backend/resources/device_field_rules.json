@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "aliases": {
+    "input_voltage": [
+      "input_voltage_range",
+      "operating_voltage_vin",
+      "supply_voltage"
+    ],
+    "output_voltage": [
+      "output_voltage",
+      "output_voltage_range"
+    ],
+    "output_current": [
+      "output_current"
+    ],
+    "operating_temperature": [
+      "operating_temperature",
+      "operating_temperature_range"
+    ],
+    "switching_frequency": [
+      "switching_frequency"
+    ],
+    "resolution": [
+      "resolution"
+    ],
+    "interface": [
+      "interface",
+      "interface_type"
+    ],
+    "feature": [],
+    "price": [
+      "price"
+    ]
+  },
+  "policy": "same object, dimension, rating and conditions; missing remains unknown"
+}

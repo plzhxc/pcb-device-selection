@@ -1,0 +1,140 @@
+{
+  "schema_version": "1.0",
+  "template_id": "common.passive.variable_capacitor",
+  "version": "1.0.0",
+  "status": "implemented",
+  "family": "passive",
+  "kind": "primitive",
+  "description": "两端可调电容的范围、设定值与连接契约；不包含控制器或电压调谐二极管。",
+  "parameters_schema": {
+    "type": "object",
+    "properties": {
+      "capacitance_min_f": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "description": "允许范围下限，单位 F；必填且不可为 null。"
+      },
+      "capacitance_max_f": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "description": "允许范围上限，单位 F；必填且不可为 null。"
+      },
+      "capacitance_set_f": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "exclusiveMinimum": 0,
+        "description": "已知设定电容量，单位 F；可省略或 null 表示尚未设定。"
+      },
+      "rated_voltage_v": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "exclusiveMinimum": 0,
+        "description": "额定电压，单位 V；可省略或 null 表示未知，不保证工作电压适用。"
+      }
+    },
+    "required": [
+      "capacitance_min_f",
+      "capacitance_max_f"
+    ],
+    "additionalProperties": false
+  },
+  "ports": [
+    {
+      "id": "a",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    },
+    {
+      "id": "b",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    }
+  ],
+  "body": {
+    "representation": "terminal_contract",
+    "description": "a 与 b 之间声明一个可调电容元件；不得将两端直接合并为同一网络。"
+  },
+  "rules": [
+    {
+      "id": "range_order",
+      "severity": "error",
+      "description": "capacitance_min_f 必须小于或等于 capacitance_max_f。"
+    },
+    {
+      "id": "setpoint_range",
+      "severity": "error",
+      "description": "非 null 的 capacitance_set_f 必须位于 [capacitance_min_f, capacitance_max_f]。"
+    },
+    {
+      "id": "fixed_operating_value",
+      "severity": "unresolved",
+      "description": "如任务需要确定的工作电容量而 capacitance_set_f 未知，则该工作点验证保持未决；仅范围连接建模可继续。"
+    },
+    {
+      "id": "terminal_binding",
+      "severity": "error",
+      "description": "a、b 必须各有一个显式绑定，且指向不同的引脚 ID。"
+    },
+    {
+      "id": "same_net_review",
+      "severity": "warning",
+      "description": "两端绑定到同一网络时标记旁路状态供审阅，不自动修正原网表。"
+    }
+  ],
+  "sources": [
+    {
+      "kind": "design_contract",
+      "reference": "00_Project-SPEC/netlist_design/NETLIST_GENERATION_DESIGN.md"
+    }
+  ],
+  "example": {
+    "parameters": {
+      "capacitance_min_f": 5e-12,
+      "capacitance_max_f": 2e-11,
+      "capacitance_set_f": 1.2e-11,
+      "rated_voltage_v": null
+    },
+    "pin_space": "logical",
+    "pin_bindings": [
+      {
+        "port": "a",
+        "bit": 0,
+        "pin_id": "a"
+      },
+      {
+        "port": "b",
+        "bit": 0,
+        "pin_id": "b"
+      }
+    ],
+    "pins": [
+      {
+        "id": "a",
+        "name": "a",
+        "net": "TUNE_NODE"
+      },
+      {
+        "id": "b",
+        "name": "b",
+        "net": "RETURN_NODE"
+      }
+    ],
+    "expected": {
+      "status": "logical_ready",
+      "notes": "示例明确给出 5 pF 至 20 pF 的调节范围及 12 pF 的设定值；额定电压未知。"
+    }
+  },
+  "device_type": "variable_capacitor",
+  "designator_prefix": "CV",
+  "abstract_description": "可变电容",
+  "value_spec": {
+    "parameter": "capacitance_set_f",
+    "unit": "F"
+  }
+}

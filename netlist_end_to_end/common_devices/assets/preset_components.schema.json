@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "preset-components.schema.json",
+  "title": "PCBAgent preset component library",
+  "type": "object",
+  "required": ["schema", "generated", "generator", "sources", "ranking", "kinds", "module_presets", "parts"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"const": "pcbagent.device_selection.preset-components.v1"},
+    "generated": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+    "generator": {"type": "string"},
+    "sources": {"type": "object"},
+    "ranking": {"type": "string"},
+    "kinds": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["device_type", "designator_prefix", "match", "source", "count"],
+        "properties": {
+          "device_type": {"enum": ["resistance", "capacitance", "inductance", "diode", "tvs_diode", "esd_protection", "triode", "mos", "switch", "oscillator", "fuse", "connector", "chip", "module", "other"]},
+          "designator_prefix": {"type": "string", "minLength": 1},
+          "match": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+          "variant_fields": {"type": "array", "items": {"type": "string"}},
+          "default_package": {"type": ["string", "null"]},
+          "pins": {"type": ["integer", "null"]},
+          "source": {"enum": ["reference_cases", "device_catalog"]},
+          "count": {"type": "integer", "minimum": 1}
+        }
+      }
+    },
+    "module_presets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["module_id", "title", "kind", "variants", "parameter_fields"],
+        "properties": {
+          "module_id": {"type": "string", "pattern": "^\\d+(\\.\\d+)*$"},
+          "title": {"type": "string"},
+          "kind": {"type": "string"},
+          "block_if_parameters_match": {"type": ["string", "null"]},
+          "variants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["when"],
+              "properties": {
+                "when": {"type": "string"},
+                "variant": {"type": "string"},
+                "variant_prefix": {"type": "string"}
+              }
+            }
+          },
+          "fallback_variant": {"type": ["string", "null"]},
+          "parameter_fields": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "parts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["supplier_part", "kind", "device_type", "source", "usage", "variant", "rank", "default"],
+        "properties": {
+          "supplier_part": {"type": "string", "pattern": "^C\\d+$"},
+          "kind": {"type": "string"},
+          "device_type": {"type": "string"},
+          "mpn": {"type": ["string", "null"]},
+          "manufacturer": {"type": ["string", "null"]},
+          "package": {"type": ["string", "null"]},
+          "value": {"type": "string"},
+          "value_si": {"type": "number"},
+          "tolerance": {"type": ["string", "null"]},
+          "rated_voltage": {"type": ["string", "null"]},
+          "power": {"type": ["string", "null"]},
+          "dielectric": {"type": ["string", "null"]},
+          "color": {"type": "string"},
+          "lcsc_name": {"type": ["string", "null"]},
+          "lcsc_category": {"type": ["string", "null"]},
+          "jlc_class": {"enum": ["basic", "extended", null]},
+          "variant": {"type": "string"},
+          "parameters": {"type": "object", "additionalProperties": {"type": "string"}},
+          "price_cny": {"type": ["number", "null"]},
+          "pins": {"type": ["integer", "null"]},
+          "source": {"enum": ["reference_cases", "device_catalog"]},
+          "usage": {
+            "type": "object",
+            "required": ["cases", "instances"],
+            "properties": {"cases": {"type": "integer", "minimum": 0}, "instances": {"type": "integer", "minimum": 0}}
+          },
+          "rank": {"type": "integer", "minimum": 1},
+          "default": {"type": "boolean"}
+        }
+      }
+    }
+  }
+}

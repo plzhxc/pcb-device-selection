@@ -1,0 +1,1 @@
+完整voltage_domains清单已在Planner冻结。系统会将它确定性序列化为独立SCL电压域声明，与本模块原文共同编译；不添加任何connect。仅作logic上下文而无需连线的域也会保留。需要本地G/V等端点句柄时，优先用voltage_domain_ref("精确的已冻结域ID")引用，不重复填写voltage_v/reference/profile_ref。此调用不定义或改变域，不表示电气合格，也不连接任何脚；不能新建未批准域或把logic域接成rail。返回本模块完整替换SCL，保留必要连线；host域声明独立存在，无需在替换文本中重写。

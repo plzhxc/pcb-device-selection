@@ -1,0 +1,1 @@
+planning_obligations是架构移交的未完成任务。通过实际common_devices、pin_usage、已审核operating_selections和供电声明完成本模块任务；之后SCL还须生成真实接线。不要返回completed/status或自造证明。来源/外部范围缺项仍列unresolved，不为完成任务改写输入或解除必要接口。最终独立机械检查才决定是否完成。

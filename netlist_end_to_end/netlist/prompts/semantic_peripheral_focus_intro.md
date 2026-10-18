@@ -1,0 +1,1 @@
+Repair these local design choices before returning the declared peripheral_choices RESULT. 

@@ -1,0 +1,41 @@
+{% macro status(value) -%}
+  <span class="badge {{ value|status_class }}">{{ value or "?" }}</span>
+{%- endmacro %}
+
+{% macro short(value, length=12) -%}
+  {% if value is none or value == "" -%}
+    —
+  {%- else -%}
+    <span class="short" title="{{ value }}">{{ value|shorten(length) }}</span>
+  {%- endif %}
+{%- endmacro %}
+
+{% macro id_link(kind, value, length=14) -%}
+  {% if value is none or value == "" -%}
+    —
+  {%- else -%}
+    <a href="{{ path_for(kind, value) }}">{{ short(value, length) }}</a>
+  {%- endif %}
+{%- endmacro %}
+
+{% macro empty(title, detail="") -%}
+  <div class="empty">
+    <strong>{{ title }}</strong>
+    {% if detail %}{{ detail }}{% endif %}
+  </div>
+{%- endmacro %}
+
+{% macro json_block(value) -%}
+  <pre>{{ value|pretty_json }}</pre>
+{%- endmacro %}
+
+{% macro data_cell(value) -%}
+  {% if value is none or value == "" -%}
+    —
+  {%- else -%}
+    <details class="data-det">
+      <summary>{{ value|preview }}</summary>
+      <pre>{{ value|pretty_json }}</pre>
+    </details>
+  {%- endif %}
+{%- endmacro %}

@@ -1,0 +1,111 @@
+{
+  "schema_version": "1.0",
+  "template_id": "common.circuit.rc_lowpass",
+  "version": "1.0.0",
+  "status": "implemented",
+  "family": "circuit",
+  "kind": "composite",
+  "description": "RC 低通连接",
+  "parameters_schema": {
+    "type": "object",
+    "properties": {
+      "resistance_ohm": {
+        "type": "number",
+        "exclusiveMinimum": 0
+      },
+      "capacitance_f": {
+        "type": "number",
+        "exclusiveMinimum": 0
+      }
+    },
+    "required": [
+      "resistance_ohm",
+      "capacitance_f"
+    ],
+    "additionalProperties": false
+  },
+  "ports": [
+    {
+      "id": "input",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    },
+    {
+      "id": "output",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    },
+    {
+      "id": "reference",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    }
+  ],
+  "body": {
+    "representation": "composite",
+    "instances": [
+      {
+        "instance_id": "series",
+        "template_ref": {
+          "template_id": "common.passive.resistor",
+          "version": "1.0.0"
+        },
+        "parameters": {
+          "resistance_ohm": {
+            "parameter": "resistance_ohm"
+          }
+        },
+        "connections": {
+          "a": {
+            "port": "input"
+          },
+          "b": {
+            "port": "output"
+          }
+        }
+      },
+      {
+        "instance_id": "shunt",
+        "template_ref": {
+          "template_id": "common.passive.capacitor",
+          "version": "1.0.0"
+        },
+        "parameters": {
+          "capacitance_f": {
+            "parameter": "capacitance_f"
+          },
+          "polarization": {
+            "literal": "non_polarized"
+          },
+          "positive_port": {
+            "literal": null
+          }
+        },
+        "connections": {
+          "a": {
+            "port": "output"
+          },
+          "b": {
+            "port": "reference"
+          }
+        }
+      }
+    ]
+  },
+  "rules": [
+    {
+      "id": "electrical_performance",
+      "severity": "unresolved",
+      "description": "仅声明连接；负载、偏置、额定与工作条件须另行验证，不保证理想电路响应。"
+    }
+  ],
+  "sources": [
+    {
+      "kind": "design_contract",
+      "reference": "00_Project-SPEC/netlist_design/COMMON_DEVICE_IMPLEMENTATION.md"
+    }
+  ]
+}

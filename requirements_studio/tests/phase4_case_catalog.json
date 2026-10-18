@@ -1,0 +1,191 @@
+[
+  {
+    "id": "CASE-01",
+    "title": "100MHz高压差分探头",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/100MHz高压差分探头/100MHz高压差分探头_文生原理图提示词.txt",
+    "sha256": "9367232ee961f10c1f17ac8a229b32107b7b2eefc798fb6e7db5e7989800fd08",
+    "prompt": "设计一款100MHz高压差分探头工程，采用VPS8702高速运算放大器配合SGM8061XN5精密运放构建差分信号调理链路，配备BL1551B模拟开关实现量程切换控制，搭配ME6211C25和SGM2209-ADJ两款LDO提供双路低噪声稳压电源管理，由TL432精密电压基准提供参考电平，板载约190个元器件，集成JC3H7C光耦隔离、BNC信号输出接口、USB-C供电接口和拨动开关量程选择，支持100MHz带宽高压差分信号采集、单端转换输出、衰减倍率可调和LED状态指示功能。"
+  },
+  {
+    "id": "CASE-02",
+    "title": "4G物联定位控制魔盒(硬件+服务端+APP)",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/4G物联定位控制魔盒(硬件+服务端+APP)/4G物联定位控制魔盒(硬件+服务端+APP)_文生原理图提示词.txt",
+    "sha256": "8d92a5aa03b63d764321a7d308112fce33e8a9f00c98697ba02d0bb8a83d4000",
+    "prompt": "设计一款4G物联定位控制魔盒工程，采用ESP32-C3FH4（RISC-V 32位处理器，160MHz，4MB Flash）作为主控，搭配WH-GM800TF 4G LTE全网通通信模组和ATGM336H高精度GPS/北斗双模定位模块，由SYW-1912 DC-DC降压芯片和ME6211C33 LDO提供多级稳压电源管理，配备ME3116AM6G DC-DC升压和LPW5209AB5F USB限流开关完善供电系统，板载约140个元器件，集成9路继电器输出（ULN2802达林顿阵列驱动，光耦EL3H7隔离），通过RS0102YH8电平转换器匹配不同电压域，支持4G全网通远程通信、GPS/北斗双模定位追踪、WiFi+蓝牙本地无线配置、SIM卡座（Nano SIM）、IPEX 4G天线接口和SMA有源GPS天线接口，配备蜂鸣器报警、按键输入和LED状态指示功能。"
+  },
+  {
+    "id": "CASE-03",
+    "title": "AD9361+高云FPGA SDR无线通信系统 AD9363",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/AD9361+高云FPGA SDR无线通信系统 AD9363/AD9361+高云FPGA SDR无线通信系统 AD9363_文生原理图提示词.txt",
+    "sha256": "0c54393f06cab009792cffc08d5b7ff7cb0f160a1ee75530823684005c905bc3",
+    "prompt": "设计一款AD9361+高云FPGA软件无线电（SDR）无线通信系统工程，采用AD9363宽带射频收发器（覆盖70MHz~6GHz频段）和高云FPGA作为核心信号处理单元，搭配STM32F411CEU6（Cortex-M4，100MHz）作为系统控制MCU，由MP2236GJ DC-DC降压芯片、ADP1755超低噪声LDO以及ME6217C33和ME6211C18多路LDO组成分级电源管理网络，板载约274个元器件，集成8个SMA射频天线接口，支持千兆以太网（RTL8211F-CG PHY）高速TCP/IP数据传输、USB3320 USB 2.0高速ULPI PHY控制器、CH343P USB转UART串口调试、CH334P USB 2.0 Hub集线器（一拖四）、TXS0102DQER 2位双向电平转换器，配备100Pin和80Pin高速板对板连接器（DF40HC系列）、USB-C接口、4路排针和LED状态指示。"
+  },
+  {
+    "id": "CASE-04",
+    "title": "All in one服务器三合一扩展卡",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/All in one服务器三合一扩展卡/All in one服务器三合一扩展卡_文生原理图提示词.txt",
+    "sha256": "81c846e3c2e78453a36b2314eeaa4cb819d324a746e1ea2216582c950d0a08e6",
+    "prompt": "设计一款All in one服务器三合一扩展卡工程，采用PEX8724 PCIe Gen3 Switch交换芯片（24通道，支持多端口灵活配置）作为核心交换，搭配JMB585 PCIe Gen3转5口SATA 6G桥接控制器实现大容量磁盘存储扩展，以STM32G030C8T6（Cortex-M0+，64MHz）作为板级管理MCU，由TPS56520和TPS56C230多路DC-DC同步降压芯片提供分级电源管理，配备LMK00301差分时钟缓冲器为PCIe提供低抖动参考时钟、PCA9306 I2C电平转换器，板载约476个元器件，集成5路SATA 7Pin数据接口和2路散热风扇接口，支持PCIe Gen3多通道信号灵活分配交换、5盘位SATA 6Gbps硬盘阵列扩展、P25Q40 SPI Flash固件存储、2N7002 MOSFET开关控制和LED工作状态指示功能。"
+  },
+  {
+    "id": "CASE-05",
+    "title": "Klipper九轴主板",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/Klipper九轴主板/Klipper九轴主板_文生原理图提示词.txt",
+    "sha256": "469a0c16965230fa90e02703f211b0c3d8c89d15dbd87ccbb2c8ae552e641f1c",
+    "prompt": "设计一款Klipper固件九轴3D打印机主板工程，采用STM32F446ZET6（Cortex-M4，180MHz，512KB Flash，128KB SRAM，集成FPU和DSP指令）作为主控，搭配9片TMC2209超静音步进电机驱动芯片（UART模式，256微步细分，StealthChop2静音斩波和StallGuard4无传感器堵转检测）实现九轴联动控制，由两路TPS5450 DC-DC降压芯片（5A输出）和两路ME6211C33 LDO组成多级电源管理网络（提供24V/12V/5V/3.3V多电压轨），配备HD50N06D大功率N-MOSFET（4路，60V/50A）驱动加热床和加热棒，AO3400小功率MOSFET（6路）驱动风扇阵列，板载约383个元器件，集成大量外设接口，通信方面支持CAN FD总线（MCP2542FD高速收发器）、USB-C和USB-A双接口，传感器方面配备INA826仪表放大器（支持PT100/PT1000高精度热电阻测温）、9路DIAG堵转检测、3路BLTouch自动调平接口，存储方面配备AT24C32D 32Kb I2C EEPROM和TF卡座，提供SN74HC125四路总线缓冲器、74HCT365D六路缓冲器、74LVC1G125单路缓冲器和EL357C光耦隔离实现传感器接口保护，配备36路3Pin限位开关/温度传感器接口、9路XH-4A电机驱动输出接口、21路XH-2A风扇/外设接口、RJ11串口调试接口、RGB灯带接口和18路LED状态指示，支持Klipper高速USB固件通信、共振补偿和压力提前等进阶功能。"
+  },
+  {
+    "id": "CASE-06",
+    "title": "STM32F407机器人主控板",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/STM32F407机器人主控板/STM32F407机器人主控板_文生原理图提示词.txt",
+    "sha256": "53914cfbdbaa4d13c3c77f13d5970286ef0a9e05b04124419d3301f8a88618e6",
+    "prompt": "设计一款STM32F407机器人主控板工程，采用STM32F407VET6（Cortex-M4，168MHz，512KB Flash，192KB SRAM，集成FPU和DSP指令）作为主控，搭配TPS62933 DC-DC同步降压芯片（3A输出）和ME6211C33 LDO提供双路低纹波稳压电源，配备W25Q128JVSIQ 16MB SPI Flash存储和B0505S-3WR3隔离DC-DC模块（3W，5V转5V），板载约177个元器件，集成10个外设接口，通信方面支持2路CAN总线（TJA1051T/3收发器）、2路RS485（THVD1420DR收发器）和1路RS232（MAX3232IDRG4），通过6路CA-IS3722LS高速数字隔离器实现工业级全隔离通信保护，配备PC817光耦隔离、PESD3V3L2BT ESD静电保护二极管阵列，提供4路GH1.25电机/传感器接口、6Pin/14Pin排针扩展、USB-C通信接口和XT30PW大电流电源输入接口。"
+  },
+  {
+    "id": "CASE-07",
+    "title": "STM32F4工业控制板 高精度采集 全隔离通信 ESP32",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/STM32F4工业控制板 高精度采集 全隔离通信 ESP32/STM32F4工业控制板 高精度采集 全隔离通信 ESP32_文生原理图提示词.txt",
+    "sha256": "c52943ec56617b67c21b91c7f3c13fb5e0f4ac02550799fa385cda65e1c16545",
+    "prompt": "设计一款STM32F4工业控制板工程，采用ESP32-S3-WROOM-1U（Xtensa LX7双核处理器，240MHz，集成16MB Flash和8MB PSRAM，支持Wi-Fi 4和蓝牙5）作为主控，搭配TPS5430 DC-DC降压芯片（3A输出，宽输入电压范围）提供核心电源管理，板载约323个元器件，集成RJ45百兆以太网接口（HR911105A集成网络变压器）和DC电源输入接口，支持G5Q-14大功率继电器多路输出控制、高精度多通道ADC模拟信号采集、全隔离RS485工业总线通信、有源晶振提供高稳定时钟和LED状态指示功能。"
+  },
+  {
+    "id": "CASE-08",
+    "title": "XM_POWER_KIT 数控电源+示波器+万用表+信号源四合一",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/XM_POWER_KIT 数控电源+示波器+万用表+信号源四合一/XM_POWER_KIT 数控电源+示波器+万用表+信号源四合一_文生原理图提示词.txt",
+    "sha256": "ee02f075177a4acde1dd23b17b1c21ce2bea841d8b6868103d5dafcd447eedfe",
+    "prompt": "设计一款四合一多功能桌面仪器工程，采用STM32F407VET6（Cortex-M4，168MHz）作为主控，搭配AGM6014A FPGA协处理器实现高速并行数据采集与实时数字信号处理，配备W25Q256JVEIQ 32MB大容量SPI Flash存储波形数据和配置参数，由多个DC-DC和LDO（含LR7533）组成多路独立电源管理网络，采用TMP102数字温度传感器进行板级热监控，板载约385个元器件，集成8个外设接口，支持数控可调电源输出（恒压/恒流模式，含电流采样反馈）、便携式示波器功能（多通道同步采样，OPA运放前端调理）、数字万用表功能（电压/电流/电阻/通断测量）、DDS信号发生器功能（正弦/方波/三角波/任意波形），配备LMV321轨到轨运放信号缓冲、MX5050T模拟开关通道切换、XR2318和AGM15P13E功率MOSFET，集成USB-C通信接口、FPC 40Pin显示屏接口、BNC信号接口、4mm香蕉头测量接口和编码器旋钮操作。"
+  },
+  {
+    "id": "CASE-09",
+    "title": "[已验证] PN532RFIDNFC调试器",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/[已验证] PN532RFIDNFC调试器/[已验证] PN532RFIDNFC调试器_文生原理图提示词.txt",
+    "sha256": "e42478efea0b06bf60b41c913308fdead4332af16130a27fe54d477348d64eda",
+    "prompt": "设计一款PN532 RFID/NFC调试器工程，采用PN5321A3HN（NXP 13.56MHz NFC读写芯片，集成80C51内核，支持ISO14443A/B、ISO18092、Mifare Classic/Ultralight、FeliCa和NTAG全系列协议）作为核心，搭配CH340N USB转UART串口芯片实现即插即用免驱通信，由RT9013双路LDO（1.2V内核+3.3V IO）提供低噪声稳压电源管理，板载约64个元器件，集成USB-C接口（供电与通信二合一）和4Pin调试排针扩展，支持13.56MHz高频RFID/NFC卡片读写操作、Mifare S50/S70/Ultralight/Desfire卡协议解析、NTAG21x系列标签读写、ISO14443A/B双协议自动识别、板载PCB天线（ANT）近距离感应和红蓝双色LED工作状态指示功能。"
+  },
+  {
+    "id": "CASE-10",
+    "title": "便携式示波器-主体部分",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/便携式示波器-主体部分/便携式示波器-主体部分_文生原理图提示词.txt",
+    "sha256": "203453a8da95af0cc60869d733096e5b32834b81253ef79f6338e04a407db0de",
+    "prompt": "设计一款便携式示波器主体工程，采用CY7C68013A-56LTXC（Cypress EZ-USB FX2LP，USB 2.0高速控制器，内嵌8051内核，支持480Mbps Slave FIFO GPIF数据传输）作为数据采集与USB桥接主控，搭配两片AD9288BSTZ-100高速8位100MSPS双通道ADC构成四通道并行采样核心，采用AD8138ARZ差分ADC驱动器和AD8337BCPZ可变增益放大器（VGA）构建模拟前端信号调理链，由TPS72301负压LDO和SPX3819正压LDO提供低噪声双极性±5V电源管理，通过LM2776开关电容电压逆变器产生负电源轨，MCP1501T-18提供1.8V精密电压基准，板载约424个元器件，集成8个外设接口，支持四通道100MHz模拟带宽波形同步采集、BNC探头接口（兼容×1/×10标准示波器探头），配备TLV3501高速比较器实现精确边沿触发、AD5304四通道DAC程控偏置和增益调节、OPA692宽带视频运放（6路）和AD8065高阻抗FET输入运放构建多级放大，千兆以太网（RTL8211EG-VB PHY）支持高速远程数据上传、3PD5651高速DAC输出、74AVCH8T245 8位高速双向电平转换器、CH340N UART调试串口、24LC64 EEPROM存储校准参数，配备USB-C即插即用接口、FPC 50Pin显示屏接口、JTAG调试接口，通过AQY282S PhotoMOS固态继电器实现量程自动切换、LMH6643高速运放信号整形，支持IPEX天线接口和MT9700 USB负载开关保护功能。"
+  },
+  {
+    "id": "CASE-11",
+    "title": "可乐充电宝4.0(带无线充)",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/可乐充电宝4.0(带无线充)/可乐充电宝4.0(带无线充)_文生原理图提示词.txt",
+    "sha256": "cb8847d268ad475feab8668b1c367e90a91d297dc2fb1ab0fe776e33a8299d63",
+    "prompt": "设计一款可乐充电宝4.0工程，采用IP5568高集成度移动电源SoC（内置开关充电、同步升压输出、四段电量LED驱动和多重保护电路）作为核心，搭配RUH30D20H N-MOSFET（30V/20A）构成电池保护开关和RU20P7C P-MOSFET（20V/7A）负载开关，由BSS84小信号P-MOSFET和SE2N7002E N-MOSFET组成辅助开关控制，板载约109个元器件，集成USB-A快充输出接口和无线充电发射线圈接口，支持QC3.0/PD快充协议18W双向充放电、10W Qi无线充电发射输出、四段LED电量灯指示、TM-005-D-02继电器电池保护切换、按键开关唤醒和单节18650锂电池充放电管理功能。"
+  },
+  {
+    "id": "CASE-12",
+    "title": "四轮独立转向小车",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/四轮独立转向小车/四轮独立转向小车_文生原理图提示词.txt",
+    "sha256": "c431aca5dbdac00cad5bdfbb0a8972f6fbe39def4c3a3ba48ac833022511533d",
+    "prompt": "设计一款四轮独立转向小车工程，采用STM32F407VET6（Cortex-M4，168MHz，512KB Flash，192KB SRAM）作为主控，搭配XL4016E1大电流DC-DC降压芯片（8A输出，最高40V输入）和LM1117IMPX-3.3 LDO提供双路电源管理，配备CH224K USB PD快充受电协议芯片实现Type-C供电协商，板载约123个元器件，集成4个外设接口，通过DRV8870 H桥直流电机驱动芯片（3.6A峰值电流）实现4路电机独立PWM调速控制，支持4路舵机独立转向角度控制、LSM6DS3TR-C六轴IMU惯性测量单元实时姿态检测、TMB12A03蜂鸣器声音提示、BSS138 MOSFET电平转换、USB-C PD供电（5V/9V/12V自适应）、DC 5.5×2.1备用电源输入、排针扩展和LED状态指示功能。"
+  },
+  {
+    "id": "CASE-13",
+    "title": "基于LoRa的无线通信装置",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/基于LoRa的无线通信装置/基于LoRa的无线通信装置_文生原理图提示词.txt",
+    "sha256": "0979fda61507bf260bde78ec3d2aec39aad647f642d22e407c6dfb7da60c8be0",
+    "prompt": "设计一款基于LoRa的无线通信装置工程，采用ESP32-WROOM-32E（Xtensa LX6双核处理器，240MHz，8MB SPI Flash，支持Wi-Fi 4和蓝牙4.2+BLE）作为主控，搭配E32-433T30D LoRa扩频无线串口模块（基于SX1278芯片，433MHz频段，最大30dBm发射功率，空中速率0.3~19.2kbps，理论通信距离8km）实现远距离数据传输，由TP4056X线性锂电池充电管理芯片（最大1A充电电流）和SX1308 boost升压芯片（2A开关电流，最高28V输出）组成电源系统，板载约82个元器件，集成3个外设接口，支持433MHz LoRa远距离扩频透明传输、WiFi+蓝牙双模本地无线网关桥接、IP3005A集成电量计（4段LED电量指示）、SPX3819超低噪声LDO稳压（3.3V输出）、S8050和AO3401A MOSFET开关控制、IPEX天线接口、USB-C充电/通信二合一接口和18650锂电池座供电功能。"
+  },
+  {
+    "id": "CASE-14",
+    "title": "基于STM32G4的FOC电机驱动学习板",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/基于STM32G4的FOC电机驱动学习板/基于STM32G4的FOC电机驱动学习板_文生原理图提示词.txt",
+    "sha256": "63afffbc02e0e7e391b216bfbcf3276dbd9cb183ccf6d8c7af97cc972b2af75b",
+    "prompt": "设计一款基于STM32G4的FOC电机驱动学习板工程，采用STM32G431RBT6（Cortex-M4，170MHz，集成硬件DSP指令和单精度FPU浮点单元、高分辨率PWM定时器、12位5MSPS高速ADC和内置比较器，专为数字电源和电机控制优化）作为主控，搭配NCE7560K大功率N-MOSFET（75V/60A，极低Rds(on) 6.5mΩ）构建三相全桥逆变驱动电路，配备FMMT593高压PNP晶体管辅助驱动、W25Q16JVUXIQ 2MB SPI Flash存储配置参数，通过RS624XQ四通道轨到轨运放实现三相低边电流采样，板载约334个元器件，集成6个外设接口，支持三相BLDC无刷直流电机和PMSM永磁同步电机无感FOC矢量控制（含滑模观测器）、CAN总线通信（TJA1051TK/3高速CAN收发器）、GS4157B模拟开关通道自动切换、LM321运放单相电流采样、TS-KG02S继电器输出控制、XT30PW和MR30PW大电流电源接口（兼容3S~6S锂电池）以及编码器/霍尔传感器接口。"
+  },
+  {
+    "id": "CASE-15",
+    "title": "基于STM32的农机控制板",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/基于STM32的农机控制板/基于STM32的农机控制板_文生原理图提示词.txt",
+    "sha256": "63231b339c18adc1c237303fed6a4410d60ac0a8dc88a7db245837cd437f85a2",
+    "prompt": "设计一款基于STM32的农机控制板工程，采用STM32F405RGT6（Cortex-M4，168MHz，1MB Flash，192KB SRAM）作为主控，搭配Raspberry Pi Pico（RP2040双核Cortex-M0+，133MHz）作为协处理器实现传感器数据融合与扩展通信，由TPS54540 DC-DC降压芯片（5A输出，最高42V输入）和ME6212C33 LDO提供宽电压范围电源管理，配备MPU6500六轴惯性测量单元实现农机姿态感知，板载约98个元器件，集成多种农业机械专用接口，通信方面支持双路CAN FD总线（MAX3051EKA+T高速CAN收发器）实现农机ISOBUS通信，以及CH340N USB转UART串口调试，配备2N3904通用NPN晶体管驱动外部负载，提供4路11257W系列电机/泵阀控制接口、2路传感器/限位接口、XT30PW大电流电源输入接口和7Pin多功能信号接口，支持USB-C供电与通信、有源蜂鸣器状态报警和LED工作状态指示功能。"
+  },
+  {
+    "id": "CASE-16",
+    "title": "大功率2KW不间断电源",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/大功率2KW不间断电源/大功率2KW不间断电源_文生原理图提示词.txt",
+    "sha256": "0fb1b90aee20537ee23885366e53ca4aa65fbfbed6640c7b739d0e49699fc5c5",
+    "prompt": "设计一款大功率2KW不间断电源（UPS）工程，采用EG1163S高性能PWM控制器配合EG2132高压半桥栅极驱动芯片组成全桥DC-AC逆变拓扑，搭配IRFP4568大功率N-MOSFET（247A脉冲电流/150V耐压，超低Rds(on) 5.5mΩ）和CRSS042N10N同步整流N-MOSFET（100V/42A）构成高效率功率级，由LM5164同步降压DC-DC转换器（100V输入）提供辅助电源管理，采用MBR120150WT 150V肖特基二极管实现高效整流，配备SLT130125T103MTB工频隔离变压器实现电压变换与电气隔离，板载约350个元器件，集成大电流接线端子和交流输出接口，支持2KW纯正弦波逆变输出（AC 220V/50Hz，总谐波失真<3%）、锂电池组恒流/恒压充电管理、AC-DC市电/电池双路无缝自动切换不间断供电、EGS002正弦波驱动模块辅助控制、USB-C通信配置接口和LED状态指示功能。"
+  },
+  {
+    "id": "CASE-17",
+    "title": "小智AI语音对话开发板 - C3",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/小智AI语音对话开发板 - C3/小智AI语音对话开发板 - C3_文生原理图提示词.txt",
+    "sha256": "b017e2b1ebb300a5107a47f7e2fdd18044920ab3d38c1591e0f0d5816e2aed68",
+    "prompt": "设计一款小智AI语音对话开发板工程，采用ESP32-C3（RISC-V 32位单核处理器，160MHz，内置4MB Flash，支持Wi-Fi 4和蓝牙5.0 LE长距离）作为主控，搭配ES8311低功耗Mono音频编解码器（I2S/PCM接口，24位DAC，SNR 95dB）和NS4150B D类音频功放（3W@4Ω输出，效率>90%，无滤波设计）组成专业音频子系统，配备W25Q128JVSIQ 16MB SPI Flash扩展存储（存放语音模型和音频文件），由RT9013-33GB LDO提供低噪声3.3V稳压，通过SI1304BDL N-MOSFET和AO3401A P-MOSFET实现电源开关控制，板载约82个元器件，集成3个外设接口，支持WiFi+蓝牙双模无线连接云端AI服务、I2S全双工高保真语音交互（含回声消除）、扬声器直接驱动（最大3W）、MEMS麦克风模拟差分输入、TP4057线性锂电池充电管理（带充电状态指示）、ZTS6216 MEMS麦克风和RFANT3216120A5T陶瓷天线，配备USB-C充电/通信接口、4Pin调试排针和LED状态指示，适用于AI语音助手、智能音箱和便携语音交互等应用场景。"
+  },
+  {
+    "id": "CASE-18",
+    "title": "心电监护（含12导联功能）",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/心电监护（含12导联功能）/心电监护（含12导联功能）_文生原理图提示词.txt",
+    "sha256": "57dbf24b2460db8f00c8d419d41aacbe5706b967535310df720edb2bb9a99db9",
+    "prompt": "设计一款心电监护仪（12导联）工程，采用GD32F470ZIT6（Cortex-M4，240MHz，2MB Flash，512KB SRAM，集成硬件FPU和DSP加速指令）作为主控，搭配两片ADS1298IPA 8通道24位高精度生物电模拟前端（集成PGA可编程增益放大器、右腿驱动RLD输出和导联脱落检测，数据速率最高32kSPS），通过级联实现12导联同步采集，由B88069X1640T902气体放电管和DTC114EE带阻NPN晶体管提供输入保护，配备SK34肖特基二极管和IRLML6402 P-MOSFET电源开关，板载约347个元器件，集成10个外设接口，支持标准12导联心电信号同步采集（I/II/III/aVR/aVL/aVF/V1~V6），右腿驱动（RLD）抗共模干扰电路、呼吸阻抗检测、导联脱落自动检测报警、GC8838步进电机驱动芯片控制热敏打印机走纸，CH340C USB转UART数据通信、FPC 28Pin液晶显示屏接口、XT60大电流电源接口、单节锂电池供电管理系统和蜂鸣器异常报警功能。"
+  },
+  {
+    "id": "CASE-19",
+    "title": "按键发声玩具",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/按键发声玩具/按键发声玩具_文生原理图提示词.txt",
+    "sha256": "d6af195bdc6ae1f8311e75086e3478b6c8e9345d4e2f6d2517dacd4eec8e7bd3",
+    "prompt": "设计一款按键发声玩具工程，采用CX588 OTP语音播放芯片（内置8位MCU、音频DAC和1.2W功放，支持PWM/DAC直接驱动扬声器，可存储多段语音）作为核心，搭配C10S01X单通道电容式触摸感应芯片实现触摸按键检测（灵敏度可调），由PW5100同步升压芯片（0.9V极低启动电压，3.3V固定输出，效率>94%）将单节AA/AAA干电池升压至3.3V供电管理，板载约22个元器件，集成按键矩阵输入接口和扬声器接口（支持8Ω/2W喇叭），支持6键独立触发多段语音/音效播放、单节1.5V干电池供电（0.9V~1.5V输入范围）、触摸按键唤醒触发和LED工作状态指示功能。"
+  },
+  {
+    "id": "CASE-20",
+    "title": "数字恒流源-星火计划",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/数字恒流源-星火计划/数字恒流源-星火计划_文生原理图提示词.txt",
+    "sha256": "ab07ed60abad561e7103fb5c5264097f073bf0be9245394c4725be8c61d3c320",
+    "prompt": "设计一款精密数字恒流源工程，采用AT32F403AVGT7（Cortex-M4，240MHz，1024KB Flash，96KB SRAM，集成3个12位DAC和3个12位ADC）作为主控，搭配TPS54360 DC-DC降压芯片（60V/3.5A输入，宽电压范围）和LM1117GS-3.3 LDO组成多级稳压电源管理网络，通过GS8552-SR精密双通道零漂移运放（最大失调电压10μV）实现高精度电流采样反馈，配备SC81440多通道DAC和LN33X61Q1精密电压基准，板载约309个元器件，集成7个外设接口，支持可编程精密恒流输出（DAC设定+ADC实时采样PID闭环控制）、高精度电流/电压实时测量与OLED显示、BSS138 MOSFET逻辑电平转换、CH340N USB转UART通信接口（上位机控制与数据记录）、编码器旋钮精细调节、散热风扇PWM温控调速和排针扩展接口功能。"
+  },
+  {
+    "id": "CASE-21",
+    "title": "星火计划-桌面HiFi功放",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/星火计划-桌面HiFi功放/星火计划-桌面HiFi功放_文生原理图提示词.txt",
+    "sha256": "97eee1e8f524fabf794d1921dea751bbe41ed34877680e2a3673b899cdfc0b8b",
+    "prompt": "设计一款桌面HiFi功放工程，采用TPA3255高性能D类功放芯片（PurePath Ultra-HD技术，最高315W×2立体声/4Ω或600W单声道/2Ω，THD+N<0.006% @1W/4Ω，信噪比111dB，支持BTL/SE/PBTL多种输出模式）作为核心放大单元，搭配NE5532经典双通道低噪声运放（噪声密度5nV/√Hz）构建前级音调调节和有源滤波电路，配备HFD4/5-S双刀双掷信号继电器实现多路音频输入通道切换和输出保护，由S8050 NPN晶体管驱动继电器线圈，板载约200个元器件，集成6个外设接口，支持蓝牙5.0无线音频接收（AAC/aptX高清解码）、3.5mm立体声有线模拟音频输入、RCA莲花座双声道输入、大功率高保真双声道扬声器输出（支持BTL桥接模式），配备低音/高音独立调节电位器、DC 24~48V宽电压直流供电和IPEX蓝牙天线接口。"
+  },
+  {
+    "id": "CASE-22",
+    "title": "环境气象监测仪2",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/环境气象监测仪2/环境气象监测仪2_文生原理图提示词.txt",
+    "sha256": "c362a074d14738b45d38481c26a07e74a77383b5c80d68ddd3c4686b01f6df8c",
+    "prompt": "设计一款环境气象监测仪工程，采用STM32F405RGT6（Cortex-M4，168MHz，1MB Flash，192KB SRAM，集成硬件FPU）作为主控，板载约139个元器件，集成9个外设接口，支持AHT10高精度温湿度传感器（I2C接口，±0.3°C测温精度，±2%RH湿度精度）、QMC5883L三轴地磁传感器（I2C接口，16位分辨率，电子罗盘应用）、BMP280气压/温度传感器实现多参数环境数据同步采集，配备MAX3485ECSA RS485半双工工业通信接口（支持MODBUS协议）、2N7002 N-MOSFET电平转换和开关控制、TF卡座（SPI模式）本地数据离线存储、TC6291B锂电池充电管理和TP5000多化学类型充电芯片双路电源、USB-C通信/充电二合一接口、CR1220纽扣电池RTC时钟后备供电、蜂鸣器异常报警和LED工作状态指示功能。"
+  },
+  {
+    "id": "CASE-23",
+    "title": "琛光E1 Mini ESP32无人机 开源版",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/琛光E1 Mini ESP32无人机 开源版/琛光E1 Mini ESP32无人机 开源版_文生原理图提示词.txt",
+    "sha256": "87cf641a5ae1207880a144d45a7293865fdcfa0b2762a6c3aa5439c61b1fad75",
+    "prompt": "设计一款琛光E1 Mini ESP32无人机工程，采用ESP32-WROOM-32（Xtensa LX6双核处理器，240MHz，4MB SPI Flash，支持Wi-Fi 802.11 b/g/n和蓝牙4.2+BLE）作为飞控主控，搭配MPU6500六轴惯性测量单元IMU（3轴MEMS陀螺仪±2000dps+3轴加速度计±16g）实现飞行姿态实时感知与解算，由ME6118A33 LDO（3.3V/1A输出）提供低噪声稳压电源管理，通过AO3416 N-MOSFET低压功率管（20V/6.5A，超低Rds(on) 22mΩ）驱动空心杯电机，板载约53个元器件，集成5个外设接口，支持四轴720空心杯直流电机PWM驱动控制、WiFi 2.4GHz无线实时图传与手机App遥控、IMU姿态解算与级联PID飞控算法实现（角速度/角度/角加速度三环控制）、气压定高辅助悬停和1S锂电池（3.7V）直接供电功能。"
+  },
+  {
+    "id": "CASE-24",
+    "title": "用于运动健身的AR智能眼镜_硬件方案参考",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/用于运动健身的AR智能眼镜_硬件方案参考/用于运动健身的AR智能眼镜_硬件方案参考_文生原理图提示词.txt",
+    "sha256": "1d2316a60a2287306a2a93ef7962243851a91d7de9afde72ecd58e2e6162e329",
+    "prompt": "设计一款用于运动健身的AR智能眼镜硬件方案参考工程，采用STM32U5A9NJH6Q（Cortex-M33，160MHz，集成2.5D NeoChrom GPU图形加速器、Chrom-ART硬件加速器，超低功耗40nm制程，2MB Flash，786KB SRAM）作为主控，搭配LSM6DSV16X六轴IMU运动传感器（内置有限状态机和机器学习核，加速度计±16g+陀螺仪±2000dps）和LPS22HB MEMS气压高度传感器（绝对精度±0.5hPa，相当于±4cm高度分辨率），配备HTS221电容式温湿度传感器和MX25UM51245GXDI00 512Mb Octal SPI Flash（支持8线DTR模式，200MHz时钟）大容量高速存储，通过TXS0108EPWR 8位双向自动方向电平转换器实现1.8V/3.3V混合电压系统互联，由LDO提供多路低噪声稳定电源管理，板载约145个元器件，集成4个外设接口，支持MIPI DSI-2高速显示接口驱动微型OLED（AR近眼显示，640×400分辨率）、运动追踪与姿态9轴融合检测、气压高度变化监测（楼层识别）、TF卡座存储扩展和USB-C数据/充电接口，适用于运动数据实时抬头显示、户外导航指示和健康监测等AR穿戴应用场景。"
+  },
+  {
+    "id": "CASE-25",
+    "title": "立创·泰山派RK3566-1F金手指【全功能底板】",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/立创·泰山派RK3566-1F金手指【全功能底板】/立创·泰山派RK3566-1F金手指【全功能底板】_文生原理图提示词.txt",
+    "sha256": "1156bcd0b47188fbe305e987a5478f4ba1be8ec2f47b378b92535dcbd20b56ab",
+    "prompt": "设计一款立创·泰山派RK3566开发板全功能底板工程，通过260Pin高速金手指连接器与泰山派RK3566核心计算模组（搭载RK3566四核Cortex-A55处理器最高1.8GHz、RK809-5高集成度PMIC电源管理芯片和LPDDR4内存2/4/8GB可选）对接，底板由多路SY8113BADC、SY8089AAAC和SY7201ABC DC-DC同步降压芯片以及MT9700-N USB限流负载开关组成分级电源管理网络，配备SPI NOR Flash（W25Q128JVSIQ 16MB）和74LVC1T45/74LVC1G125多路逻辑电平转换器，板载约772个元器件，集成29个外设接口和79个扩展IO，视频显示方面支持Micro HDMI（4K@60fps）、MIPI DSI（1080P@60Hz，30Pin FPC）和SPI LCD，摄像头方面支持MIPI CSI（30Pin FPC）和DVP接口，网络通信方面配备千兆以太网（RTL8211F-CG PHY）和WiFi+蓝牙模块接口，存储扩展方面提供TF卡座（最高512GB）和eMMC焊盘，其他外设包括USB 2.0/3.0 Host、USB-A双路接口、USB-C OTG、SP3485 RS485工业通信接口、4路125V继电器控制输出（光耦+SS8050驱动）、40Pin树莓派兼容GPIO排针、3.5mm音频输入输出（PJ-393）、RTC电池座（CR1220）、ADC按键和LED状态指示功能。"
+  },
+  {
+    "id": "CASE-26",
+    "title": "蓝桥杯单片机主板IAP15F2K61S2(一键下载版)",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/蓝桥杯单片机主板IAP15F2K61S2(一键下载版)/蓝桥杯单片机主板IAP15F2K61S2(一键下载版)_文生原理图提示词.txt",
+    "sha256": "cf5cb705a92cbdf4566e9e6fb56fdd6a7ba5d69b6ee2de96ab107cb24ae535e1",
+    "prompt": "设计一款蓝桥杯单片机竞赛训练主板工程，采用IAP15F2K61S2-28I-LQFP44（增强型8051内核，主频28MHz，61KB片内Flash程序存储器，2048B SRAM，内置EEPROM、8通道10位ADC和4路PWM，支持在线仿真和ISP编程）作为主控，搭配CH340C USB转UART串口芯片实现一键自动下载电路（免冷启动/RTS#自动复位），由DC5V电源接口经LDO提供3.3V系统供电管理，板载约167个元器件，集成8个外设接口，通过SN74HC573ADWR 8位透明锁存器扩展并行IO输出驱动能力，显示方面支持4位共阴/共阳多功能数码管动态扫描显示（含位选和段选），输入方面支持4位独立按键和4×4矩阵键盘扫描输入、3386P电位器ADC电压采样，传感器接口方面支持TCT40-16T超声波测距模块（HC-SR04兼容）、DS18B20单总线数字温度传感器和红外接收头，输出方面支持S8050/SI2301驱动有源蜂鸣器音乐播放和8路LED流水灯，配备HDR 20Pin和16Pin扩展排针引出全部GPIO、6Pin ISP下载接口和USB B型通信接口。"
+  },
+  {
+    "id": "CASE-27",
+    "title": "音视频KVM切换器 光纤、模拟音频、HDMI",
+    "source": "/share/home/chenxin/jlceda/PCBAgent/caset/文生原理图_典型电路/音视频KVM切换器 光纤、模拟音频、HDMI/音视频KVM切换器 光纤、模拟音频、HDMI_文生原理图提示词.txt",
+    "sha256": "1bb16a3e5270377eafc5e1b987d8c417ba66e516498ff64e49c71ddd7b4243af",
+    "prompt": "设计一款音视频KVM切换器工程，采用STM32系列MCU作为切换控制核心，搭配AT24C16D 16Kb I2C EEPROM存储通道配置参数，由LP3220 DC-DC升压芯片和LDO组成多路稳压电源管理网络，配备S8550和MMBT3904通用晶体管驱动信号继电器阵列，通过G6S-2低功耗双刀双掷信号继电器（2A/30VDC触点容量）和PLT133/T10W光纤收发模块（TOSLINK Toshiba接口标准）实现多通道物理切换，板载约398个元器件，集成6个外设接口，支持多路HDMI高清视频信号无损切换（最高4K@30Hz，含EDID透传）、SPDIF光纤数字音频独立切换（无电气干扰）、3.5mm模拟立体声音频同步切换，兼容多台主机共享一套USB键盘/鼠标/显示器（KVM全功能），配备USB-C 5V供电接口、FL26T2 32.768kHz时钟晶振和LED通道状态指示功能。"
+  }
+]

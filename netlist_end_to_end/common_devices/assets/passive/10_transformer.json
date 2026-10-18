@@ -1,0 +1,177 @@
+{
+  "schema_version": "1.0",
+  "template_id": "common.passive.transformer",
+  "version": "1.0.0",
+  "status": "implemented",
+  "family": "passive",
+  "kind": "primitive",
+  "description": "仅两绕组、四端子的变压器拓扑契约，保留匝比和相对极性，不承诺隔离或工作性能。",
+  "parameters_schema": {
+    "type": "object",
+    "properties": {
+      "turns_ratio_primary_to_secondary": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "description": "匝数比 N_primary / N_secondary，无量纲；必填且不可为 null，不等同保证输出电压比。"
+      },
+      "relative_polarity": {
+        "type": "string",
+        "enum": [
+          "same_a",
+          "opposite_a",
+          "unknown"
+        ],
+        "description": "a 端相对同名端关系，无量纲；必填不可 null。same_a 为 primary_a 与 secondary_a 同名，opposite_a 为 primary_a 与 secondary_b 同名，unknown 为资料未知。"
+      },
+      "primary_inductance_h": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "exclusiveMinimum": 0,
+        "description": "在输入资料给定条件下的一次绕组电感，单位 H；可省略或 null 表示未知。"
+      },
+      "secondary_inductance_h": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "exclusiveMinimum": 0,
+        "description": "在输入资料给定条件下的二次绕组电感，单位 H；可省略或 null 表示未知。"
+      }
+    },
+    "required": [
+      "turns_ratio_primary_to_secondary",
+      "relative_polarity"
+    ],
+    "additionalProperties": false
+  },
+  "ports": [
+    {
+      "id": "primary_a",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    },
+    {
+      "id": "primary_b",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    },
+    {
+      "id": "secondary_a",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    },
+    {
+      "id": "secondary_b",
+      "direction": "passive",
+      "domain": "electrical",
+      "width": 1
+    }
+  ],
+  "body": {
+    "representation": "terminal_contract",
+    "description": "primary_a 与 primary_b 为同一绕组的两端；secondary_a 与 secondary_b 为另一绕组的两端。两个绕组仅声明耦合结构，不生成导电跨接网络。"
+  },
+  "rules": [
+    {
+      "id": "four_terminal_scope",
+      "severity": "error",
+      "description": "首版必须恰为两绕组四个功能端点；抽头、多绕组或自耦实例必须另选契约，原始额外脚仍保留。"
+    },
+    {
+      "id": "terminal_binding",
+      "severity": "error",
+      "description": "四个端口各绑定一个不同的引脚 ID，不能用同一脚代替两个端点。"
+    },
+    {
+      "id": "relative_polarity_known",
+      "severity": "unresolved",
+      "description": "relative_polarity 为 unknown 时，相位及依赖同名端的连接验证保持未决，不猜测绕向。"
+    },
+    {
+      "id": "no_implicit_cross_winding_join",
+      "severity": "error",
+      "description": "模板实例化不得自动合并任意跨绕组网；外部连接必须独立声明并保留依据。"
+    },
+    {
+      "id": "same_winding_net_review",
+      "severity": "warning",
+      "description": "同一绕组的两端在同一网络时记录短接状态供审阅，不修改保真输入。"
+    },
+    {
+      "id": "no_performance_guarantee",
+      "severity": "unresolved",
+      "description": "只凭匝比和端子不得判定输出电压、隔离安全等级、功率、工作频段或饱和裕量；相关要求需另有证据。"
+    }
+  ],
+  "sources": [
+    {
+      "kind": "design_contract",
+      "reference": "00_Project-SPEC/netlist_design/NETLIST_GENERATION_DESIGN.md"
+    }
+  ],
+  "example": {
+    "parameters": {
+      "turns_ratio_primary_to_secondary": 2,
+      "relative_polarity": "same_a",
+      "primary_inductance_h": null,
+      "secondary_inductance_h": null
+    },
+    "pin_space": "logical",
+    "pin_bindings": [
+      {
+        "port": "primary_a",
+        "bit": 0,
+        "pin_id": "primary_a"
+      },
+      {
+        "port": "primary_b",
+        "bit": 0,
+        "pin_id": "primary_b"
+      },
+      {
+        "port": "secondary_a",
+        "bit": 0,
+        "pin_id": "secondary_a"
+      },
+      {
+        "port": "secondary_b",
+        "bit": 0,
+        "pin_id": "secondary_b"
+      }
+    ],
+    "pins": [
+      {
+        "id": "primary_a",
+        "name": "primary_a",
+        "net": "PRIMARY_A"
+      },
+      {
+        "id": "primary_b",
+        "name": "primary_b",
+        "net": "PRIMARY_B"
+      },
+      {
+        "id": "secondary_a",
+        "name": "secondary_a",
+        "net": "SECONDARY_A"
+      },
+      {
+        "id": "secondary_b",
+        "name": "secondary_b",
+        "net": "SECONDARY_B"
+      }
+    ],
+    "expected": {
+      "status": "logical_ready",
+      "notes": "显式假设匝比为 2，两个 a 端为同名端；无真实器件选型、工作频率或隔离等级保证。"
+    }
+  },
+  "device_type": "transformer",
+  "designator_prefix": "T",
+  "abstract_description": "变压器"
+}

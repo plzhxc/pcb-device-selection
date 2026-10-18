@@ -1,0 +1,4567 @@
+{
+  "schema_version": "requirements-studio/module-device-map/1",
+  "module_source_sha256": "1c81bb02c9da497202cf117eb39e0cd7be180caf2d73a56d40b0443183e78508",
+  "taxonomy_version_id": "51",
+  "purpose": "bounded_retrieval_not_suitability",
+  "mappings": {
+    "P_1_1": {
+      "type_name": "电源转换模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ac_dc_controller_and_voltage_regulator",
+        "l_charge_pump",
+        "l_dc_dc_power_module",
+        "l_dc_dc_pwm_controller",
+        "l_linear_regulator_ldo",
+        "l_nonisolated_dc_dc_power_module",
+        "l_professional_power_management_pmic",
+        "l_step_down_dc_dc_converter",
+        "l_step_up_buck_boost_converter"
+      ],
+      "selectors": [
+        "step_down_dc_dc_converter",
+        "step_up_buck_boost_converter",
+        "linear_regulator_ldo",
+        "charge_pump",
+        "dc_dc_pwm_controller",
+        "ac_dc_controller_and_voltage_regulator",
+        "dc_dc_power_module",
+        "nonisolated_dc_dc_power_module",
+        "professional_power_management_pmic"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_1_2": {
+      "type_name": "电源时序管理模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_power_sequence_control",
+        "l_professional_power_management_pmic"
+      ],
+      "selectors": [
+        "power_sequence_control",
+        "professional_power_management_pmic"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_1_3": {
+      "type_name": "电源监测与复位模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_current_sensing_amplifier",
+        "l_electric_energy_metering_chip",
+        "l_monitoring_and_reset_chip"
+      ],
+      "selectors": [
+        "monitoring_and_reset_chip",
+        "electric_energy_metering_chip",
+        "current_sensing_amplifier"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_1_4": {
+      "type_name": "隔离电源模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ac_dc_power_module",
+        "l_isolated_dc_dc_converter",
+        "l_isolated_power_supply_module",
+        "l_transformer_driver"
+      ],
+      "selectors": [
+        "isolated_dc_dc_converter",
+        "isolated_power_supply_module",
+        "ac_dc_power_module",
+        "transformer_driver"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_1_5": {
+      "type_name": "基准电压模块",
+      "status": "mapped",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_voltage_reference_chip"
+      ],
+      "selectors": [
+        "voltage_reference_chip"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_1_6": {
+      "type_name": "电流源与恒流源模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_current_source_constant_current_source",
+        "l_lighting_driver"
+      ],
+      "selectors": [
+        "current_source_constant_current_source",
+        "lighting_driver"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_1_7": {
+      "type_name": "受电端Sink协议模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_fast_charging_protocol_chip",
+        "l_power_over_ethernet_poe_controller",
+        "l_usb_type_c_port_controller"
+      ],
+      "selectors": [
+        "fast_charging_protocol_chip",
+        "usb_type_c_port_controller",
+        "power_over_ethernet_poe_controller"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_1_8": {
+      "type_name": "电池管理模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_battery_management",
+        "l_fast_charging_protocol_chip",
+        "l_wireless_charging_and_discharging_chip"
+      ],
+      "selectors": [
+        "battery_management",
+        "wireless_charging_and_discharging_chip",
+        "fast_charging_protocol_chip"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_1_9": {
+      "type_name": "功率电子开关模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_field_effect_transistor_mosfet",
+        "l_ideal_diode_oring_controller",
+        "l_power_electronic_switch"
+      ],
+      "selectors": [
+        "power_electronic_switch",
+        "field_effect_transistor_mosfet",
+        "ideal_diode_oring_controller"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_1_10": {
+      "type_name": "电源备份模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_battery_management",
+        "l_dc_ac_module_inverter",
+        "l_ideal_diode_oring_controller",
+        "l_power_electronic_switch"
+      ],
+      "selectors": [
+        "ideal_diode_oring_controller",
+        "battery_management",
+        "power_electronic_switch",
+        "dc_ac_module_inverter"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_2_1": {
+      "type_name": "时钟缓冲与分配模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_clock_buffer_driver_distributor",
+        "l_signal_buffer_repeater_distributor"
+      ],
+      "selectors": [
+        "clock_buffer_driver_distributor",
+        "signal_buffer_repeater_distributor"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_2_2": {
+      "type_name": "PLL锁相环模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_clock_generator_frequency_synthesizer_pll",
+        "l_network_clock_synchronization_synce_ieee_1588"
+      ],
+      "selectors": [
+        "clock_generator_frequency_synthesizer_pll",
+        "network_clock_synchronization_synce_ieee_1588"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_2_3": {
+      "type_name": "时钟发生器模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_active_crystal_oscillator",
+        "l_ceramic_resonator_passive",
+        "l_clock_buffer_driver_distributor",
+        "l_clock_debounce",
+        "l_clock_delay",
+        "l_clock_extraction_and_data_recovery",
+        "l_clock_generator_frequency_synthesizer_pll",
+        "l_clock_multiplier",
+        "l_crystal_oscillator_driver",
+        "l_dedicated_clock_timer",
+        "l_digitally_controlled_oscillator_dco",
+        "l_l_555_timer_chronometer",
+        "l_network_clock_synchronization_synce_ieee_1588",
+        "l_oven_controlled_crystal_oscillator_ocxo",
+        "l_passive_crystal_oscillator",
+        "l_pre_programmed_oscillator",
+        "l_real_time_clock_rtc",
+        "l_saw_oscillator_active",
+        "l_saw_resonator_passive",
+        "l_spread_spectrum_oscillator",
+        "l_temperature_compensated_crystal_oscillator_tcxo",
+        "l_thermal_resonator_passive",
+        "l_timer_chronometer",
+        "l_voltage_controlled_crystal_oscillator_vcxo",
+        "l_voltage_controlled_oscillator_vco",
+        "l_voltage_controlled_tcxo"
+      ],
+      "selectors": [
+        "@F06",
+        "@F27"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_2_4": {
+      "type_name": "时钟电平转换模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_clock_buffer_driver_distributor",
+        "l_converter_level_shifter",
+        "l_lvds_chip"
+      ],
+      "selectors": [
+        "converter_level_shifter",
+        "lvds_chip",
+        "clock_buffer_driver_distributor"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_3_1": {
+      "type_name": "信号放大模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_audio_power_amplifier",
+        "l_comparator",
+        "l_current_sensing_amplifier",
+        "l_differential_operational_amplifier",
+        "l_fet_input_operational_amplifier",
+        "l_instrumentation_amplifier",
+        "l_linear_analog_multiplier_divider",
+        "l_operational_amplifier",
+        "l_pin_electronics_driver_comparator",
+        "l_precision_operational_amplifier",
+        "l_programmable_variable_gain_amplifier_pga_vga",
+        "l_sample_hold_amplifier",
+        "l_special_function_amplifier",
+        "l_video_amplifier"
+      ],
+      "selectors": [
+        "@F04"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_3_2": {
+      "type_name": "有源滤波器模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_active_filter",
+        "l_operational_amplifier",
+        "l_precision_operational_amplifier",
+        "l_switched_capacitor_filter"
+      ],
+      "selectors": [
+        "active_filter",
+        "switched_capacitor_filter",
+        "operational_amplifier",
+        "precision_operational_amplifier"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_3_3": {
+      "type_name": "电平转换模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_buffer_driver_transceiver",
+        "l_converter_level_shifter",
+        "l_digital_isolator"
+      ],
+      "selectors": [
+        "converter_level_shifter",
+        "buffer_driver_transceiver",
+        "digital_isolator"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_3_4": {
+      "type_name": "模拟开关与多路复用模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_analog_switch_multiplexer",
+        "l_analog_switch_special_purpose",
+        "l_signal_switch_codec_multiplexer"
+      ],
+      "selectors": [
+        "analog_switch_multiplexer",
+        "analog_switch_special_purpose",
+        "signal_switch_codec_multiplexer"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_3_5": {
+      "type_name": "比较器与整形模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_comparator",
+        "l_isolated_comparator",
+        "l_pin_electronics_driver_comparator"
+      ],
+      "selectors": [
+        "comparator",
+        "isolated_comparator",
+        "pin_electronics_driver_comparator"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_3_6": {
+      "type_name": "数模与模数转换模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_analog_front_end_afe",
+        "l_analog_to_digital_conversion_chip_adc",
+        "l_data_acquisition_system",
+        "l_digital_to_analog_converter_chip_dac",
+        "l_isolated_adc"
+      ],
+      "selectors": [
+        "analog_to_digital_conversion_chip_adc",
+        "digital_to_analog_converter_chip_dac",
+        "analog_front_end_afe",
+        "data_acquisition_system",
+        "isolated_adc"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_3_7": {
+      "type_name": "V F与F V转换模块",
+      "status": "mapped",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_v_f_and_f_v_conversion_chip"
+      ],
+      "selectors": [
+        "v_f_and_f_v_conversion_chip"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_4_1": {
+      "type_name": "通信转换模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_bus_to_uart_converter",
+        "l_protocol_bridge",
+        "l_rs232_chip",
+        "l_rs_485_rs_422_chip",
+        "l_serializer_deserializer",
+        "l_usb_conversion_chip"
+      ],
+      "selectors": [
+        "bus_to_uart_converter",
+        "protocol_bridge",
+        "usb_conversion_chip",
+        "serializer_deserializer",
+        "rs232_chip",
+        "rs_485_rs_422_chip"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_4_2": {
+      "type_name": "接口模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ac_power_connector",
+        "l_audio_connector_headphones",
+        "l_automotive_connector",
+        "l_banana_plug_alligator_clip",
+        "l_barrier_terminal_block",
+        "l_blade_shrapnel_contacts_the_battery_connector",
+        "l_board_to_board_and_backplane_connectors",
+        "l_button_and_strip_battery_connector",
+        "l_circular_cable_connector",
+        "l_circular_din_connector",
+        "l_cold_pressed_terminal",
+        "l_d_sub_vga_connector",
+        "l_dc_power_connector",
+        "l_din41612_connector",
+        "l_displayport_dp_connector",
+        "l_dvi_connector",
+        "l_ethernet_connector_rj45_rj11",
+        "l_feed_rf_insulator",
+        "l_female_connector",
+        "l_ffc_connector_flexible_flat_cable",
+        "l_ffc_fpc_connector",
+        "l_gold_finger_connector",
+        "l_hard_disk_connector_sas_sata_m_2",
+        "l_hdmi_connector",
+        "l_ic_transistor_socket",
+        "l_idc_pierceable_connector_bull_horn_simplified_bull",
+        "l_ieee_1394_firewire_connector",
+        "l_lotus_connector_rca_connector",
+        "l_memory_module_connector_ddr",
+        "l_micro_match_connector",
+        "l_optical_module_connector",
+        "l_pci_pcie_connector",
+        "l_pin_header",
+        "l_plug_in_terminal_block",
+        "l_pogo_pin_spring_probe_connector",
+        "l_rf_coaxial_connector",
+        "l_rubber_shell_wire_to_board_wire_to_wire",
+        "l_screw_terminal_block",
+        "l_sd_card_memory_card_connector",
+        "l_shorting_cap_jumper_cap",
+        "l_sim_card_connector",
+        "l_spring_loaded_terminal_block",
+        "l_telecommunication_interface_ic",
+        "l_test_point_test_loop",
+        "l_usb_connector",
+        "l_usb_conversion_chip",
+        "l_usb_hub",
+        "l_usb_type_c_port_controller",
+        "l_wire_to_board_pin_header"
+      ],
+      "selectors": [
+        "@F30",
+        "usb_type_c_port_controller",
+        "telecommunication_interface_ic",
+        "usb_conversion_chip",
+        "usb_hub"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_4_3": {
+      "type_name": "CAN接口模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_can_bus_module",
+        "l_can_controller",
+        "l_can_transceiver",
+        "l_isolated_can_transceiver",
+        "l_isolated_can_transceiver_with_power_supply"
+      ],
+      "selectors": [
+        "can_controller",
+        "can_transceiver",
+        "isolated_can_transceiver",
+        "isolated_can_transceiver_with_power_supply",
+        "can_bus_module"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_4_4": {
+      "type_name": "以太网接口模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ethernet_controller",
+        "l_ethernet_module",
+        "l_ethernet_switch",
+        "l_ethernet_transceiver",
+        "l_network_port_transformer"
+      ],
+      "selectors": [
+        "ethernet_controller",
+        "ethernet_transceiver",
+        "ethernet_switch",
+        "ethernet_module",
+        "network_port_transformer"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_4_5": {
+      "type_name": "总线开关模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_analog_switch_multiplexer",
+        "l_i2c_bus_switch",
+        "l_sdio_port_expander",
+        "l_signal_switch_codec_multiplexer"
+      ],
+      "selectors": [
+        "i2c_bus_switch",
+        "signal_switch_codec_multiplexer",
+        "sdio_port_expander",
+        "analog_switch_multiplexer"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_5_1": {
+      "type_name": "非易失存储模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_eeprom",
+        "l_ferroelectric_random_access_memory_fram",
+        "l_nand_flash",
+        "l_non_volatile_memory_rom",
+        "l_nor_flash",
+        "l_nvsram_non_volatile_sram"
+      ],
+      "selectors": [
+        "eeprom",
+        "nor_flash",
+        "nand_flash",
+        "non_volatile_memory_rom",
+        "ferroelectric_random_access_memory_fram",
+        "nvsram_non_volatile_sram"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_5_2": {
+      "type_name": "易失存储模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ddr_sdram",
+        "l_dram_memory",
+        "l_fifo_memory",
+        "l_psram_pseudo_static_random_access_memory",
+        "l_random_access_memory_ram",
+        "l_sram_memory",
+        "l_synchronous_dynamic_random_access_memory_sdram"
+      ],
+      "selectors": [
+        "sram_memory",
+        "psram_pseudo_static_random_access_memory",
+        "dram_memory",
+        "ddr_sdram",
+        "synchronous_dynamic_random_access_memory_sdram",
+        "fifo_memory",
+        "random_access_memory_ram"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_5_3": {
+      "type_name": "eMMC存储模块",
+      "status": "mapped",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_emmc"
+      ],
+      "selectors": [
+        "emmc"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_6_1": {
+      "type_name": "过压保护模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_automobile_fuse",
+        "l_disposable_fuse",
+        "l_electrostatic_and_surge_protection_tvs_esd",
+        "l_fuse_holder_box",
+        "l_gas_discharge_tube_gdt",
+        "l_glass_discharge_tube",
+        "l_led_protection",
+        "l_self_resetting_fuse",
+        "l_semiconductor_discharge_tube_tss",
+        "l_thermal_cut_out_tco",
+        "l_varistor",
+        "l_zener_diode"
+      ],
+      "selectors": [
+        "@F26",
+        "electrostatic_and_surge_protection_tvs_esd",
+        "zener_diode"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_6_2": {
+      "type_name": "浪涌限流与缓启动模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ntc_thermistor",
+        "l_power_electronic_switch",
+        "l_professional_power_management_pmic",
+        "l_surge_protector"
+      ],
+      "selectors": [
+        "power_electronic_switch",
+        "surge_protector",
+        "ntc_thermistor",
+        "professional_power_management_pmic"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_6_3": {
+      "type_name": "防反接模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_field_effect_transistor_mosfet",
+        "l_ideal_diode_oring_controller",
+        "l_rectifier_bridge"
+      ],
+      "selectors": [
+        "ideal_diode_oring_controller",
+        "field_effect_transistor_mosfet",
+        "rectifier_bridge"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_7_1": {
+      "type_name": "温度传感器模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ntc_thermistor",
+        "l_ptc_thermistor",
+        "l_temperature_and_humidity_sensor",
+        "l_temperature_sensor"
+      ],
+      "selectors": [
+        "temperature_sensor",
+        "temperature_and_humidity_sensor",
+        "ntc_thermistor",
+        "ptc_thermistor"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_7_2": {
+      "type_name": "电流与电压检测模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_current_sensing_amplifier",
+        "l_current_sensor",
+        "l_electric_energy_metering_chip",
+        "l_sensor_measurement_converter"
+      ],
+      "selectors": [
+        "current_sensor",
+        "current_sensing_amplifier",
+        "electric_energy_metering_chip",
+        "sensor_measurement_converter"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_7_3": {
+      "type_name": "光电传感器模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ambient_light_sensor",
+        "l_fiber_optic_laser_sensor",
+        "l_image_sensor",
+        "l_photodiode",
+        "l_photosensitive_resistor",
+        "l_phototransistor"
+      ],
+      "selectors": [
+        "ambient_light_sensor",
+        "photodiode",
+        "phototransistor",
+        "photosensitive_resistor",
+        "image_sensor",
+        "fiber_optic_laser_sensor"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_7_4": {
+      "type_name": "姿态传感器模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_attitude_sensor_gyroscope",
+        "l_tilt_sensor"
+      ],
+      "selectors": [
+        "attitude_sensor_gyroscope",
+        "tilt_sensor"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_7_5": {
+      "type_name": "编码器接口模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_magnetic_angle_sensor",
+        "l_position_sensor",
+        "l_resolver_to_digital_converter",
+        "l_rotary_encoder"
+      ],
+      "selectors": [
+        "magnetic_angle_sensor",
+        "rotary_encoder",
+        "resolver_to_digital_converter",
+        "position_sensor"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_7_6": {
+      "type_name": "磁传感器模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_current_sensor",
+        "l_dry_reed_switch",
+        "l_hall_switch",
+        "l_l_3d_magnetic_sensor",
+        "l_linear_hall_sensor",
+        "l_magnetic_angle_sensor"
+      ],
+      "selectors": [
+        "@F18"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_7_7": {
+      "type_name": "震动传感器模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_attitude_sensor_gyroscope",
+        "l_vibration_sensor"
+      ],
+      "selectors": [
+        "vibration_sensor",
+        "attitude_sensor_gyroscope"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_7_8": {
+      "type_name": "压力传感器模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_force_sensor_and_load_cell",
+        "l_pressure_sensor"
+      ],
+      "selectors": [
+        "pressure_sensor",
+        "force_sensor_and_load_cell"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_7_9": {
+      "type_name": "电容传感器模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_capacitive_sensor_ic",
+        "l_capacitive_touch_sensor_ic",
+        "l_inductive_capacitive_sensing_interface"
+      ],
+      "selectors": [
+        "capacitive_sensor_ic",
+        "capacitive_touch_sensor_ic",
+        "inductive_capacitive_sensing_interface"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_7_10": {
+      "type_name": "电感传感器模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_inductive_capacitive_sensing_interface",
+        "l_sensor_measurement_converter"
+      ],
+      "selectors": [
+        "inductive_capacitive_sensing_interface",
+        "sensor_measurement_converter"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_7_11": {
+      "type_name": "气体传感器模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_gas_flow_sensor",
+        "l_gas_sensor",
+        "l_voc_sensor"
+      ],
+      "selectors": [
+        "gas_sensor",
+        "voc_sensor",
+        "gas_flow_sensor"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_7_12": {
+      "type_name": "超声波传感器模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_sensor_module",
+        "l_ultrasonic_transceiver"
+      ],
+      "selectors": [
+        "ultrasonic_transceiver",
+        "sensor_module"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_8_1": {
+      "type_name": "数码管与点阵显示模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_digital_tube_driver",
+        "l_led_digital_display",
+        "l_led_dot_matrix_screen",
+        "l_led_driver"
+      ],
+      "selectors": [
+        "led_digital_display",
+        "led_dot_matrix_screen",
+        "digital_tube_driver",
+        "led_driver"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_8_2": {
+      "type_name": "LCD与OLED显示模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_lcd_display_screen",
+        "l_lcd_driver",
+        "l_oled_display_screen",
+        "l_oled_driver"
+      ],
+      "selectors": [
+        "lcd_display_screen",
+        "oled_display_screen",
+        "lcd_driver",
+        "oled_driver"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_8_3": {
+      "type_name": "蜂鸣器与扬声器模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_audio_codec",
+        "l_audio_power_amplifier",
+        "l_buzzer",
+        "l_loudspeaker_speaker"
+      ],
+      "selectors": [
+        "buzzer",
+        "loudspeaker_speaker",
+        "audio_power_amplifier",
+        "audio_codec"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_8_4": {
+      "type_name": "拾音器模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_audio_codec",
+        "l_audio_interface_chip",
+        "l_mems_microphone",
+        "l_microphone_head_microphone"
+      ],
+      "selectors": [
+        "mems_microphone",
+        "microphone_head_microphone",
+        "audio_codec",
+        "audio_interface_chip"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_8_5": {
+      "type_name": "语音识别模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_audio_and_video_module",
+        "l_digital_signal_processor_dsp_dsc",
+        "l_microcontroller_mcu_mpu_soc"
+      ],
+      "selectors": [
+        "microcontroller_mcu_mpu_soc",
+        "digital_signal_processor_dsp_dsc",
+        "audio_and_video_module"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_8_6": {
+      "type_name": "输入模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_button_switch",
+        "l_capacitive_touch_sensor_ic",
+        "l_dip_switch",
+        "l_direct_key_switch",
+        "l_mechanical_keyboard_switch",
+        "l_metal_dome",
+        "l_multi_way_switch",
+        "l_multifunction_switch",
+        "l_rocker_switch",
+        "l_rotary_coding_switch",
+        "l_rotary_encoder",
+        "l_rotary_switch",
+        "l_slide_switch",
+        "l_tactile_switch",
+        "l_toggle_switch",
+        "l_touch_screen_controller",
+        "l_travel_switch"
+      ],
+      "selectors": [
+        "@F31",
+        "capacitive_touch_sensor_ic",
+        "touch_screen_controller",
+        "rotary_encoder"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_8_7": {
+      "type_name": "视频转换模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_audio_and_video_module",
+        "l_serializer_deserializer",
+        "l_video_amplifier",
+        "l_video_interface_chip"
+      ],
+      "selectors": [
+        "video_interface_chip",
+        "serializer_deserializer",
+        "audio_and_video_module",
+        "video_amplifier"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_9_1": {
+      "type_name": "天线接口模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_antenna",
+        "l_balun",
+        "l_rf_coaxial_connector",
+        "l_rf_connecting_cable",
+        "l_rf_transformer"
+      ],
+      "selectors": [
+        "antenna",
+        "rf_coaxial_connector",
+        "rf_connecting_cable",
+        "rf_transformer",
+        "balun"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_9_2": {
+      "type_name": "射频前端模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_antenna",
+        "l_balun",
+        "l_duplexer",
+        "l_radar_transmitter_ic",
+        "l_radio_frequency_card_chip",
+        "l_radio_frequency_front_end_chip",
+        "l_radio_frequency_low_noise_amplifier",
+        "l_radio_frequency_power_amplifier",
+        "l_rf_amplifier",
+        "l_rf_attenuator",
+        "l_rf_bias_tee",
+        "l_rf_connecting_cable",
+        "l_rf_coupler",
+        "l_rf_detector",
+        "l_rf_isolator",
+        "l_rf_limiter",
+        "l_rf_mixer",
+        "l_rf_modulator_and_demodulator",
+        "l_rf_phase_shifter",
+        "l_rf_power_divider_combiner",
+        "l_rf_switch",
+        "l_rf_termination",
+        "l_wireless_transceiver_chip"
+      ],
+      "selectors": [
+        "@F14"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_9_3": {
+      "type_name": "无线收发模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_bluetooth_module",
+        "l_cellular_2g_3g_4g_5g_module",
+        "l_lora_module",
+        "l_radio_frequency_card_chip",
+        "l_radio_frequency_module",
+        "l_rfid_module",
+        "l_wifi_module",
+        "l_wireless_transceiver_chip",
+        "l_zigbee_module"
+      ],
+      "selectors": [
+        "wireless_transceiver_chip",
+        "lora_module",
+        "wifi_module",
+        "bluetooth_module",
+        "zigbee_module",
+        "cellular_2g_3g_4g_5g_module",
+        "radio_frequency_module",
+        "rfid_module",
+        "radio_frequency_card_chip"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_9_4": {
+      "type_name": "GPS与北斗定位模块",
+      "status": "mapped",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_satellite_positioning_module"
+      ],
+      "selectors": [
+        "satellite_positioning_module"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_10_1": {
+      "type_name": "隔离器件模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_digital_isolator",
+        "l_digital_isolator_with_power_supply",
+        "l_gate_drive_optocoupler",
+        "l_isolated_adc",
+        "l_isolated_adc_with_power_supply",
+        "l_isolated_amplifier",
+        "l_isolated_amplifier_with_power_supply",
+        "l_isolated_can_transceiver",
+        "l_isolated_can_transceiver_with_power_supply",
+        "l_isolated_comparator",
+        "l_isolated_i2c",
+        "l_isolated_i2c_with_power_supply",
+        "l_isolated_lvds_buffer",
+        "l_isolated_rs485_422_transceiver",
+        "l_isolated_rs485_422_transceiver_with_power_supply",
+        "l_isolated_rs_232_transceiver",
+        "l_isolated_rs_232_transceiver_with_power_supply",
+        "l_isolated_spi",
+        "l_isolated_spi_with_power_supply",
+        "l_isolated_usb_chip",
+        "l_isolated_usb_chip_with_power_supply",
+        "l_isolation_di_do",
+        "l_isolation_solid_state_relay",
+        "l_logic_output_optocoupler",
+        "l_optocoupler_simulator_replaceable_optocoupler",
+        "l_solid_state_relay_scr_output",
+        "l_thyristor_output_optocoupler",
+        "l_transistor_output_optocoupler"
+      ],
+      "selectors": [
+        "@F11",
+        "@F12"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_10_2": {
+      "type_name": "主控与处理模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_cryptographic_coprocessor",
+        "l_digital_signal_processor_dsp_dsc",
+        "l_microcontroller_mcu_mpu_soc",
+        "l_programmable_logic_device_cpld_fpga",
+        "l_secure_authenticator",
+        "l_secure_element",
+        "l_trusted_platform_module"
+      ],
+      "selectors": [
+        "@F01"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_10_3": {
+      "type_name": "安全加密模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_cryptographic_coprocessor",
+        "l_secure_authenticator",
+        "l_secure_element",
+        "l_secure_memory",
+        "l_trusted_platform_module"
+      ],
+      "selectors": [
+        "secure_element",
+        "secure_authenticator",
+        "cryptographic_coprocessor",
+        "trusted_platform_module",
+        "secure_memory"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_10_4": {
+      "type_name": "功率驱动模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_brush_dc_motor_drive_chip",
+        "l_brushless_dc_bldc_motor_drive_chip",
+        "l_field_effect_transistor_mosfet",
+        "l_gate_driver_chip",
+        "l_ignition_timing_controller",
+        "l_isolated_gate_driver",
+        "l_motor_drive_chip",
+        "l_relay_coil_driver_chip",
+        "l_stepper_motor_driver_chip"
+      ],
+      "selectors": [
+        "@F09",
+        "field_effect_transistor_mosfet",
+        "gate_driver_chip",
+        "relay_coil_driver_chip"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "P_10_5": {
+      "type_name": "数字逻辑与IO扩展模块",
+      "status": "multi_leaf",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_binary_arithmetic_logic",
+        "l_buffer_driver_transceiver",
+        "l_converter_level_shifter",
+        "l_counter_frequency_divider",
+        "l_digital_comparator",
+        "l_flip_flop",
+        "l_i_o_expander",
+        "l_inverter",
+        "l_latch_device",
+        "l_logic_gate",
+        "l_monostable_multivibrator",
+        "l_parity_generator_checker",
+        "l_shift_register",
+        "l_signal_switch_codec_multiplexer"
+      ],
+      "selectors": [
+        "@F02",
+        "i_o_expander"
+      ],
+      "reason": "按规范功能选择的检索范围；候选仍需核对用途、参数、对象层级和实际电路边界。"
+    },
+    "M_1_1_1": {
+      "type_name": "LDO低压差线性稳压子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ac_dc_controller_and_voltage_regulator",
+        "l_charge_pump",
+        "l_dc_dc_power_module",
+        "l_dc_dc_pwm_controller",
+        "l_linear_regulator_ldo",
+        "l_nonisolated_dc_dc_power_module",
+        "l_professional_power_management_pmic",
+        "l_step_down_dc_dc_converter",
+        "l_step_up_buck_boost_converter"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_1_1_2": {
+      "type_name": "Buck降压子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ac_dc_controller_and_voltage_regulator",
+        "l_charge_pump",
+        "l_dc_dc_power_module",
+        "l_dc_dc_pwm_controller",
+        "l_linear_regulator_ldo",
+        "l_nonisolated_dc_dc_power_module",
+        "l_professional_power_management_pmic",
+        "l_step_down_dc_dc_converter",
+        "l_step_up_buck_boost_converter"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_1_1_3": {
+      "type_name": "Boost升压子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ac_dc_controller_and_voltage_regulator",
+        "l_charge_pump",
+        "l_dc_dc_power_module",
+        "l_dc_dc_pwm_controller",
+        "l_linear_regulator_ldo",
+        "l_nonisolated_dc_dc_power_module",
+        "l_professional_power_management_pmic",
+        "l_step_down_dc_dc_converter",
+        "l_step_up_buck_boost_converter"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_1_1_4": {
+      "type_name": "Buck Boost升降压子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ac_dc_controller_and_voltage_regulator",
+        "l_charge_pump",
+        "l_dc_dc_power_module",
+        "l_dc_dc_pwm_controller",
+        "l_linear_regulator_ldo",
+        "l_nonisolated_dc_dc_power_module",
+        "l_professional_power_management_pmic",
+        "l_step_down_dc_dc_converter",
+        "l_step_up_buck_boost_converter"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_1_2_1": {
+      "type_name": "上电与下电时序控制子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_power_sequence_control",
+        "l_professional_power_management_pmic"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_1_3_1": {
+      "type_name": "电源监控子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_current_sensing_amplifier",
+        "l_electric_energy_metering_chip",
+        "l_monitoring_and_reset_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_1_3_2": {
+      "type_name": "复位IC子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_current_sensing_amplifier",
+        "l_electric_energy_metering_chip",
+        "l_monitoring_and_reset_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_1_3_3": {
+      "type_name": "看门狗子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_current_sensing_amplifier",
+        "l_electric_energy_metering_chip",
+        "l_monitoring_and_reset_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_1_4_1": {
+      "type_name": "变压器隔离DC DC子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ac_dc_power_module",
+        "l_isolated_dc_dc_converter",
+        "l_isolated_power_supply_module",
+        "l_transformer_driver"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_1_5_1": {
+      "type_name": "串联型基准子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_voltage_reference_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_1_5_2": {
+      "type_name": "并联型基准子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_voltage_reference_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_1_5_3": {
+      "type_name": "输出滤波与基准缓冲子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_voltage_reference_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_1_6_1": {
+      "type_name": "精密恒流激励子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_6",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_current_source_constant_current_source",
+        "l_lighting_driver"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_1_7_1": {
+      "type_name": "USB C受电协商子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_7",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_fast_charging_protocol_chip",
+        "l_power_over_ethernet_poe_controller",
+        "l_usb_type_c_port_controller"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_1_7_2": {
+      "type_name": "USB A快充协议触发子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_7",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_fast_charging_protocol_chip",
+        "l_power_over_ethernet_poe_controller",
+        "l_usb_type_c_port_controller"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_1_8_1": {
+      "type_name": "单节锂电池线性充电子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_8",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_battery_management",
+        "l_fast_charging_protocol_chip",
+        "l_wireless_charging_and_discharging_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_1_8_2": {
+      "type_name": "单节或多节开关充电子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_8",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_battery_management",
+        "l_fast_charging_protocol_chip",
+        "l_wireless_charging_and_discharging_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_1_8_3": {
+      "type_name": "放电路径与电池保护子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_8",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_battery_management",
+        "l_fast_charging_protocol_chip",
+        "l_wireless_charging_and_discharging_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_1_8_4": {
+      "type_name": "多节监测与均衡子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_8",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_battery_management",
+        "l_fast_charging_protocol_chip",
+        "l_wireless_charging_and_discharging_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_1_9_1": {
+      "type_name": "高侧开关子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_9",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_field_effect_transistor_mosfet",
+        "l_ideal_diode_oring_controller",
+        "l_power_electronic_switch"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_1_9_2": {
+      "type_name": "低侧开关子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_9",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_field_effect_transistor_mosfet",
+        "l_ideal_diode_oring_controller",
+        "l_power_electronic_switch"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_1_10_1": {
+      "type_name": "电源路径控制子模块",
+      "status": "inherited",
+      "parent_type_id": "P_1_10",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_battery_management",
+        "l_dc_ac_module_inverter",
+        "l_ideal_diode_oring_controller",
+        "l_power_electronic_switch"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_2_1_1": {
+      "type_name": "时钟Buffer子模块",
+      "status": "inherited",
+      "parent_type_id": "P_2_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_clock_buffer_driver_distributor",
+        "l_signal_buffer_repeater_distributor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_2_1_2": {
+      "type_name": "扇出缓冲子模块",
+      "status": "inherited",
+      "parent_type_id": "P_2_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_clock_buffer_driver_distributor",
+        "l_signal_buffer_repeater_distributor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_2_2_1": {
+      "type_name": "PLL频率合成与锁定子模块",
+      "status": "inherited",
+      "parent_type_id": "P_2_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_clock_generator_frequency_synthesizer_pll",
+        "l_network_clock_synchronization_synce_ieee_1588"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_2_2_2": {
+      "type_name": "环路滤波子模块",
+      "status": "inherited",
+      "parent_type_id": "P_2_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_clock_generator_frequency_synthesizer_pll",
+        "l_network_clock_synchronization_synce_ieee_1588"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_2_3_1": {
+      "type_name": "可编程时钟发生子模块",
+      "status": "inherited",
+      "parent_type_id": "P_2_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_active_crystal_oscillator",
+        "l_ceramic_resonator_passive",
+        "l_clock_buffer_driver_distributor",
+        "l_clock_debounce",
+        "l_clock_delay",
+        "l_clock_extraction_and_data_recovery",
+        "l_clock_generator_frequency_synthesizer_pll",
+        "l_clock_multiplier",
+        "l_crystal_oscillator_driver",
+        "l_dedicated_clock_timer",
+        "l_digitally_controlled_oscillator_dco",
+        "l_l_555_timer_chronometer",
+        "l_network_clock_synchronization_synce_ieee_1588",
+        "l_oven_controlled_crystal_oscillator_ocxo",
+        "l_passive_crystal_oscillator",
+        "l_pre_programmed_oscillator",
+        "l_real_time_clock_rtc",
+        "l_saw_oscillator_active",
+        "l_saw_resonator_passive",
+        "l_spread_spectrum_oscillator",
+        "l_temperature_compensated_crystal_oscillator_tcxo",
+        "l_thermal_resonator_passive",
+        "l_timer_chronometer",
+        "l_voltage_controlled_crystal_oscillator_vcxo",
+        "l_voltage_controlled_oscillator_vco",
+        "l_voltage_controlled_tcxo"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_2_3_2": {
+      "type_name": "配置与启动状态子模块",
+      "status": "inherited",
+      "parent_type_id": "P_2_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_active_crystal_oscillator",
+        "l_ceramic_resonator_passive",
+        "l_clock_buffer_driver_distributor",
+        "l_clock_debounce",
+        "l_clock_delay",
+        "l_clock_extraction_and_data_recovery",
+        "l_clock_generator_frequency_synthesizer_pll",
+        "l_clock_multiplier",
+        "l_crystal_oscillator_driver",
+        "l_dedicated_clock_timer",
+        "l_digitally_controlled_oscillator_dco",
+        "l_l_555_timer_chronometer",
+        "l_network_clock_synchronization_synce_ieee_1588",
+        "l_oven_controlled_crystal_oscillator_ocxo",
+        "l_passive_crystal_oscillator",
+        "l_pre_programmed_oscillator",
+        "l_real_time_clock_rtc",
+        "l_saw_oscillator_active",
+        "l_saw_resonator_passive",
+        "l_spread_spectrum_oscillator",
+        "l_temperature_compensated_crystal_oscillator_tcxo",
+        "l_thermal_resonator_passive",
+        "l_timer_chronometer",
+        "l_voltage_controlled_crystal_oscillator_vcxo",
+        "l_voltage_controlled_oscillator_vco",
+        "l_voltage_controlled_tcxo"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_2_4_1": {
+      "type_name": "差分转单端时钟子模块",
+      "status": "inherited",
+      "parent_type_id": "P_2_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_clock_buffer_driver_distributor",
+        "l_converter_level_shifter",
+        "l_lvds_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_2_4_2": {
+      "type_name": "单端转差分时钟子模块",
+      "status": "inherited",
+      "parent_type_id": "P_2_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_clock_buffer_driver_distributor",
+        "l_converter_level_shifter",
+        "l_lvds_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_2_4_3": {
+      "type_name": "不同电平标准转换子模块",
+      "status": "inherited",
+      "parent_type_id": "P_2_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_clock_buffer_driver_distributor",
+        "l_converter_level_shifter",
+        "l_lvds_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_3_1_1": {
+      "type_name": "同相放大子模块",
+      "status": "inherited",
+      "parent_type_id": "P_3_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_audio_power_amplifier",
+        "l_comparator",
+        "l_current_sensing_amplifier",
+        "l_differential_operational_amplifier",
+        "l_fet_input_operational_amplifier",
+        "l_instrumentation_amplifier",
+        "l_linear_analog_multiplier_divider",
+        "l_operational_amplifier",
+        "l_pin_electronics_driver_comparator",
+        "l_precision_operational_amplifier",
+        "l_programmable_variable_gain_amplifier_pga_vga",
+        "l_sample_hold_amplifier",
+        "l_special_function_amplifier",
+        "l_video_amplifier"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_3_1_2": {
+      "type_name": "反相放大子模块",
+      "status": "inherited",
+      "parent_type_id": "P_3_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_audio_power_amplifier",
+        "l_comparator",
+        "l_current_sensing_amplifier",
+        "l_differential_operational_amplifier",
+        "l_fet_input_operational_amplifier",
+        "l_instrumentation_amplifier",
+        "l_linear_analog_multiplier_divider",
+        "l_operational_amplifier",
+        "l_pin_electronics_driver_comparator",
+        "l_precision_operational_amplifier",
+        "l_programmable_variable_gain_amplifier_pga_vga",
+        "l_sample_hold_amplifier",
+        "l_special_function_amplifier",
+        "l_video_amplifier"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_3_1_3": {
+      "type_name": "仪表放大子模块",
+      "status": "inherited",
+      "parent_type_id": "P_3_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_audio_power_amplifier",
+        "l_comparator",
+        "l_current_sensing_amplifier",
+        "l_differential_operational_amplifier",
+        "l_fet_input_operational_amplifier",
+        "l_instrumentation_amplifier",
+        "l_linear_analog_multiplier_divider",
+        "l_operational_amplifier",
+        "l_pin_electronics_driver_comparator",
+        "l_precision_operational_amplifier",
+        "l_programmable_variable_gain_amplifier_pga_vga",
+        "l_sample_hold_amplifier",
+        "l_special_function_amplifier",
+        "l_video_amplifier"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_3_1_4": {
+      "type_name": "差分放大子模块",
+      "status": "inherited",
+      "parent_type_id": "P_3_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_audio_power_amplifier",
+        "l_comparator",
+        "l_current_sensing_amplifier",
+        "l_differential_operational_amplifier",
+        "l_fet_input_operational_amplifier",
+        "l_instrumentation_amplifier",
+        "l_linear_analog_multiplier_divider",
+        "l_operational_amplifier",
+        "l_pin_electronics_driver_comparator",
+        "l_precision_operational_amplifier",
+        "l_programmable_variable_gain_amplifier_pga_vga",
+        "l_sample_hold_amplifier",
+        "l_special_function_amplifier",
+        "l_video_amplifier"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_3_1_5": {
+      "type_name": "对数放大子模块",
+      "status": "inherited",
+      "parent_type_id": "P_3_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_audio_power_amplifier",
+        "l_comparator",
+        "l_current_sensing_amplifier",
+        "l_differential_operational_amplifier",
+        "l_fet_input_operational_amplifier",
+        "l_instrumentation_amplifier",
+        "l_linear_analog_multiplier_divider",
+        "l_operational_amplifier",
+        "l_pin_electronics_driver_comparator",
+        "l_precision_operational_amplifier",
+        "l_programmable_variable_gain_amplifier_pga_vga",
+        "l_sample_hold_amplifier",
+        "l_special_function_amplifier",
+        "l_video_amplifier"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_3_2_1": {
+      "type_name": "LPF低通滤波子模块",
+      "status": "inherited",
+      "parent_type_id": "P_3_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_active_filter",
+        "l_operational_amplifier",
+        "l_precision_operational_amplifier",
+        "l_switched_capacitor_filter"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_3_2_2": {
+      "type_name": "HPF高通滤波子模块",
+      "status": "inherited",
+      "parent_type_id": "P_3_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_active_filter",
+        "l_operational_amplifier",
+        "l_precision_operational_amplifier",
+        "l_switched_capacitor_filter"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_3_2_3": {
+      "type_name": "BPF带通滤波子模块",
+      "status": "inherited",
+      "parent_type_id": "P_3_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_active_filter",
+        "l_operational_amplifier",
+        "l_precision_operational_amplifier",
+        "l_switched_capacitor_filter"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_3_3_1": {
+      "type_name": "单向电平转换子模块",
+      "status": "inherited",
+      "parent_type_id": "P_3_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_buffer_driver_transceiver",
+        "l_converter_level_shifter",
+        "l_digital_isolator"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_3_3_2": {
+      "type_name": "双向电平转换子模块",
+      "status": "inherited",
+      "parent_type_id": "P_3_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_buffer_driver_transceiver",
+        "l_converter_level_shifter",
+        "l_digital_isolator"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_3_4_1": {
+      "type_name": "模拟开关子模块",
+      "status": "inherited",
+      "parent_type_id": "P_3_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_analog_switch_multiplexer",
+        "l_analog_switch_special_purpose",
+        "l_signal_switch_codec_multiplexer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_3_4_2": {
+      "type_name": "多路选择与分配子模块",
+      "status": "inherited",
+      "parent_type_id": "P_3_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_analog_switch_multiplexer",
+        "l_analog_switch_special_purpose",
+        "l_signal_switch_codec_multiplexer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_3_5_1": {
+      "type_name": "电压比较器子模块",
+      "status": "inherited",
+      "parent_type_id": "P_3_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_comparator",
+        "l_isolated_comparator",
+        "l_pin_electronics_driver_comparator"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_3_5_2": {
+      "type_name": "迟滞比较器子模块",
+      "status": "inherited",
+      "parent_type_id": "P_3_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_comparator",
+        "l_isolated_comparator",
+        "l_pin_electronics_driver_comparator"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_3_5_3": {
+      "type_name": "施密特触发整形子模块",
+      "status": "inherited",
+      "parent_type_id": "P_3_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_comparator",
+        "l_isolated_comparator",
+        "l_pin_electronics_driver_comparator"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_3_6_1": {
+      "type_name": "ADC模数转换子模块",
+      "status": "inherited",
+      "parent_type_id": "P_3_6",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_analog_front_end_afe",
+        "l_analog_to_digital_conversion_chip_adc",
+        "l_data_acquisition_system",
+        "l_digital_to_analog_converter_chip_dac",
+        "l_isolated_adc"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_3_6_2": {
+      "type_name": "DAC数模转换子模块",
+      "status": "inherited",
+      "parent_type_id": "P_3_6",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_analog_front_end_afe",
+        "l_analog_to_digital_conversion_chip_adc",
+        "l_data_acquisition_system",
+        "l_digital_to_analog_converter_chip_dac",
+        "l_isolated_adc"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_3_7_1": {
+      "type_name": "V F电压频率转换子模块",
+      "status": "inherited",
+      "parent_type_id": "P_3_7",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_v_f_and_f_v_conversion_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_3_7_2": {
+      "type_name": "F V频率电压转换子模块",
+      "status": "inherited",
+      "parent_type_id": "P_3_7",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_v_f_and_f_v_conversion_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_4_1_1": {
+      "type_name": "USB转逻辑电平UART子模块",
+      "status": "inherited",
+      "parent_type_id": "P_4_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_bus_to_uart_converter",
+        "l_protocol_bridge",
+        "l_rs232_chip",
+        "l_rs_485_rs_422_chip",
+        "l_serializer_deserializer",
+        "l_usb_conversion_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_4_1_2": {
+      "type_name": "USB转I2C子模块",
+      "status": "inherited",
+      "parent_type_id": "P_4_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_bus_to_uart_converter",
+        "l_protocol_bridge",
+        "l_rs232_chip",
+        "l_rs_485_rs_422_chip",
+        "l_serializer_deserializer",
+        "l_usb_conversion_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_4_1_3": {
+      "type_name": "USB 3.0转HDMI子模块",
+      "status": "inherited",
+      "parent_type_id": "P_4_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_bus_to_uart_converter",
+        "l_protocol_bridge",
+        "l_rs232_chip",
+        "l_rs_485_rs_422_chip",
+        "l_serializer_deserializer",
+        "l_usb_conversion_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_4_1_4": {
+      "type_name": "UART转RS485子模块",
+      "status": "inherited",
+      "parent_type_id": "P_4_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_bus_to_uart_converter",
+        "l_protocol_bridge",
+        "l_rs232_chip",
+        "l_rs_485_rs_422_chip",
+        "l_serializer_deserializer",
+        "l_usb_conversion_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_4_1_5": {
+      "type_name": "UART转网口子模块",
+      "status": "inherited",
+      "parent_type_id": "P_4_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_bus_to_uart_converter",
+        "l_protocol_bridge",
+        "l_rs232_chip",
+        "l_rs_485_rs_422_chip",
+        "l_serializer_deserializer",
+        "l_usb_conversion_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_4_1_6": {
+      "type_name": "总线缓冲与中继子模块",
+      "status": "inherited",
+      "parent_type_id": "P_4_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_bus_to_uart_converter",
+        "l_protocol_bridge",
+        "l_rs232_chip",
+        "l_rs_485_rs_422_chip",
+        "l_serializer_deserializer",
+        "l_usb_conversion_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_4_2_1": {
+      "type_name": "内置隔离RJ45百兆端口子模块",
+      "status": "inherited",
+      "parent_type_id": "P_4_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ac_power_connector",
+        "l_audio_connector_headphones",
+        "l_automotive_connector",
+        "l_banana_plug_alligator_clip",
+        "l_barrier_terminal_block",
+        "l_blade_shrapnel_contacts_the_battery_connector",
+        "l_board_to_board_and_backplane_connectors",
+        "l_button_and_strip_battery_connector",
+        "l_circular_cable_connector",
+        "l_circular_din_connector",
+        "l_cold_pressed_terminal",
+        "l_d_sub_vga_connector",
+        "l_dc_power_connector",
+        "l_din41612_connector",
+        "l_displayport_dp_connector",
+        "l_dvi_connector",
+        "l_ethernet_connector_rj45_rj11",
+        "l_feed_rf_insulator",
+        "l_female_connector",
+        "l_ffc_connector_flexible_flat_cable",
+        "l_ffc_fpc_connector",
+        "l_gold_finger_connector",
+        "l_hard_disk_connector_sas_sata_m_2",
+        "l_hdmi_connector",
+        "l_ic_transistor_socket",
+        "l_idc_pierceable_connector_bull_horn_simplified_bull",
+        "l_ieee_1394_firewire_connector",
+        "l_lotus_connector_rca_connector",
+        "l_memory_module_connector_ddr",
+        "l_micro_match_connector",
+        "l_optical_module_connector",
+        "l_pci_pcie_connector",
+        "l_pin_header",
+        "l_plug_in_terminal_block",
+        "l_pogo_pin_spring_probe_connector",
+        "l_rf_coaxial_connector",
+        "l_rubber_shell_wire_to_board_wire_to_wire",
+        "l_screw_terminal_block",
+        "l_sd_card_memory_card_connector",
+        "l_shorting_cap_jumper_cap",
+        "l_sim_card_connector",
+        "l_spring_loaded_terminal_block",
+        "l_telecommunication_interface_ic",
+        "l_test_point_test_loop",
+        "l_usb_connector",
+        "l_usb_conversion_chip",
+        "l_usb_hub",
+        "l_usb_type_c_port_controller",
+        "l_wire_to_board_pin_header"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_4_2_2": {
+      "type_name": "HDMI A型端口子模块",
+      "status": "inherited",
+      "parent_type_id": "P_4_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ac_power_connector",
+        "l_audio_connector_headphones",
+        "l_automotive_connector",
+        "l_banana_plug_alligator_clip",
+        "l_barrier_terminal_block",
+        "l_blade_shrapnel_contacts_the_battery_connector",
+        "l_board_to_board_and_backplane_connectors",
+        "l_button_and_strip_battery_connector",
+        "l_circular_cable_connector",
+        "l_circular_din_connector",
+        "l_cold_pressed_terminal",
+        "l_d_sub_vga_connector",
+        "l_dc_power_connector",
+        "l_din41612_connector",
+        "l_displayport_dp_connector",
+        "l_dvi_connector",
+        "l_ethernet_connector_rj45_rj11",
+        "l_feed_rf_insulator",
+        "l_female_connector",
+        "l_ffc_connector_flexible_flat_cable",
+        "l_ffc_fpc_connector",
+        "l_gold_finger_connector",
+        "l_hard_disk_connector_sas_sata_m_2",
+        "l_hdmi_connector",
+        "l_ic_transistor_socket",
+        "l_idc_pierceable_connector_bull_horn_simplified_bull",
+        "l_ieee_1394_firewire_connector",
+        "l_lotus_connector_rca_connector",
+        "l_memory_module_connector_ddr",
+        "l_micro_match_connector",
+        "l_optical_module_connector",
+        "l_pci_pcie_connector",
+        "l_pin_header",
+        "l_plug_in_terminal_block",
+        "l_pogo_pin_spring_probe_connector",
+        "l_rf_coaxial_connector",
+        "l_rubber_shell_wire_to_board_wire_to_wire",
+        "l_screw_terminal_block",
+        "l_sd_card_memory_card_connector",
+        "l_shorting_cap_jumper_cap",
+        "l_sim_card_connector",
+        "l_spring_loaded_terminal_block",
+        "l_telecommunication_interface_ic",
+        "l_test_point_test_loop",
+        "l_usb_connector",
+        "l_usb_conversion_chip",
+        "l_usb_hub",
+        "l_usb_type_c_port_controller",
+        "l_wire_to_board_pin_header"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_4_2_3": {
+      "type_name": "全尺寸DisplayPort端口子模块",
+      "status": "inherited",
+      "parent_type_id": "P_4_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ac_power_connector",
+        "l_audio_connector_headphones",
+        "l_automotive_connector",
+        "l_banana_plug_alligator_clip",
+        "l_barrier_terminal_block",
+        "l_blade_shrapnel_contacts_the_battery_connector",
+        "l_board_to_board_and_backplane_connectors",
+        "l_button_and_strip_battery_connector",
+        "l_circular_cable_connector",
+        "l_circular_din_connector",
+        "l_cold_pressed_terminal",
+        "l_d_sub_vga_connector",
+        "l_dc_power_connector",
+        "l_din41612_connector",
+        "l_displayport_dp_connector",
+        "l_dvi_connector",
+        "l_ethernet_connector_rj45_rj11",
+        "l_feed_rf_insulator",
+        "l_female_connector",
+        "l_ffc_connector_flexible_flat_cable",
+        "l_ffc_fpc_connector",
+        "l_gold_finger_connector",
+        "l_hard_disk_connector_sas_sata_m_2",
+        "l_hdmi_connector",
+        "l_ic_transistor_socket",
+        "l_idc_pierceable_connector_bull_horn_simplified_bull",
+        "l_ieee_1394_firewire_connector",
+        "l_lotus_connector_rca_connector",
+        "l_memory_module_connector_ddr",
+        "l_micro_match_connector",
+        "l_optical_module_connector",
+        "l_pci_pcie_connector",
+        "l_pin_header",
+        "l_plug_in_terminal_block",
+        "l_pogo_pin_spring_probe_connector",
+        "l_rf_coaxial_connector",
+        "l_rubber_shell_wire_to_board_wire_to_wire",
+        "l_screw_terminal_block",
+        "l_sd_card_memory_card_connector",
+        "l_shorting_cap_jumper_cap",
+        "l_sim_card_connector",
+        "l_spring_loaded_terminal_block",
+        "l_telecommunication_interface_ic",
+        "l_test_point_test_loop",
+        "l_usb_connector",
+        "l_usb_conversion_chip",
+        "l_usb_hub",
+        "l_usb_type_c_port_controller",
+        "l_wire_to_board_pin_header"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_4_2_4": {
+      "type_name": "音频接口子模块",
+      "status": "inherited",
+      "parent_type_id": "P_4_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ac_power_connector",
+        "l_audio_connector_headphones",
+        "l_automotive_connector",
+        "l_banana_plug_alligator_clip",
+        "l_barrier_terminal_block",
+        "l_blade_shrapnel_contacts_the_battery_connector",
+        "l_board_to_board_and_backplane_connectors",
+        "l_button_and_strip_battery_connector",
+        "l_circular_cable_connector",
+        "l_circular_din_connector",
+        "l_cold_pressed_terminal",
+        "l_d_sub_vga_connector",
+        "l_dc_power_connector",
+        "l_din41612_connector",
+        "l_displayport_dp_connector",
+        "l_dvi_connector",
+        "l_ethernet_connector_rj45_rj11",
+        "l_feed_rf_insulator",
+        "l_female_connector",
+        "l_ffc_connector_flexible_flat_cable",
+        "l_ffc_fpc_connector",
+        "l_gold_finger_connector",
+        "l_hard_disk_connector_sas_sata_m_2",
+        "l_hdmi_connector",
+        "l_ic_transistor_socket",
+        "l_idc_pierceable_connector_bull_horn_simplified_bull",
+        "l_ieee_1394_firewire_connector",
+        "l_lotus_connector_rca_connector",
+        "l_memory_module_connector_ddr",
+        "l_micro_match_connector",
+        "l_optical_module_connector",
+        "l_pci_pcie_connector",
+        "l_pin_header",
+        "l_plug_in_terminal_block",
+        "l_pogo_pin_spring_probe_connector",
+        "l_rf_coaxial_connector",
+        "l_rubber_shell_wire_to_board_wire_to_wire",
+        "l_screw_terminal_block",
+        "l_sd_card_memory_card_connector",
+        "l_shorting_cap_jumper_cap",
+        "l_sim_card_connector",
+        "l_spring_loaded_terminal_block",
+        "l_telecommunication_interface_ic",
+        "l_test_point_test_loop",
+        "l_usb_connector",
+        "l_usb_conversion_chip",
+        "l_usb_hub",
+        "l_usb_type_c_port_controller",
+        "l_wire_to_board_pin_header"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_4_2_5": {
+      "type_name": "USB IC与USB控制器子模块",
+      "status": "inherited",
+      "parent_type_id": "P_4_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ac_power_connector",
+        "l_audio_connector_headphones",
+        "l_automotive_connector",
+        "l_banana_plug_alligator_clip",
+        "l_barrier_terminal_block",
+        "l_blade_shrapnel_contacts_the_battery_connector",
+        "l_board_to_board_and_backplane_connectors",
+        "l_button_and_strip_battery_connector",
+        "l_circular_cable_connector",
+        "l_circular_din_connector",
+        "l_cold_pressed_terminal",
+        "l_d_sub_vga_connector",
+        "l_dc_power_connector",
+        "l_din41612_connector",
+        "l_displayport_dp_connector",
+        "l_dvi_connector",
+        "l_ethernet_connector_rj45_rj11",
+        "l_feed_rf_insulator",
+        "l_female_connector",
+        "l_ffc_connector_flexible_flat_cable",
+        "l_ffc_fpc_connector",
+        "l_gold_finger_connector",
+        "l_hard_disk_connector_sas_sata_m_2",
+        "l_hdmi_connector",
+        "l_ic_transistor_socket",
+        "l_idc_pierceable_connector_bull_horn_simplified_bull",
+        "l_ieee_1394_firewire_connector",
+        "l_lotus_connector_rca_connector",
+        "l_memory_module_connector_ddr",
+        "l_micro_match_connector",
+        "l_optical_module_connector",
+        "l_pci_pcie_connector",
+        "l_pin_header",
+        "l_plug_in_terminal_block",
+        "l_pogo_pin_spring_probe_connector",
+        "l_rf_coaxial_connector",
+        "l_rubber_shell_wire_to_board_wire_to_wire",
+        "l_screw_terminal_block",
+        "l_sd_card_memory_card_connector",
+        "l_shorting_cap_jumper_cap",
+        "l_sim_card_connector",
+        "l_spring_loaded_terminal_block",
+        "l_telecommunication_interface_ic",
+        "l_test_point_test_loop",
+        "l_usb_connector",
+        "l_usb_conversion_chip",
+        "l_usb_hub",
+        "l_usb_type_c_port_controller",
+        "l_wire_to_board_pin_header"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_4_3_1": {
+      "type_name": "CAN收发子模块",
+      "status": "inherited",
+      "parent_type_id": "P_4_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_can_bus_module",
+        "l_can_controller",
+        "l_can_transceiver",
+        "l_isolated_can_transceiver",
+        "l_isolated_can_transceiver_with_power_supply"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_4_3_2": {
+      "type_name": "共模滤波与浪涌防护子模块",
+      "status": "inherited",
+      "parent_type_id": "P_4_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_can_bus_module",
+        "l_can_controller",
+        "l_can_transceiver",
+        "l_isolated_can_transceiver",
+        "l_isolated_can_transceiver_with_power_supply"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_4_4_1": {
+      "type_name": "Ethernet PHY子模块",
+      "status": "inherited",
+      "parent_type_id": "P_4_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ethernet_controller",
+        "l_ethernet_module",
+        "l_ethernet_switch",
+        "l_ethernet_transceiver",
+        "l_network_port_transformer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_4_4_2": {
+      "type_name": "网络变压器子模块",
+      "status": "inherited",
+      "parent_type_id": "P_4_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ethernet_controller",
+        "l_ethernet_module",
+        "l_ethernet_switch",
+        "l_ethernet_transceiver",
+        "l_network_port_transformer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_4_4_3": {
+      "type_name": "RJ45连接子模块",
+      "status": "inherited",
+      "parent_type_id": "P_4_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ethernet_controller",
+        "l_ethernet_module",
+        "l_ethernet_switch",
+        "l_ethernet_transceiver",
+        "l_network_port_transformer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_4_4_4": {
+      "type_name": "PoE供电子模块",
+      "status": "inherited",
+      "parent_type_id": "P_4_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ethernet_controller",
+        "l_ethernet_module",
+        "l_ethernet_switch",
+        "l_ethernet_transceiver",
+        "l_network_port_transformer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_4_5_1": {
+      "type_name": "多通道I2C选择开关子模块",
+      "status": "inherited",
+      "parent_type_id": "P_4_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_analog_switch_multiplexer",
+        "l_i2c_bus_switch",
+        "l_sdio_port_expander",
+        "l_signal_switch_codec_multiplexer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_5_1_1": {
+      "type_name": "EEPROM子模块",
+      "status": "inherited",
+      "parent_type_id": "P_5_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_eeprom",
+        "l_ferroelectric_random_access_memory_fram",
+        "l_nand_flash",
+        "l_non_volatile_memory_rom",
+        "l_nor_flash",
+        "l_nvsram_non_volatile_sram"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_5_1_2": {
+      "type_name": "NOR Flash子模块",
+      "status": "inherited",
+      "parent_type_id": "P_5_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_eeprom",
+        "l_ferroelectric_random_access_memory_fram",
+        "l_nand_flash",
+        "l_non_volatile_memory_rom",
+        "l_nor_flash",
+        "l_nvsram_non_volatile_sram"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_5_1_3": {
+      "type_name": "NAND Flash子模块",
+      "status": "inherited",
+      "parent_type_id": "P_5_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_eeprom",
+        "l_ferroelectric_random_access_memory_fram",
+        "l_nand_flash",
+        "l_non_volatile_memory_rom",
+        "l_nor_flash",
+        "l_nvsram_non_volatile_sram"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_5_1_4": {
+      "type_name": "FRAM铁电存储子模块",
+      "status": "inherited",
+      "parent_type_id": "P_5_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_eeprom",
+        "l_ferroelectric_random_access_memory_fram",
+        "l_nand_flash",
+        "l_non_volatile_memory_rom",
+        "l_nor_flash",
+        "l_nvsram_non_volatile_sram"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_5_2_1": {
+      "type_name": "SDR SDRAM子模块",
+      "status": "inherited",
+      "parent_type_id": "P_5_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ddr_sdram",
+        "l_dram_memory",
+        "l_fifo_memory",
+        "l_psram_pseudo_static_random_access_memory",
+        "l_random_access_memory_ram",
+        "l_sram_memory",
+        "l_synchronous_dynamic_random_access_memory_sdram"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_5_2_2": {
+      "type_name": "DDR SDRAM子模块",
+      "status": "inherited",
+      "parent_type_id": "P_5_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ddr_sdram",
+        "l_dram_memory",
+        "l_fifo_memory",
+        "l_psram_pseudo_static_random_access_memory",
+        "l_random_access_memory_ram",
+        "l_sram_memory",
+        "l_synchronous_dynamic_random_access_memory_sdram"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_5_2_3": {
+      "type_name": "DDR2 SDRAM子模块",
+      "status": "inherited",
+      "parent_type_id": "P_5_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ddr_sdram",
+        "l_dram_memory",
+        "l_fifo_memory",
+        "l_psram_pseudo_static_random_access_memory",
+        "l_random_access_memory_ram",
+        "l_sram_memory",
+        "l_synchronous_dynamic_random_access_memory_sdram"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_5_2_4": {
+      "type_name": "DDR3 SDRAM子模块",
+      "status": "inherited",
+      "parent_type_id": "P_5_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ddr_sdram",
+        "l_dram_memory",
+        "l_fifo_memory",
+        "l_psram_pseudo_static_random_access_memory",
+        "l_random_access_memory_ram",
+        "l_sram_memory",
+        "l_synchronous_dynamic_random_access_memory_sdram"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_5_2_5": {
+      "type_name": "DDR4 SDRAM子模块",
+      "status": "inherited",
+      "parent_type_id": "P_5_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ddr_sdram",
+        "l_dram_memory",
+        "l_fifo_memory",
+        "l_psram_pseudo_static_random_access_memory",
+        "l_random_access_memory_ram",
+        "l_sram_memory",
+        "l_synchronous_dynamic_random_access_memory_sdram"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_5_2_6": {
+      "type_name": "SRAM子模块",
+      "status": "inherited",
+      "parent_type_id": "P_5_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ddr_sdram",
+        "l_dram_memory",
+        "l_fifo_memory",
+        "l_psram_pseudo_static_random_access_memory",
+        "l_random_access_memory_ram",
+        "l_sram_memory",
+        "l_synchronous_dynamic_random_access_memory_sdram"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_5_3_1": {
+      "type_name": "eMMC受管理存储子模块",
+      "status": "inherited",
+      "parent_type_id": "P_5_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_emmc"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_5_3_2": {
+      "type_name": "电源去耦与数据端接子模块",
+      "status": "inherited",
+      "parent_type_id": "P_5_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_emmc"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_6_1_1": {
+      "type_name": "过压保护IC子模块",
+      "status": "inherited",
+      "parent_type_id": "P_6_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_automobile_fuse",
+        "l_disposable_fuse",
+        "l_electrostatic_and_surge_protection_tvs_esd",
+        "l_fuse_holder_box",
+        "l_gas_discharge_tube_gdt",
+        "l_glass_discharge_tube",
+        "l_led_protection",
+        "l_self_resetting_fuse",
+        "l_semiconductor_discharge_tube_tss",
+        "l_thermal_cut_out_tco",
+        "l_varistor",
+        "l_zener_diode"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_6_1_2": {
+      "type_name": "稳压管及瞬态钳位子模块",
+      "status": "inherited",
+      "parent_type_id": "P_6_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_automobile_fuse",
+        "l_disposable_fuse",
+        "l_electrostatic_and_surge_protection_tvs_esd",
+        "l_fuse_holder_box",
+        "l_gas_discharge_tube_gdt",
+        "l_glass_discharge_tube",
+        "l_led_protection",
+        "l_self_resetting_fuse",
+        "l_semiconductor_discharge_tube_tss",
+        "l_thermal_cut_out_tco",
+        "l_varistor",
+        "l_zener_diode"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_6_2_1": {
+      "type_name": "热插拔控制子模块",
+      "status": "inherited",
+      "parent_type_id": "P_6_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ntc_thermistor",
+        "l_power_electronic_switch",
+        "l_professional_power_management_pmic",
+        "l_surge_protector"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_6_2_2": {
+      "type_name": "浪涌电流限制子模块",
+      "status": "inherited",
+      "parent_type_id": "P_6_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ntc_thermistor",
+        "l_power_electronic_switch",
+        "l_professional_power_management_pmic",
+        "l_surge_protector"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_6_2_3": {
+      "type_name": "缓启动子模块",
+      "status": "inherited",
+      "parent_type_id": "P_6_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ntc_thermistor",
+        "l_power_electronic_switch",
+        "l_professional_power_management_pmic",
+        "l_surge_protector"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_6_3_1": {
+      "type_name": "理想二极管与反接阻断子模块",
+      "status": "inherited",
+      "parent_type_id": "P_6_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_field_effect_transistor_mosfet",
+        "l_ideal_diode_oring_controller",
+        "l_rectifier_bridge"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_1_1": {
+      "type_name": "热电偶子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ntc_thermistor",
+        "l_ptc_thermistor",
+        "l_temperature_and_humidity_sensor",
+        "l_temperature_sensor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_1_2": {
+      "type_name": "热敏电阻子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ntc_thermistor",
+        "l_ptc_thermistor",
+        "l_temperature_and_humidity_sensor",
+        "l_temperature_sensor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_1_3": {
+      "type_name": "RTD电阻温度检测子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ntc_thermistor",
+        "l_ptc_thermistor",
+        "l_temperature_and_humidity_sensor",
+        "l_temperature_sensor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_1_4": {
+      "type_name": "数字温度传感器子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ntc_thermistor",
+        "l_ptc_thermistor",
+        "l_temperature_and_humidity_sensor",
+        "l_temperature_sensor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_2_1": {
+      "type_name": "电流检测放大子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_current_sensing_amplifier",
+        "l_current_sensor",
+        "l_electric_energy_metering_chip",
+        "l_sensor_measurement_converter"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_2_2": {
+      "type_name": "霍尔电流检测子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_current_sensing_amplifier",
+        "l_current_sensor",
+        "l_electric_energy_metering_chip",
+        "l_sensor_measurement_converter"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_2_3": {
+      "type_name": "电阻分压电压采样子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_current_sensing_amplifier",
+        "l_current_sensor",
+        "l_electric_energy_metering_chip",
+        "l_sensor_measurement_converter"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_3_1": {
+      "type_name": "光耦子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ambient_light_sensor",
+        "l_fiber_optic_laser_sensor",
+        "l_image_sensor",
+        "l_photodiode",
+        "l_photosensitive_resistor",
+        "l_phototransistor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_3_2": {
+      "type_name": "光电二极管子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ambient_light_sensor",
+        "l_fiber_optic_laser_sensor",
+        "l_image_sensor",
+        "l_photodiode",
+        "l_photosensitive_resistor",
+        "l_phototransistor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_3_3": {
+      "type_name": "光电晶体管子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_ambient_light_sensor",
+        "l_fiber_optic_laser_sensor",
+        "l_image_sensor",
+        "l_photodiode",
+        "l_photosensitive_resistor",
+        "l_phototransistor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_4_1": {
+      "type_name": "加速度计子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_attitude_sensor_gyroscope",
+        "l_tilt_sensor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_4_2": {
+      "type_name": "陀螺仪子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_attitude_sensor_gyroscope",
+        "l_tilt_sensor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_4_3": {
+      "type_name": "磁力计子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_attitude_sensor_gyroscope",
+        "l_tilt_sensor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_4_4": {
+      "type_name": "电平与接口适配子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_attitude_sensor_gyroscope",
+        "l_tilt_sensor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_5_1": {
+      "type_name": "ABZ增量编码器子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_magnetic_angle_sensor",
+        "l_position_sensor",
+        "l_resolver_to_digital_converter",
+        "l_rotary_encoder"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_5_2": {
+      "type_name": "SSI绝对编码器子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_magnetic_angle_sensor",
+        "l_position_sensor",
+        "l_resolver_to_digital_converter",
+        "l_rotary_encoder"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_5_3": {
+      "type_name": "BiSS绝对编码器子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_magnetic_angle_sensor",
+        "l_position_sensor",
+        "l_resolver_to_digital_converter",
+        "l_rotary_encoder"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_5_4": {
+      "type_name": "EnDat绝对编码器子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_magnetic_angle_sensor",
+        "l_position_sensor",
+        "l_resolver_to_digital_converter",
+        "l_rotary_encoder"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_6_1": {
+      "type_name": "干簧管子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_6",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_current_sensor",
+        "l_dry_reed_switch",
+        "l_hall_switch",
+        "l_l_3d_magnetic_sensor",
+        "l_linear_hall_sensor",
+        "l_magnetic_angle_sensor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_6_2": {
+      "type_name": "磁阻开关子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_6",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_current_sensor",
+        "l_dry_reed_switch",
+        "l_hall_switch",
+        "l_l_3d_magnetic_sensor",
+        "l_linear_hall_sensor",
+        "l_magnetic_angle_sensor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_6_3": {
+      "type_name": "霍尔磁场子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_6",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_current_sensor",
+        "l_dry_reed_switch",
+        "l_hall_switch",
+        "l_l_3d_magnetic_sensor",
+        "l_linear_hall_sensor",
+        "l_magnetic_angle_sensor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_7_1": {
+      "type_name": "震动开关子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_7",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_attitude_sensor_gyroscope",
+        "l_vibration_sensor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_8_1": {
+      "type_name": "气压计子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_8",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_force_sensor_and_load_cell",
+        "l_pressure_sensor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_8_2": {
+      "type_name": "应变片桥式采集子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_8",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_force_sensor_and_load_cell",
+        "l_pressure_sensor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_9_1": {
+      "type_name": "LC谐振式电容检测子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_9",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_capacitive_sensor_ic",
+        "l_capacitive_touch_sensor_ic",
+        "l_inductive_capacitive_sensing_interface"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_9_2": {
+      "type_name": "电容接近开关子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_9",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_capacitive_sensor_ic",
+        "l_capacitive_touch_sensor_ic",
+        "l_inductive_capacitive_sensing_interface"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_9_3": {
+      "type_name": "开关电容式读出子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_9",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_capacitive_sensor_ic",
+        "l_capacitive_touch_sensor_ic",
+        "l_inductive_capacitive_sensing_interface"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_10_1": {
+      "type_name": "LC谐振式电感检测子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_10",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_inductive_capacitive_sensing_interface",
+        "l_sensor_measurement_converter"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_11_1": {
+      "type_name": "二氧化碳传感器子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_11",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_gas_flow_sensor",
+        "l_gas_sensor",
+        "l_voc_sensor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_11_2": {
+      "type_name": "一氧化碳传感器子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_11",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_gas_flow_sensor",
+        "l_gas_sensor",
+        "l_voc_sensor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_11_3": {
+      "type_name": "一氧化氮传感器子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_11",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_gas_flow_sensor",
+        "l_gas_sensor",
+        "l_voc_sensor"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_12_1": {
+      "type_name": "超声波发射子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_12",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_sensor_module",
+        "l_ultrasonic_transceiver"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_7_12_2": {
+      "type_name": "超声波接收子模块",
+      "status": "inherited",
+      "parent_type_id": "P_7_12",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_sensor_module",
+        "l_ultrasonic_transceiver"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_8_1_1": {
+      "type_name": "数码管静态驱动子模块",
+      "status": "inherited",
+      "parent_type_id": "P_8_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_digital_tube_driver",
+        "l_led_digital_display",
+        "l_led_dot_matrix_screen",
+        "l_led_driver"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_8_1_2": {
+      "type_name": "数码管动态扫描子模块",
+      "status": "inherited",
+      "parent_type_id": "P_8_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_digital_tube_driver",
+        "l_led_digital_display",
+        "l_led_dot_matrix_screen",
+        "l_led_driver"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_8_1_3": {
+      "type_name": "LED点阵驱动子模块",
+      "status": "inherited",
+      "parent_type_id": "P_8_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_digital_tube_driver",
+        "l_led_digital_display",
+        "l_led_dot_matrix_screen",
+        "l_led_driver"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_8_2_1": {
+      "type_name": "LCD显示与偏置子模块",
+      "status": "inherited",
+      "parent_type_id": "P_8_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_lcd_display_screen",
+        "l_lcd_driver",
+        "l_oled_display_screen",
+        "l_oled_driver"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_8_2_2": {
+      "type_name": "OLED显示与供电子模块",
+      "status": "inherited",
+      "parent_type_id": "P_8_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_lcd_display_screen",
+        "l_lcd_driver",
+        "l_oled_display_screen",
+        "l_oled_driver"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_8_2_3": {
+      "type_name": "并行显示接口子模块",
+      "status": "inherited",
+      "parent_type_id": "P_8_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_lcd_display_screen",
+        "l_lcd_driver",
+        "l_oled_display_screen",
+        "l_oled_driver"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_8_2_4": {
+      "type_name": "SPI与I2C显示接口子模块",
+      "status": "inherited",
+      "parent_type_id": "P_8_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_lcd_display_screen",
+        "l_lcd_driver",
+        "l_oled_display_screen",
+        "l_oled_driver"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_8_2_5": {
+      "type_name": "MIPI显示接口子模块",
+      "status": "inherited",
+      "parent_type_id": "P_8_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_lcd_display_screen",
+        "l_lcd_driver",
+        "l_oled_display_screen",
+        "l_oled_driver"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_8_2_6": {
+      "type_name": "LCD背光驱动子模块",
+      "status": "inherited",
+      "parent_type_id": "P_8_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_lcd_display_screen",
+        "l_lcd_driver",
+        "l_oled_display_screen",
+        "l_oled_driver"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_8_2_7": {
+      "type_name": "触摸控制子模块",
+      "status": "inherited",
+      "parent_type_id": "P_8_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_lcd_display_screen",
+        "l_lcd_driver",
+        "l_oled_display_screen",
+        "l_oled_driver"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_8_3_1": {
+      "type_name": "蜂鸣器驱动子模块",
+      "status": "inherited",
+      "parent_type_id": "P_8_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_audio_codec",
+        "l_audio_power_amplifier",
+        "l_buzzer",
+        "l_loudspeaker_speaker"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_8_3_2": {
+      "type_name": "音频功放子模块",
+      "status": "inherited",
+      "parent_type_id": "P_8_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_audio_codec",
+        "l_audio_power_amplifier",
+        "l_buzzer",
+        "l_loudspeaker_speaker"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_8_3_3": {
+      "type_name": "扬声器输出滤波子模块",
+      "status": "inherited",
+      "parent_type_id": "P_8_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_audio_codec",
+        "l_audio_power_amplifier",
+        "l_buzzer",
+        "l_loudspeaker_speaker"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_8_4_1": {
+      "type_name": "MEMS麦克风子模块",
+      "status": "inherited",
+      "parent_type_id": "P_8_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_audio_codec",
+        "l_audio_interface_chip",
+        "l_mems_microphone",
+        "l_microphone_head_microphone"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_8_4_2": {
+      "type_name": "驻极体咪头子模块",
+      "status": "inherited",
+      "parent_type_id": "P_8_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_audio_codec",
+        "l_audio_interface_chip",
+        "l_mems_microphone",
+        "l_microphone_head_microphone"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_8_5_1": {
+      "type_name": "离线语音识别与语音控制子模块",
+      "status": "inherited",
+      "parent_type_id": "P_8_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_audio_and_video_module",
+        "l_digital_signal_processor_dsp_dsc",
+        "l_microcontroller_mcu_mpu_soc"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_8_6_1": {
+      "type_name": "矩阵键盘子模块",
+      "status": "inherited",
+      "parent_type_id": "P_8_6",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_button_switch",
+        "l_capacitive_touch_sensor_ic",
+        "l_dip_switch",
+        "l_direct_key_switch",
+        "l_mechanical_keyboard_switch",
+        "l_metal_dome",
+        "l_multi_way_switch",
+        "l_multifunction_switch",
+        "l_rocker_switch",
+        "l_rotary_coding_switch",
+        "l_rotary_encoder",
+        "l_rotary_switch",
+        "l_slide_switch",
+        "l_tactile_switch",
+        "l_toggle_switch",
+        "l_touch_screen_controller",
+        "l_travel_switch"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_8_7_1": {
+      "type_name": "图像字符叠加输出子模块",
+      "status": "inherited",
+      "parent_type_id": "P_8_7",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_audio_and_video_module",
+        "l_serializer_deserializer",
+        "l_video_amplifier",
+        "l_video_interface_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_9_1_1": {
+      "type_name": "天线座与馈线子模块",
+      "status": "inherited",
+      "parent_type_id": "P_9_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_antenna",
+        "l_balun",
+        "l_rf_coaxial_connector",
+        "l_rf_connecting_cable",
+        "l_rf_transformer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_9_1_2": {
+      "type_name": "L型与π型阻抗匹配子模块",
+      "status": "inherited",
+      "parent_type_id": "P_9_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_antenna",
+        "l_balun",
+        "l_rf_coaxial_connector",
+        "l_rf_connecting_cable",
+        "l_rf_transformer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_9_1_3": {
+      "type_name": "巴伦子模块",
+      "status": "inherited",
+      "parent_type_id": "P_9_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_antenna",
+        "l_balun",
+        "l_rf_coaxial_connector",
+        "l_rf_connecting_cable",
+        "l_rf_transformer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_9_2_1": {
+      "type_name": "射频开关子模块",
+      "status": "inherited",
+      "parent_type_id": "P_9_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_antenna",
+        "l_balun",
+        "l_duplexer",
+        "l_radar_transmitter_ic",
+        "l_radio_frequency_card_chip",
+        "l_radio_frequency_front_end_chip",
+        "l_radio_frequency_low_noise_amplifier",
+        "l_radio_frequency_power_amplifier",
+        "l_rf_amplifier",
+        "l_rf_attenuator",
+        "l_rf_bias_tee",
+        "l_rf_connecting_cable",
+        "l_rf_coupler",
+        "l_rf_detector",
+        "l_rf_isolator",
+        "l_rf_limiter",
+        "l_rf_mixer",
+        "l_rf_modulator_and_demodulator",
+        "l_rf_phase_shifter",
+        "l_rf_power_divider_combiner",
+        "l_rf_switch",
+        "l_rf_termination",
+        "l_wireless_transceiver_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_9_2_2": {
+      "type_name": "LNA低噪声放大子模块",
+      "status": "inherited",
+      "parent_type_id": "P_9_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_antenna",
+        "l_balun",
+        "l_duplexer",
+        "l_radar_transmitter_ic",
+        "l_radio_frequency_card_chip",
+        "l_radio_frequency_front_end_chip",
+        "l_radio_frequency_low_noise_amplifier",
+        "l_radio_frequency_power_amplifier",
+        "l_rf_amplifier",
+        "l_rf_attenuator",
+        "l_rf_bias_tee",
+        "l_rf_connecting_cable",
+        "l_rf_coupler",
+        "l_rf_detector",
+        "l_rf_isolator",
+        "l_rf_limiter",
+        "l_rf_mixer",
+        "l_rf_modulator_and_demodulator",
+        "l_rf_phase_shifter",
+        "l_rf_power_divider_combiner",
+        "l_rf_switch",
+        "l_rf_termination",
+        "l_wireless_transceiver_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_9_2_3": {
+      "type_name": "PA功率放大子模块",
+      "status": "inherited",
+      "parent_type_id": "P_9_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_antenna",
+        "l_balun",
+        "l_duplexer",
+        "l_radar_transmitter_ic",
+        "l_radio_frequency_card_chip",
+        "l_radio_frequency_front_end_chip",
+        "l_radio_frequency_low_noise_amplifier",
+        "l_radio_frequency_power_amplifier",
+        "l_rf_amplifier",
+        "l_rf_attenuator",
+        "l_rf_bias_tee",
+        "l_rf_connecting_cable",
+        "l_rf_coupler",
+        "l_rf_detector",
+        "l_rf_isolator",
+        "l_rf_limiter",
+        "l_rf_mixer",
+        "l_rf_modulator_and_demodulator",
+        "l_rf_phase_shifter",
+        "l_rf_power_divider_combiner",
+        "l_rf_switch",
+        "l_rf_termination",
+        "l_wireless_transceiver_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_9_2_4": {
+      "type_name": "混频子模块",
+      "status": "inherited",
+      "parent_type_id": "P_9_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_antenna",
+        "l_balun",
+        "l_duplexer",
+        "l_radar_transmitter_ic",
+        "l_radio_frequency_card_chip",
+        "l_radio_frequency_front_end_chip",
+        "l_radio_frequency_low_noise_amplifier",
+        "l_radio_frequency_power_amplifier",
+        "l_rf_amplifier",
+        "l_rf_attenuator",
+        "l_rf_bias_tee",
+        "l_rf_connecting_cable",
+        "l_rf_coupler",
+        "l_rf_detector",
+        "l_rf_isolator",
+        "l_rf_limiter",
+        "l_rf_mixer",
+        "l_rf_modulator_and_demodulator",
+        "l_rf_phase_shifter",
+        "l_rf_power_divider_combiner",
+        "l_rf_switch",
+        "l_rf_termination",
+        "l_wireless_transceiver_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_9_2_5": {
+      "type_name": "射频控制子模块",
+      "status": "inherited",
+      "parent_type_id": "P_9_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_antenna",
+        "l_balun",
+        "l_duplexer",
+        "l_radar_transmitter_ic",
+        "l_radio_frequency_card_chip",
+        "l_radio_frequency_front_end_chip",
+        "l_radio_frequency_low_noise_amplifier",
+        "l_radio_frequency_power_amplifier",
+        "l_rf_amplifier",
+        "l_rf_attenuator",
+        "l_rf_bias_tee",
+        "l_rf_connecting_cable",
+        "l_rf_coupler",
+        "l_rf_detector",
+        "l_rf_isolator",
+        "l_rf_limiter",
+        "l_rf_mixer",
+        "l_rf_modulator_and_demodulator",
+        "l_rf_phase_shifter",
+        "l_rf_power_divider_combiner",
+        "l_rf_switch",
+        "l_rf_termination",
+        "l_wireless_transceiver_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_9_3_1": {
+      "type_name": "蓝牙子模块",
+      "status": "inherited",
+      "parent_type_id": "P_9_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_bluetooth_module",
+        "l_cellular_2g_3g_4g_5g_module",
+        "l_lora_module",
+        "l_radio_frequency_card_chip",
+        "l_radio_frequency_module",
+        "l_rfid_module",
+        "l_wifi_module",
+        "l_wireless_transceiver_chip",
+        "l_zigbee_module"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_9_3_2": {
+      "type_name": "Wi Fi子模块",
+      "status": "inherited",
+      "parent_type_id": "P_9_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_bluetooth_module",
+        "l_cellular_2g_3g_4g_5g_module",
+        "l_lora_module",
+        "l_radio_frequency_card_chip",
+        "l_radio_frequency_module",
+        "l_rfid_module",
+        "l_wifi_module",
+        "l_wireless_transceiver_chip",
+        "l_zigbee_module"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_9_3_3": {
+      "type_name": "Zigbee子模块",
+      "status": "inherited",
+      "parent_type_id": "P_9_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_bluetooth_module",
+        "l_cellular_2g_3g_4g_5g_module",
+        "l_lora_module",
+        "l_radio_frequency_card_chip",
+        "l_radio_frequency_module",
+        "l_rfid_module",
+        "l_wifi_module",
+        "l_wireless_transceiver_chip",
+        "l_zigbee_module"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_9_3_4": {
+      "type_name": "LoRa子模块",
+      "status": "inherited",
+      "parent_type_id": "P_9_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_bluetooth_module",
+        "l_cellular_2g_3g_4g_5g_module",
+        "l_lora_module",
+        "l_radio_frequency_card_chip",
+        "l_radio_frequency_module",
+        "l_rfid_module",
+        "l_wifi_module",
+        "l_wireless_transceiver_chip",
+        "l_zigbee_module"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_9_3_5": {
+      "type_name": "NB IoT子模块",
+      "status": "inherited",
+      "parent_type_id": "P_9_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_bluetooth_module",
+        "l_cellular_2g_3g_4g_5g_module",
+        "l_lora_module",
+        "l_radio_frequency_card_chip",
+        "l_radio_frequency_module",
+        "l_rfid_module",
+        "l_wifi_module",
+        "l_wireless_transceiver_chip",
+        "l_zigbee_module"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_9_4_1": {
+      "type_name": "GNSS接收子模块",
+      "status": "inherited",
+      "parent_type_id": "P_9_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_satellite_positioning_module"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_9_4_2": {
+      "type_name": "GNSS天线供电与保持子模块",
+      "status": "inherited",
+      "parent_type_id": "P_9_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_satellite_positioning_module"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_1_1": {
+      "type_name": "磁耦合数字隔离子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_digital_isolator",
+        "l_digital_isolator_with_power_supply",
+        "l_gate_drive_optocoupler",
+        "l_isolated_adc",
+        "l_isolated_adc_with_power_supply",
+        "l_isolated_amplifier",
+        "l_isolated_amplifier_with_power_supply",
+        "l_isolated_can_transceiver",
+        "l_isolated_can_transceiver_with_power_supply",
+        "l_isolated_comparator",
+        "l_isolated_i2c",
+        "l_isolated_i2c_with_power_supply",
+        "l_isolated_lvds_buffer",
+        "l_isolated_rs485_422_transceiver",
+        "l_isolated_rs485_422_transceiver_with_power_supply",
+        "l_isolated_rs_232_transceiver",
+        "l_isolated_rs_232_transceiver_with_power_supply",
+        "l_isolated_spi",
+        "l_isolated_spi_with_power_supply",
+        "l_isolated_usb_chip",
+        "l_isolated_usb_chip_with_power_supply",
+        "l_isolation_di_do",
+        "l_isolation_solid_state_relay",
+        "l_logic_output_optocoupler",
+        "l_optocoupler_simulator_replaceable_optocoupler",
+        "l_solid_state_relay_scr_output",
+        "l_thyristor_output_optocoupler",
+        "l_transistor_output_optocoupler"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_1_2": {
+      "type_name": "电容耦合数字隔离子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_digital_isolator",
+        "l_digital_isolator_with_power_supply",
+        "l_gate_drive_optocoupler",
+        "l_isolated_adc",
+        "l_isolated_adc_with_power_supply",
+        "l_isolated_amplifier",
+        "l_isolated_amplifier_with_power_supply",
+        "l_isolated_can_transceiver",
+        "l_isolated_can_transceiver_with_power_supply",
+        "l_isolated_comparator",
+        "l_isolated_i2c",
+        "l_isolated_i2c_with_power_supply",
+        "l_isolated_lvds_buffer",
+        "l_isolated_rs485_422_transceiver",
+        "l_isolated_rs485_422_transceiver_with_power_supply",
+        "l_isolated_rs_232_transceiver",
+        "l_isolated_rs_232_transceiver_with_power_supply",
+        "l_isolated_spi",
+        "l_isolated_spi_with_power_supply",
+        "l_isolated_usb_chip",
+        "l_isolated_usb_chip_with_power_supply",
+        "l_isolation_di_do",
+        "l_isolation_solid_state_relay",
+        "l_logic_output_optocoupler",
+        "l_optocoupler_simulator_replaceable_optocoupler",
+        "l_solid_state_relay_scr_output",
+        "l_thyristor_output_optocoupler",
+        "l_transistor_output_optocoupler"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_1_3": {
+      "type_name": "光隔离数字传输子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_digital_isolator",
+        "l_digital_isolator_with_power_supply",
+        "l_gate_drive_optocoupler",
+        "l_isolated_adc",
+        "l_isolated_adc_with_power_supply",
+        "l_isolated_amplifier",
+        "l_isolated_amplifier_with_power_supply",
+        "l_isolated_can_transceiver",
+        "l_isolated_can_transceiver_with_power_supply",
+        "l_isolated_comparator",
+        "l_isolated_i2c",
+        "l_isolated_i2c_with_power_supply",
+        "l_isolated_lvds_buffer",
+        "l_isolated_rs485_422_transceiver",
+        "l_isolated_rs485_422_transceiver_with_power_supply",
+        "l_isolated_rs_232_transceiver",
+        "l_isolated_rs_232_transceiver_with_power_supply",
+        "l_isolated_spi",
+        "l_isolated_spi_with_power_supply",
+        "l_isolated_usb_chip",
+        "l_isolated_usb_chip_with_power_supply",
+        "l_isolation_di_do",
+        "l_isolation_solid_state_relay",
+        "l_logic_output_optocoupler",
+        "l_optocoupler_simulator_replaceable_optocoupler",
+        "l_solid_state_relay_scr_output",
+        "l_thyristor_output_optocoupler",
+        "l_transistor_output_optocoupler"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_1_4": {
+      "type_name": "隔离运放子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_digital_isolator",
+        "l_digital_isolator_with_power_supply",
+        "l_gate_drive_optocoupler",
+        "l_isolated_adc",
+        "l_isolated_adc_with_power_supply",
+        "l_isolated_amplifier",
+        "l_isolated_amplifier_with_power_supply",
+        "l_isolated_can_transceiver",
+        "l_isolated_can_transceiver_with_power_supply",
+        "l_isolated_comparator",
+        "l_isolated_i2c",
+        "l_isolated_i2c_with_power_supply",
+        "l_isolated_lvds_buffer",
+        "l_isolated_rs485_422_transceiver",
+        "l_isolated_rs485_422_transceiver_with_power_supply",
+        "l_isolated_rs_232_transceiver",
+        "l_isolated_rs_232_transceiver_with_power_supply",
+        "l_isolated_spi",
+        "l_isolated_spi_with_power_supply",
+        "l_isolated_usb_chip",
+        "l_isolated_usb_chip_with_power_supply",
+        "l_isolation_di_do",
+        "l_isolation_solid_state_relay",
+        "l_logic_output_optocoupler",
+        "l_optocoupler_simulator_replaceable_optocoupler",
+        "l_solid_state_relay_scr_output",
+        "l_thyristor_output_optocoupler",
+        "l_transistor_output_optocoupler"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_1_5": {
+      "type_name": "隔离ADC与隔离调制器子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_1",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_digital_isolator",
+        "l_digital_isolator_with_power_supply",
+        "l_gate_drive_optocoupler",
+        "l_isolated_adc",
+        "l_isolated_adc_with_power_supply",
+        "l_isolated_amplifier",
+        "l_isolated_amplifier_with_power_supply",
+        "l_isolated_can_transceiver",
+        "l_isolated_can_transceiver_with_power_supply",
+        "l_isolated_comparator",
+        "l_isolated_i2c",
+        "l_isolated_i2c_with_power_supply",
+        "l_isolated_lvds_buffer",
+        "l_isolated_rs485_422_transceiver",
+        "l_isolated_rs485_422_transceiver_with_power_supply",
+        "l_isolated_rs_232_transceiver",
+        "l_isolated_rs_232_transceiver_with_power_supply",
+        "l_isolated_spi",
+        "l_isolated_spi_with_power_supply",
+        "l_isolated_usb_chip",
+        "l_isolated_usb_chip_with_power_supply",
+        "l_isolation_di_do",
+        "l_isolation_solid_state_relay",
+        "l_logic_output_optocoupler",
+        "l_optocoupler_simulator_replaceable_optocoupler",
+        "l_solid_state_relay_scr_output",
+        "l_thyristor_output_optocoupler",
+        "l_transistor_output_optocoupler"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_2_1": {
+      "type_name": "8位单片机与8051类子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_cryptographic_coprocessor",
+        "l_digital_signal_processor_dsp_dsc",
+        "l_microcontroller_mcu_mpu_soc",
+        "l_programmable_logic_device_cpld_fpga",
+        "l_secure_authenticator",
+        "l_secure_element",
+        "l_trusted_platform_module"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_2_2": {
+      "type_name": "16位单片机子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_cryptographic_coprocessor",
+        "l_digital_signal_processor_dsp_dsc",
+        "l_microcontroller_mcu_mpu_soc",
+        "l_programmable_logic_device_cpld_fpga",
+        "l_secure_authenticator",
+        "l_secure_element",
+        "l_trusted_platform_module"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_2_3": {
+      "type_name": "32位Cortex M单片机子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_cryptographic_coprocessor",
+        "l_digital_signal_processor_dsp_dsc",
+        "l_microcontroller_mcu_mpu_soc",
+        "l_programmable_logic_device_cpld_fpga",
+        "l_secure_authenticator",
+        "l_secure_element",
+        "l_trusted_platform_module"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_2_4": {
+      "type_name": "RISC V单片机子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_cryptographic_coprocessor",
+        "l_digital_signal_processor_dsp_dsc",
+        "l_microcontroller_mcu_mpu_soc",
+        "l_programmable_logic_device_cpld_fpga",
+        "l_secure_authenticator",
+        "l_secure_element",
+        "l_trusted_platform_module"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_2_5": {
+      "type_name": "MPU与SoC子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_cryptographic_coprocessor",
+        "l_digital_signal_processor_dsp_dsc",
+        "l_microcontroller_mcu_mpu_soc",
+        "l_programmable_logic_device_cpld_fpga",
+        "l_secure_authenticator",
+        "l_secure_element",
+        "l_trusted_platform_module"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_2_6": {
+      "type_name": "FPGA子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_cryptographic_coprocessor",
+        "l_digital_signal_processor_dsp_dsc",
+        "l_microcontroller_mcu_mpu_soc",
+        "l_programmable_logic_device_cpld_fpga",
+        "l_secure_authenticator",
+        "l_secure_element",
+        "l_trusted_platform_module"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_2_7": {
+      "type_name": "CPLD子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_cryptographic_coprocessor",
+        "l_digital_signal_processor_dsp_dsc",
+        "l_microcontroller_mcu_mpu_soc",
+        "l_programmable_logic_device_cpld_fpga",
+        "l_secure_authenticator",
+        "l_secure_element",
+        "l_trusted_platform_module"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_2_8": {
+      "type_name": "DSP子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_cryptographic_coprocessor",
+        "l_digital_signal_processor_dsp_dsc",
+        "l_microcontroller_mcu_mpu_soc",
+        "l_programmable_logic_device_cpld_fpga",
+        "l_secure_authenticator",
+        "l_secure_element",
+        "l_trusted_platform_module"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_2_9": {
+      "type_name": "最小系统时钟子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_cryptographic_coprocessor",
+        "l_digital_signal_processor_dsp_dsc",
+        "l_microcontroller_mcu_mpu_soc",
+        "l_programmable_logic_device_cpld_fpga",
+        "l_secure_authenticator",
+        "l_secure_element",
+        "l_trusted_platform_module"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_2_10": {
+      "type_name": "最小系统复位子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_cryptographic_coprocessor",
+        "l_digital_signal_processor_dsp_dsc",
+        "l_microcontroller_mcu_mpu_soc",
+        "l_programmable_logic_device_cpld_fpga",
+        "l_secure_authenticator",
+        "l_secure_element",
+        "l_trusted_platform_module"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_2_11": {
+      "type_name": "最小系统去耦与电源域子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_cryptographic_coprocessor",
+        "l_digital_signal_processor_dsp_dsc",
+        "l_microcontroller_mcu_mpu_soc",
+        "l_programmable_logic_device_cpld_fpga",
+        "l_secure_authenticator",
+        "l_secure_element",
+        "l_trusted_platform_module"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_2_12": {
+      "type_name": "启动配置子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_cryptographic_coprocessor",
+        "l_digital_signal_processor_dsp_dsc",
+        "l_microcontroller_mcu_mpu_soc",
+        "l_programmable_logic_device_cpld_fpga",
+        "l_secure_authenticator",
+        "l_secure_element",
+        "l_trusted_platform_module"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_2_13": {
+      "type_name": "调试烧录与测试接口子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_2",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_cryptographic_coprocessor",
+        "l_digital_signal_processor_dsp_dsc",
+        "l_microcontroller_mcu_mpu_soc",
+        "l_programmable_logic_device_cpld_fpga",
+        "l_secure_authenticator",
+        "l_secure_element",
+        "l_trusted_platform_module"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_3_1": {
+      "type_name": "专用加密芯片子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_3",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_cryptographic_coprocessor",
+        "l_secure_authenticator",
+        "l_secure_element",
+        "l_secure_memory",
+        "l_trusted_platform_module"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_4_1": {
+      "type_name": "直流有刷电机驱动子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_brush_dc_motor_drive_chip",
+        "l_brushless_dc_bldc_motor_drive_chip",
+        "l_field_effect_transistor_mosfet",
+        "l_gate_driver_chip",
+        "l_ignition_timing_controller",
+        "l_isolated_gate_driver",
+        "l_motor_drive_chip",
+        "l_relay_coil_driver_chip",
+        "l_stepper_motor_driver_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_4_2": {
+      "type_name": "步进电机驱动子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_brush_dc_motor_drive_chip",
+        "l_brushless_dc_bldc_motor_drive_chip",
+        "l_field_effect_transistor_mosfet",
+        "l_gate_driver_chip",
+        "l_ignition_timing_controller",
+        "l_isolated_gate_driver",
+        "l_motor_drive_chip",
+        "l_relay_coil_driver_chip",
+        "l_stepper_motor_driver_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_4_3": {
+      "type_name": "无刷电机驱动子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_brush_dc_motor_drive_chip",
+        "l_brushless_dc_bldc_motor_drive_chip",
+        "l_field_effect_transistor_mosfet",
+        "l_gate_driver_chip",
+        "l_ignition_timing_controller",
+        "l_isolated_gate_driver",
+        "l_motor_drive_chip",
+        "l_relay_coil_driver_chip",
+        "l_stepper_motor_driver_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_4_4": {
+      "type_name": "电磁继电器驱动子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_brush_dc_motor_drive_chip",
+        "l_brushless_dc_bldc_motor_drive_chip",
+        "l_field_effect_transistor_mosfet",
+        "l_gate_driver_chip",
+        "l_ignition_timing_controller",
+        "l_isolated_gate_driver",
+        "l_motor_drive_chip",
+        "l_relay_coil_driver_chip",
+        "l_stepper_motor_driver_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_4_5": {
+      "type_name": "固态继电器驱动子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_brush_dc_motor_drive_chip",
+        "l_brushless_dc_bldc_motor_drive_chip",
+        "l_field_effect_transistor_mosfet",
+        "l_gate_driver_chip",
+        "l_ignition_timing_controller",
+        "l_isolated_gate_driver",
+        "l_motor_drive_chip",
+        "l_relay_coil_driver_chip",
+        "l_stepper_motor_driver_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_4_6": {
+      "type_name": "高边与低边负载开关子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_brush_dc_motor_drive_chip",
+        "l_brushless_dc_bldc_motor_drive_chip",
+        "l_field_effect_transistor_mosfet",
+        "l_gate_driver_chip",
+        "l_ignition_timing_controller",
+        "l_isolated_gate_driver",
+        "l_motor_drive_chip",
+        "l_relay_coil_driver_chip",
+        "l_stepper_motor_driver_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_4_7": {
+      "type_name": "IGBT与功率MOS栅极驱动子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_brush_dc_motor_drive_chip",
+        "l_brushless_dc_bldc_motor_drive_chip",
+        "l_field_effect_transistor_mosfet",
+        "l_gate_driver_chip",
+        "l_ignition_timing_controller",
+        "l_isolated_gate_driver",
+        "l_motor_drive_chip",
+        "l_relay_coil_driver_chip",
+        "l_stepper_motor_driver_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_4_8": {
+      "type_name": "SiC栅极驱动子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_brush_dc_motor_drive_chip",
+        "l_brushless_dc_bldc_motor_drive_chip",
+        "l_field_effect_transistor_mosfet",
+        "l_gate_driver_chip",
+        "l_ignition_timing_controller",
+        "l_isolated_gate_driver",
+        "l_motor_drive_chip",
+        "l_relay_coil_driver_chip",
+        "l_stepper_motor_driver_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_4_9": {
+      "type_name": "功率LED恒流驱动子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_brush_dc_motor_drive_chip",
+        "l_brushless_dc_bldc_motor_drive_chip",
+        "l_field_effect_transistor_mosfet",
+        "l_gate_driver_chip",
+        "l_ignition_timing_controller",
+        "l_isolated_gate_driver",
+        "l_motor_drive_chip",
+        "l_relay_coil_driver_chip",
+        "l_stepper_motor_driver_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_4_10": {
+      "type_name": "电磁阀与螺线管驱动子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_brush_dc_motor_drive_chip",
+        "l_brushless_dc_bldc_motor_drive_chip",
+        "l_field_effect_transistor_mosfet",
+        "l_gate_driver_chip",
+        "l_ignition_timing_controller",
+        "l_isolated_gate_driver",
+        "l_motor_drive_chip",
+        "l_relay_coil_driver_chip",
+        "l_stepper_motor_driver_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_4_11": {
+      "type_name": "续流与关断能量保护子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_brush_dc_motor_drive_chip",
+        "l_brushless_dc_bldc_motor_drive_chip",
+        "l_field_effect_transistor_mosfet",
+        "l_gate_driver_chip",
+        "l_ignition_timing_controller",
+        "l_isolated_gate_driver",
+        "l_motor_drive_chip",
+        "l_relay_coil_driver_chip",
+        "l_stepper_motor_driver_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_4_12": {
+      "type_name": "自举供电子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_brush_dc_motor_drive_chip",
+        "l_brushless_dc_bldc_motor_drive_chip",
+        "l_field_effect_transistor_mosfet",
+        "l_gate_driver_chip",
+        "l_ignition_timing_controller",
+        "l_isolated_gate_driver",
+        "l_motor_drive_chip",
+        "l_relay_coil_driver_chip",
+        "l_stepper_motor_driver_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_4_13": {
+      "type_name": "负压关断子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_brush_dc_motor_drive_chip",
+        "l_brushless_dc_bldc_motor_drive_chip",
+        "l_field_effect_transistor_mosfet",
+        "l_gate_driver_chip",
+        "l_ignition_timing_controller",
+        "l_isolated_gate_driver",
+        "l_motor_drive_chip",
+        "l_relay_coil_driver_chip",
+        "l_stepper_motor_driver_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_4_14": {
+      "type_name": "米勒钳位子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_4",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_brush_dc_motor_drive_chip",
+        "l_brushless_dc_bldc_motor_drive_chip",
+        "l_field_effect_transistor_mosfet",
+        "l_gate_driver_chip",
+        "l_ignition_timing_controller",
+        "l_isolated_gate_driver",
+        "l_motor_drive_chip",
+        "l_relay_coil_driver_chip",
+        "l_stepper_motor_driver_chip"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_5_1": {
+      "type_name": "基本逻辑门子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_binary_arithmetic_logic",
+        "l_buffer_driver_transceiver",
+        "l_converter_level_shifter",
+        "l_counter_frequency_divider",
+        "l_digital_comparator",
+        "l_flip_flop",
+        "l_i_o_expander",
+        "l_inverter",
+        "l_latch_device",
+        "l_logic_gate",
+        "l_monostable_multivibrator",
+        "l_parity_generator_checker",
+        "l_shift_register",
+        "l_signal_switch_codec_multiplexer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_5_2": {
+      "type_name": "组合逻辑子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_binary_arithmetic_logic",
+        "l_buffer_driver_transceiver",
+        "l_converter_level_shifter",
+        "l_counter_frequency_divider",
+        "l_digital_comparator",
+        "l_flip_flop",
+        "l_i_o_expander",
+        "l_inverter",
+        "l_latch_device",
+        "l_logic_gate",
+        "l_monostable_multivibrator",
+        "l_parity_generator_checker",
+        "l_shift_register",
+        "l_signal_switch_codec_multiplexer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_5_3": {
+      "type_name": "I2C与SPI GPIO扩展子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_binary_arithmetic_logic",
+        "l_buffer_driver_transceiver",
+        "l_converter_level_shifter",
+        "l_counter_frequency_divider",
+        "l_digital_comparator",
+        "l_flip_flop",
+        "l_i_o_expander",
+        "l_inverter",
+        "l_latch_device",
+        "l_logic_gate",
+        "l_monostable_multivibrator",
+        "l_parity_generator_checker",
+        "l_shift_register",
+        "l_signal_switch_codec_multiplexer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_5_4": {
+      "type_name": "总线缓冲与驱动子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_binary_arithmetic_logic",
+        "l_buffer_driver_transceiver",
+        "l_converter_level_shifter",
+        "l_counter_frequency_divider",
+        "l_digital_comparator",
+        "l_flip_flop",
+        "l_i_o_expander",
+        "l_inverter",
+        "l_latch_device",
+        "l_logic_gate",
+        "l_monostable_multivibrator",
+        "l_parity_generator_checker",
+        "l_shift_register",
+        "l_signal_switch_codec_multiplexer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_5_5": {
+      "type_name": "双向总线收发子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_binary_arithmetic_logic",
+        "l_buffer_driver_transceiver",
+        "l_converter_level_shifter",
+        "l_counter_frequency_divider",
+        "l_digital_comparator",
+        "l_flip_flop",
+        "l_i_o_expander",
+        "l_inverter",
+        "l_latch_device",
+        "l_logic_gate",
+        "l_monostable_multivibrator",
+        "l_parity_generator_checker",
+        "l_shift_register",
+        "l_signal_switch_codec_multiplexer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_5_6": {
+      "type_name": "地址译码子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_binary_arithmetic_logic",
+        "l_buffer_driver_transceiver",
+        "l_converter_level_shifter",
+        "l_counter_frequency_divider",
+        "l_digital_comparator",
+        "l_flip_flop",
+        "l_i_o_expander",
+        "l_inverter",
+        "l_latch_device",
+        "l_logic_gate",
+        "l_monostable_multivibrator",
+        "l_parity_generator_checker",
+        "l_shift_register",
+        "l_signal_switch_codec_multiplexer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_5_7": {
+      "type_name": "片选分配子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_binary_arithmetic_logic",
+        "l_buffer_driver_transceiver",
+        "l_converter_level_shifter",
+        "l_counter_frequency_divider",
+        "l_digital_comparator",
+        "l_flip_flop",
+        "l_i_o_expander",
+        "l_inverter",
+        "l_latch_device",
+        "l_logic_gate",
+        "l_monostable_multivibrator",
+        "l_parity_generator_checker",
+        "l_shift_register",
+        "l_signal_switch_codec_multiplexer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_5_8": {
+      "type_name": "触发器子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_binary_arithmetic_logic",
+        "l_buffer_driver_transceiver",
+        "l_converter_level_shifter",
+        "l_counter_frequency_divider",
+        "l_digital_comparator",
+        "l_flip_flop",
+        "l_i_o_expander",
+        "l_inverter",
+        "l_latch_device",
+        "l_logic_gate",
+        "l_monostable_multivibrator",
+        "l_parity_generator_checker",
+        "l_shift_register",
+        "l_signal_switch_codec_multiplexer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_5_9": {
+      "type_name": "锁存器子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_binary_arithmetic_logic",
+        "l_buffer_driver_transceiver",
+        "l_converter_level_shifter",
+        "l_counter_frequency_divider",
+        "l_digital_comparator",
+        "l_flip_flop",
+        "l_i_o_expander",
+        "l_inverter",
+        "l_latch_device",
+        "l_logic_gate",
+        "l_monostable_multivibrator",
+        "l_parity_generator_checker",
+        "l_shift_register",
+        "l_signal_switch_codec_multiplexer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_5_10": {
+      "type_name": "555定时核心子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_binary_arithmetic_logic",
+        "l_buffer_driver_transceiver",
+        "l_converter_level_shifter",
+        "l_counter_frequency_divider",
+        "l_digital_comparator",
+        "l_flip_flop",
+        "l_i_o_expander",
+        "l_inverter",
+        "l_latch_device",
+        "l_logic_gate",
+        "l_monostable_multivibrator",
+        "l_parity_generator_checker",
+        "l_shift_register",
+        "l_signal_switch_codec_multiplexer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_5_11": {
+      "type_name": "单稳态定时子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_binary_arithmetic_logic",
+        "l_buffer_driver_transceiver",
+        "l_converter_level_shifter",
+        "l_counter_frequency_divider",
+        "l_digital_comparator",
+        "l_flip_flop",
+        "l_i_o_expander",
+        "l_inverter",
+        "l_latch_device",
+        "l_logic_gate",
+        "l_monostable_multivibrator",
+        "l_parity_generator_checker",
+        "l_shift_register",
+        "l_signal_switch_codec_multiplexer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    },
+    "M_10_5_12": {
+      "type_name": "多谐振荡子模块",
+      "status": "inherited",
+      "parent_type_id": "P_10_5",
+      "taxonomy_version_id": "51",
+      "leaf_codes": [
+        "l_binary_arithmetic_logic",
+        "l_buffer_driver_transceiver",
+        "l_converter_level_shifter",
+        "l_counter_frequency_divider",
+        "l_digital_comparator",
+        "l_flip_flop",
+        "l_i_o_expander",
+        "l_inverter",
+        "l_latch_device",
+        "l_logic_gate",
+        "l_monostable_multivibrator",
+        "l_parity_generator_checker",
+        "l_shift_register",
+        "l_signal_switch_codec_multiplexer"
+      ],
+      "reason": "采用父类别检索范围；具体子类由原规范功能与参数进一步核对，不以目录类别宣称满足。"
+    }
+  }
+}
