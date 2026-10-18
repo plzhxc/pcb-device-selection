@@ -10,12 +10,52 @@ diff --git a/requirements_studio/frontend/src/App.tsx b/requirements_studio/fron
  } from 'lucide-react';
  import { Diagrams, DocumentDiagram } from './Diagrams';
  import { QuestionCards } from './QuestionCards';
-@@ -335,7 +335,7 @@
+@@ -117,9 +117,28 @@
+   const [tab, setTab] = useState<'overview'|'document'|'history'|'convergence'|'modules'>('overview');
+   const [devicePanel,setDevicePanel]=useState<{referenceId?:string;moduleId?:string;requirementId?:string}|null>(null);
+   const [handoffOpen,setHandoffOpen]=useState(false);
++  const [selMenu,setSelMenu]=useState(false);
++  const [selBusy,setSelBusy]=useState(false);
++  const selRef=useRef<HTMLDivElement>(null);
+   const canvasTop=useRef(0);
+   function openDevices(options:{referenceId?:string;moduleId?:string;requirementId?:string}={}){canvasTop.current=document.querySelector('.canvas-scroll')?.scrollTop??0;setDevicePanel(options);setCanvasOpen(true);setMobilePane('canvas');requestAnimationFrame(()=>{const el=document.querySelector('.canvas-scroll');if(el)el.scrollTop=0;});}
+   function closeDevices(){setDevicePanel(null);requestAnimationFrame(()=>{const el=document.querySelector('.canvas-scroll');if(el)el.scrollTop=canvasTop.current;});}
++
++  /** 不跳转选型界面，直接跑完选型并把下游输入下载下来。 */
++  async function autoSelectAndExport(){
++    if(!project||selBusy) return;
++    setSelMenu(false); setSelBusy(true);
++    try{
++      const base=`http://${location.hostname}:8899`;
++      const res=await fetch(`${base}/api/projects/auto-export`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({project_id:project.id})});
++      const data=await res.json();
++      if(!data.ok){setError('自动选型未完成：'+(data.error||data.status||'未知原因'));return;}
++      window.open(`${base}${data.download}`,'_blank');
++      const c=data.counts||{};
++      setToast(`自动选型完成：确认 ${c.confirmed||0} 项，导出 ${data.modules||0} 个模块`+(c.flagged?`，其中 ${c.flagged} 项需复核（详见选型界面）`:''));
++    }catch(err){setError('自动选型失败：'+String(err));}
++    finally{setSelBusy(false);}
++  }
+   useEffect(()=>{document.querySelector('.canvas-tabs [aria-selected="true"]')?.scrollIntoView({block:'nearest',inline:'nearest'});},[tab]);
+   const [chatWidth, setChatWidth] = useState(Math.min(650, Math.max(360, Number(readSetting('chat-width', '480')) || 480)));
+   const [draft, setDraft] = useState('');
+@@ -190,8 +209,8 @@
+   useEffect(() => { if (selected.current) saveSetting(`draft:${selected.current}`, draft); }, [draft]);
+   useEffect(() => { if (!toast) return; const timer = setTimeout(() => setToast(''), 3500); return () => clearTimeout(timer); }, [toast]);
+   useEffect(() => {
+-    function outside(e: MouseEvent) { if (exportRef.current && !exportRef.current.contains(e.target as Node)) setExportOpen(false); }
+-    function escape(e: KeyboardEvent) { if (e.key === 'Escape') { setExportOpen(false); if (window.innerWidth < 760) setSidebar(false); } }
++    function outside(e: MouseEvent) { if (exportRef.current && !exportRef.current.contains(e.target as Node)) setExportOpen(false); if (selRef.current && !selRef.current.contains(e.target as Node)) setSelMenu(false); }
++    function escape(e: KeyboardEvent) { if (e.key === 'Escape') { setExportOpen(false); setSelMenu(false); if (window.innerWidth < 760) setSidebar(false); } }
+     document.addEventListener('click', outside); document.addEventListener('keydown', escape);
+     return () => { document.removeEventListener('click', outside); document.removeEventListener('keydown', escape); };
+   }, []);
+@@ -335,7 +354,7 @@
      <div className="workbench">
        <header className="topbar">
          <div className="breadcrumb"><button className="icon-button toggle-sidebar" aria-label={sidebar?'收起项目侧栏':'展开项目侧栏'} onClick={()=>setSidebar(v=>!v)}>{sidebar?<PanelLeftClose size={17}/>:<PanelLeftOpen size={17}/>}</button><span className="breadcrumb-root">需求工作台</span><ChevronRight size={13}/><button className="project-title-button" title="重命名项目" disabled={!project||busy||loading} onClick={()=>{setNewTitle(project?.title??'');setRenameError('');setRenaming(true);}}>{project?.title??'正在加载'}<Pencil size={11}/></button><span className="draft-badge">{project?.review?.status==='approved'?'已审核':project?.review?.status==='ready'?'待审核':'草稿'}</span></div>
 -        <div className="topbar-actions"><span className="save-indicator"><CheckCheck size={14}/>{busy?'已有版本已保存':'已保存'}</span><div className="export-menu" ref={exportRef}><button className="button secondary small" disabled={loading||!project||!doc?.requirements.length} onClick={()=>setExportOpen(v=>!v)} aria-expanded={exportOpen}><Download size={14}/><span>导出</span><ChevronDown size={12}/></button>{exportOpen&&project&&<div className="dropdown"><span>导出当前版本 v{doc?.version}</span><a href={`/api/projects/${project.id}/export/md`} onClick={()=>setExportOpen(false)} download={`${project.title}_需求说明书_v${doc?.version}.md`}><FileText size={15}/>Markdown 文档<ArrowDownToLine size={13}/></a><a href={`/api/projects/${project.id}/export/studio-json`} onClick={()=>setExportOpen(false)} download={`${project.title}_需求说明书_v${doc?.version}.json`}><Layers3 size={15}/>完整工作台 JSON<ArrowDownToLine size={13}/></a><button className="export-handoff" onClick={()=>{setExportOpen(false);setHandoffOpen(true);}}><CheckCheck size={15}/>选型交接包<ArrowRight size={13}/></button><a className="legacy-export" href={`/api/projects/${project.id}/export/json`} onClick={()=>setExportOpen(false)} download>旧版结构 JSON · v1</a></div>}</div><button className="icon-button canvas-toggle" aria-label={canvasOpen?'收起需求画布':'展开需求画布'} onClick={()=>{setCanvasOpen(v=>!v);setCanvasFocus(false);}}>{canvasOpen?<PanelRightClose size={18}/>:<PanelRightOpen size={18}/>}</button></div>
-+        <div className="topbar-actions"><span className="save-indicator"><CheckCheck size={14}/>{busy?'已有版本已保存':'已保存'}</span><div className="export-menu" ref={exportRef}><button className="button secondary small" disabled={loading||!project||!doc?.requirements.length} onClick={()=>setExportOpen(v=>!v)} aria-expanded={exportOpen}><Download size={14}/><span>导出</span><ChevronDown size={12}/></button>{exportOpen&&project&&<div className="dropdown"><span>导出当前版本 v{doc?.version}</span><a href={`/api/projects/${project.id}/export/md`} onClick={()=>setExportOpen(false)} download={`${project.title}_需求说明书_v${doc?.version}.md`}><FileText size={15}/>Markdown 文档<ArrowDownToLine size={13}/></a><a href={`/api/projects/${project.id}/export/studio-json`} onClick={()=>setExportOpen(false)} download={`${project.title}_需求说明书_v${doc?.version}.json`}><Layers3 size={15}/>完整工作台 JSON<ArrowDownToLine size={13}/></a><button className="export-handoff" onClick={()=>{setExportOpen(false);setHandoffOpen(true);}}><CheckCheck size={15}/>选型交接包<ArrowRight size={13}/></button><a className="legacy-export" href={`/api/projects/${project.id}/export/json`} onClick={()=>setExportOpen(false)} download>旧版结构 JSON · v1</a></div>}</div><a className="button secondary small device-selection-link" href={project?`http://${location.hostname}:8899/?project=${project.id}`:undefined} target="_blank" rel="noopener" aria-disabled={!project} title="在器件选型阶段打开这个项目" onClick={(e)=>{if(!project)e.preventDefault();}}><Boxes size={14}/><span>器件选型</span><ArrowUpRight size={12}/></a><button className="icon-button canvas-toggle" aria-label={canvasOpen?'收起需求画布':'展开需求画布'} onClick={()=>{setCanvasOpen(v=>!v);setCanvasFocus(false);}}>{canvasOpen?<PanelRightClose size={18}/>:<PanelRightOpen size={18}/>}</button></div>
++        <div className="topbar-actions"><span className="save-indicator"><CheckCheck size={14}/>{busy?'已有版本已保存':'已保存'}</span><div className="export-menu" ref={exportRef}><button className="button secondary small" disabled={loading||!project||!doc?.requirements.length} onClick={()=>setExportOpen(v=>!v)} aria-expanded={exportOpen}><Download size={14}/><span>导出</span><ChevronDown size={12}/></button>{exportOpen&&project&&<div className="dropdown"><span>导出当前版本 v{doc?.version}</span><a href={`/api/projects/${project.id}/export/md`} onClick={()=>setExportOpen(false)} download={`${project.title}_需求说明书_v${doc?.version}.md`}><FileText size={15}/>Markdown 文档<ArrowDownToLine size={13}/></a><a href={`/api/projects/${project.id}/export/studio-json`} onClick={()=>setExportOpen(false)} download={`${project.title}_需求说明书_v${doc?.version}.json`}><Layers3 size={15}/>完整工作台 JSON<ArrowDownToLine size={13}/></a><button className="export-handoff" onClick={()=>{setExportOpen(false);setHandoffOpen(true);}}><CheckCheck size={15}/>选型交接包<ArrowRight size={13}/></button><a className="legacy-export" href={`/api/projects/${project.id}/export/json`} onClick={()=>setExportOpen(false)} download>旧版结构 JSON · v1</a></div>}</div><div className="export-menu device-selection-menu" ref={selRef}><button className="button secondary small" disabled={!project||selBusy} onClick={()=>setSelMenu(v=>!v)} aria-expanded={selMenu} title="器件选型"><Boxes size={14}/><span>{selBusy?'选型中…':'器件选型'}</span><ChevronDown size={12}/></button>{selMenu&&project&&<div className="dropdown"><a href={`http://${location.hostname}:8899/?project=${project.id}`} target="_blank" rel="noopener" onClick={()=>setSelMenu(false)}><ArrowUpRight size={13}/>打开选型界面<ArrowUpRight size={12}/></a><button onClick={()=>void autoSelectAndExport()}><CheckCheck size={14}/>自动选型并导出下游文件</button></div>}</div><button className="icon-button canvas-toggle" aria-label={canvasOpen?'收起需求画布':'展开需求画布'} onClick={()=>{setCanvasOpen(v=>!v);setCanvasFocus(false);}}>{canvasOpen?<PanelRightClose size={18}/>:<PanelRightOpen size={18}/>}</button></div>
        </header>
        <div className="mobile-switch" role="tablist" aria-label="工作区"><button role="tab" aria-selected={mobilePane==='chat'} onClick={()=>setMobilePane('chat')}><MessageSquare size={14}/>需求讨论</button><button role="tab" aria-selected={mobilePane==='canvas'} onClick={()=>{setMobilePane('canvas');setCanvasOpen(true);}}><BookOpen size={14}/>需求画布{doc&&doc.version>0&&<span>v{doc.version}</span>}</button></div>
        {error&&<div className="error-banner" role="alert"><AlertCircle size={15}/><span>{error}</span>{!project&&<button className="text-button" onClick={()=>void bootstrap()}>重新连接</button>}<button className="icon-button" aria-label="关闭提示" onClick={()=>setError('')}><X size={14}/></button></div>}

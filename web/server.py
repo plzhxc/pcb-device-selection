@@ -332,17 +332,22 @@ class Session:
         }
 
     # --------------------------------------------------------- 一键确认推荐
-    def confirm_recommended(self) -> dict[str, Any]:
-        """把「已核对且有推荐」的选型项一次性确认掉。
+    def confirm_recommended(self, *, mode: str = "all") -> dict[str, Any]:
+        """一键把选型项确认掉。
 
-        只确认 fit 为 `recommended` / `acceptable` 的首选；`conditional`
-        （硬性条件未知）和 `unjudged`（一条条件都没判过）**不动**——
-        自动确认未核对的东西，等于把假绿写进下游。
+        ``mode="all"``（默认）：**每个有候选的选型项都选上，不留空**。
+        结论不完美的照选，但会在 ``needs_review`` 里写明问题，界面上打标。
+
+        ``mode="strict"``：只选 `recommended` / `acceptable` 的，其余留空。
+
+        两种模式都跳过"已经确认过的"，避免重复计数。
         """
 
         confirmed: list[dict[str, Any]] = []
         skipped: list[dict[str, str]] = []
+        flagged: list[dict[str, str]] = []
         existing = self.decisions.all()
+        strict = str(mode or "all").lower() == "strict"
 
         for item in self.result.get("items", []):
             selection = item.get("selection_item") or {}
@@ -351,30 +356,53 @@ class Session:
             if not candidates:
                 skipped.append({"item_id": item_id, "reason": "没有候选器件"})
                 continue
-            if item.get("unverified"):
-                skipped.append(
-                    {"item_id": item_id, "reason": "没有可判定的条件，未核对"}
-                )
-                continue
             top = candidates[0]
-            fit = (top.get("evaluation") or {}).get("fit")
-            if fit not in ("recommended", "acceptable"):
+            evaluation = top.get("evaluation") or {}
+            fit = evaluation.get("fit")
+
+            # 这个项有没有问题、问题是什么
+            issue = ""
+            if item.get("unverified"):
+                issue = "未核对：没有可判定的条件，仅按类别召回"
+            elif fit == "conditional":
+                unknown = [
+                    v.get("field") for v in evaluation.get("unknown", [])
+                    if v.get("hard")
+                ]
+                issue = "硬性条件未知" + (f"：{'、'.join(unknown[:4])}" if unknown else "")
+            elif fit == "excluded":
+                violated = [
+                    v.get("field") for v in evaluation.get("violated", [])
+                    if v.get("hard")
+                ]
+                issue = "全部候选都违反硬性条件" + (
+                    f"：{'、'.join(violated[:4])}" if violated else ""
+                )
+            elif fit not in ("recommended", "acceptable"):
+                issue = f"结论为 {fit or '未知'}"
+
+            if strict and issue:
                 skipped.append(
-                    {
-                        "item_id": item_id,
-                        "reason": f"首选结论是 {fit or '未知'}，需人工判断",
-                    }
+                    {"item_id": item_id, "reason": f"{issue}，严格模式下不自动确认"}
                 )
                 continue
+
             key = f"{item_id}::{top.get('model')}"
             if (existing.get(key) or {}).get("decision") == "confirmed":
                 skipped.append({"item_id": item_id, "reason": "已经是已确认状态"})
                 continue
+
             self.decisions.record(
                 item_id=item_id,
                 model=str(top.get("model") or ""),
                 decision="confirmed",
-                reason="一键确认系统推荐（可随时改回保留/排除）",
+                reason=(
+                    "一键确认（需复核：" + issue + "）"
+                    if issue
+                    else "一键确认系统推荐"
+                ),
+                origin="auto",
+                needs_review=issue,
             )
             confirmed.append(
                 {
@@ -382,19 +410,102 @@ class Session:
                     "model": top.get("model"),
                     "supplier_part": top.get("supplier_part"),
                     "fit": fit,
-                    "confidence": (top.get("evaluation") or {}).get("confidence"),
+                    "confidence": evaluation.get("confidence"),
+                    "needs_review": issue,
                 }
             )
+            if issue:
+                flagged.append(
+                    {
+                        "item_id": item_id,
+                        "model": str(top.get("model") or ""),
+                        "issue": issue,
+                    }
+                )
 
         return {
             "confirmed": confirmed,
+            "flagged": flagged,
             "skipped": skipped,
             "counts": {
                 "confirmed": len(confirmed),
+                "flagged": len(flagged),
                 "skipped": len(skipped),
                 "total": len(self.result.get("items", [])),
             },
+            "mode": "strict" if strict else "all",
             "decisions": self.decisions.all(),
+        }
+
+    # ------------------------------------------------- 自动选型并导出下游
+    def auto_export(self, project_id: str) -> dict[str, Any]:
+        """一次做完：取交接包 → 跑选型 → 全部确认 → 导出下游输入。
+
+        给工作台的「自动选型并导出」用。结论不完美的项也会被选上并打标，
+        但**没有候选**的项无法凭空生成，如实列在 skipped 里。
+        """
+
+        entry = self.store.open(project_id, run=True)
+        self.current_id = project_id
+        if entry.status != "ready":
+            return {
+                "ok": False,
+                "status": entry.status,
+                "error": entry.error or "项目尚未就绪，无法自动选型",
+            }
+
+        confirm = self.confirm_recommended(mode="all")
+        try:
+            payload = build_handoff(
+                entry.result,
+                self.decisions.all(),
+                description=(
+                    f"器件选型阶段自动导出｜需求版本 "
+                    f"{entry.result.get('requirement_version') or '未标注'}"
+                ),
+            )
+        except ValueError as exc:
+            return {
+                "ok": False,
+                "status": "no_selection",
+                "error": str(exc),
+                "counts": confirm["counts"],
+            }
+
+        contract = contract_only(payload)
+        validation = "passed"
+        validation_error = ""
+        try:
+            validate_with_downstream(contract, str(PCBAgent_ROOT))
+        except Exception as exc:  # noqa: BLE001
+            validation = "failed"
+            validation_error = f"{type(exc).__name__}: {str(exc)[:200]}"
+        payload["validation"] = validation
+        if validation_error:
+            payload["validation_error"] = validation_error
+        payload["auto_selection"] = {
+            "confirmed": confirm["counts"]["confirmed"],
+            "flagged": confirm["counts"]["flagged"],
+            "flagged_items": confirm["flagged"],
+        }
+
+        target = self.store.dir_of(project_id) / "generation-input.json"
+        target.write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+
+        return {
+            "ok": validation == "passed",
+            "status": "exported",
+            "project_id": project_id,
+            "counts": confirm["counts"],
+            "flagged": confirm["flagged"],
+            "skipped": confirm["skipped"],
+            "not_exported": payload["diagnostics"]["skipped"],
+            "modules": len(payload["modules"]),
+            "validation": validation,
+            "validation_error": validation_error,
+            "download": f"/api/projects/{project_id}/generation-input.json",
         }
 
     # ------------------------------------------------------------- 对话逻辑
@@ -765,8 +876,20 @@ class Handler(SimpleHTTPRequestHandler):
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-store")
+        # 需求分析工作台（另一个端口）要能调这里的接口
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()
         self.wfile.write(body)
+
+    def do_OPTIONS(self) -> None:  # noqa: N802
+        self.send_response(204)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("Content-Length", "0")
+        self.end_headers()
 
     def _body(self) -> dict[str, Any]:
         length = int(self.headers.get("Content-Length") or 0)
@@ -822,6 +945,26 @@ class Handler(SimpleHTTPRequestHandler):
                 self._json({"error": str(exc)}, 404)
                 return
             self._json(detail)
+            return
+        if parsed.path.startswith("/api/projects/") and parsed.path.endswith(
+            "/generation-input.json"
+        ):
+            project_id = parsed.path.split("/")[3]
+            target = self.session.store.dir_of(project_id) / "generation-input.json"
+            if not target.exists():
+                self._json({"error": "尚未导出，请先执行自动选型"}, 404)
+                return
+            body = target.read_bytes()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.send_header(
+                "Content-Disposition",
+                f'attachment; filename="netlist-input-{project_id[:8]}.json"',
+            )
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.end_headers()
+            self.wfile.write(body)
             return
         if parsed.path == "/api/export/candidates":
             # 最终交付物：候选清单 + 用户决定 + 交接状态
@@ -879,6 +1022,21 @@ class Handler(SimpleHTTPRequestHandler):
                     }
                 )
                 return
+            if parsed.path == "/api/projects/auto-export":
+                project_id = str(payload.get("project_id") or "").strip()
+                if not project_id:
+                    self._json({"ok": False, "error": "project_id is required"}, 400)
+                    return
+                try:
+                    result = self.session.auto_export(project_id)
+                except Exception as exc:  # noqa: BLE001
+                    self._json(
+                        {"ok": False, "error": f"{type(exc).__name__}: {str(exc)[:200]}"},
+                        502,
+                    )
+                    return
+                self._json(result, 200 if result.get("ok") else 409)
+                return
             if parsed.path == "/api/run":
                 spec = payload.get("spec")
                 if isinstance(spec, dict):
@@ -914,7 +1072,11 @@ class Handler(SimpleHTTPRequestHandler):
                 self._json({"decisions": self.session.decisions.all()})
                 return
             if parsed.path == "/api/decisions/confirm-recommended":
-                self._json(self.session.confirm_recommended())
+                self._json(
+                    self.session.confirm_recommended(
+                        mode=str(payload.get("mode") or "all")
+                    )
+                )
                 return
             if parsed.path == "/api/chat":
                 self._json(self.session.chat(str(payload.get("message") or "")))

@@ -83,6 +83,8 @@ class DecisionStore:
         model: str,
         decision: str,
         reason: str = "",
+        origin: str = "manual",
+        needs_review: str = "",
     ) -> dict[str, Any]:
         if decision not in ALL_DECISIONS:
             raise ValueError(f"decision must be one of {ALL_DECISIONS}")
@@ -93,6 +95,10 @@ class DecisionStore:
             "decision": decision,
             "decision_label": label_of(decision),
             "reason": str(reason or ""),
+            # origin: manual 人工点选 / auto 一键确认
+            # needs_review: 非空表示"选上了但结论可疑"，界面要标出来
+            "origin": str(origin or "manual"),
+            "needs_review": str(needs_review or ""),
             "decided_at": datetime.now(timezone.utc).astimezone().isoformat(timespec="seconds"),
         }
         self._entries[key] = entry

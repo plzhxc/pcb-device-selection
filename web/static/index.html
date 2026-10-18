@@ -348,7 +348,8 @@ function candidateRow(item, c) {
   const consHtml = cons.length ? '<ul class="tight">' + cons.join("") + "</ul>" : '<span class="muted">—</span>';
 
   const decisionKey = item.selection_item.id + "::" + c.model;
-  const decision = (state.decisions[decisionKey] || {}).decision || "";
+  const record = state.decisions[decisionKey] || {};
+  const decision = record.decision || "";
   const buttons = ["keep", "exclude", "discuss", "confirmed"].map((d) =>
     `<button data-model="${esc(c.model)}" data-item="${esc(item.selection_item.id)}" data-decision="${d}"
       class="${decision === d ? "on" : ""}">${decisionLabel[d]}</button>`).join("");
@@ -382,7 +383,8 @@ function candidateRow(item, c) {
     <td>${consHtml}</td>
     <td>${costCell(c)}</td>
     <td><span class="badge ${fitClass[ev.fit]}">${fitLabel[ev.fit]}</span>
-        <small class="muted">证据 ${Math.round(ev.confidence * 100)}%</small></td>
+        <small class="muted">证据 ${Math.round(ev.confidence * 100)}%</small>
+        ${record.needs_review ? `<small class="warn-text" title="自动确认时记录的待复核项">⚠ 需复核</small>` : ""}</td>
     <td><div class="actions">${buttons}</div></td>
   </tr>
   <tr><td colspan="7" style="padding:0">${detail}</td></tr>`;
@@ -489,10 +491,10 @@ function render() {
     const total = ((state.result && state.result.items) || []).length;
     confirmAll.hidden = total === 0;
     confirmAll.disabled = count === 0;
-    confirmAll.textContent = count ? `一键确认推荐 (${count})` : "一键确认推荐";
+    confirmAll.textContent = count ? `一键确认全部 (${count})` : "一键确认全部";
     confirmAll.title = count
-      ? `确认 ${count} 个已核对、结论为推荐或可接受的项`
-      : "当前没有可一键确认的项：未核对、或有硬性条件未知，都需要人工判断";
+      ? `把 ${count} 个选型项全部确认（结论不完美的会标「需复核」，随时可改成保留或排除）`
+      : "所有选型项都已确认，或没有可用候选";
     confirmAll.onclick = () => confirmRecommended();
   }
 }
@@ -981,11 +983,8 @@ document.addEventListener("keydown", (event) => {
 function eligibleCount() {
   const items = (state.result && state.result.items) || [];
   return items.filter((item) => {
-    if (item.unverified) return false;
     const top = (item.candidates || [])[0];
     if (!top) return false;
-    const fit = (top.evaluation || {}).fit;
-    if (fit !== "recommended" && fit !== "acceptable") return false;
     const key = `${item.selection_item.id}::${top.model}`;
     const recorded = (state.decisions || {})[key];
     return !recorded || recorded.decision !== "confirmed";
@@ -1007,8 +1006,11 @@ async function confirmRecommended() {
       const counts = data.counts || {};
       const skip = (data.skipped || []).slice(0, 6)
         .map((s) => `${s.item_id}：${s.reason}`).join("；");
+      const flagged = (data.flagged || []).slice(0, 8)
+        .map((f) => `${f.item_id}（${f.issue}）`).join("；");
       pushMessage("bot",
-        `已一键确认 ${counts.confirmed || 0} 个推荐器件（共 ${counts.total || 0} 个选型项）。`
+        `已一键确认 ${counts.confirmed || 0} 个器件（共 ${counts.total || 0} 个选型项）。`
+        + (counts.flagged ? `\n其中 ${counts.flagged} 项需复核，界面上已标「⚠ 需复核」：${flagged}` : "")
         + (counts.skipped ? `\n跳过 ${counts.skipped} 项：${skip}` : "")
         + "\n随时可以在任意一行改成「保留」或「排除」。");
     }
