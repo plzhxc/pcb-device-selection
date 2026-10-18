@@ -278,6 +278,125 @@ class Session:
             return payload, str(exc)
         return payload, None
 
+    # ------------------------------------------------------------- 器件详情
+    def device_detail(self, device_id: int) -> dict[str, Any]:
+        """点型号时弹窗用：身份 + 全部参数 + 手册片段。"""
+
+        row = self.service.catalog.by_id(int(device_id))
+        if row is None:
+            raise ValueError(f"器件库里没有 device_id={device_id}")
+        attributes = self.service.attributes.for_device(row.device_id)
+        c_number = self.service._c_number(attributes, row)
+
+        ordered = sorted(
+            attributes.values(), key=lambda a: (a.priority_rank, a.field_key)
+        )
+        params = [a.as_dict() for a in ordered]
+        key_params = [
+            a.as_dict()
+            for a in ordered
+            if a.priority_rank < 9999 or a.is_required
+        ]
+
+        spans: list[dict[str, Any]] = []
+        if self.service.datasheet is not None and c_number:
+            try:
+                for span in self.service.datasheet.spans(c_number, limit=6):
+                    text = span.content.strip()
+                    spans.append(
+                        {
+                            "title": span.title,
+                            "page": span.page,
+                            "database": span.database,
+                            "locator": f"{span.database}.DataSheet:{span.span_id}",
+                            "snippet": text[:1200],
+                        }
+                    )
+            except Exception as exc:  # noqa: BLE001 - 手册取不到不该挡住参数
+                spans = [{"error": f"{type(exc).__name__}: {str(exc)[:120]}"}]
+
+        evidence = {}
+        for attribute in ordered:
+            evidence[attribute.evidence_status] = (
+                evidence.get(attribute.evidence_status, 0) + 1
+            )
+
+        return {
+            "identity": row.as_dict(),
+            "supplier_part": c_number,
+            "parameters": params,
+            "key_parameters": key_params,
+            "datasheet": spans,
+            "datasheet_available": bool(spans) and not spans[0].get("error"),
+            "evidence": evidence,
+        }
+
+    # --------------------------------------------------------- 一键确认推荐
+    def confirm_recommended(self) -> dict[str, Any]:
+        """把「已核对且有推荐」的选型项一次性确认掉。
+
+        只确认 fit 为 `recommended` / `acceptable` 的首选；`conditional`
+        （硬性条件未知）和 `unjudged`（一条条件都没判过）**不动**——
+        自动确认未核对的东西，等于把假绿写进下游。
+        """
+
+        confirmed: list[dict[str, Any]] = []
+        skipped: list[dict[str, str]] = []
+        existing = self.decisions.all()
+
+        for item in self.result.get("items", []):
+            selection = item.get("selection_item") or {}
+            item_id = str(selection.get("id") or "")
+            candidates = item.get("candidates") or []
+            if not candidates:
+                skipped.append({"item_id": item_id, "reason": "没有候选器件"})
+                continue
+            if item.get("unverified"):
+                skipped.append(
+                    {"item_id": item_id, "reason": "没有可判定的条件，未核对"}
+                )
+                continue
+            top = candidates[0]
+            fit = (top.get("evaluation") or {}).get("fit")
+            if fit not in ("recommended", "acceptable"):
+                skipped.append(
+                    {
+                        "item_id": item_id,
+                        "reason": f"首选结论是 {fit or '未知'}，需人工判断",
+                    }
+                )
+                continue
+            key = f"{item_id}::{top.get('model')}"
+            if (existing.get(key) or {}).get("decision") == "confirmed":
+                skipped.append({"item_id": item_id, "reason": "已经是已确认状态"})
+                continue
+            self.decisions.record(
+                item_id=item_id,
+                model=str(top.get("model") or ""),
+                decision="confirmed",
+                reason="一键确认系统推荐（可随时改回保留/排除）",
+            )
+            confirmed.append(
+                {
+                    "item_id": item_id,
+                    "model": top.get("model"),
+                    "supplier_part": top.get("supplier_part"),
+                    "fit": fit,
+                    "confidence": (top.get("evaluation") or {}).get("confidence"),
+                }
+            )
+
+        return {
+            "confirmed": confirmed,
+            "skipped": skipped,
+            "counts": {
+                "confirmed": len(confirmed),
+                "skipped": len(skipped),
+                "total": len(self.result.get("items", [])),
+            },
+            "decisions": self.decisions.all(),
+        }
+
     # ------------------------------------------------------------- 对话逻辑
     def _models(self) -> dict[str, dict[str, Any]]:
         table: dict[str, dict[str, Any]] = {}
@@ -695,6 +814,15 @@ class Handler(SimpleHTTPRequestHandler):
             query = (parse_qs(parsed.query).get("q") or [""])[0]
             self._json(self.session.service.search(query, limit=8))
             return
+        if parsed.path.startswith("/api/devices/"):
+            raw = parsed.path.rsplit("/", 1)[-1]
+            try:
+                detail = self.session.device_detail(int(raw))
+            except (TypeError, ValueError) as exc:
+                self._json({"error": str(exc)}, 404)
+                return
+            self._json(detail)
+            return
         if parsed.path == "/api/export/candidates":
             # 最终交付物：候选清单 + 用户决定 + 交接状态
             self._json(self.session.export_candidates())
@@ -784,6 +912,9 @@ class Handler(SimpleHTTPRequestHandler):
                     self._json({"error": "invalid decision"}, 400)
                     return
                 self._json({"decisions": self.session.decisions.all()})
+                return
+            if parsed.path == "/api/decisions/confirm-recommended":
+                self._json(self.session.confirm_recommended())
                 return
             if parsed.path == "/api/chat":
                 self._json(self.session.chat(str(payload.get("message") or "")))

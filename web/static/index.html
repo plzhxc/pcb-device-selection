@@ -89,6 +89,49 @@
   .runbar .state.warn { background: var(--warn-bg); color: var(--warn); }
   .runbar .state.bad { background: var(--bad-bg); color: var(--bad); }
 
+  /* 可点击的器件型号 */
+  .model-link {
+    font: inherit; font-weight: 600; color: var(--accent); background: none;
+    border: 0; padding: 0; cursor: pointer; text-align: left;
+    border-bottom: 1px dashed transparent;
+  }
+  .model-link:hover { border-bottom-color: var(--accent); }
+
+  /* 器件详情浮窗 */
+  #device-card {
+    position: fixed; z-index: 60; width: 460px; max-width: calc(100vw - 24px);
+    max-height: 70vh; overflow: auto; background: #fff; border: 1px solid var(--line-strong);
+    border-radius: 10px; box-shadow: 0 12px 32px rgba(20, 30, 50, .16); padding: 0;
+  }
+  #device-card[hidden] { display: none; }
+  #device-card .dc-head {
+    position: sticky; top: 0; background: #fff; border-bottom: 1px solid var(--line);
+    padding: 12px 14px; display: flex; align-items: flex-start; gap: 10px;
+  }
+  #device-card .dc-head .t { font-size: 15px; font-weight: 600; }
+  #device-card .dc-head .s { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  #device-card .dc-close {
+    margin-left: auto; border: 0; background: none; cursor: pointer; color: var(--muted);
+    font-size: 16px; line-height: 1; padding: 2px 4px;
+  }
+  #device-card .dc-body { padding: 10px 14px 14px; }
+  #device-card h4 {
+    font-size: 12px; color: var(--muted); font-weight: 600; margin: 12px 0 6px;
+    text-transform: none;
+  }
+  #device-card h4:first-child { margin-top: 2px; }
+  .dc-params { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .dc-params td { padding: 4px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .dc-params td:first-child { color: var(--muted); width: 42%; }
+  .dc-params tr.missing td { color: var(--warn); }
+  .dc-snippet {
+    font-size: 12px; line-height: 1.5; background: #fafbfd; border: 1px solid var(--line);
+    border-radius: 6px; padding: 8px 10px; margin-bottom: 8px; white-space: pre-wrap;
+    max-height: 160px; overflow: auto;
+  }
+  .dc-snippet .cap { color: var(--muted); font-size: 11px; display: block; margin-bottom: 4px; }
+  .dc-empty { color: var(--muted); font-size: 12px; }
+
   /* 可折叠的选型项 */
   details.item > summary {
     list-style: none; cursor: pointer; display: flex; align-items: center;
@@ -329,7 +372,10 @@ function candidateRow(item, c) {
     </details>`;
 
   return `<tr>
-    <td class="model">${esc(c.model)}<small>${esc(c.manufacturer || "厂商未记录")}</small></td>
+    <td class="model"><button type="button" class="model-link"
+        data-device="${esc(c.device_id)}" data-model="${esc(c.model)}"
+        title="查看该器件的手册参数">${esc(c.model)}</button>
+      <small>${esc(c.manufacturer || "厂商未记录")}</small></td>
     <td>${keyParams ? '<ul class="tight">' + keyParams + "</ul>" : '<span class="muted">—</span>'}</td>
     <td>${pros}</td>
     <td>${consHtml}</td>
@@ -787,6 +833,7 @@ function renderRunbar() {
   } else if (status === "error") sub = entry.error || "处理出错";
 
   const canRun = status !== "waiting" && (entry.runnable ?? true);
+  const eligible = status === "ready" ? eligibleCount() : 0;
   bar.hidden = false;
   bar.innerHTML = `
     <div class="grow">
@@ -794,12 +841,15 @@ function renderRunbar() {
       <div class="rb-sub">${esc(sub)}</div>
     </div>
     <span class="state ${label[0]}">${esc(label[1])}</span>
+    ${eligible ? `<button class="ghost" id="btn-confirm-all" title="只确认已核对过、结论为推荐或可接受的项">一键确认推荐 (${eligible})</button>` : ""}
     ${status === "ready"
       ? `<button class="ghost" id="btn-run" ${running ? "disabled" : ""}>${running ? "执行中…" : "重新选型"}</button>`
       : `<button id="btn-run" ${canRun && !running ? "" : "disabled"}>${running ? "执行中…" : "开始选型"}</button>`}
   `;
   const button = document.getElementById("btn-run");
   if (button) button.onclick = () => runSelection(status === "ready");
+  const confirmButton = document.getElementById("btn-confirm-all");
+  if (confirmButton) confirmButton.onclick = () => confirmRecommended();
 }
 
 document.getElementById("chat-form").addEventListener("submit", (event) => {
@@ -813,6 +863,150 @@ document.querySelectorAll("#hints button").forEach((btn) => {
 });
 document.getElementById("btn-handoff").addEventListener("click", () => showExport("handoff"));
 document.getElementById("btn-candidates").addEventListener("click", () => showExport("candidates"));
+
+/* ---------------- 器件详情浮窗 ---------------- */
+
+function closeDeviceCard() {
+  const card = document.getElementById("device-card");
+  if (card) {
+    card.hidden = true;
+    card.innerHTML = "";
+  }
+}
+
+function positionCard(card, anchor) {
+  const rect = anchor.getBoundingClientRect();
+  card.hidden = false;
+  const width = card.offsetWidth;
+  const height = card.offsetHeight;
+  let left = Math.max(12, Math.min(rect.left, window.innerWidth - width - 12));
+  let top = rect.bottom + 8;
+  if (top + height > window.innerHeight - 12) {
+    top = Math.max(12, rect.top - height - 8);
+  }
+  card.style.left = left + "px";
+  card.style.top = top + "px";
+}
+
+function renderDeviceCard(d) {
+  const id = d.identity || {};
+  const key = (d.key_parameters || []).slice(0, 16);
+  const all = d.parameters || [];
+  const other = all.length > key.length
+    ? all.filter((p) => !key.some((k) => k.field_key === p.field_key)).slice(0, 40)
+    : [];
+  const evidence = Object.entries(d.evidence || {})
+    .map(([k, v]) => `${k} ${v}`).join(" · ") || "—";
+  const paramRow = (p) => `<tr class="${p.is_missing ? "missing" : ""}">
+    <td>${esc(p.name_zh || p.field_key)}</td>
+    <td>${esc(p.value_text || p.value_normalized || "—")}
+      ${p.is_missing ? '<small class="muted">（缺失）</small>' : ""}</td></tr>`;
+  const snippets = (d.datasheet || []).filter((s) => s.snippet).slice(0, 3);
+  return `
+    <div class="dc-head">
+      <div>
+        <div class="t">${esc(id.model || "")}</div>
+        <div class="s">${esc(id.manufacturer || "厂商未记录")}
+          ${id.leaf_name_zh ? " · " + esc(id.leaf_name_zh) : ""}
+          ${d.supplier_part ? " · 立创 " + esc(d.supplier_part) : ""}
+          · device_id=${esc(id.device_id)}</div>
+      </div>
+      <button class="dc-close" aria-label="关闭">✕</button>
+    </div>
+    <div class="dc-body">
+      <h4>关键参数（${key.length}）</h4>
+      ${key.length ? `<table class="dc-params">${key.map(paramRow).join("")}</table>`
+        : '<p class="dc-empty">该类别没有登记关键参数。</p>'}
+      ${other.length ? `<details><summary class="muted" style="font-size:12px;cursor:pointer;margin-top:8px">
+          展开其余 ${other.length} 项参数</summary>
+          <table class="dc-params">${other.map(paramRow).join("")}</table></details>` : ""}
+      <h4>证据状态</h4>
+      <p class="dc-empty">${esc(evidence)}</p>
+      <h4>数据手册片段${snippets.length ? `（${snippets.length}）` : ""}</h4>
+      ${snippets.length
+        ? snippets.map((s) => `<div class="dc-snippet">
+            <span class="cap">${esc(s.title || "")}${s.page ? " · 第 " + esc(s.page) + " 页" : ""}
+              · ${esc(s.database || "")}</span>${esc(s.snippet)}</div>`).join("")
+        : `<p class="dc-empty">${esc((d.datasheet && d.datasheet[0] && d.datasheet[0].error) || "手册库里没有这个器件的片段。")}</p>`}
+      <p class="dc-empty" style="margin-top:10px">数据来自器件目录与 Milvus 手册库；缺失项如实标出，未作推断。</p>
+    </div>`;
+}
+
+async function showDeviceCard(anchor, deviceId) {
+  const card = document.getElementById("device-card");
+  card.innerHTML = '<div class="dc-body"><p class="dc-empty">正在读取器件参数…</p></div>';
+  positionCard(card, anchor);
+  try {
+    const res = await fetch(`/api/devices/${encodeURIComponent(deviceId)}`);
+    const data = await res.json();
+    if (!res.ok) {
+      card.innerHTML = `<div class="dc-body"><p class="dc-empty">${esc(data.error || "读取失败")}</p></div>`;
+    } else {
+      card.innerHTML = renderDeviceCard(data);
+      const close = card.querySelector(".dc-close");
+      if (close) close.onclick = closeDeviceCard;
+    }
+    positionCard(card, anchor);
+  } catch (err) {
+    card.innerHTML = `<div class="dc-body"><p class="dc-empty">读取失败：${esc(err)}</p></div>`;
+  }
+}
+
+document.addEventListener("click", (event) => {
+  const trigger = event.target.closest(".model-link");
+  if (trigger) {
+    event.preventDefault();
+    showDeviceCard(trigger, trigger.dataset.device);
+    return;
+  }
+  const card = document.getElementById("device-card");
+  if (card && !card.hidden && !card.contains(event.target)) closeDeviceCard();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") closeDeviceCard();
+});
+
+/** 可一键确认的项：已核对、首选结论是推荐或可接受。 */
+function eligibleCount() {
+  const items = (state.result && state.result.items) || [];
+  return items.filter((item) => {
+    if (item.unverified) return false;
+    const top = (item.candidates || [])[0];
+    if (!top) return false;
+    const fit = (top.evaluation || {}).fit;
+    if (fit !== "recommended" && fit !== "acceptable") return false;
+    const key = `${item.selection_item.id}::${top.model}`;
+    const recorded = (state.decisions || {})[key];
+    return !recorded || recorded.decision !== "confirmed";
+  }).length;
+}
+
+async function confirmRecommended() {
+  const btn = document.getElementById("btn-confirm-all");
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "确认中…";
+  }
+  try {
+    const res = await fetch("/api/decisions/confirm-recommended", { method: "POST" });
+    const data = await res.json();
+    if (data.error) {
+      pushMessage("bot", "一键确认失败：" + data.error);
+    } else {
+      const counts = data.counts || {};
+      const skip = (data.skipped || []).slice(0, 6)
+        .map((s) => `${s.item_id}：${s.reason}`).join("；");
+      pushMessage("bot",
+        `已一键确认 ${counts.confirmed || 0} 个推荐器件（共 ${counts.total || 0} 个选型项）。`
+        + (counts.skipped ? `\n跳过 ${counts.skipped} 项：${skip}` : "")
+        + "\n随时可以在任意一行改成「保留」或「排除」。");
+    }
+    await load();
+  } catch (err) {
+    pushMessage("bot", "一键确认失败：" + err);
+    if (btn) btn.disabled = false;
+  }
+}
 
 pushMessage("bot", "已连接真实器件库。你可以让我总结清单、解释某个候选为什么被推荐、改预算或改条件。所有结论都带出处，查不到的证据我会如实标成待补。");
 
@@ -830,5 +1024,6 @@ pushMessage("bot", "已连接真实器件库。你可以让我总结清单、解
   pushMessage("bot", "已从需求分析工作台跳转过来。确认交接件没问题后，按上方的「开始选型」执行。");
 })();
 </script>
+<div id="device-card" hidden></div>
 </body>
 </html>

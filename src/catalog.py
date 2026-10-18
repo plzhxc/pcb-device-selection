@@ -116,6 +116,19 @@ class DeviceCatalog:
         )
         return _row(rows[0]) if rows else None
 
+    def by_id(self, device_id: int) -> DeviceRow | None:
+        """按 device_id 取器件记录（界面点型号时用）。"""
+
+        try:
+            key = int(device_id)
+        except (TypeError, ValueError):
+            return None
+        rows = self.db.query(
+            f"SELECT {_COLUMNS} FROM {_SEARCH_VIEW} WHERE device_id = %s LIMIT 1",
+            (key,),
+        )
+        return _row(rows[0]) if rows else None
+
     def find_by_model(self, model: str, *, limit: int = 5) -> list[DeviceRow]:
         """按型号精确查身份，附带前缀兜底（型号常带后缀差异）。"""
 
