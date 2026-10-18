@@ -292,6 +292,7 @@
         <h2>交付与交接</h2>
         <p id="handoff-status">先在下面的清单里做决定，再导出。</p>
       </div>
+      <button id="btn-confirm-all" class="ghost" hidden>一键确认推荐</button>
       <button id="btn-candidates" class="ghost">查看最终候选清单</button>
       <button id="btn-handoff">导出下游交接文件</button>
     </section>
@@ -480,6 +481,20 @@ function render() {
     ? `已记录 ${decided.length} 条决定：已确认 ${selected.length} 个，保留待定 ${shortlisted.length} 个。`
       + "只有「已确认」的器件会导出给下游，「保留」只是进候选短名单。"
     : "还没有记录任何决定。点右边每行的按钮：保留＝进短名单继续比较，已确认＝最终选定（只有它会导出），待讨论＝有未知待补，排除＝不再考虑。";
+
+  // 「一键确认推荐」放在交付区，示例模式和项目模式都看得见
+  const confirmAll = document.getElementById("btn-confirm-all");
+  if (confirmAll) {
+    const count = eligibleCount();
+    const total = ((state.result && state.result.items) || []).length;
+    confirmAll.hidden = total === 0;
+    confirmAll.disabled = count === 0;
+    confirmAll.textContent = count ? `一键确认推荐 (${count})` : "一键确认推荐";
+    confirmAll.title = count
+      ? `确认 ${count} 个已核对、结论为推荐或可接受的项`
+      : "当前没有可一键确认的项：未核对、或有硬性条件未知，都需要人工判断";
+    confirmAll.onclick = () => confirmRecommended();
+  }
 }
 
 let activeExport = null;   // 记住当前展开的是哪一块，再点同一个按钮就收起
@@ -833,7 +848,6 @@ function renderRunbar() {
   } else if (status === "error") sub = entry.error || "处理出错";
 
   const canRun = status !== "waiting" && (entry.runnable ?? true);
-  const eligible = status === "ready" ? eligibleCount() : 0;
   bar.hidden = false;
   bar.innerHTML = `
     <div class="grow">
@@ -841,15 +855,12 @@ function renderRunbar() {
       <div class="rb-sub">${esc(sub)}</div>
     </div>
     <span class="state ${label[0]}">${esc(label[1])}</span>
-    ${eligible ? `<button class="ghost" id="btn-confirm-all" title="只确认已核对过、结论为推荐或可接受的项">一键确认推荐 (${eligible})</button>` : ""}
     ${status === "ready"
       ? `<button class="ghost" id="btn-run" ${running ? "disabled" : ""}>${running ? "执行中…" : "重新选型"}</button>`
       : `<button id="btn-run" ${canRun && !running ? "" : "disabled"}>${running ? "执行中…" : "开始选型"}</button>`}
   `;
   const button = document.getElementById("btn-run");
   if (button) button.onclick = () => runSelection(status === "ready");
-  const confirmButton = document.getElementById("btn-confirm-all");
-  if (confirmButton) confirmButton.onclick = () => confirmRecommended();
 }
 
 document.getElementById("chat-form").addEventListener("submit", (event) => {
