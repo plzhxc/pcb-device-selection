@@ -42,6 +42,16 @@ class SendMessage(Body):
     after_run_id: str | None = Field(default=None,max_length=64)
     actions: list['DomainAction'] = Field(default_factory=list,max_length=10)
 
+class ReferenceUpload(Body):
+    filename:str=Field(min_length=1,max_length=180)
+    content_base64:str=Field(min_length=1,max_length=2800000)
+    request_id:str=Field(min_length=1,max_length=80)
+
+class AdoptReference(Body):
+    source_id:str=Field(min_length=1,max_length=64)
+    base_version:int=Field(ge=0)
+    request_id:str=Field(min_length=1,max_length=80)
+
 
 class DomainAction(Body):
     operation: Literal['set_intent','select_identity','remove_reference','add_reference']
@@ -233,6 +243,40 @@ def create_app(data_dir: Path | None = None, knowledge_provider=None):
     async def remove_queued(project_id: str,queue_id: str):
         store.remove_queued(project_id,queue_id)
         return store.get_project(project_id)
+
+    @app.post('/api/projects/{project_id}/reference-designs',status_code=202)
+    async def attach_reference(project_id:str,body:ReferenceUpload):
+        from .reference_design import parse_reference,reference_message
+        try:source=await asyncio.to_thread(parse_reference,body.filename,body.content_base64)
+        except ValueError as exc:raise HTTPException(422,str(exc)) from exc
+        text=reference_message(source)
+        run,created,queued=store.submit_message(project_id,text,'attach:'+source['id'],actions=[{'operation':'attach_reference','source':source}])
+        if run:runner.start(run['id'])
+        return store.get_project(project_id)
+
+    @app.post('/api/projects/{project_id}/reference-designs/adopt',status_code=202)
+    async def adopt_reference(project_id:str,body:AdoptReference):
+        from .reference_design import bom_view
+        p=store.get_project(project_id)
+        if p['document']['version']!=body.base_version:raise Conflict('方案已更新，请查看当前核心器件清单后采用。')
+        rows=[r for r in bom_view(p['document'])['rows'] if r['source_id']==body.source_id and r['core'] and r['status']=='proposed']
+        if not rows:raise Conflict('没有等待采用的参考核心器件方案。')
+        text='[采用参考核心器件方案]\n采用已展示且关联本版功能的以下器件为优先方案；保留工程适用性核验：\n'+'\n'.join('- '+','.join(r['designators'])+'：'+r['model']+'；参考观测数量 '+str(r['observed_quantity']) for r in rows)+'\n未展示或不适用的参考部分不因此纳入本版；外围参数和最终生产BOM由工程核验。'
+        run,created,queued=store.submit_message(project_id,text,body.request_id,actions=[{'operation':'adopt_reference_core','source_id':body.source_id,'base_version':body.base_version}])
+        if run:runner.start(run['id'])
+        return store.get_project(project_id)
+
+    @app.get('/api/projects/{project_id}/reference-bom.csv')
+    async def download_reference_bom(project_id:str):
+        from .reference_design import bom_view,bom_csv
+        return Response(bom_csv(bom_view(store.get_project(project_id)['document'])['rows']),media_type='text/csv; charset=utf-8',headers={'Content-Disposition':'attachment; filename="reference-and-current-bom.csv"'})
+
+    @app.get('/api/projects/{project_id}/reference-designs/{source_id}')
+    async def download_reference_source(project_id:str,source_id:str):
+        import base64
+        source=next((s for s in store.get_project(project_id)['document'].get('reference_designs',[]) if s['id']==source_id),None)
+        if not source:raise Missing('参考资料不存在。')
+        return Response(base64.b64decode(source['original_content_base64']),media_type='application/octet-stream',headers={'Content-Disposition':"attachment; filename*=UTF-8''"+quote(source['filename'])})
 
     @app.post("/api/projects/{project_id}/queue/resume",status_code=202)
     async def resume_queued(project_id: str):

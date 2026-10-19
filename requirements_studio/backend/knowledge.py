@@ -46,7 +46,8 @@ def mentions(text):
     result = []
     for match in PART.finditer(text):
         token = match.group().rstrip('/.+-')
-        if len(token) < 4 or not any(x.isdigit() for x in token) or NON_PARTS.fullmatch(token) or INTERNAL_ID.fullmatch(token):
+        if (len(token) < 4 or not any(x.isdigit() for x in token) or NON_PARTS.fullmatch(token) or INTERNAL_ID.fullmatch(token)
+                or re.fullmatch(r'(?:ISO14443[A-B]?(?:/[AB])?|ISO18092|NTAG21x|S50/S70/Ultralight/Desfire)',token,re.I)):
             continue
         if token not in result:
             result.append(token)
@@ -255,10 +256,27 @@ class Catalog:
         raw_items=[self._public_identity(r) for r in rows]+[self._public_identity(r,True) for r in manual_rows]
         has_more=len(raw_items)>limit
         items=raw_items[:limit]
+        # Read distinguishing identity columns for the whole page, rather than
+        # asking the customer to guess between identical-looking records.
+        page_ids=[int(i['record_id']) for i in items if i['origin']=='published']
+        if page_ids:
+            marks=','.join('%s' for _ in page_ids)
+            try:
+                with self.connection(source=True) as conn:
+                    sources=self.query(conn,f'SELECT device_id,device_name,supplier_part FROM devices WHERE device_id IN ({marks})',tuple(page_ids))
+                with self.connection() as conn:
+                    packages=self.query(conn,f"SELECT device_id,field_value_text FROM {ATTRS} WHERE device_id IN ({marks}) AND field_key IN ('package','encapsulation_specification') AND is_missing=0 ORDER BY priority_rank LIMIT 80",tuple(page_ids))
+                by_id={str(s.get('device_id')):s for s in sources}
+                for item in items:
+                    source=by_id.get(item['record_id'],{})
+                    if source and normalize(source.get('device_name',''))==normalize(item['model']):
+                        item['supplier_part']=source.get('supplier_part') or item['supplier_part']
+                    item['package']=next((p.get('field_value_text') or '' for p in packages if str(p.get('device_id'))==item['record_id']),item['package'])
+            except KnowledgeUnavailable:warning='部分采购号或封装暂不可核对；保留来源记录，不自动合并身份。'
         # A verified identical supplier identity may have two source records. Preserve both locators.
         dedup = {}
         for item in items:
-            identity = (item['model'], item['manufacturer'], item['supplier_part']) if item['supplier_part'] and item['manufacturer'] else (item['device_key'],)
+            identity = (item['model'], item['manufacturer'], item['supplier_part'],item.get('checksum'),item.get('build_id')) if item['supplier_part'] and item['manufacturer'] else (item['device_key'],)
             if identity in dedup:
                 dedup[identity].setdefault('alternate_records', []).append(item['device_key'])
             else: dedup[identity] = item
@@ -400,6 +418,11 @@ class Catalog:
             device = self.device(reference['device_key'])
             return {'status': 'matched', 'match_mode': 'user_identity', 'items': [device['identity']],
                     'device': device, 'checked_at': now()}
+        if SUPPLIER.fullmatch(reference.get('reference_supplier_part','')):
+            from .reference_design import model_name
+            suggested=self.search(reference['reference_supplier_part'],mode='exact')
+            if suggested['status']=='matched' and normalize(model_name(suggested['items'][0]['model']))==normalize(model_name(reference['mention'])):
+                return {**suggested,'device':self.device(suggested['items'][0]['device_key']),'match_mode':'reference_supplier_exact'}
         found = self.search(reference['mention'], mode='exact' if reference['identity_scope'] == 'exact_part' else 'auto')
         if found['status'] == 'matched' and reference['identity_scope'] != 'family':
             found = {**found, 'device': self.device(found['items'][0]['device_key'])}

@@ -693,19 +693,23 @@ python3 tools/bridge_studio.py run --project <project_id>
 `candidate-set.json`（候选清单）、`decisions.json`（用户决定）、`meta.json`（状态）。
 再打开同一个项目直接读缓存；换版本时点「重新选型」。
 
-### 15.3 从工作台跳过来
+### 15.3 在工作台里使用
 
-我的界面支持 `?project=<项目编号>`：带这个参数打开，会自动载入该项目（仍然不自动
-跑选型）。
-
-反向的入口也做好了——**在拷贝过来的工作台前端里加了「器件选型 ↗」按钮**，
-位置在顶栏「导出」右边，点击打开 `http://<主机名>:8899/?project=<项目编号>`。
+选型页已经并入需求分析工作台，和「需求说明书 / 收敛路径 / 模块方案」并列成
+第四个标签页。切换过去时地址是
+`http://<主机名>:8899/?project=<项目编号>&embed=1`，选型页会隐藏自己的项目栏
+和对话栏，只保留正文。
 
 | 项 | 内容 |
 | --- | --- |
-| 改动位置 | `frontend/src/App.tsx` 顶栏，新增一个 `<a>` 与两个图标 import（约 334 字符） |
-| 构建 | 本机 Node 16 太旧，Vite 6 报 `crypto.getRandomValues is not a function`；加了 3 行 `frontend/crypto-shim.cjs` 绕过 |
-| 预览 | `http://127.0.0.1:8901/`（跑的是我改过的副本，与 chenxin 在用的 8878 完全隔离） |
+| 工作台改动 | `frontend/src/App.tsx` 增加 `selection` 标签与 iframe；`styles.css` 增加嵌入尺寸 |
+| 选型页改动 | `web/static/index.html` 支持 `embed=1`；窄画布下候选表自动折成卡片 |
+| 需求回填 | `src/supplement.py` + `GET /api/supplements` + `POST /api/supplements/apply` |
+| 构建 | Node < 18 需要 `NODE_OPTIONS=--require=./crypto-shim.cjs npm run build` |
 
-**待 chenxin 确认两点**：按钮要不要保留、放哪；端口 `8899` 要不要改成配置项。
-另外 `crypto-shim.cjs` 只是本机 Node 16 的绕行方案，新版 Node 上构建不需要它。
+回填只写 `tbd` / 空值需求，且要求器件参数有确定值；写入状态是 `suggested`，
+需要在需求说明书里人工确认。接口数量、统计口径这类不能由单颗器件确定的条目
+会在界面上列为“暂时不能自动回填”，不会被猜测值覆盖。
+
+「交付与交接」里的「自动选型并导出」保留原来的快捷流程：取最新交接件 →
+选型 → 全部确认（有问题的项标注）→ 生成并下载 `generation-input.json`。

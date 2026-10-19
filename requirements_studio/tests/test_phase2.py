@@ -208,13 +208,13 @@ class Phase2Tests(unittest.TestCase):
         self.assertEqual(after['field_resolutions'][0]['state'],'confirmed')
         self.assertEqual(len(after['requirements']),1)
 
-    def test_unlinked_confirmed_boundary_is_rechecked_after_a_requirement_change(self):
+    def test_unlinked_explicit_boundary_survives_an_unrelated_requirement_change(self):
         fid='V3-1.3:F07';self.doc['convergence_version']=2
         self.doc['field_resolutions']=[dict(field_id=fid,state='confirmed',conclusion='无日期约束',requirement_ids=[],source_message_id='owner',source_quote=self.text)]
         update={k:self.doc['requirements'][0][k] for k in ['id','category','name','value','unit','priority','state','source_message_id','source_quote']};update['value']='新目标'
         after=apply_analysis(self.doc,response(updates=[update]),self.messages,'owner')
-        self.assertIn(fid,after['recheck_fields']);self.assertEqual(after['field_resolutions'][0]['state'],'tbd')
-        self.assertEqual(after['field_resolutions'][0]['recheck_evidence']['source_message_id'],'owner')
+        self.assertNotIn(fid,after['recheck_fields']);self.assertEqual(after['field_resolutions'][0]['state'],'confirmed')
+        self.assertEqual(after['field_resolutions'][0]['source_message_id'],'owner')
         self.assertIn('owner',source_message_ids(after))
 
     def test_empty_workflow_delta_does_not_erase_the_existing_product_flow(self):

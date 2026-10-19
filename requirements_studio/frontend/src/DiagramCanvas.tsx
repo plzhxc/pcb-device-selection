@@ -51,7 +51,9 @@ function connection(a: PlacedNode, b: PlacedNode, horizontalOnly = false) {
 export function DiagramCanvas({ graph, title, storageKey, tabs, onDiscuss, onToggle }: {
   graph: DiagramGraph; title: string; storageKey: string; tabs?: ReactNode; onDiscuss?: (id: string) => void; onToggle?: (id: string) => void;
 }) {
-  const serialized = JSON.stringify(graph);
+  const [size, setSize] = useState({ width: 640, height: 460 });
+  const compactLayout=graph.layout==='directed'&&!graph.direction&&graph.nodes.length<=8;
+  const serialized = JSON.stringify(compactLayout?{...graph,direction:size.width<840?'TB':'LR'}:graph);
   const [fontsReady, setFontsReady] = useState(false);
   useEffect(() => { let alive = true; void document.fonts.ready.then(() => { if (alive) setFontsReady(true); }); return () => { alive = false; }; }, []);
   const placed = useMemo(() => placeGraph(JSON.parse(serialized) as DiagramGraph), [serialized, fontsReady]);
@@ -63,7 +65,6 @@ export function DiagramCanvas({ graph, title, storageKey, tabs, onDiscuss, onTog
   const selected = selectedId ? byId.get(selectedId) : undefined;
   const [expanded, setExpanded] = useState(false), [dragging, setDragging] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null), viewport = useRef<HTMLDivElement>(null);
-  const [size, setSize] = useState({ width: 640, height: 460 });
   const [camera, setCamera] = useState<Camera>({ x: 0, y: 0, scale: 1 });
   const cameraRef = useRef(camera); cameraRef.current = camera;
   const pointers = useRef(new Map<number, Point>()), gesture = useRef<Gesture | null>(null);
@@ -92,7 +93,7 @@ export function DiagramCanvas({ graph, title, storageKey, tabs, onDiscuss, onTog
   useLayoutEffect(() => {
     // Polling the same document must not reset a user's camera or node layout.
     const signature = serialized + ':' + fontsReady + ':' + expanded + ':' + size.width + ':' + size.height;
-    if (initialized.current !== signature && size.width > 0 && size.height > 0) { initialized.current = signature; fit(false, true); }
+    if (initialized.current !== signature && size.width > 0 && size.height > 0) { initialized.current = signature; fit(false, nodes.length>8); }
   }, [serialized, fontsReady, expanded, size.width, size.height]);
   useEffect(() => {
     if (!expanded) return;

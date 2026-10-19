@@ -6,28 +6,36 @@
 <title>器件选型 · AI 辅助</title>
 <style>
   :root {
-    --bg: #f5f6f8;
+    --bg: #f6f7f4;
     --panel: #ffffff;
-    --line: #e3e6ec;
-    --line-strong: #cdd3dd;
-    --text: #1c2230;
-    --muted: #6b7488;
-    --accent: #2f6df6;
+    --line: #e9ece6;
+    --line-strong: #dde2da;
+    --text: #303630;
+    --muted: #8b918a;
+    --accent: #2f624b;
+    --accent-dark: #244b3c;
     --ok: #17864a;
-    --ok-bg: #e8f6ee;
-    --bad: #c0392b;
-    --bad-bg: #fdecea;
+    --ok-bg: #edf4ee;
+    --bad: #a3402f;
+    --bad-bg: #fdeeeb;
     --warn: #9a6700;
     --warn-bg: #fdf4e0;
-    --chip: #eef1f7;
+    --chip: #f2f4ef;
   }
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    font: 14px/1.55 -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font: 13px/1.7 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
     color: var(--text);
     background: var(--bg);
   }
+
+  /* 嵌入工作台时：外层的项目栏与对话已存在，这里只保留选型正文 */
+  body.embed header { display: none; }
+  body.embed main { grid-template-columns: minmax(0, 1fr); padding: 0; gap: 0; }
+  body.embed #projects, body.embed #chat { display: none; }
+  body.embed .panel { border-radius: 0; border-left: 0; border-right: 0; }
+  body.embed .runbar { margin-bottom: 0; border-top: 0; }
   header {
     display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
     padding: 12px 20px; background: var(--panel); border-bottom: 1px solid var(--line);
@@ -64,8 +72,8 @@
     padding: 7px 12px 7px 20px; cursor: pointer; border-left: 3px solid transparent;
     display: block; text-decoration: none; color: inherit;
   }
-  .pitem:hover { background: #f4f7ff; }
-  .pitem.active { background: #eaf1ff; border-left-color: var(--accent); }
+  .pitem:hover { background: #f4f7f1; }
+  .pitem.active { background: #eaf1ec; border-left-color: var(--accent); }
   .pitem .t { font-size: 13px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .pitem .m { font-size: 11px; color: var(--muted); display: block; margin-top: 1px; }
   .pitem .m .ok { color: var(--ok); }
@@ -89,11 +97,67 @@
   .runbar .state.warn { background: var(--warn-bg); color: var(--warn); }
   .runbar .state.bad { background: var(--bad-bg); color: var(--bad); }
 
+  /* 需求补充建议 */
+  .supplement { margin-bottom: 14px; padding: 12px 14px; }
+  .sup-head { display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+  .sup-head h2 { font-size: 13px; margin: 0; display: flex; align-items: center; gap: 8px; }
+  .sup-head h2 small { color: var(--muted); font-weight: 400; }
+  .sup-head p { margin: 3px 0 0; font-size: 12px; }
+  .sup-head button {
+    margin-left: auto; font: inherit; font-size: 12px; padding: 7px 12px;
+    border-radius: 7px; border: 1px solid var(--accent); background: var(--accent);
+    color: #fff; cursor: pointer; white-space: nowrap;
+  }
+  #sup-list { margin-top: 10px; display: grid; gap: 6px; }
+  .sup-row {
+    display: flex; align-items: center; gap: 10px; padding: 7px 10px;
+    border: 1px solid var(--line); border-radius: 8px; background: #fbfcfa; cursor: pointer;
+  }
+  .sup-row:hover { border-color: var(--line-strong); background: #f7f9f5; }
+  .sup-row input { margin: 0; accent-color: var(--accent); }
+  .sup-main { display: flex; flex-direction: column; min-width: 0; }
+  .sup-main b { font-weight: 500; }
+  .sup-main .muted { font-size: 11px; }
+  .sup-value { margin-left: auto; font-weight: 500; color: var(--accent-dark); white-space: nowrap; }
+  .sup-src { font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .sup-pending {
+    margin-top: 8px; padding: 9px 11px; border: 1px dashed var(--line-strong);
+    border-radius: 8px; background: #fffdf7; font-size: 12px; color: var(--muted);
+  }
+  .sup-pending b { display: block; color: var(--text); font-weight: 500; margin-bottom: 3px; }
+  .sup-pending ul { margin: 6px 0 0; padding-left: 18px; }
+  .sup-pending li { margin: 2px 0; }
+
+  /* 嵌在工作台右侧时宽度较窄，把候选表折成卡片，避免关键列被挤出屏幕 */
+  @media (max-width: 980px) {
+    .table-wrap { overflow: visible; }
+    .table-wrap table { min-width: 0; display: block; }
+    .table-wrap thead { display: none; }
+    .table-wrap tbody { display: block; }
+    .cand-row {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 4px 16px; padding: 12px 14px; border-bottom: 1px solid var(--line);
+    }
+    .cand-row td { display: block; padding: 3px 0; border: 0; }
+    .cand-row td::before {
+      content: attr(data-label); display: block; margin-bottom: 2px;
+      font-size: 11px; color: var(--muted);
+    }
+    .cand-row td.model { grid-column: 1 / -1; }
+    .cand-row td.model::before { display: none; }
+    .cand-row td:nth-child(4) { grid-column: 1 / -1; }
+    .cand-row td:nth-child(7) { grid-column: 1 / -1; padding-top: 8px; }
+    .cand-row .actions { flex-wrap: nowrap; }
+    .cand-row .actions button { flex: 1; padding: 5px 6px; }
+    .cand-detail, .cand-detail td { display: block; padding: 0; border: 0; }
+    .cand-detail details { border-top: 0; }
+  }
+
   /* 可点击的器件型号 */
   .model-link {
     font: inherit; font-weight: 600; color: var(--accent); background: none;
     border: 0; padding: 0; cursor: pointer; text-align: left;
-    border-bottom: 1px dashed transparent;
+    border-bottom: 1px dashed transparent; white-space: nowrap;
   }
   .model-link:hover { border-bottom-color: var(--accent); }
 
@@ -187,10 +251,12 @@
   .badge.warn { background: var(--warn-bg); color: var(--warn); }
   .badge.mute { background: var(--chip); color: var(--muted); }
 
+  .table-wrap { width: 100%; overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  @media (min-width: 981px) { .table-wrap table { min-width: 860px; } }
   th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
-  th { color: var(--muted); font-weight: 500; font-size: 12px; background: #fafbfd; }
-  tbody tr:hover { background: #f8faff; }
+  th { color: var(--muted); font-weight: 500; font-size: 12px; background: #fafbf7; }
+  tbody tr:hover { background: #f8faf5; }
   td.model { font-weight: 600; white-space: nowrap; }
   td.model small { display: block; color: var(--muted); font-weight: 400; }
   ul.tight { margin: 0; padding-left: 16px; }
@@ -225,7 +291,7 @@
     color: #fff; border-radius: 8px; padding: 7px 14px; cursor: pointer; white-space: nowrap;
   }
   .handoff button.ghost { background: #fff; color: var(--accent); }
-  .handoff button.on { background: #1b4fd0; border-color: #1b4fd0; color: #fff; }
+  .handoff button.on { background: var(--accent-dark); border-color: var(--accent-dark); color: #fff; }
   .handoff button:disabled { opacity: .5; cursor: not-allowed; }
   .out { margin-bottom: 14px; padding: 14px; }
   .out[hidden] { display: none; }
@@ -287,11 +353,22 @@
 
   <div>
     <section class="panel runbar" id="runbar" hidden></section>
+    <section class="panel supplement" id="supplement-panel" hidden>
+      <div class="sup-head">
+        <div>
+          <h2>需求补充建议 <small>选完后已经能确定的条目</small></h2>
+          <p id="sup-note" class="muted"></p>
+        </div>
+        <button id="btn-sup-apply">采纳选中项</button>
+      </div>
+      <div id="sup-list"></div>
+    </section>
     <section class="panel handoff">
       <div class="grow">
         <h2>交付与交接</h2>
         <p id="handoff-status">先在下面的清单里做决定，再导出。</p>
       </div>
+      <button id="btn-auto-export" class="ghost">自动选型并导出</button>
       <button id="btn-confirm-all" class="ghost" hidden>一键确认推荐</button>
       <button id="btn-candidates" class="ghost">查看最终候选清单</button>
       <button id="btn-handoff">导出下游交接文件</button>
@@ -373,21 +450,21 @@ function candidateRow(item, c) {
       </div>
     </details>`;
 
-  return `<tr>
+  return `<tr class="cand-row">
     <td class="model"><button type="button" class="model-link"
         data-device="${esc(c.device_id)}" data-model="${esc(c.model)}"
         title="查看该器件的手册参数">${esc(c.model)}</button>
       <small>${esc(c.manufacturer || "厂商未记录")}</small></td>
-    <td>${keyParams ? '<ul class="tight">' + keyParams + "</ul>" : '<span class="muted">—</span>'}</td>
-    <td>${pros}</td>
-    <td>${consHtml}</td>
-    <td>${costCell(c)}</td>
-    <td><span class="badge ${fitClass[ev.fit]}">${fitLabel[ev.fit]}</span>
+    <td data-label="关键参数">${keyParams ? '<ul class="tight">' + keyParams + "</ul>" : '<span class="muted">—</span>'}</td>
+    <td data-label="优势">${pros}</td>
+    <td data-label="劣势与风险">${consHtml}</td>
+    <td data-label="成本">${costCell(c)}</td>
+    <td data-label="结论"><span class="badge ${fitClass[ev.fit]}">${fitLabel[ev.fit]}</span>
         <small class="muted">证据 ${Math.round(ev.confidence * 100)}%</small>
         ${record.needs_review ? `<small class="warn-text" title="自动确认时记录的待复核项">⚠ 需复核</small>` : ""}</td>
-    <td><div class="actions">${buttons}</div></td>
+    <td data-label="你的决定"><div class="actions">${buttons}</div></td>
   </tr>
-  <tr><td colspan="7" style="padding:0">${detail}</td></tr>`;
+  <tr class="cand-detail"><td colspan="7" style="padding:0">${detail}</td></tr>`;
 }
 
 function itemBlock(item) {
@@ -400,14 +477,14 @@ function itemBlock(item) {
         : `<span class="badge ok">有推荐</span>`)
     : `<span class="badge bad">阻塞</span>`;
   const body = visible.length
-    ? `<table>
+    ? `<div class="table-wrap"><table>
         <thead><tr>
           <th style="width:15%">器件型号</th><th style="width:22%">关键参数</th>
           <th style="width:19%">优势</th><th style="width:22%">劣势与风险</th>
           <th style="width:9%">成本</th><th style="width:9%">结论</th><th style="width:12%">你的决定</th>
         </tr></thead>
         <tbody>${visible.map((c) => candidateRow(item, c)).join("")}</tbody>
-      </table>`
+      </table></div>`
     : `<div class="blocked">${(item.blocked_by || ["没有可用候选"]).map(esc).join("<br>")}</div>`;
 
   const excludedHtml = excluded.length
@@ -676,6 +753,91 @@ async function load() {
   renderProjects();
   renderRunbar();
   render();
+  loadSupplements();
+}
+
+/* ---------------- 需求补充建议 ---------------- */
+
+async function loadSupplements() {
+  const panel = document.getElementById("supplement-panel");
+  if (!workspace.current) {
+    panel.hidden = true;
+    return;
+  }
+  try {
+    const res = await fetch(
+      `/api/supplements?project=${encodeURIComponent(workspace.current)}`
+    );
+    const data = await res.json();
+    const list = data.proposals || [];
+    const pending = data.pending || [];
+    if (!list.length && !pending.length) {
+      panel.hidden = true;
+      return;
+    }
+    panel.hidden = false;
+    document.getElementById("sup-note").textContent = data.note || "";
+    const button = document.getElementById("btn-sup-apply");
+    if (button) {
+      button.hidden = !list.length;
+      button.disabled = !list.length;
+    }
+    document.getElementById("sup-list").innerHTML = list.map((p) => `
+      <label class="sup-row">
+        <input type="checkbox" checked data-key="${esc(p.key)}">
+        <span class="sup-main">
+          <b>${esc(p.requirement_name)}</b>
+          <span class="muted">${esc(p.requirement_id)} · 当前 ${esc(p.current_value)}</span>
+        </span>
+        <span class="sup-value">→ ${esc(p.proposed_value)}${p.unit && !String(p.proposed_value).toLowerCase().includes(String(p.unit).toLowerCase()) ? " " + esc(p.unit) : ""}</span>
+        <span class="sup-src">来自 ${esc(p.model)}</span>
+      </label>`).join("") + (pending.length ? `
+      <div class="sup-pending">
+        <b>这些条目暂时不能自动回填</b>
+        <span>需要人工确认，系统不会用猜测值覆盖原需求。</span>
+        <ul>${pending.map((p) => `<li>${esc(p.id)} · ${esc(p.name)}：${esc(p.current_value)}</li>`).join("")}</ul>
+      </div>` : "");
+  } catch (err) {
+    panel.hidden = true;
+  }
+}
+
+async function applySupplements() {
+  const keys = [...document.querySelectorAll("#sup-list input:checked")]
+    .map((el) => el.dataset.key);
+  if (!keys.length) {
+    pushMessage("bot", "没有选中任何一条建议。");
+    return;
+  }
+  const button = document.getElementById("btn-sup-apply");
+  if (button) { button.disabled = true; button.textContent = "写回中…"; }
+  try {
+    const res = await fetch("/api/supplements/apply", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ keys, project_id: workspace.current }),
+    });
+    const data = await res.json();
+    if (data.error) {
+      pushMessage("bot", "回填失败：" + data.error);
+    } else {
+      pushMessage("bot",
+        `已把 ${data.counts.applied} 条建议写回需求说明书（状态为「建议」，需要你在说明书里最终确认）。`
+        + (data.counts.failed ? `\n有 ${data.counts.failed} 条没写成功。` : ""));
+      // 嵌入工作台时，通知外层立即刷新需求说明书，不必等轮询。
+      if (window.parent !== window) {
+        window.parent.postMessage(
+          { type: "pcb-selection:requirements-updated", projectId: workspace.current },
+          "*"
+        );
+      }
+    }
+    await loadSupplements();
+  } catch (err) {
+    pushMessage("bot", "回填失败：" + err);
+  } finally {
+    if (button) { button.disabled = false; button.textContent = "采纳选中项"; }
+  }
 }
 
 /** 项目列表：按「已处理 / 未处理」分组，组本身可折叠。 */
@@ -876,6 +1038,8 @@ document.querySelectorAll("#hints button").forEach((btn) => {
 });
 document.getElementById("btn-handoff").addEventListener("click", () => showExport("handoff"));
 document.getElementById("btn-candidates").addEventListener("click", () => showExport("candidates"));
+document.getElementById("btn-auto-export").addEventListener("click", () => autoExport());
+document.getElementById("btn-sup-apply").addEventListener("click", () => applySupplements());
 
 /* ---------------- 器件详情浮窗 ---------------- */
 
@@ -1021,11 +1185,61 @@ async function confirmRecommended() {
   }
 }
 
+/** 一次做完：取最新交接件 → 选型 → 全部确认 → 生成下游输入。 */
+async function autoExport() {
+  const btn = document.getElementById("btn-auto-export");
+  const out = document.getElementById("handoff-out");
+  if (!workspace.current) {
+    pushMessage("bot", "请先在工作台打开一个项目，再使用自动选型导出。");
+    return;
+  }
+  if (btn) { btn.disabled = true; btn.textContent = "处理中…"; }
+  out.hidden = false;
+  out.innerHTML = '<p class="exp-note">正在取最新交接件、执行选型并确认全部候选…</p>';
+  try {
+    const res = await fetch("/api/projects/auto-export", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ project_id: workspace.current }),
+    });
+    const data = await res.json();
+    if (!data.download) {
+      out.innerHTML = `<div class="verdict-line bad"><span class="dot"></span>
+        <b>没有导出成功</b></div><p class="muted">${esc(data.error || data.status || "未知原因")}</p>`;
+      return;
+    }
+    const c = data.counts || {};
+    const flagged = (data.flagged || []).slice(0, 8)
+      .map((f) => `<li>${esc(f.item_id)}：${esc(f.issue)}</li>`).join("");
+    out.innerHTML = `<div class="verdict-line ${data.validation === "passed" ? "ok" : "bad"}">
+        <span class="dot"></span><b>已生成下游输入</b></div>
+      <div class="kpis">
+        <span class="kpi">确认<b>${c.confirmed || 0}</b></span>
+        <span class="kpi">需复核<b>${c.flagged || 0}</b></span>
+        <span class="kpi">跳过<b>${c.skipped || 0}</b></span>
+        <span class="kpi">模块<b>${data.modules || 0}</b></span>
+      </div>
+      ${flagged ? `<p class="warn-text">以下项已选上并标注问题，请人工复核：</p><ul class="tight">${flagged}</ul>` : ""}
+      ${data.validation !== "passed" ? `<p class="bad-text">下游契约校验未通过：${esc(data.validation_error || "未给出原因")}</p>` : ""}
+      <p><a class="button" href="${esc(data.download)}" download>下载 generation-input.json</a></p>`;
+    pushMessage("bot", `自动选型完成：确认 ${c.confirmed || 0} 项，导出 ${data.modules || 0} 个模块。`
+      + (c.flagged ? `其中 ${c.flagged} 项需复核，已在界面标注。` : ""));
+    await openProject(workspace.current);
+  } catch (err) {
+    out.innerHTML = `<div class="verdict-line bad"><span class="dot"></span><b>自动导出失败</b></div>
+      <p class="muted">${esc(String(err))}</p>`;
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = "自动选型并导出"; }
+  }
+}
+
 pushMessage("bot", "已连接真实器件库。你可以让我总结清单、解释某个候选为什么被推荐、改预算或改条件。所有结论都带出处，查不到的证据我会如实标成待补。");
 
 /** 从工作台点「器件选型」跳过来时带 ?project=<id>，直接载入该项目（不自动跑选型）。 */
 (async function bootstrap() {
-  const wanted = new URLSearchParams(location.search).get("project");
+  const params = new URLSearchParams(location.search);
+  if (params.get("embed")) document.body.classList.add("embed");
+  const wanted = params.get("project");
   await load();
   if (!wanted) return;
   const known = (workspace.projects || []).some((p) => p.project_id === wanted);

@@ -91,6 +91,43 @@ class StudioClient:
             "GET", f"/api/projects/{project_id}/handoff/{artifact_id}", raw=True
         )
 
+    def patch_requirement(
+        self,
+        project_id: str,
+        *,
+        base_version: int,
+        requirement_id: str,
+        name: str,
+        value: str,
+        unit: str,
+        category: str,
+        priority: str,
+        state: str,
+        implementation: str = "hardware",
+    ) -> dict:
+        """调用工作台自己的需求编辑接口。
+
+        工作台会据此新建一版文档、留下"手动编辑"的记录，并把改动同步到说明书。
+        选型阶段不改需求内容本身，只提交**建议值**（state=suggested），
+        等用户在说明书里确认。
+        """
+
+        return self._call(
+            "PATCH",
+            f"/api/projects/{project_id}/requirements",
+            {
+                "base_version": int(base_version),
+                "id": str(requirement_id),
+                "category": category,
+                "name": name,
+                "value": value,
+                "unit": unit,
+                "priority": priority,
+                "state": state,
+                "implementation": implementation,
+            },
+        )
+
 
 def fetch_spec(
     client: StudioClient, project_id: str, out_dir: Path | None = None

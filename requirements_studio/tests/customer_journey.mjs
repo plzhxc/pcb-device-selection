@@ -27,7 +27,7 @@ let index;try{index=JSON.parse(await fs.readFile(indexFile,'utf8'));}catch{index
 let entry=index.cases.find(e=>e.key===key),page;
 const bridge=JSON.parse(await fs.readFile(path.join(root,'.runtime/phase3/browser-bridge.json'),'utf8'));
 const require=createRequire(path.join(root,'frontend/package.json'));
-const browser=await require('puppeteer-core').connect({browserWSEndpoint:bridge.ws});
+const browser=await require('puppeteer-core').connect({browserWSEndpoint:bridge.ws,defaultViewport:null});
 const context=await browser.createBrowserContext();const errors=[];
 async function save(){
  const lock=indexFile+'.lock';let handle;
@@ -50,10 +50,10 @@ async function capture(){
  entry.user_turns=p.messages.filter(m=>m.role==='user').length;
  entry.status=p.review.status==='approved'?'approved':p.latest_run?.status==='failed'?'run_failed':['queued','running'].includes(p.latest_run?.status)||p.input_queue.length?'analyzing':'needs_review';
  entry.browser_errors=[...new Set([...(entry.browser_errors??[]),...errors])];entry.updated_at=new Date().toISOString();await save();
- if(request.screenshot){await page.screenshot({path:path.join(dir,key+'-'+request.screenshot+'.webp'),type:'webp',quality:87});}
+ if(request.screenshot){await page.bringToFront();await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));await page.screenshot({path:path.join(dir,key+'-'+request.screenshot+'.webp'),type:'webp',quality:87});}
  const v=p.convergence?.product_review;
  return {key,project_id:p.id,url:base+'/?project='+p.id,version:p.document.version,run:p.latest_run&&{id:p.latest_run.id,status:p.latest_run.status,error:p.latest_run.error},queue:p.input_queue.length,domain_jobs:p.domain?.active_jobs,
-  review:p.review.status,decision_pending:v?.decision_pending,module_pending:p.convergence?.module_pending,issues:p.convergence?.issues,
+  review:p.review.status,decision_pending:v?.decision_pending,internal_rechecks:p.review.internal_rechecks,dependency_reviews:p.review.dependency_reviews,module_pending:p.convergence?.module_pending,issues:p.convergence?.issues,
   questions:p.document.questions.map(q=>({id:q.id,question:q.question,options:q.options,why:q.why,decision_key:q.decision_key})),
   modules:request.include_modules?p.convergence?.modules?.filter(m=>m.state!=='not_applicable').map(m=>({name:m.name,type:m.type_name,state:m.state,quantity:m.quantity,purpose:m.purpose})):undefined,
   reply:p.messages.filter(m=>m.role==='assistant').slice(-2).map(m=>m.content),user_turns:entry.user_turns,browser_errors:entry.browser_errors};
@@ -96,7 +96,7 @@ try{
   if(request.action==='send')await send(request.text);
   else if(request.action==='discuss_module'){
    const p=await project(),m=p.convergence.modules.find(m=>m.id===request.module_id);assert.ok(m,'Unknown module');
-   await page.$eval('.canvas-tabs [role="tab"]:nth-child(5)',e=>e.click());
+   await page.$$eval('.canvas-tabs [role="tab"]',nodes=>nodes.find(e=>e.textContent.includes('模块方案')).click());
    const card=`.module-instance[data-module-id="${m.id}"]`;
    await page.waitForSelector(card);
    await page.$eval(card,e=>{const button=[...e.querySelectorAll('button')].find(b=>b.textContent.includes('继续讨论'));if(!button)throw Error('Module discussion button missing');button.click();});
@@ -105,15 +105,44 @@ try{
    entry.actions.push({kind:'module_discussion_button',module_id:m.id,module_name:m.name,prefilled_text:text,at:new Date().toISOString()});await save();
    await send(text+(request.text?'\n\n'+request.text:''));
   }
+  else if(request.action==='upload_reference'){
+   const file=await fs.realpath(request.path);assert.ok(file.startsWith('/share/home/chenxin/'),'Reference path outside authorized workspace');
+   const bytes=await fs.readFile(file),p=await project(),before=p.messages.filter(m=>m.role==='user').length,queued=p.input_queue.length;
+   const response=page.waitForResponse(r=>r.url().endsWith('/reference-designs')&&r.request().method()==='POST');
+   const input=await page.$('.reference-file-input');assert.ok(input);await input.uploadFile(file);
+   assert.ok((await response).ok(),'Reference upload rejected');
+   await page.waitForFunction(async({id,before,queued})=>{const p=await fetch('/api/projects/'+id).then(r=>r.json());return p.messages.filter(m=>m.role==='user').length>before||p.input_queue.length>queued;},{timeout:20000},{id:entry.project_id,before,queued});
+   entry.actions.push({kind:'ui_reference_upload',path:file,sha256:createHash('sha256').update(bytes).digest('hex'),bytes:bytes.length,at:new Date().toISOString()});await save();
+  }
+  else if(request.action==='edit_interface'){
+   const p=await project();assert.ok(!['queued','running'].includes(p.latest_run?.status)&&!p.input_queue.length);
+   const row=p.document.external_interfaces.find(r=>r.id===request.interface_id);assert.ok(row);assert.ok(['purpose','external_object','protocol','signalText','voltage','shared_link'].includes(request.field));
+   await page.$$eval('.canvas-tabs [role="tab"]',nodes=>nodes.find(n=>n.textContent.includes('模块方案')).click());
+   const selector=`[data-interface-id="${row.id}"]`;await page.locator(selector+' details summary').click();await page.locator(selector+` input[name="${request.field}"]`).fill(request.value);
+   const before=p.messages.filter(m=>m.role==='user').length;await page.locator(selector+' form button').click();
+   await page.waitForFunction(async({id,before})=>{const p=await fetch('/api/projects/'+id).then(r=>r.json());return p.messages.filter(m=>m.role==='user').length>before||p.input_queue.length;},{timeout:20000},{id:entry.project_id,before});
+   assert.equal(await page.$eval(selector+' details',e=>e.open),false,'Submitted interface form must collapse');
+   await page.locator(selector+' details summary').click();assert.equal(await page.$eval(selector+' form button',e=>e.disabled),true,'Submitted row cannot be submitted repeatedly');
+   entry.actions.push({kind:'ui_interface_row_edit',interface_id:row.id,field:request.field,value:request.value,before_rows:p.document.external_interfaces,controls_closed:true,repeat_submit_disabled:true,at:new Date().toISOString()});await save();
+  }
+  else if(request.action==='adopt_reference'){
+   const p=await project();assert.ok(request.review_note,'Review the current core-device plan before adoption');assert.ok(!['queued','running'].includes(p.latest_run?.status)||(p.latest_run?.kind==='continuation'&&p.latest_run.status==='queued'));
+   await page.$$eval('.canvas-tabs [role="tab"]',nodes=>nodes.find(e=>e.textContent.includes('模块方案')).click());await page.waitForSelector('.adopt-reference-core:not([disabled])');
+   const before=p.messages.filter(m=>m.role==='user').length;const offered=p.delivery.bom.rows.filter(r=>r.core&&r.status==='proposed');assert.ok(offered.length);
+   await page.locator('.adopt-reference-core:not([disabled])').click();
+   await page.waitForFunction(async({id,before})=>{const p=await fetch('/api/projects/'+id).then(r=>r.json());return p.messages.filter(m=>m.role==='user').length>before||p.input_queue.length;},{timeout:20000},{id:entry.project_id,before});
+   entry.actions.push({kind:'ui_core_plan_adoption',offered:offered.map(r=>({model:r.model,quantity:r.observed_quantity,purpose:r.purpose})),review_note:request.review_note,at:new Date().toISOString()});await save();
+  }
   else if(request.action==='adopt_modules'){
    const p=await project();assert.ok(request.review_note,'Read the offered module purposes before adopting');
    assert.ok(!['queued','running'].includes(p.latest_run?.status)&&!p.input_queue.length,'Wait for the current changes');
    const offered=await page.$$eval('.module-plan-review li',els=>els.map(e=>e.textContent));assert.ok(offered.length);
    const before=p.messages.filter(m=>m.role==='user').length;
-   await page.locator('.confirm-module-plan:not([disabled])').click();
+   if(request.from_module_view){await page.$$eval('.canvas-tabs [role="tab"]',nodes=>nodes.find(e=>e.textContent.includes('模块方案')).click());await page.waitForSelector('.module-board .confirm-module-plan:not([disabled])');}
+   await page.locator(request.from_module_view?'.module-board .confirm-module-plan:not([disabled])':'.confirm-module-plan:not([disabled])').click();
    await page.waitForFunction(async({id,before})=>{const p=await fetch('/api/projects/'+id).then(r=>r.json());return p.messages.filter(m=>m.role==='user').length>before||p.input_queue.length;},{timeout:20000},{id:entry.project_id,before});
    await page.waitForFunction(()=>!document.querySelector('.confirm-module-plan')||document.querySelector('.confirm-module-plan').disabled,{timeout:20000});
-   entry.actions.push({kind:'ui_module_plan_adoption',offered,review_note:request.review_note,at:new Date().toISOString()});await save();
+   entry.actions.push({kind:'ui_module_plan_adoption',from_module_view:!!request.from_module_view,offered,review_note:request.review_note,at:new Date().toISOString()});await save();
   }
   else if(request.action==='answer'){
    const p=await project(),typed=request.answers??{},choices=request.choices??{};
@@ -152,22 +181,35 @@ try{
    entry.actions.push({kind:'visible_continue_button',at:new Date().toISOString()});await save();
   }else if(request.action==='approve'){
    const p=await project();assert.equal(p.review.status,'ready','Only reviewed ready documents can be approved');assert.ok(request.review_note);
-   await page.$eval('.canvas-tabs [role="tab"]:nth-child(2)',e=>e.click());await page.waitForSelector('.document-approve:not([disabled])');await page.locator('.document-approve:not([disabled])').click();
+   await page.$$eval('.canvas-tabs [role="tab"]',nodes=>nodes.find(e=>e.textContent.includes('需求说明书')).click());await page.waitForSelector('.document-approve:not([disabled])');await page.locator('.document-approve:not([disabled])').click();
    await page.waitForFunction(async id=>(await fetch('/api/projects/'+id).then(r=>r.json())).review.status==='approved',{timeout:30000},entry.project_id);
    entry.actions.push({kind:'explicit_ui_approval',review_note:request.review_note,at:new Date().toISOString()});await save();
-  }else if(request.action==='export'){
-   const p=await project();assert.equal(p.review.status,'approved');
+  }else if(request.action==='refresh_knowledge'){
+   const p=await project();assert.equal(p.domain.active_jobs,0,'Wait for the previous knowledge job');
+   await page.locator('[aria-label="打开器件与证据"]').click();await page.waitForSelector('.device-panel');
+   const response=page.waitForResponse(r=>r.url().endsWith('/knowledge-jobs')&&r.request().method()==='POST');
+   await page.$$eval('.device-panel .section-heading button',nodes=>nodes.find(n=>n.textContent.includes('重新核对')).click());
+   const receipt=await (await response).json();entry.actions.push({kind:'ui_refresh_real_knowledge',job_id:receipt.job_id,at:new Date().toISOString()});await save();
+   const observations=[];const start=Date.now();
+   while(Date.now()-start<50000){const current=await project();observations.push({elapsed_ms:Date.now()-start,active_jobs:current.domain.active_jobs,revision:current.domain_revision,references:current.domain.references.map(r=>({mention:r.mention,status:r.resolution_status,documents:r.document_status,evidence:r.evidence_ids.length}))});if(!current.domain.active_jobs)break;await new Promise(r=>setTimeout(r,1500));}
+   await fs.writeFile(path.join(dir,key+'-knowledge-refresh.json'),JSON.stringify({job_id:receipt.job_id,observations},null,2)+'\n');
+   await page.locator('[aria-label="关闭器件与证据"]').click();
+  }else if(request.action==='export'||request.action==='export_draft'){
+   const p=await project(),draft=request.action==='export_draft';
+   if(draft){assert.ok(['ready','draft'].includes(p.review.status));assert.ok(!['running','queued'].includes(p.latest_run?.status));}
+   else assert.equal(p.review.status,'approved');
    await page.locator('.export-menu>.button').click();await page.locator('.export-handoff').click();await page.waitForSelector('.handoff-status');
-   const status=await page.$eval('.handoff-status',e=>e.textContent);assert.ok(!status.includes('还有内容需要处理'),status);
+   const status=await page.$eval('.handoff-status',e=>e.textContent);if(!draft)assert.ok(!status.includes('还有内容需要处理'),status);
    const response=page.waitForResponse(r=>r.url().endsWith('/downstream-adapter')&&r.request().method()==='POST');
    await page.locator('.handoff-adapter>.text-button').click();const adapter=await (await response).json();assert.ok(adapter.accepted,'Downstream intake rejected the requirements');
    await page.waitForSelector('.handoff-adapter [role="status"]');await fs.writeFile(path.join(dir,key+'-adapter.json'),JSON.stringify(adapter,null,2)+'\n');
    entry.adapter={accepted:adapter.accepted,can_start_generation:adapter.can_start_generation,state:adapter.state,selection_needed:adapter.selection_needed.length};
-   await page.waitForFunction(()=>[...document.querySelectorAll('.handoff-dialog button')].some(n=>n.textContent.includes('生成交接包')&&!n.disabled));
-   await page.$$eval('.handoff-dialog button',nodes=>nodes.find(n=>n.textContent.includes('生成交接包')).click());await page.waitForSelector('.handoff-dialog a[download]');
+   await page.waitForFunction(label=>[...document.querySelectorAll('.handoff-dialog button')].some(n=>n.textContent.includes(label)&&!n.disabled),{},draft?'生成草稿包':'生成交接包');
+   await page.$$eval('.handoff-dialog button',(nodes,label)=>nodes.find(n=>n.textContent.includes(label)).click(),draft?'生成草稿包':'生成交接包');await page.waitForSelector('.handoff-dialog a[download]');
    const href=await page.$eval('.handoff-dialog a[download]',e=>e.href),r=await fetch(href);assert.ok(r.ok);await fs.writeFile(path.join(dir,key+'-handoff.zip'),Buffer.from(await r.arrayBuffer()));
-   await page.screenshot({path:path.join(dir,key+'-handoff.webp'),type:'webp',quality:87});await page.locator('[aria-label="关闭需求交接"]').click();entry.actions.push({kind:'ui_handoff_export',at:new Date().toISOString()});await save();
+   await page.screenshot({path:path.join(dir,key+'-handoff.webp'),type:'webp',quality:87});await page.locator('[aria-label="关闭需求交接"]').click();entry.actions.push({kind:draft?'ui_draft_handoff_export':'ui_handoff_export',at:new Date().toISOString()});await save();
   }else assert.equal(request.action,'read');
  }
+ if(request.view){await page.$$eval('.canvas-tabs [role="tab"]',(nodes,label)=>nodes.find(e=>e.textContent.includes(label)).click(),request.view);await new Promise(r=>setTimeout(r,300));}
  console.log(JSON.stringify(await capture(),null,2));
 }catch(e){if(entry){entry.driver_error=String(e);await save();}throw e;}finally{await context.close();browser.disconnect();}

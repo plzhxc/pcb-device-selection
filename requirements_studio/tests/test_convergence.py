@@ -236,10 +236,10 @@ class ConvergenceTests(unittest.TestCase):
         doc=self.store.get_project(pid)['document'];doc['recheck_topics']=['V3-1.1']
         self.store.commit_analysis(run['id'],doc,'继续内部核对。')
         first=self.store.advance(run['id'],'复核已有边界')
-        _,_,queued=self.store.submit_message(pid,'补充了新的目标','preempt-1')
-        self.assertIsNotNone(queued)
-        self.store.commit_analysis(first['id'],self.store.get_project(pid)['document'],'尚有内部事项。')
-        following=self.store.advance(first['id'],'继续核对剩余事项')
+        following,created,queued=self.store.submit_message(pid,'补充了新的目标','preempt-1')
+        self.assertTrue(created);self.assertIsNone(queued)
+        self.assertEqual(self.store.get_run(first['id'])['status'],'cancelled')
+        self.assertFalse(self.store.mark_running(first['id']))
         self.assertEqual(following['kind'],'user');self.assertEqual(following['request_id'],'preempt-1')
 
     def test_pause_stops_further_internal_steps_without_resolving_questions(self):

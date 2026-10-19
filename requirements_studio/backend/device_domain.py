@@ -14,7 +14,7 @@ from .module_catalog import TYPES, CATALOG
 
 INTENTS = {'must': '必须使用', 'prefer': '优先考虑', 'reference': '仅作参考', 'undecided': '意图待明确'}
 METRICS = ('input_voltage', 'output_voltage', 'output_current', 'operating_temperature',
-           'switching_frequency', 'resolution', 'interface', 'feature', 'price')
+           'switching_frequency', 'rf_frequency', 'clock_frequency', 'resolution', 'interface', 'feature', 'price')
 
 
 class Strict(BaseModel):
@@ -39,7 +39,7 @@ class DeviceConstraintUpdate(Strict):
     reference_id: str = Field(max_length=64)
     requirement_id: str = Field(max_length=32)
     field_key: Literal['input_voltage', 'output_voltage', 'output_current', 'operating_temperature',
-                       'switching_frequency', 'resolution', 'interface', 'feature', 'price']
+                       'switching_frequency', 'rf_frequency', 'clock_frequency', 'resolution', 'interface', 'feature', 'price']
     kind: Literal['design_requirement', 'user_device_description']
     relation: Literal['covers', 'at_least', 'at_most', 'equals', 'contains']
     minimum: float | None = None
@@ -178,6 +178,14 @@ def apply_updates(doc, result, original, messages, req_aliases, module_aliases):
                 unsupported_parts.append(prior_part['mention'] + '（intent=' + prior_part['intent'] +
                                          '，identity_scope=' + prior_part['identity_scope'] +
                                          '，quantity=' + str(prior_part.get('quantity')) + '）')
+            if (key in refs and not changed_part and not module_source and row['mention'].casefold() not in quote.casefold()
+                    and not re.search(r'不(?:再)?(?:锁定|指定|限定|确定)|取消|撤销|仅作参考|只作参考|改为参考|必须|强制|优先(?:采用|考虑)|可(?:以)?(?:更换|替换|换)',quote)):
+                # A power/usage decision can update the functional association
+                # of an already sourced part without re-authoring its identity.
+                # Preserve both provenances; this path cannot alter the part,
+                # its adoption intent, identity scope, or physical quantity.
+                row['association_source']={'source_message_id':row['source_message_id'],'source_quote':quote}
+                row.update(mention=prior_part['mention'],source_message_id=prior_part['source_message_id'],source_quote=prior_part['source_quote'])
             if module_source:
                 # Functional associations may change; a button adopting circuits
                 # does not replace the original evidence for a part constraint.
@@ -211,7 +219,11 @@ def apply_updates(doc, result, original, messages, req_aliases, module_aliases):
                             and prior['intent'] == row['intent']
                             and prior['source_message_id'] == row['source_message_id']
                             and prior['source_quote'] == quote)
-            if collective or bounded or retained:
+            if prior and row.get('association_source'):
+                # The identity-preserving path above already retained its
+                # original source; keep the newly justified associations too.
+                pass
+            elif collective or bounded or retained:
                 # A collective intent change cannot silently change part identity,
                 # known physical quantity or functional associations.
                 row={**prior,'intent':row['intent'],'source_message_id':row['source_message_id'],'source_quote':quote,
@@ -237,6 +249,10 @@ def apply_updates(doc, result, original, messages, req_aliases, module_aliases):
         prior = refs.get(row['id'], {})
         if prior.get('mention_source') and prior.get('mention')==row['mention']:
             row.setdefault('mention_source',prior['mention_source'])
+        if prior.get('reference_quantity_source') and prior.get('quantity')==row.get('quantity'):
+            row['reference_quantity_source']=copy.deepcopy(prior['reference_quantity_source'])
+        if prior.get('reference_supplier_part') and prior.get('mention')==row['mention']:
+            row['reference_supplier_part']=prior['reference_supplier_part']
         row.update(requirement_ids=rid, module_ids=mids, lifecycle='active',
                    device_key=prior.get('device_key'), identity_decision=prior.get('identity_decision'))
         if prior and prior.get('mention') != row['mention']:
@@ -318,6 +334,20 @@ def module_mapping(type_id):
     return _mapping_data()['mappings'].get(type_id, {'status':'deferred','leaf_codes':[],'reason':'类别映射待建立'})
 
 
+def context_assertions(assertions, limit=16):
+    """Requirement analysis needs capabilities, not hundred-pin JSON arrays."""
+    excluded={'pin_functions','pin_definitions','pin_mapping','datasheet','domain_code','family_code','leaf_code','taxonomy_path','part_number','package'}
+    selected=[]
+    for raw in assertions:
+        if raw.get('is_missing') or raw.get('field_key') in excluded:continue
+        row={k:copy.deepcopy(raw.get(k)) for k in ('field_key','label','raw_value','normalized','validation_state','rating_kind',
+             'conditions','issue','source_disagreement','supporting_evidence_ids','supporting_quote','is_missing','source_evidence_status','locator')}
+        value=str(row.get('raw_value') or '')
+        if len(value)>1000:row.update(raw_value=value[:1000],context_truncated=True)
+        selected.append(row)
+    return selected[:limit]
+
+
 def device_context(doc, domain):
     references=[]
     for raw in domain.get('references',[]):
@@ -327,11 +357,14 @@ def device_context(doc, domain):
                            for c in raw.get('candidates',[])[:5]]
         references.append(row)
     evidence=[]
-    for raw in domain.get('evidence',[])[-30:]:
+    # Retain evidence fairly across devices instead of dropping the early parts
+    # of a long input when only the final 30 snapshots fit the old projection.
+    by_ref={}
+    for item in domain.get('evidence',[]):by_ref.setdefault(item.get('reference_id',item.get('device_key','')),[]).append(item)
+    selected=[e for items in by_ref.values() for e in items[:4]]
+    for raw in selected[:240]:
         row={k:raw.get(k) for k in ('id','device_key','kind','title','locator','version_context','availability','checked_at','excerpt')}
-        row['assertions']=[{k:a.get(k) for k in ('field_key','raw_value','normalized','validation_state','rating_kind',
-                            'conditions','issue','source_disagreement','supporting_evidence_ids','supporting_quote','is_missing','source_evidence_status')}
-                           for a in raw.get('assertions',[]) if a.get('priority_rank',9999)<=8][:8]
+        row['assertions']=context_assertions(raw.get('assertions',[]))
         evidence.append(row)
     return {'references':references, 'checks': domain.get('checks', []),
             'evidence':evidence,

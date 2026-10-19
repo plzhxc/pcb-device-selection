@@ -30,6 +30,7 @@ class Requirement(Contract):
     implementation: str
     source_message_id: str
     source_quote: str
+    spec_field_ids: list[str] = Field(default_factory=list)
 
 
 class SelectionItem(Contract):
@@ -51,10 +52,11 @@ class SelectionItem(Contract):
     specified_references: list[str]
     preferred_references: list[str]
     reference_only: list[str]
+    device_descriptions: list[dict] = Field(default_factory=list)
 
 
 class RequirementSpec(Contract):
-    schema_version: Literal['pcbagent.requirement-spec/1.0']
+    schema_version: Literal['pcbagent.requirement-spec/1.0','pcbagent.requirement-spec/1.1','pcbagent.requirement-spec/1.2']
     spec_id: str
     project_id: str
     requirement_version: int = Field(ge=0)
@@ -75,6 +77,15 @@ class RequirementSpec(Contract):
     acceptance_criteria: list[dict]
     open_items: list[dict]
     handoff_status: Literal['ready', 'ready_with_open_items', 'blocked']
+    field_resolutions: list[dict] = Field(default_factory=list)
+    intake_checks: list[dict] = Field(default_factory=list)
+    scope_exclusions: list[Requirement] = Field(default_factory=list)
+    device_descriptions: list[dict] = Field(default_factory=list)
+    external_interfaces:list[dict]=Field(default_factory=list)
+    delivery_checks:list[dict]=Field(default_factory=list)
+    reference_designs:list[dict]=Field(default_factory=list)
+    core_bom:list[dict]=Field(default_factory=list)
+    reference_audit:dict=Field(default_factory=dict)
 
     @model_validator(mode='after')
     def references_valid(self):
@@ -112,7 +123,7 @@ class RequirementSpec(Contract):
         for link in self.module_links:
             if link['source'] not in modules or link['target'] not in modules:
                 raise ValueError('模块关系有断开的端点。')
-        for constraint in self.constraints:
+        for constraint in [*self.constraints,*self.device_descriptions]:
             if constraint.get('requirement_id') not in reqs or (constraint.get('reference_id') and constraint['reference_id'] not in refs):
                 raise ValueError('约束有断开的作用对象。')
         for step in self.workflow:
@@ -171,15 +182,20 @@ def build_spec(project):
     for raw in doc.get('selection_items', []):
         item = {k: v for k, v in raw.items() if k in SelectionItem.model_fields}
         item['constraints'] = [c for c in doc.get('numeric_constraints', []) if c['requirement_id'] in raw['requirement_ids']]
-        item['constraints'] += [c for c in doc.get('device_constraints', []) if c['requirement_id'] in raw['requirement_ids']]
+        item['constraints'] += [c for c in doc.get('device_constraints', []) if c['kind']=='design_requirement' and c['requirement_id'] in raw['requirement_ids']]
+        item['device_descriptions']=[c for c in doc.get('device_constraints',[]) if c['kind']=='user_device_description' and c['reference_id'] in raw['reference_ids']]
         for intent, field in [('must', 'specified_references'), ('prefer', 'preferred_references'), ('reference', 'reference_only')]:
             item[field] = [rid for rid in raw['reference_ids'] if refmap.get(rid, {}).get('intent') == intent]
         items.append(item)
     requirements = []
+    excluded=[]
     for r in doc['requirements']:
-        if r['state'] == 'not_applicable': continue
         row = {k: r.get(k, '') for k in Requirement.model_fields}
         row['implementation'] = r.get('implementation', 'hardware')
+        row['spec_field_ids'] = r.get('spec_field_ids', [])
+        if r['state']=='not_applicable':
+            excluded.append(row)
+            continue
         requirements.append(row)
     valid_reqs = {r['id'] for r in requirements}
     modules = [{**m, 'type_name': TYPES[m['type_id']]['name'], 'category_id': TYPES[m['type_id']]['category_id']}
@@ -190,20 +206,31 @@ def build_spec(project):
         if e['id'] in seen: continue
         seen.add(e['id']); evidence.append({k: e.get(k) for k in ('id', 'kind', 'device_key', 'locator', 'title', 'primary_key',
                                                                'page_number', 'content_hash', 'version_context', 'availability')})
-    data = {'schema_version': 'pcbagent.requirement-spec/1.0',
+    from .reference_design import bom_view,qualified_reference
+    acceptance_ids={rid for f in doc.get('field_resolutions',[]) if f.get('state')=='confirmed' and f.get('field_id','').startswith('V3-4.2.1:') for rid in f.get('requirement_ids',[])}
+    acceptance_ids.update(rid for c in doc.get('intake_checks',[]) if c.get('key')=='acceptance' and c.get('state')=='confirmed' for rid in c.get('requirement_ids',[]))
+    data = {'schema_version': 'pcbagent.requirement-spec/1.2',
             'spec_id': f"SPEC-{project['id']}-v{doc['version']}-d{project.get('domain_revision',0)}",
             'project_id': project['id'], 'requirement_version': doc['version'],
             'domain_revision': project.get('domain_revision', 0), 'review_status': project['review']['status'],
             'title': doc['title'], 'summary': doc['summary'],
             'template': {'requirements': '硬件需求说明书 V3.0', 'module_catalog_revision': CATALOG['revision'],
                          'module_catalog_sha256': CATALOG['source_sha256']},
-            'requirements': requirements, 'constraints': doc.get('numeric_constraints', []) + doc.get('device_constraints', []),
+            'requirements': requirements, 'constraints': doc.get('numeric_constraints', []) + [c for c in doc.get('device_constraints',[]) if c['kind']=='design_requirement'],
+            'device_descriptions':[c for c in doc.get('device_constraints',[]) if c['kind']=='user_device_description'],
             'modules': modules, 'module_links': doc.get('module_links', []), 'workflow': doc['flow'],
             'selection_items': items, 'device_references': refs, 'evidence_refs': evidence,
             'source_messages': [{k: m[k] for k in ('id', 'content', 'created_at')} for m in project['messages'] if m['role'] == 'user'],
             'acceptance_criteria': [{'requirement_id': r['id'], 'criterion': r['value'], 'source_message_id': r['source_message_id']}
-                                    for r in requirements if r['category'] in ('performance', 'manufacturing')],
-            'open_items': ready['open_items'], 'handoff_status': ready['status']}
+                                    for r in requirements if r['category'] in ('performance', 'manufacturing') or r['id'] in acceptance_ids
+                                    or any(fid.startswith('V3-4.2.1:') for fid in r.get('spec_field_ids',[]))],
+            'open_items': ready['open_items'], 'handoff_status': ready['status'],
+            'field_resolutions':doc.get('field_resolutions',[]),'intake_checks':doc.get('intake_checks',[]),
+            'scope_exclusions':excluded,'external_interfaces':doc.get('external_interfaces',[]),
+            'delivery_checks':doc.get('delivery_checks',[]),
+            'reference_designs':[{k:v for k,v in qualified_reference(s).items() if k!='original_content_base64'} for s in doc.get('reference_designs',[])],
+            'core_bom':[r for r in bom_view(doc,domain)['rows'] if r['core']],
+            'reference_audit':doc.get('reference_audit',{})}
     return RequirementSpec.model_validate(data).model_dump(mode='json')
 
 
@@ -259,12 +286,17 @@ def generation_adapter(spec):
     Unselected functional needs remain in the intake/open-items metadata.
     """
     spec = RequirementSpec.model_validate(spec).model_dump()
+    # Older 1.0 archives mixed device introductions into constraints. Preserve
+    # their information while giving consumers an unambiguous requirement list.
+    spec['device_descriptions'] += [c for c in spec['constraints'] if c.get('kind')=='user_device_description']
+    spec['constraints']=[c for c in spec['constraints'] if c.get('kind')!='user_device_description']
     refs = {r['id']: r for r in spec['device_references']}
     modulemap = {m['id']: m for m in spec['modules']}
     modules = []; pending = [];owners={};shared=[]
     for item in spec['selection_items']:
         devices = []
-        for rid in item['specified_references']:
+        adopted=[rid for rid in item['preferred_references'] if refs[rid].get('reference_quantity_source')]
+        for rid in dict.fromkeys(item['specified_references']+adopted):
             r = refs[rid]
             if r['identity_scope'] not in ('exact_part', 'assembly'):
                 continue
@@ -277,7 +309,8 @@ def generation_adapter(spec):
             model = identity.get('model') if r.get('device_key') or r.get('resolution_status') == 'matched' else r['mention']
             device = {'name': r['mention'], 'model': model or r['mention'],'requirement_reference_id':rid,'quantity_scope':'project', 'manufacturer': identity.get('manufacturer', ''),
                       'supplier_part': identity.get('supplier_part', ''), 'role': r.get('purpose', ''),
-                      'description': '用户指定；资料与工程适用性分别核对。', 'verification_status': 'unverified',
+                      'description': ('用户指定' if r['intent']=='must' else '用户采用的参考优先方案，可替换')+'；资料与工程适用性分别核对。', 'verification_status': 'unverified',
+                      'quantity_state':'user_stated' if r.get('quantity') is not None else 'design_stage',
                       'evidence': 'RequirementSpec ' + spec['spec_id'] + ' / ' + rid}
             wrapper = {'device': device}
             if r.get('quantity') is not None: wrapper['quantity'] = r['quantity']
@@ -289,9 +322,30 @@ def generation_adapter(spec):
                             'selected_devices': devices})
         elif not any(s['functional_module_id']==item['module_id'] for s in shared):
             pending.append({'selection_item_id': item['id'], 'module_id': item['module_id'], 'reason': '尚无用户明确指定的具体器件，需后续选型。'})
+    brief=generation_brief(spec)
+    generation_gaps=[]
+    if spec['handoff_status']=='blocked':generation_gaps.append('需求尚未完成审核或当前版本仍有阻塞。')
+    if pending:generation_gaps.append(f'{len(pending)} 个纳入本版的功能模块仍需选型。')
+    for rid in owners:
+        r=refs[rid];identity=r.get('identity') or {}
+        if r.get('resolution_status')!='matched' or not identity.get('supplier_part'):
+            generation_gaps.append(r['mention']+' 的具体目录身份尚未核实。')
+        if r.get('quantity') is None:generation_gaps.append(r['mention']+' 的实际物理用量尚未确定。')
+        if r.get('document_status')!='available':generation_gaps.append(r['mention']+' 的所需资料尚未齐备。')
+    # A valid subset is useful for integration checks, but cannot grant board
+    # generation readiness while implementation/interface work is still open.
+    if spec['open_items']:generation_gaps.append('尚有设计、供电/接口或资料任务，需要在完整生成前核定。')
+    if not spec['module_links'] and len(spec['modules'])>1:generation_gaps.append('模块之间的接口与供电关系尚未给定。')
+    for link in spec['module_links']:
+        if not link.get('voltage') or not link.get('boundary') or (link['kind']=='data' and not link.get('protocol')):
+            generation_gaps.append('接口 '+link['id']+' 的电平、边界或协议仍待设计落实。')
+    completeness={'requirements_handoff':spec['handoff_status'],'complete_generation_ready':not generation_gaps and bool(modules),
+                  'gaps':list(dict.fromkeys(generation_gaps)),'scope':'当前本机输入合同；未运行电路生成或电气验证',
+                  'requirement_version':spec['requirement_version'],'domain_revision':spec['domain_revision']}
     if not modules:
         return {'accepted': True, 'can_start_generation': False, 'state': 'selection_required',
                 'selection_needed': pending, 'generation_input': None,
+                'completeness':completeness,
                 'message': '需求输入已接收；这些选型项需要先确定具体器件。'}
     import sys
     from pathlib import Path
@@ -301,20 +355,65 @@ def generation_adapter(spec):
     from netlist_end_to_end.netlist.stage_results import read_inputs
     ids = {m['module']['id'] for m in modules}
     links = [e for e in spec['module_links'] if e['source'] in ids and e['target'] in ids]
-    data = build_generation_input(modules, description=spec['summary'],
+    data = build_generation_input(modules, description=brief,
                                  system={'requirement_spec_id': spec['spec_id'], 'requirements': spec['requirements'],
+                                         'constraints':spec['constraints'],'field_resolutions':spec['field_resolutions'],
+                                         'device_descriptions':spec['device_descriptions'],
+                                         'external_interfaces':spec['external_interfaces'],'delivery_checks':spec['delivery_checks'],
+                                         'core_bom':spec['core_bom'],'reference_designs':spec['reference_designs'],
+                                         'intake_checks':spec['intake_checks'],
+                                         'scope_exclusions':spec['scope_exclusions'],
+                                         'generation_readiness':completeness,
+                                         'quantity_unknown_reference_ids':[rid for rid in owners if refs[rid].get('quantity') is None],
+                                         'workflow':spec['workflow'],'acceptance_criteria':spec['acceptance_criteria'],
+                                         'requirement_version':spec['requirement_version'],'domain_revision':spec['domain_revision'],
                                          'open_items': spec['open_items'], 'selection_needed': pending,
                                          'functional_modules':spec['modules'],'functional_module_links':spec['module_links'],
                                          'shared_device_references':shared,
                                          'input_scope': 'explicit_user_specified_devices', 'hardware_validation': 'pending'}, links=links)
     decomposition = generation_decomposition(data)
-    intake=read_inputs(data,spec['summary'])
-    return {'accepted': True, 'can_start_generation': spec['handoff_status'] != 'blocked',
+    intake=read_inputs(data,brief)
+    return {'accepted': True, 'can_start_generation': completeness['complete_generation_ready'],
             'state': 'input_validated' if spec['handoff_status'] != 'blocked' else 'requirements_blocked',
             'generation_input': data, 'selection_needed': pending, 'prepared_modules': len(decomposition['modules']),
+            'completeness':completeness,
             'intake':{'entrypoint':'netlist_end_to_end.netlist.stage_results.read_inputs','accepted_modules':intake['total'],
                       'requirement_spec_id':spec['spec_id'],'scope':'输入适配和真实入口读取'},
-            'message': '现有流程的输入入口已读取指定器件与需求；开放选型项和工程待办已随输入保存。'}
+            'message': '本机流程入口已读取指定器件及完整需求简报。这是局部输入适配；整板生成仍需完成列明的选型、用量与工程任务。' if generation_gaps else '本机输入合同已完整读取；电路生成与工程核验尚未执行。'}
+
+
+def generation_brief(spec):
+    """Effective requirements, not conversation/candidate BOMs or a summary only."""
+    lines=['# '+spec['title'],spec['summary'],'','## 本版有效要求']
+    for r in spec['requirements']:
+        lines.append(f"- {r['id']} [{r['state']}/{r['priority']}] {r['name']}：{r['value']} {r['unit']}")
+    lines+=['','## 结构化约束（作用对象与工况随同保留）']
+    for c in spec['constraints']:
+        if c.get('kind')!='user_device_description':lines.append(json.dumps(c,ensure_ascii=False))
+    descriptions=spec.get('device_descriptions',[])+[c for c in spec['constraints'] if c.get('kind')=='user_device_description']
+    if descriptions:
+        lines+=['','## 用户提供的器件介绍（不是整机要求，仍需资料核验）']
+        for c in descriptions:lines.append(json.dumps(c,ensure_ascii=False))
+    lines+=['','## 明确不纳入本版的范围']
+    for r in spec.get('scope_exclusions',[]):lines.append(f"- {r['name']}：{r['value']}")
+    lines+=['','## 已有条款结论']
+    for f in spec.get('field_resolutions',[]):
+        lines.append(f"- {f['field_id']} [{f['state']}] {f['conclusion']}")
+    for check in spec.get('intake_checks',[]):lines.append(f"- 产品边界 {check['key']} [{check['state']}] {check['conclusion']}")
+    lines+=['','## 功能模块及边界']
+    for m in spec['modules']:lines.append(f"- {m['id']} {m['name']}：{m['purpose']}；独立电路 {m['quantity']} 路；{m['boundary']}")
+    lines+=['','## 接口与工作流程']
+    for interface in spec.get('external_interfaces',[]):lines.append(json.dumps(interface,ensure_ascii=False))
+    for link in spec['module_links']:lines.append(json.dumps(link,ensure_ascii=False))
+    for i,step in enumerate(spec['workflow'],1):lines.append(f"{i}. {step['label']}")
+    lines+=['','## 核心验收依据']
+    for criterion in spec['acceptance_criteria']:lines.append(criterion['requirement_id']+'：'+criterion['criterion'])
+    lines+=['','## 系统能力链与核心器件方案']
+    for check in spec.get('delivery_checks',[]):lines.append(json.dumps(check,ensure_ascii=False))
+    for part in spec.get('core_bom',[]):lines.append(json.dumps(part,ensure_ascii=False))
+    lines+=['','## 后续任务']
+    for item in spec['open_items']:lines.append(f"- {item['description']}；承接：{item['owner']}；完成条件：{item['completion_condition']}")
+    return '\n'.join(lines)
 
 
 def legacy_document(doc):

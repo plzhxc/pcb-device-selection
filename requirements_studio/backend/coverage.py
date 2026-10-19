@@ -29,9 +29,29 @@ def review_document(doc):
     ready = bool(doc["requirements"]) and not gaps and not unsettled and not doc["questions"] and not doc.get("recheck_topics") and bool(doc["flow"])
     if convergence:
         ready=bool(doc['requirements']) and not scope['decision_pending'] and not scope['module_rechecks'] and not unsettled and not doc['questions'] and bool(doc['flow']) and not convergence['module_gaps'] and not convergence['module_pending'] and not convergence['issues']
+    dependency_reviews=doc.get('decision_reviews',[])
+    if dependency_reviews:ready=False
+    from .intake import review as intake_review
+    intake=intake_review(doc)
+    if intake['gaps'] or intake['rechecks']:ready=False
+    from .delivery import review as delivery_review
+    delivery=delivery_review(doc)
+    if delivery['gaps'] or delivery['rechecks']:ready=False
+    from .reference_audit import pending as reference_review_pending
+    reference_pending=bool(ready and reference_review_pending(doc))
+    if reference_pending:ready=False
     decision_gaps=[]
     if convergence:
         for topic in rows:
             missing=[f for f in scope['decision_fields'] if f['topic_id']==topic['id'] and f['state'] not in CLOSED and f['id'] not in scope['decision_rechecks']]
             if missing:decision_gaps.append({'id':topic['id'],'title':topic['title'],'section':topic['section'],'fields':[f['label'] for f in missing]})
-    return {"status":"approved" if ready and doc.get("review_status")=="approved" else "ready" if ready else "draft", "closed":len(rows)-len(gaps), "total":len(rows), "topics":rows, "gaps":[{"id":r["id"],"title":r["title"],"section":r["section"],"fields":r["fields"]} for r in gaps], "unsettled_requirements":unsettled, "open_questions":len(doc["questions"]), "has_flow":bool(doc["flow"]), "recheck_count":len(doc.get("recheck_topics",[])), 'fields_closed':convergence['fields_closed'] if convergence else None,'fields_total':convergence['fields_total'] if convergence else None,'module_gaps':convergence['module_gaps'] if convergence else [],'module_pending':convergence['module_pending'] if convergence else [],'consistency_issues':convergence['issues'] if convergence else [],'decision_gaps':decision_gaps,'decision_total':scope['decision_total'] if convergence else None,'decision_closed':scope['decision_closed'] if convergence else None,'engineering_pending':scope['engineering_pending'] if convergence else 0,'internal_rechecks':len(scope['decision_rechecks'])+len(scope['module_rechecks']) if convergence else len(doc.get('recheck_topics',[]))}
+    result={"status":"approved" if ready and doc.get("review_status")=="approved" else "ready" if ready else "draft", "closed":len(rows)-len(gaps), "total":len(rows), "topics":rows, "gaps":[{"id":r["id"],"title":r["title"],"section":r["section"],"fields":r["fields"]} for r in gaps], "unsettled_requirements":unsettled, "open_questions":len(doc["questions"]), "has_flow":bool(doc["flow"]), "recheck_count":len(doc.get("recheck_topics",[])), 'fields_closed':convergence['fields_closed'] if convergence else None,'fields_total':convergence['fields_total'] if convergence else None,'module_gaps':convergence['module_gaps'] if convergence else [],'module_pending':convergence['module_pending'] if convergence else [],'consistency_issues':convergence['issues'] if convergence else [],'decision_gaps':decision_gaps,'decision_total':scope['decision_total'] if convergence else None,'decision_closed':scope['decision_closed'] if convergence else None,'engineering_pending':scope['engineering_pending'] if convergence else 0,'internal_rechecks':len(scope['decision_rechecks'])+len(scope['module_rechecks']) if convergence else len(doc.get('recheck_topics',[]))}
+    result['dependency_reviews']=[r['requirement_id'] for r in dependency_reviews]
+    result['internal_rechecks']+=len(dependency_reviews)
+    result['intake']=intake
+    result['internal_rechecks']+=len(intake['rechecks'])
+    result['delivery']=delivery
+    result['internal_rechecks']+=len(delivery['rechecks'])
+    result['reference_audit_pending']=reference_pending
+    result['internal_rechecks']+=int(reference_pending)
+    return result

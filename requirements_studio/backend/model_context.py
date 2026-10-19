@@ -32,8 +32,10 @@ def compact(context):
     result['coverage_review']={k:v for k,v in result['coverage_review'].items()
                                if k not in ('topics','gaps','engineering_gaps')}
     document=result['current_document']
+    from .reference_design import prompt_reference
+    document['reference_designs']=[prompt_reference(s) for s in document.get('reference_designs',[])]
     for key in ('selection_items','convergence_history','domain_impacts','changed_ids','updated_at','created_at',
-                'next_module_number','next_requirement_number','next_device_reference_number','coverage'):
+                'next_module_number','next_requirement_number','next_device_reference_number','coverage','decision_event'):
         document.pop(key,None)
     document['question_history']=[{k:v for k,v in q.items() if k in ('id','question','decision_key','resolved_by')}
                                   for q in document.get('question_history',[])[-30:]]
@@ -86,12 +88,17 @@ def compact(context):
                 'message_id':message['id'],'start':start,'end':end,
                 'sha256':hashlib.sha256(span.encode()).hexdigest(),'text':span}
     result['source_anchor_index']=anchors
+    if len([m for m in result['messages'] if m['role']=='user'])==1 and not document.get('requirements') and not document.get('reference_designs'):
+        important={'V3-1.1','V3-1.3','V3-2.1.1','V3-2.2','V3-3.1.1','V3-4.2.1','V3-5.1','V3-5.3'}
+        result['field_catalog']=[t for t in result['field_catalog'] if t['topic_id'] in important]
+        for parent in result['module_catalog']['parents']:parent.pop('children',None)
+        result['interaction_phase']='先完成可交互初稿：整理已知内容、一个必要问题。详细字段与子类会在后续结合实际功能提供。'
     return result
 
 
 def expand_sources(result,context,user_sources):
     expanded=[]
-    for group in ('updates','coverage','field_resolutions','module_updates','numeric_constraints','device_reference_updates','device_constraints'):
+    for group in ('updates','coverage','field_resolutions','module_updates','module_links','numeric_constraints','device_reference_updates','device_constraints','intake_checks','delivery_checks','external_interfaces'):
         for index,row in enumerate(getattr(result,group)):
             alias=row.source_message_id
             quote=row.source_quote

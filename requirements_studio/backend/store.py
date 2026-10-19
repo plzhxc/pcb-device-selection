@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import copy
 import os
 import sqlite3
 import uuid
@@ -131,7 +132,8 @@ class Store(DomainStore):
         with self.connect() as db:
             row, doc = self._document(db, project_id)
             messages = [dict(m) for m in db.execute("SELECT * FROM messages WHERE project_id=? ORDER BY rowid", (project_id,))]
-            revisions = [{"version": r["version"], "created_at": r["created_at"], "changes": history_document(r["document"])["changes"]} for r in db.execute("SELECT * FROM revisions WHERE project_id=? ORDER BY version DESC", (project_id,))]
+            snapshots=[history_document(r['document']) for r in db.execute('SELECT document FROM revisions WHERE project_id=? ORDER BY version',(project_id,))]
+            revisions=[{'version':s['version'],'created_at':s['updated_at'],'changes':s['changes']} for s in reversed(snapshots)]
             latest = db.execute("SELECT * FROM runs WHERE project_id=? ORDER BY rowid DESC LIMIT 1", (project_id,)).fetchone()
             queue = [dict(q) for q in db.execute("SELECT id,text,created_at FROM input_queue WHERE project_id=? AND status='pending' ORDER BY rowid", (project_id,))]
             submissions={}
@@ -159,6 +161,9 @@ class Store(DomainStore):
                 visible=[e for e in events if e.get('phase')!='waiting' or e is waiting[-1]] if waiting else events
                 activity.append({**run,'events':visible[-16:]})
             project={"id": row["id"], "title": row["title"], "is_example": bool(row["is_example"]), "updated_at": row["updated_at"], "document": doc, "messages": messages, "revisions": revisions, "latest_run": dict(latest) if latest else None, "input_queue":queue,"review":review_document(doc),'convergence':convergence_view(doc),'question_submissions':[s for qid,s in submissions.items() if qid in pending_ids],'run_activity':activity}
+            from .decisions import journey_view
+            answer_runs=[{**dict(r),'answers':json.loads(r['answers'])} for r in db.execute('SELECT message_id,answers,status FROM runs WHERE project_id=? ORDER BY rowid',(project_id,))]
+            project['decision_path']=journey_view(doc,messages,snapshots,answer_runs,project['question_submissions'])
             project['analysis_pending']=self._pending_analysis(db,project_id)
             if project['analysis_pending']:
                 project['review'].update(status='draft',analysis_pending='最新补充尚未完成整理。请等待本轮完成；若分析未完成，可重试或继续补充后再整体审核。')
@@ -166,13 +171,24 @@ class Store(DomainStore):
         project['domain']=domain
         project['reference_submissions']=reference_submissions
         project['domain_revision']=domain['revision']
+        from .decision_map import decision_map
+        project['decision_map']=decision_map(doc,domain,snapshots,project['question_submissions'])
         project['run_activity']=sorted(activity+domain['activity'],key=lambda r:r['created_at'])
         if domain['blockers']:
             project['review']['status']='draft'
             project['review']['domain_blockers']=domain['blockers']
             project['review']['consistency_issues']+= [{'id':c['id'],'kind':'conflict','title':c['title'],'description':c['description'],'requirement_ids':c['requirement_ids']} for c in domain['blockers']]
             project['convergence']['issues']+= [{'id':c['id'],'kind':'conflict','title':c['title'],'description':c['description'],'requirement_ids':c['requirement_ids']} for c in domain['blockers']]
-        project['markdown']=render_markdown({**doc,'analysis_pending':project['analysis_pending']},domain)
+        from .document_export import render_project_document
+        rendered=render_project_document({**doc,'analysis_pending':project['analysis_pending']},domain,structured=True)
+        project['markdown']=rendered.pop('markdown')
+        project['specification']=rendered
+        from .delivery import view as delivery_view
+        project['delivery']=delivery_view(project)
+        with self.connect() as db:
+            scheduled=[dict(r) for r in db.execute("SELECT id,project_id,status,kind,created_at FROM runs WHERE status IN ('queued','running') ORDER BY rowid")]
+        queued=[r for r in scheduled if r['status']=='queued']
+        project['scheduling']={'running':sum(r['status']=='running' for r in scheduled),'queued':len(queued),'position':next((i+1 for i,r in enumerate(queued) if r['project_id']==project_id),None),'capacity':2}
         return project
 
     @staticmethod
@@ -265,6 +281,12 @@ class Store(DomainStore):
                     locked.update(a['question_id'] for a in json.loads(item['answers']))
                 if requested & locked:raise Conflict('这条回答已经收到，正在处理。可在输入框继续补充，无需重复选择。')
             pending = db.execute("SELECT COUNT(*) FROM input_queue WHERE project_id=? AND status='pending'",(project_id,)).fetchone()[0]
+            # A queued internal pass has not read a context yet. Replace it with
+            # real customer input; an already running pass is allowed to finish.
+            if running and running['kind']=='continuation' and running['status']=='queued':
+                db.execute("UPDATE runs SET status='cancelled',finished_at=?,error=? WHERE id=? AND status='queued'",(now(),'已由新收到的用户补充替代，未执行旧上下文。',running['id']))
+                self._event(db,running['id'],'cancelled',{'message':'新回答优先，尚未开始的内部整理已合并到下一轮。'})
+                running=None
             if not running and not pending and not paused:
                 run,created = self._begin_run(db,project_id,text,request_id,answers=answers,actions=actions)
                 return run,created,None
@@ -339,7 +361,7 @@ class Store(DomainStore):
 
     def mark_running(self, run_id):
         with self.connect() as db:
-            db.execute("UPDATE runs SET status='running' WHERE id=? AND status='queued'", (run_id,))
+            return bool(db.execute("UPDATE runs SET status='running' WHERE id=? AND status='queued'", (run_id,)).rowcount)
 
     def finish(self, run_id, status, error=""):
         with self.connect() as db:
@@ -358,8 +380,20 @@ class Store(DomainStore):
             _, current = self._document(db,run["project_id"])
             if current["version"] != run["base_version"]:
                 raise Conflict("文档已在另一处更新，本轮结果未覆盖它。请重新分析。")
-            self._save(db,run["project_id"],doc,current["version"]+1)
-            db.execute("INSERT INTO messages VALUES(?,?,?,?,?)", (uuid.uuid4().hex,run["project_id"],"assistant",reply,now()))
+            from .decisions import public_change
+            before_review=review_document(current)['status']
+            after_review=review_document({**doc,'review_status':'draft'})['status']
+            milestone=before_review=='draft' and after_review=='ready'
+            if milestone and doc.get('guidance_version')==1:
+                reply=reply.rstrip()+'\n\n关联内容已整理完成，请到需求说明书整体审阅本版内容。'
+            self._save(db,run["project_id"],doc,current["version"]+1,event={
+                'message_id':run['message_id'],'run_id':run_id,'kind':run['kind'],
+                'reply':reply,'answers':json.loads(run['answers'])})
+            silent_internal=doc.get('guidance_version')==1 and run['kind']=='continuation' and before_review==after_review and not public_change(current,doc)
+            if silent_internal:
+                self._event(db,run_id,'progress',{'phase':'review','message':'已根据已有回答复核关联内容，当前产品决定保持有效。'})
+            else:
+                db.execute("INSERT INTO messages VALUES(?,?,?,?,?)", (uuid.uuid4().hex,run["project_id"],"assistant",reply,now()))
             self._event(db,run_id,"document",{"version":doc["version"],"changed_ids":doc["changed_ids"]})
             if finalize:
                 db.execute("UPDATE runs SET status='completed',finished_at=? WHERE id=?", (now(),run_id))
@@ -368,7 +402,7 @@ class Store(DomainStore):
                 self._event(db,run_id,'progress',{'phase':'finalizing','message':'本轮修改已保存，正在完成资料排程和内部核对。可以继续补充，内容将按顺序处理。'})
 
     @staticmethod
-    def _save(db,project_id,doc,version,approved=False):
+    def _save(db,project_id,doc,version,approved=False,event=None):
         if doc.get('domain_schema_version'):
             from .device_domain import reconcile_selection_items
             reconcile_selection_items(doc)
@@ -378,6 +412,8 @@ class Store(DomainStore):
         doc["version"] = version
         doc["updated_at"] = now()
         doc["review_status"] = "approved" if approved else "draft"
+        if event is not None:doc['decision_event']={**event,'version':version}
+        else:doc.pop('decision_event',None)
         raw = json.dumps(doc,ensure_ascii=False)
         db.execute("UPDATE projects SET title=?,document=?,updated_at=? WHERE id=?", (doc["title"],raw,now(),project_id))
         db.execute("INSERT INTO revisions VALUES(?,?,?,?)", (project_id,version,pack_history(raw),now()))
@@ -386,6 +422,7 @@ class Store(DomainStore):
         with self.connect() as db:
             db.execute("BEGIN IMMEDIATE")
             _, doc = self._document(db,project_id)
+            original=copy.deepcopy(doc)
             if doc["version"] != base_version:
                 raise Conflict("文档版本已变化，请刷新后再保存。")
             if db.execute("SELECT id FROM runs WHERE project_id=? AND status IN ('queued','running')", (project_id,)).fetchone():
@@ -402,6 +439,7 @@ class Store(DomainStore):
             text = f"手动编辑 {rid}：{update['name']} = {update['value']} {update['unit']}；状态：{update['state']}。"
             db.execute("INSERT INTO messages VALUES(?,?,?,?,?)", (message_id,project_id,"user",text,now()))
             row = {**update,"id":rid,"source_message_id":message_id,"source_quote":text,"source_type":"manual","updated_at":now()}
+            row['spec_field_ids']=existing.get('spec_field_ids',[]) if existing else []
             if existing:
                 doc["requirements"][doc["requirements"].index(existing)] = row
             else:
@@ -413,10 +451,14 @@ class Store(DomainStore):
                 if rid in item["requirement_ids"]:
                     item.update(state="tbd",conclusion="关联需求已手动修改，待重新核对。",source_message_id="",source_quote="")
             invalidate_convergence(doc,[rid])
+            if doc.get('guidance_version')==1:
+                from types import SimpleNamespace
+                from .decisions import reconcile_requirements
+                reconcile_requirements(doc,original,SimpleNamespace(guidance_revision=1,reviewed_requirement_ids=[],updates=[SimpleNamespace(id=rid)]),set(),{rid},{},message_id)
             overview=[r["value"] for r in doc["requirements"] if r["category"]=="overview" and r["state"]=="stated"]
             features=[r["name"] for r in doc["requirements"] if r["category"]=="functions" and r["state"]!="not_applicable"]
             doc["summary"] = ("；".join(overview[:2])+"。" if overview else "") + ("主要功能："+"、".join(features[:6])+"。" if features else "") + "具体指标与约束以以下需求条目为准。"
-            self._save(db,project_id,doc,base_version+1)
+            self._save(db,project_id,doc,base_version+1,event={'message_id':message_id,'kind':'manual_requirement','reply':text})
         return self.get_project(project_id)
 
     def edit_module(self,project_id,base_version,update,remove=False):
@@ -446,7 +488,7 @@ class Store(DomainStore):
             try:apply_convergence(doc,changes,original,[{'id':mid,'role':'user','content':text}],{},set())
             except ValueError as exc:raise Conflict(str(exc)) from exc
             doc.update(changes=[text],changed_ids=[])
-            self._save(db,project_id,doc,base_version+1)
+            self._save(db,project_id,doc,base_version+1,event={'message_id':mid,'kind':'manual_module','reply':text})
         return self.get_project(project_id)
 
     def rename(self,project_id,title,base_version):
@@ -482,7 +524,7 @@ class Store(DomainStore):
             if review["status"] not in ("ready","approved"):
                 gaps=review['decision_gaps'] if doc.get('convergence_version')==2 else review['gaps']
                 missing=f'{len(gaps)} 项产品决定待整理' if doc.get('convergence_version')==2 else f'{len(gaps)} 个章节缺口'
-                raise Conflict(f"仍有 {missing}、{review['open_questions']} 个待答问题、{len(review['unsettled_requirements'])} 项未确认需求、{len(review['module_gaps'])+len(review['module_pending'])} 项模块待核对及 {len(review['consistency_issues'])} 项一致性问题；模块变更也需先完成内部复核，暂不能标记已审核。")
+                raise Conflict(f"仍有 {missing}、{review['open_questions']} 个待答问题、{len(review['unsettled_requirements'])} 项未确认需求、{len(review['module_gaps'])+len(review['module_pending'])} 项模块待核对、{len(review['consistency_issues'])} 项一致性问题及 {review['internal_rechecks']} 项 AI 关联复核；助手需依据已有决定完成内部整理，暂不能标记已审核。")
             if review["status"]=="approved":
                 return self.get_project(project_id)
             doc.update(changes=["用户审核通过当前需求说明书。"],changed_ids=[])

@@ -56,6 +56,16 @@ class ModuleLink(Strict):
     target_port: str = Field(max_length=100)
     description: str = Field(min_length=1,max_length=800)
     state: Literal['proposed','confirmed','design_stage']
+    protocol: str = Field(default='',max_length=200)
+    signals: list[str] = Field(default_factory=list,max_length=24)
+    voltage: str = Field(default='',max_length=300)
+    rate: str = Field(default='',max_length=200)
+    boundary: str = Field(default='',max_length=300)
+    role: str = Field(default='',max_length=300)
+    conditions: str = Field(default='',max_length=500)
+    requirement_ids: list[str] = Field(default_factory=list,max_length=80)
+    source_message_id: str = Field(default='',max_length=64)
+    source_quote: str = Field(default='',max_length=3000)
 
 
 class NumericConstraint(Strict):
@@ -204,7 +214,7 @@ def mark_recheck(row,reason):
 
 
 def source_message_ids(doc):
-    ids={r.get('source_message_id') for key in ('requirements','field_resolutions','modules','device_references','device_constraints') for r in doc.get(key,[])}
+    ids={r.get('source_message_id') for key in ('requirements','field_resolutions','modules','module_links','numeric_constraints','device_references','device_constraints','intake_checks','delivery_checks','external_interfaces','reference_designs') for r in doc.get(key,[])}
     ids.update(r.get('recheck_evidence',{}).get('source_message_id') for r in doc.get('field_resolutions',[]))
     ids.update(r.get('mention_source',{}).get('source_message_id') for r in doc.get('device_references',[]))
     return ids-{None,''}
@@ -263,14 +273,17 @@ def apply(doc, result, original, messages, aliases, semantic_changes):
     fields={r['field_id']:copy.deepcopy(r) for r in doc.get('field_resolutions',[])}
     rechecks=set(doc.get('recheck_fields',[]))
     for row in fields.values():
-        if set(row['requirement_ids']) & semantic_changes or (semantic_changes and row['state']=='confirmed' and not row['requirement_ids']):
+        if set(row['requirement_ids']) & semantic_changes:
             mark_recheck(row,'关联需求已修改，待内部重新核对。')
             rechecks.add(row['field_id'])
     seen=set()
     for update in result.field_resolutions:
         row=update.model_dump();row['requirement_ids']=refs(row['requirement_ids'])
-        if len(set(row['field_ids']))!=len(row['field_ids']) or any(fid not in FIELDS or fid in seen for fid in row['field_ids']):
-            raise ValueError('字段核对范围不存在或重复，本轮未保存。')
+        invalid=sorted({fid for fid in row['field_ids'] if fid not in FIELDS})
+        duplicate=sorted({fid for fid in row['field_ids'] if fid in seen or row['field_ids'].count(fid)>1})
+        if invalid or duplicate:
+            details=('不存在：'+ '、'.join(invalid)+'。' if invalid else '')+('重复：'+'、'.join(duplicate)+'。每个字段本轮只返回一次；多个接口汇总成一条，具体接口分行写 external_interfaces。' if duplicate else '')
+            raise ValueError('字段核对范围不存在或重复，本轮未保存。'+details)
         proven=evidence(row)
         if row['state'] in CLOSED and not proven:
             row.update(state='tbd',conclusion=row['conclusion']+'（尚缺用户原话依据）')
@@ -332,6 +345,10 @@ def apply(doc, result, original, messages, aliases, semantic_changes):
     links={l['id']:l for l in doc.get('module_links',[]) if l['source'] in modules and l['target'] in modules}
     for link in result.module_links:
         row=link.model_dump()
+        row['requirement_ids']=refs(row['requirement_ids'])
+        if row['source_message_id'] or row['source_quote']:
+            if not evidence(row):raise ValueError('接口合同缺少可核查的用户来源。')
+        elif row['state']=='confirmed':row['state']='design_stage'
         row['source']=module_alias.get(row['source'],row['source']);row['target']=module_alias.get(row['target'],row['target'])
         if row['source'] not in modules or row['target'] not in modules or row['source']==row['target']:
             raise ValueError('模块关系引用了不存在或相同的端点，本轮未保存。')
@@ -388,8 +405,12 @@ def invalidate(doc, requirement_ids):
     changed=set(requirement_ids)
     rechecks=set(doc.get('recheck_fields',[]))
     for row in doc.get('field_resolutions',[]):
-        if changed & set(row['requirement_ids']) or (changed and row['state']=='confirmed' and not row['requirement_ids']):
+        if changed & set(row['requirement_ids']):
             mark_recheck(row,'关联需求已修改，待内部重新核对。');rechecks.add(row['field_id'])
     doc['recheck_fields']=sorted(rechecks)
     doc['numeric_constraints']=[r for r in doc.get('numeric_constraints',[]) if r['requirement_id'] not in changed]
+    for check in doc.get('intake_checks',[]):
+        if changed & set(check['requirement_ids']):check['state']='review'
+    for check in doc.get('delivery_checks',[]):
+        if changed & set(check['requirement_ids']):check['state']='review'
     doc['recheck_topics']=sorted(set(doc.get('recheck_topics',[]))|{FIELDS[f]['topic_id'] for f in rechecks})

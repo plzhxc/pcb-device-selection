@@ -59,6 +59,9 @@ def module_topics(doc):
         if any(word in parent.get('name','') for word in ('存储','eMMC')):topics.add('V3-5.2.7')
         if parent.get('name') in ('过压保护模块','浪涌限流与缓启动模块','防反接模块'):topics.add('V3-5.2.8')
         text=' '.join([kind.get('name',''),m.get('name',''),m.get('purpose','')])
+        # Historical approved projects keep their prior checklist scope until a
+        # real new analysis adopts the extended boundary policy.
+        if doc.get('intake_policy_version') and 'USB' in text and re.search(r'通信|数据|UART|串口|协议转换',text):topics.add('V3-5.2.4.5')
         for word,topic in [('Wi-Fi','5.2.4.1'),('蓝牙','5.2.4.2'),('LoRa','5.2.4.3'),('蜂窝','5.2.4.4'),('RS485','5.2.4.7'),('RS232','5.2.4.7'),('按键','5.2.5.5'),('触控','5.2.5.2'),('指示灯','5.2.5.3')]:
             if word in text:topics.add('V3-'+topic)
     return topics
@@ -106,5 +109,8 @@ def review_reply(reply,doc):
     if review['consistency_issues']:next_steps.append('处理已列出的一致性问题')
     if not review['has_flow']:next_steps.append('依据已有功能整理工作流程')
     if not next_steps:next_steps.append('依据已有资料完成产品决定和关联内容的核对')
-    changes='\n'.join('- '+change for change in doc['changes'])
-    return '本轮已整理：\n'+changes+'\n\n当前仍为草稿，下一步需要'+ '；'.join(next_steps)+'。已有要求已保存，可以继续补充。'
+    if review.get('dependency_reviews'):next_steps.append('由助手复核本次决定影响的旧条目')
+    # Preserve useful explanations; replace only the premature readiness claim.
+    corrected=''.join(s for s in re.split(r'(?<=[。！？\n])',reply)
+                      if not (re.search(claim,s) and not re.search(r'如果|后|才能|才可|不能|暂不|尚未',s))).strip()
+    return corrected+'\n\n当前仍为草稿，接下来需要'+ '；'.join(next_steps)+'。已明确的决定继续保留。'

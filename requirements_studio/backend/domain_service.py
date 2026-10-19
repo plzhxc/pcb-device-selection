@@ -8,7 +8,7 @@ import json
 import re
 from concurrent.futures import ThreadPoolExecutor
 
-from .device_domain import digest
+from .device_domain import digest,context_assertions
 from .domain_store import identity_input
 from .knowledge import catalog, mentions, KnowledgeUnavailable, now
 
@@ -107,24 +107,45 @@ class KnowledgeManager:
             if mention.casefold() not in known:
                 refs.append({'id': '', 'mention': mention, 'identity_scope': 'exact_part', 'device_key': None})
                 known.add(mention.casefold())
-            if len(refs) >= 5: break
-        refs+=existing[:max(0,5-len(refs))]
+        # Five is the concurrent batch width, not the total number of named
+        # devices in a customer's input. Keep a finite list and wall-time budget.
+        refs += [r for r in existing if r['mention'].casefold() not in
+                 {candidate['mention'].casefold() for candidate in refs}]
+        refs=refs[:80]
         job_id = await self.enqueue(project_id, refs,request_id='preflight:'+run_id, message_id=message['id'], parent_run_id=run_id)
         if job_id and job_id in self.tasks:
-            try: await asyncio.wait_for(asyncio.shield(self.tasks[job_id]), timeout=24)
+            try: await asyncio.wait_for(asyncio.shield(self.tasks[job_id]), timeout=45)
             except asyncio.TimeoutError: pass
 
     def preflight_context(self, project_id, text):
         doc = self.store.raw_document(project_id)
         values = {m.casefold() for m in mentions(text)}
         with self.store.connect() as db:
-            rows = db.execute("SELECT result FROM domain_jobs WHERE project_id=? AND status='completed' ORDER BY rowid DESC LIMIT 12", (project_id,)).fetchall()
+            rows = db.execute("SELECT result FROM domain_jobs WHERE project_id=? AND status IN ('completed','running') ORDER BY rowid DESC LIMIT 12", (project_id,)).fetchall()
         result = []
         for row in rows:
             for ref in json.loads(row['result']).get('references', []):
                 if ref['mention'].casefold() in values and not any(r['mention'].casefold() == ref['mention'].casefold() for r in result):
-                    result.append({k: v for k, v in ref.items() if k not in ('items',)})
-        return result[:12]
+                    item={k: v for k, v in ref.items() if k not in ('items',)}
+                    item['attributes']=context_assertions(ref.get('attributes',[]))
+                    item['candidates']=[{k:c.get(k) for k in ('device_key','model','supplier_part','package')} for c in ref.get('items',[])[:5]]
+                    # First-turn evidence must be usable before the model creates
+                    # the saved REF objects. Read only immutable snapshots.
+                    item['evidence']=[]
+                    for eid in ref.get('evidence_ids',[])[:4]:
+                        piece=self.store.evidence(project_id,eid)
+                        if piece['kind']=='catalog':
+                            piece={**piece,'assertions':context_assertions(piece.get('assertions',[]))}
+                        else:
+                            piece={k:piece.get(k) for k in ('id','kind','title','locator','page_number','section_path','content_hash','excerpt','version_context')}
+                        item['evidence'].append(piece)
+                    result.append(item)
+        present={r['mention'].casefold() for r in result}
+        for mention in mentions(text):
+            if mention.casefold() not in present:
+                result.append({'mention':mention,'status':'pending','evidence':[],
+                               'message':'本轮有限预查尚未取得结果，不能解释为无此型号；后台资料任务继续。'})
+        return result[:80]
 
     async def _read_reference(self, job, ref):
         async with self.limit:
@@ -132,6 +153,13 @@ class KnowledgeManager:
                 return None, []
             loop = asyncio.get_running_loop()
             self.store.domain_event(job['id'], '正在查询 ' + ref['mention'] + ' 的真实目录身份。')
+            def publish(output,evidence):
+                if output.get('status')=='unavailable' and not output.get('identity'):
+                    partial=json.loads(self.store.domain_job(job['project_id'],job['id'])['result']).get('references',[])
+                    found=next((r for r in partial if r.get('identity_input_hash')==output['identity_input_hash'] and r.get('identity')),None)
+                    if found:output={**found,'document_status':'unavailable','message':'目录身份与参数已保存；手册资料暂未取得，仍需补证。'}
+                self.store.record_domain_reference(job['project_id'],job['id'],output,evidence)
+                return output,evidence
             try:
                 resolution = await loop.run_in_executor(self.pool, self.provider.resolve, ref)
                 output = {'mention': ref['mention'], 'identity_input_hash': identity_input(ref),
@@ -140,27 +168,30 @@ class KnowledgeManager:
                           'evidence_ids': [], 'document_status': 'not_checked', 'message': ''}
                 if not resolution.get('device'):
                     output['message'] = '存在多个或相关型号，未替用户选择代表器件。' if resolution['status'] == 'ambiguous' else '在本次目录范围内未找到唯一身份。'
-                    return output, []
+                    return publish(output, [])
                 device = resolution['device']; identity = device['identity']; output['identity'] = identity
+                record = catalog_evidence(device)
+                output.update(evidence_ids=[record['id']],document_status='pending',
+                              attributes=[a for a in record['assertions'] if not a.get('is_missing')][:18])
+                publish(output,[record])
                 self.store.domain_event(job['id'], ref['mention'] + ' 已定位，正在取得参数与手册片段。', 'datasheet')
-                topics=ref.get('knowledge_topics') or ['输入电压 开关频率','功能 接口 工作条件']
+                topics=ref.get('knowledge_topics') or ['功能 接口 供电 推荐工作条件','引脚 典型应用 工作模式']
                 documents = await loop.run_in_executor(self.pool, self.provider.spans, identity, topics)
                 spans = [span_evidence(identity, r) for r in documents.get('items', [])]
-                record = catalog_evidence(device)
                 strengthen_attributes(record, spans)
                 evidence = [record, *spans]
                 output.update(evidence_ids=[e['id'] for e in evidence], document_status=documents['status'],
                               attributes=[a for a in record['assertions'] if a['priority_rank'] <= 8][:8],
                               message='已保存目录原值及实际取得的资料；工程结论按具体条件核对。')
                 self.store.domain_event(job['id'], ref['mention'] + f'：已取得 {len(record["assertions"])} 项属性与 {len(spans)} 个片段。', 'checks')
-                return output, evidence
+                return publish(output, evidence)
             except (KnowledgeUnavailable, ValueError) as exc:
-                return {'mention': ref['mention'], 'identity_input_hash': identity_input(ref), 'status': 'unavailable',
-                        'items': [], 'identity': None, 'evidence_ids': [], 'document_status': 'unavailable', 'message': str(exc)}, []
+                return publish({'mention': ref['mention'], 'identity_input_hash': identity_input(ref), 'status': 'unavailable',
+                        'items': [], 'identity': None, 'evidence_ids': [], 'document_status': 'unavailable', 'message': str(exc)}, [])
             except Exception as exc:
-                return {'mention': ref['mention'], 'identity_input_hash': identity_input(ref), 'status': 'unavailable',
+                return publish({'mention': ref['mention'], 'identity_input_hash': identity_input(ref), 'status': 'unavailable',
                         'items': [], 'identity': None, 'evidence_ids': [], 'document_status': 'unavailable',
-                        'message': '资料读取未完成（' + type(exc).__name__ + '），可以重试。'}, []
+                        'message': '资料读取未完成（' + type(exc).__name__ + '），可以重试。'}, [])
 
     async def _run(self, job):
         if not self.store.start_domain_job(job['project_id'], job['id']): return
@@ -180,7 +211,9 @@ class KnowledgeManager:
                 if pending:
                     for ref, task in zip(refs[start:start+5], tasks):
                         if task in pending:
-                            outputs.append({'mention': ref['mention'], 'identity_input_hash': identity_input(ref),
+                            partial=json.loads(self.store.domain_job(job['project_id'],job['id'])['result']).get('references',[])
+                            found=next((r for r in partial if r.get('identity_input_hash')==identity_input(ref)),None)
+                            outputs.append({**found,'document_status':'unavailable','message':'目录身份已取得；手册读取达到预算，保留目录证据。'} if found and found.get('identity') else {'mention': ref['mention'], 'identity_input_hash': identity_input(ref),
                                             'status': 'unavailable', 'items': [], 'evidence_ids': [],
                                             'message': '此批检索达到预算，已有需求保留，可以重试。'})
             self.store.finish_domain_job(job['project_id'], job['id'], {'references': outputs}, evidence)

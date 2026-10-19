@@ -507,6 +507,145 @@ class Session:
             "download": f"/api/projects/{project_id}/generation-input.json",
         }
 
+    # --------------------------------------------- 需求回填（选型 → 需求）
+    def supplement_proposals(self, project_id: str | None = None) -> dict[str, Any]:
+        """算出"选型之后已经能确定、但需求里还写着待定"的条目。"""
+
+        from src.supplement import pending, propose
+
+        pid = str(project_id or self.current_id or "")
+        if not pid:
+            raise ValueError("当前是示例模式，没有上游需求可回填")
+        entry = self.store.entry(pid)
+        if entry is None or entry.status != "ready":
+            raise ValueError("该项目尚未完成选型，暂无可回填的内容")
+        raw = self.store._read_raw(pid)
+        if raw is None:
+            raise ValueError("找不到该项目的上游交接件副本")
+
+        # 交接件是打开项目时的快照；用户在说明书里确认或修改过之后，
+        # 要以工作台当前文档为准，否则已经回填过的条目会反复出现在建议里。
+        try:
+            live = self.studio.project(pid)
+            live_rows = {
+                str(row.get("id")): row
+                for row in (live.get("document") or {}).get("requirements") or []
+            }
+        except Exception:  # noqa: BLE001 - 工作台暂时不可达时退回快照
+            live_rows = {}
+        if live_rows:
+            merged: list[dict[str, Any]] = []
+            seen_ids: set[str] = set()
+            for row in raw.get("requirements") or []:
+                rid = str(row.get("id") or "")
+                seen_ids.add(rid)
+                merged.append({**row, **live_rows.get(rid, {})})
+            for rid, row in live_rows.items():
+                if rid not in seen_ids:
+                    merged.append(dict(row))
+            raw = {**raw, "requirements": merged}
+
+        proposals = propose(
+            raw_spec=raw,
+            result=entry.result,
+            decisions=self.store.decisions(pid).all(),
+            attributes_for=self.service.attributes.for_device,
+        )
+        covered = {p.requirement_id for p in proposals}
+        pending_rows = [row for row in pending(raw) if row["id"] not in covered]
+        if proposals:
+            note = (
+                "这些需求当初只能写「待定」，现在选完器件已经能给出具体值。"
+                "采纳后会以「建议」状态写回需求说明书，仍需你最终确认。"
+            )
+        elif pending_rows:
+            note = (
+                f"还有 {len(pending_rows)} 条待定需求，但现有器件参数不足以唯一确定它们。"
+                "例如接口数量取决于统计口径，不能从单颗器件的参数直接抄出，需要回到需求说明书确认。"
+            )
+        else:
+            note = "这个项目没有待定需求，不需要补充。"
+        return {
+            "project_id": pid,
+            "count": len(proposals),
+            "proposals": [p.as_dict() for p in proposals],
+            "pending": pending_rows,
+            "note": note,
+        }
+
+    def apply_supplements(
+        self, keys: Sequence[str], project_id: str | None = None
+    ) -> dict[str, Any]:
+        """把选中的建议写回工作台的需求说明书。
+
+        走的是工作台自己的需求编辑接口：它会新建一版文档、留下改动记录，
+        并把内容同步到说明书。写入状态一律是"建议"，不冒充用户原话。
+        """
+
+        pid = str(project_id or self.current_id or "")
+        if not pid:
+            raise ValueError("当前是示例模式，没有可回填的项目")
+        preview = self.supplement_proposals(pid)
+        wanted = set(str(k) for k in keys or [])
+        chosen = [p for p in preview["proposals"] if p["key"] in wanted]
+        if not chosen:
+            raise ValueError("没有选中任何一条建议")
+
+        raw = self.store._read_raw(pid) or {}
+        requirements = {
+            str(r.get("id")): dict(r) for r in raw.get("requirements") or []
+        }
+
+        applied: list[dict[str, Any]] = []
+        failed: list[dict[str, Any]] = []
+        done: set[str] = set()
+        for proposal in chosen:
+            rid = proposal["requirement_id"]
+            if rid in done:
+                continue
+            requirement = requirements.get(rid) or {}
+            try:
+                project = self.studio.project(pid)
+                version = int((project.get("document") or {}).get("version") or 0)
+                self.studio.patch_requirement(
+                    pid,
+                    base_version=version,
+                    requirement_id=rid,
+                    name=proposal["requirement_name"],
+                    value=proposal["proposed_value"],
+                    unit=proposal["unit"],
+                    category=proposal["category"],
+                    priority=str(requirement.get("priority") or "must"),
+                    state="suggested",
+                    implementation=str(requirement.get("implementation") or "hardware"),
+                )
+                done.add(rid)
+                applied.append(
+                    {
+                        "requirement_id": rid,
+                        "name": proposal["requirement_name"],
+                        "value": proposal["proposed_value"],
+                        "unit": proposal["unit"],
+                        "from_model": proposal["model"],
+                    }
+                )
+            except Exception as exc:  # noqa: BLE001 - 单条失败不影响其它
+                failed.append(
+                    {
+                        "requirement_id": rid,
+                        "name": proposal["requirement_name"],
+                        "error": f"{type(exc).__name__}: {str(exc)[:160]}",
+                    }
+                )
+
+        return {
+            "project_id": pid,
+            "applied": applied,
+            "failed": failed,
+            "counts": {"applied": len(applied), "failed": len(failed)},
+            "next": "打开需求说明书即可看到这些条目已按「建议」补充，确认后可改为正式要求。",
+        }
+
     # ------------------------------------------------------------- 对话逻辑
     def _models(self) -> dict[str, dict[str, Any]]:
         table: dict[str, dict[str, Any]] = {}
@@ -932,6 +1071,13 @@ class Handler(SimpleHTTPRequestHandler):
                 }
             )
             return
+        if parsed.path == "/api/supplements":
+            project = (parse_qs(parsed.query).get("project") or [""])[0]
+            try:
+                self._json(self.session.supplement_proposals(project or None))
+            except ValueError as exc:
+                self._json({"error": str(exc), "proposals": []}, 409)
+            return
         if parsed.path == "/api/search":
             query = (parse_qs(parsed.query).get("q") or [""])[0]
             self._json(self.session.service.search(query, limit=8))
@@ -1076,6 +1222,14 @@ class Handler(SimpleHTTPRequestHandler):
                         mode=str(payload.get("mode") or "all")
                     )
                 )
+                return
+            if parsed.path == "/api/supplements/apply":
+                keys = payload.get("keys") or []
+                project_id = str(payload.get("project_id") or "") or None
+                try:
+                    self._json(self.session.apply_supplements(keys, project_id))
+                except ValueError as exc:
+                    self._json({"error": str(exc)}, 409)
                 return
             if parsed.path == "/api/chat":
                 self._json(self.session.chat(str(payload.get("message") or "")))

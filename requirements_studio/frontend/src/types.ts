@@ -5,8 +5,9 @@ export interface Requirement {
   priority: 'must' | 'should' | 'could'; state: State;
   source_message_id: string; source_quote: string; source_type: string; updated_at: string;
   implementation?: 'hardware'|'software'|'service'|'system';
+  spec_field_ids?:string[];
 }
-export interface Question { id: string; question: string; reason: string; options: string[]; requirement_ids: string[]; branch?: Category; status?: 'pending' | 'deferred'; field_ids?:string[]; decision_key?:string; priority?:number; impact?:string; option_impacts?:string[] }
+export interface Question { source_message_id?:string; id: string; question: string; reason: string; options: string[]; requirement_ids: string[]; branch?: Category; status?: 'pending' | 'deferred'; field_ids?:string[]; decision_key?:string; priority?:number; impact?:string; option_impacts?:string[] }
 export interface QuestionAnswer { question_id: string; answer: string; deferred: boolean }
 export interface QuestionSubmission extends QuestionAnswer {status:'sending'|'processing'|'queued'|'needs_input'|'failed';run_id?:string;message_id?:string;queue_id?:string}
 export interface RunActivity {id:string;message_id:string;kind:string;status:string;created_at:string;events:{seq:number;kind:string;message?:string;at?:string;phase?:string}[]}
@@ -16,6 +17,8 @@ export interface Document {
   version: number; updated_at: string; changed_ids: string[]; changes: string[];
   questions_paused?: boolean;
   modules?:ModuleInstance[];
+  created_at?:string;
+  external_interfaces?:ExternalInterface[];
 }
 export interface Run { id: string; status: string; error: string; created_at: string; kind?: 'user' | 'continuation' }
 export interface CoverageTopic { id:string; section:string; chapter:number; title:string; fields:string[]; state:'confirmed'|'not_applicable'|'design_stage'|'tbd'|'conflict'; conclusion?:string; source_quote?:string; requirement_ids?:string[] }
@@ -36,17 +39,34 @@ export interface Project {
   input_queue: { id: string; text: string; created_at: string }[];
   review: Review;
   convergence: Convergence;
+  specification:Specification;
+  decision_path:DecisionPath;
+  decision_map:DecisionMap;
   question_submissions?:QuestionSubmission[];
   reference_submissions?:(DomainAction&{run_id?:string;queue_id?:string;status:'processing'|'queued'})[];
   run_activity?:RunActivity[];
   domain?:DomainView;
   domain_revision?:number;
   analysis_pending?:{message_id:string;run_id:string;status:string}|null;
+  scheduling?:{running:number;queued:number;position:number|null;capacity:number};
+  delivery?:Delivery;
 }
 
+export interface ExternalInterface {id:string;name:string;purpose:string;external_object:string;protocol:string;signals:string[];voltage:string;shared_link:string;state:string;requirement_ids:string[]}
+export interface BomRow {key:string;model:string;original_model:string;designators:string[];supplier_part:string;package:string;observed_quantity:number;quantity:number|null;core:boolean;status:'adopted'|'proposed'|'reference';source_id:string;source_filename:string;module_ids:string[];reference_id:string;purpose:string;quantity_basis:string;resolution_status:string}
+export interface Delivery {next_owner:string;next_label:string;user_decisions:number;internal_tasks:number;checks:{key:string;label:string;state:string;conclusion:string;next_action:string}[];bom:{sources:{id:string;filename:string;instance_count:number;warnings:string[]}[];rows:BomRow[];core_count:number;core_adopted:number;proposed_count:number};engineering_tasks:{id:string;owner:string;description:string;completion_condition:string}[]}
+
+export interface SpecificationField extends ResolvedField {display:'requirements'|'names'|'summary'|'title';content:string;status_label:string;review_pending:boolean;engineering:boolean}
+export interface Specification {revision:string;chapters:{number:number;title:string;topics:{id:string;section:string;title:string;parent?:{section:string;title:string}|null;engineering:boolean;fields:SpecificationField[]}[]}[];unassigned_requirement_ids:string[];field_count:number;confirmed_count:number;tail_markdown:string;compact_tail_markdown?:string}
+export interface DecisionBranch {id:string;question:string;reason:string;options:string[];option_impacts:string[];state:'waiting'|'processing'|'answered'|'organized'|'deferred';adjusted:boolean;requirement_ids:string[];answer:string;answer_message_id:string;receipt?:QuestionSubmission}
+export interface DecisionTurn {id:string;input:string;at:string;versions:number[];analyses:string[];results:string[];current_results:string[];branches:DecisionBranch[];legacy:boolean;answered?:string[];module_ids?:string[];internal_notes?:string[]}
+export interface DecisionPath {turns:DecisionTurn[];pending_reviews:{requirement_id:string;message_id:string;reason:string}[];version:number;note:string}
+export interface DecisionNode {id:string;kind:'requirement'|'device'|'module'|'interface'|'question'|'boundary';group:string;title:string;conclusion:string;status:string;status_label:string;basis:string;sources:{message_id:string;quote:string}[];facts:{label:string;value:string;basis:string;conditions:string}[];evidence_ids:string[];requirement_ids:string[];module_ids:string[];spec_fields:{id:string;label:string;section:string}[];history:{version:number;value:Record<string,unknown>;source_message_id:string}[];notes:string[];question_id?:string;options?:string[];option_impacts?:string[];impact?:string}
+export interface DecisionMap {revision:string;version:number;root:{title:string;summary:string};groups:{id:string;label:string;description:string;total:number;settled:number;pending:number}[];nodes:DecisionNode[];edges:{source:string;target:string;kind:string;label:string}[];counts:{settled:number;questions:number;specified_devices:number;located_devices:number};policy:string}
+
 export type DeviceIntent='must'|'prefer'|'reference'|'undecided';
-export interface DeviceIdentity {device_key:string;model:string;manufacturer:string;supplier_part:string;supplier_namespace:string;package:string;leaf_code?:string;leaf_name:string;taxonomy_path:string;source_locator:string;document_locator:string;origin:string;identity_warning?:string;price?:string|number|null;price_conditions?:string}
-export interface DeviceReference {id:string;mention:string;intent:DeviceIntent;identity_scope:'exact_part'|'family'|'assembly'|'unresolved';purpose:string;requirement_ids:string[];module_ids:string[];quantity:number|null;lifecycle:string;source_message_id:string;source_quote:string;device_key?:string|null;resolution_status:string;identity:DeviceIdentity|null;candidates:DeviceIdentity[];document_status:string;lookup_message:string;evidence_ids:string[]}
+export interface DeviceIdentity {build_id?:string;record_id?:string;device_key:string;model:string;manufacturer:string;supplier_part:string;supplier_namespace:string;package:string;leaf_code?:string;leaf_name:string;taxonomy_path:string;source_locator:string;document_locator:string;origin:string;identity_warning?:string;price?:string|number|null;price_conditions?:string}
+export interface DeviceReference {reference_quantity_source?:{source_id:string;sha256:string;part_key:string;basis:string};id:string;mention:string;intent:DeviceIntent;identity_scope:'exact_part'|'family'|'assembly'|'unresolved';purpose:string;requirement_ids:string[];module_ids:string[];quantity:number|null;lifecycle:string;source_message_id:string;source_quote:string;device_key?:string|null;resolution_status:string;identity:DeviceIdentity|null;candidates:DeviceIdentity[];document_status:string;lookup_message:string;evidence_ids:string[]}
 export interface DeviceAssertion {field_key:string;label:string;raw_value:string;raw_numeric:string|null;raw_unit:string|null;normalized:{minimum:string;maximum:string;dimension:string;unit:string;form:string}|null;validation_state:string;issue:string;source_disagreement?:string;source_evidence_status:string;is_missing:boolean;is_derived:boolean;is_required_in_catalog:boolean;conditions:string;rating_kind:string;locator:string;source_field:string;source_checksum?:string;supporting_evidence_ids?:string[];supporting_quote?:string}
 export interface DeviceEvidence {id:string;kind:string;device_key:string;title:string;locator:string;primary_key?:string;page_number?:number;section_path?:string;content?:string;excerpt?:string;content_hash?:string;assertions:DeviceAssertion[];version_context:Record<string,unknown>;availability:string;checked_at:string;reference_id?:string}
 export interface DomainCheck {id:string;reference_id:string;title:string;status:string;description:string;blocking:boolean;evidence_ids:string[];formula:string;missing:string[];requirement_ids:string[]}

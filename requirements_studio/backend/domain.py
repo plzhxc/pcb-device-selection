@@ -10,6 +10,8 @@ from .coverage import CATALOG, LABELS as COVERAGE_LABELS, TOPICS, review_documen
 from .convergence import FieldResolution, ModuleUpdate, ModuleLink, NumericConstraint, FIELDS, apply as apply_convergence
 from .module_catalog import TYPES
 from .device_domain import DeviceReferenceUpdate, DeviceConstraintUpdate, KnowledgeRequest, apply_updates as apply_device_updates
+from .intake import IntakeCheck
+from .delivery import DeliveryCheck,InterfaceContract
 
 CATEGORIES = {
     "overview": "项目概述", "functions": "功能需求", "performance": "性能指标",
@@ -39,6 +41,7 @@ class RequirementUpdate(StrictModel):
     state: State
     source_message_id: str = Field(max_length=64)
     source_quote: str = Field(max_length=3000)
+    spec_field_ids: list[str] = Field(default_factory=list, max_length=24, description='该项需求在 V3 规范中实际对应的字段 ID。只关联真正承载此内容的条款，不为覆盖率关联无关字段。')
     implementation: Literal['hardware','software','service','system'] = Field(
         default='hardware',
         description='需求的实现归属：hardware 仅指需要电路承接的功能，如供电、传感采集、电机驱动或实体按键；software 指固件或 App 功能（含 App 内按钮）；service 指外部服务；system 指整机目标、交付配套及不含电路的机械配件（如机架、保护罩），不能因实物属性而归为电路功能。混合需求按实际功能分别记录，不得为了消除模块缺口把真实电路功能改为 system。',
@@ -86,6 +89,10 @@ class AnalysisResult(StrictModel):
     flow: list[FlowStep] = Field(max_length=9,description='非空时更新完整产品流程草案；空数组表示保留已有流程，不用于清空。')
     changes: list[str] = Field(max_length=20)
     analysis_revision: Literal[1,2,3] = 1
+    guidance_revision: Literal[0,1] = 0
+    intake_policy_revision: Literal[0,1] = 0
+    intake_checks: list[IntakeCheck] = Field(default_factory=list,max_length=5,description='五项必要产品边界的增量检查，不是五道问卷。已有原话可确定的直接沿用，真正影响产品决定的未知保留open；纯工程实现不强迫用户逐项确定。')
+    reviewed_requirement_ids: list[str] = Field(default_factory=list,max_length=160,description='本轮对照最新用户决定实际检查且内容仍然有效的现有需求 ID；已修改的放 updates。用于关联复核，不代表替用户确认或完成工程验证。')
     field_resolutions: list[FieldResolution] = Field(default_factory=list,max_length=160)
     module_updates: list[ModuleUpdate] = Field(default_factory=list,max_length=80)
     remove_module_ids: list[str] = Field(default_factory=list,max_length=80)
@@ -95,6 +102,9 @@ class AnalysisResult(StrictModel):
     remove_device_reference_ids: list[str] = Field(default_factory=list,max_length=80)
     device_constraints: list[DeviceConstraintUpdate] = Field(default_factory=list,max_length=120)
     knowledge_requests: list[KnowledgeRequest] = Field(default_factory=list,max_length=20)
+    delivery_revision: Literal[0,1] = 0
+    delivery_checks:list[DeliveryCheck]=Field(default_factory=list,max_length=4)
+    external_interfaces:list[InterfaceContract]=Field(default_factory=list,max_length=40)
 
 
 def empty_document() -> dict:
@@ -119,9 +129,13 @@ def analysis_schema(document: dict, source_ids: list[str] | None = None,
     # Require all fields for structured output while accepting historical saved
     # responses that predate the question backlog fields in local replays.
     schema["required"] = list(schema["properties"])
+    schema['properties']['guidance_revision']['enum']=[1]
+    schema['properties']['intake_policy_revision']['enum']=[1]
+    schema['properties']['delivery_revision']['enum']=[1]
     schema["$defs"]["CoverageUpdate"]["properties"]["topic_id"]["enum"] = list(TOPICS)
     schema['$defs']['FieldResolution']['properties']['field_ids']['items']['enum']=list(FIELDS)
     schema['$defs']['Question']['properties']['field_ids']['items']['enum']=list(FIELDS)
+    schema['$defs']['RequirementUpdate']['properties']['spec_field_ids']['items']['enum']=list(FIELDS)
     schema['$defs']['ModuleUpdate']['properties']['type_id']['enum']=list(TYPES)
     if source_ids is not None:
         sources=list(dict.fromkeys(['',*source_ids]))
@@ -183,6 +197,10 @@ def apply_analysis(document: dict, result: AnalysisResult, messages: list[dict],
     for update in result.updates:
         row = update.model_dump()
         original_id = row["id"]
+        if len(row['spec_field_ids']) != len(set(row['spec_field_ids'])) or any(fid not in FIELDS for fid in row['spec_field_ids']):
+            raise ValueError('需求引用了未知或重复的规范条款，本轮未保存。')
+        if not row['spec_field_ids'] and original_id in known:
+            row['spec_field_ids']=known[original_id].get('spec_field_ids',[])
         if original_id in seen and original_id:
             raise ValueError("模型返回了重复需求编号，请重试。")
         seen.add(original_id)
@@ -227,8 +245,11 @@ def apply_analysis(document: dict, result: AnalysisResult, messages: list[dict],
     for q in incoming_questions:
         if q["id"] in resolved:
             continue
+        # Keep one stable branch when a model accidentally renames its ID.
+        same_key=next((old for old in questions.values() if q.get('decision_key') and old.get('decision_key')==q['decision_key']),None)
+        if same_key and same_key['id']!=q['id']:q['id']=same_key['id']
         q["requirement_ids"] = refs(q["requirement_ids"])
-        q["source_message_id"] = message_id
+        q["source_message_id"] = questions.get(q['id'],{}).get('source_message_id') or message_id
         linked = [known[rid] for rid in q["requirement_ids"]]
         q["branch"] = linked[0]["category"] if linked else "overview"
         q["status"] = questions.get(q["id"], {}).get("status", "pending")
@@ -283,6 +304,12 @@ def apply_analysis(document: dict, result: AnalysisResult, messages: list[dict],
     doc.update(title=doc["title"] if doc.get("title_locked") else result.title.strip(), summary=result.summary.strip(), requirements=list(known.values()), questions=list(questions.values()), question_history=history[-100:], questions_paused=paused, coverage=list(coverage.values()), recheck_topics=sorted(rechecks), review_status="draft", flow=flow, changed_ids=changed, changes=result.changes, updated_at=now(),next_requirement_number=number+1)
     module_aliases=apply_convergence(doc,result,original_document,messages,aliases,semantic_changes) or {}
     apply_device_updates(doc,result,original_document,messages,aliases,module_aliases)
+    from .decisions import reconcile_requirements
+    reconcile_requirements(doc,original_document,result,resolved,semantic_changes,aliases,message_id)
+    from .intake import apply_checks,fallback_question
+    apply_checks(doc,original_document,result,messages,aliases,semantic_changes)
+    from .delivery import apply as apply_delivery
+    apply_delivery(doc,result,messages,aliases,semantic_changes)
     review = review_document(doc)
     user_gaps=review['decision_gaps'] if doc.get('convergence_version')==2 else [gap for gap in review["gaps"] if gap["id"] not in set(doc.get('recheck_topics',[]))]
     if not doc["questions"] and not paused and doc["requirements"] and (user_gaps or review["unsettled_requirements"]):
@@ -294,6 +321,10 @@ def apply_analysis(document: dict, result: AnalysisResult, messages: list[dict],
             from .experience import decision_scope
             from .convergence import field_rows
             doc['questions'][0]['field_ids']=[f['id'] for f in decision_scope(doc,field_rows(doc))['decision_fields'] if f['topic_id']==gap['id'] and f['state'] not in ('confirmed','not_applicable','design_stage')]
+        if doc.get('guidance_version')==1:
+            from .decisions import next_product_question
+            doc['questions']=[next_product_question(doc,gap,message_id)]
+    if not doc['questions'] and not paused and doc['requirements']:fallback_question(doc,message_id)
     return doc
 
 

@@ -1,6 +1,6 @@
 """与需求分析工作台（requirements_studio）的接口适配。
 
-chenxin 侧的契约是 `pcbagent.requirement-spec/1.0`（Pydantic，`extra='forbid'`），
+chenxin 侧的契约是 `pcbagent.requirement-spec/1.x`（Pydantic，`extra='forbid'`），
 与我在用的 `pcbagent.requirement_spec.v1` 不是同一套字段。本模块负责两件事：
 
 1. `to_selection_spec`：把他们的 RequirementSpec 转成本阶段的输入；
@@ -22,6 +22,9 @@ from typing import Any, Iterable, Mapping, Sequence
 from .units import _canonical_unit, parse_quantity
 
 CHENXIN_SCHEMA = "pcbagent.requirement-spec/1.0"
+# 上游在持续推进小版本（1.0 → 1.1 → 1.2）。新增字段都带默认值，
+# 本阶段只用到子集，所以按前缀接受，不因版本号升级就拒收。
+CHENXIN_SCHEMA_PREFIX = "pcbagent.requirement-spec/"
 MY_SCHEMA = "pcbagent.requirement_spec.v1"
 
 # 他们的关系词 → 本阶段的比较符
@@ -185,8 +188,10 @@ def to_selection_spec(
     """
 
     schema = str(spec.get("schema_version") or "")
-    if schema != CHENXIN_SCHEMA:
-        raise ValueError(f"期望 {CHENXIN_SCHEMA!r}，实际 {schema!r}")
+    if not schema.startswith(CHENXIN_SCHEMA_PREFIX):
+        raise ValueError(
+            f"期望 {CHENXIN_SCHEMA_PREFIX}* 的交接件，实际 {schema!r}"
+        )
 
     requirements = {
         str(r.get("id")): dict(r) for r in spec.get("requirements") or []
@@ -374,7 +379,7 @@ def to_selection_spec(
         "selection_items": items,
         "source": {
             "system": "requirements_studio",
-            "schema_version": CHENXIN_SCHEMA,
+            "schema_version": schema,
             "spec_id": str(spec.get("spec_id") or ""),
             "project_id": str(spec.get("project_id") or ""),
             "requirement_version": spec.get("requirement_version"),

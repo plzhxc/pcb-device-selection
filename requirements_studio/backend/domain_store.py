@@ -15,7 +15,9 @@ def timestamp():
 
 
 def identity_input(ref):
-    return digest({k: ref.get(k) for k in ('mention', 'identity_scope', 'device_key')})
+    values={k: ref.get(k) for k in ('mention', 'identity_scope', 'device_key')}
+    if ref.get('reference_supplier_part'):values['reference_supplier_part']=ref['reference_supplier_part']
+    return digest(values)
 
 
 class DomainStore:
@@ -121,6 +123,21 @@ class DomainStore:
                                f'资料核对已保存：{len(result.get("references", []))} 条引用、{len(evidence)} 份证据。'})
         return True
 
+    def record_domain_reference(self, project_id, job_id, result, evidence):
+        """Publish an obtained identity before other devices/manual reads finish."""
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            row=db.execute('SELECT status,result FROM domain_jobs WHERE project_id=? AND id=?',(project_id,job_id)).fetchone()
+            if not row or row['status']!='running':return False
+            saved=json.loads(row['result'])
+            refs=[r for r in saved.get('references',[]) if r.get('identity_input_hash')!=result['identity_input_hash']]
+            refs.append(copy.deepcopy(result));saved['references']=refs
+            for item in evidence:
+                db.execute('INSERT OR IGNORE INTO evidence_snapshots VALUES(?,?,?,?,?)',
+                           (project_id,item['id'],job_id,json.dumps(item,ensure_ascii=False,allow_nan=False),timestamp()))
+            db.execute('UPDATE domain_jobs SET result=? WHERE id=?',(json.dumps(saved,ensure_ascii=False),job_id))
+        return True
+
     def saved_resolution(self, project_id, fingerprint, matched=False):
         # The visible job timeline is bounded. Facts remain available after a
         # long session, even when their original job is outside that window.
@@ -146,7 +163,7 @@ class DomainStore:
         refs = []
         resolutions = []
         for job in jobs:
-            if job['status'] == 'completed': resolutions += json.loads(job['result']).get('references', [])
+            if job['status'] in ('completed','running'): resolutions += json.loads(job['result']).get('references', [])
         linked_evidence = []
         for ref in doc.get('device_references', []):
             if ref.get('lifecycle') != 'active': continue
@@ -212,6 +229,39 @@ class DomainStore:
         refs = {r['id']: r for r in doc.get('device_references', []) if r.get('lifecycle') == 'active'}
         changes = []
         for action in actions:
+            if action['operation']=='attach_reference':
+                from .reference_design import reference_message
+                from .device_domain import DeviceReferenceUpdate,apply_updates
+                from types import SimpleNamespace
+                source=copy.deepcopy(action['source']);source['source_message_id']=message_id
+                if any(s['id']==source['id'] for s in doc.get('reference_designs',[])):continue
+                doc.setdefault('reference_designs',[]).append(source)
+                lines=text.splitlines()
+                for part in [p for p in source['bom'] if p['core']][:80]:
+                    if any(r.get('lifecycle')=='active' and r['mention'].casefold()==part['model'].casefold() for r in doc.get('device_references',[])):continue
+                    quote=next((line for line in lines if '：'+part['model']+'；' in line),'')
+                    if not quote:continue
+                    update=DeviceReferenceUpdate(id='new-reference',mention=part['model'],intent='reference',identity_scope='exact_part',purpose='来自上传参考，待结合实际功能分析适用范围。',requirement_ids=[],module_ids=[],quantity=None,source_message_id=message_id,source_quote=quote)
+                    apply_updates(doc,SimpleNamespace(device_reference_updates=[update],remove_device_reference_ids=[],device_constraints=[]),copy.deepcopy(doc),[{'id':message_id,'role':'user','content':text}],{}, {})
+                    ref=next(r for r in doc['device_references'] if r['mention']==part['model'] and r['lifecycle']=='active')
+                    if part['supplier_part']:ref['reference_supplier_part']=part['supplier_part']
+                changes.append('读取参考资料：'+source['filename'])
+                continue
+            if action['operation']=='adopt_reference_core':
+                if action.get('base_version',doc['version'])!=doc['version']:raise Conflict('核心器件方案已更新，请查看当前版本后重新采用。')
+                from .reference_design import bom_view
+                rows=[p for p in bom_view(doc)['rows'] if p['source_id']==action['source_id'] and p['core'] and p['status']=='proposed']
+                source=next((s for s in doc.get('reference_designs',[]) if s['id']==action['source_id']),None)
+                if not source or not rows:raise Conflict('当前没有这份参考中可采用的核心器件方案。')
+                for part in rows:
+                    ref=next(r for r in doc['device_references'] if r['id']==part['reference_id'])
+                    if ref['intent'] in ('reference','undecided'):ref['intent']='prefer'
+                    if not source['warnings'] and ref.get('quantity') is None:
+                        ref['quantity']=part['observed_quantity'];ref['reference_quantity_source']={'source_id':source['id'],'sha256':source['sha256'],'part_key':part['key'],'basis':'用户采用已展示的参考实例数量；工程用量仍需核验'}
+                    ref['mention_source']=ref.get('mention_source') or {'source_message_id':ref['source_message_id'],'source_quote':ref['source_quote']}
+                    ref.update(source_message_id=message_id,source_quote=next(line for line in text.splitlines() if '：'+part['model']+'；' in line))
+                changes.append('采用已关联本版功能的参考核心器件方案，保留可替换和工程核验边界。')
+                continue
             if action['operation']=='add_reference':
                 from types import SimpleNamespace
                 from .device_domain import DeviceReferenceUpdate, apply_updates
@@ -245,7 +295,7 @@ class DomainStore:
             else: raise Conflict('不支持的器件操作。')
             ref.update(source_message_id=message_id, source_quote=text)
         reconcile_selection_items(doc)
-        doc.update(changes=changes, changed_ids=[], domain_impacts=[{'reference_id': a['reference_id'], 'reason': '用户修改器件意图或身份，相关核对按当前版本重算。'} for a in actions])
+        doc.update(changes=changes, changed_ids=[], domain_impacts=[{'reference_id': a.get('reference_id',''), 'reason': '用户修改器件意图、参考方案或身份，相关核对按当前版本重算。'} for a in actions])
         self._save(db, project_id, doc, doc['version'] + 1)
 
 
