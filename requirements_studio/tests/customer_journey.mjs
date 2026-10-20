@@ -94,6 +94,32 @@ try{
  }else{
   assert.ok(entry,'Unknown journey');await page.waitForFunction(id=>localStorage.getItem('requirements-studio:project')===id,{},entry.project_id);
   if(request.action==='send')await send(request.text);
+  else if(['edit_device','discuss_device'].includes(request.action)){
+   const p=await project(),ref=p.document.device_references.find(r=>r.id===request.reference_id&&r.lifecycle!=='removed');assert.ok(ref,'Unknown active device');
+   await page.$$eval('.canvas-tabs [role="tab"]',nodes=>nodes.find(e=>e.textContent.includes('模块方案')).click());
+   const current=`.current-bom tr[data-current-reference="${ref.id}"] .current-bom-edit`;
+   if(await page.$(current))await page.locator(current).click();else await page.locator('[aria-label="打开器件与证据"]').click();
+   const card=`.device-reference[data-reference-id="${ref.id}"]`;await page.waitForSelector(card);
+   if(request.action==='edit_device'){
+    assert.ok(Object.keys(request.changes??{}).length,'No device changes');
+    await page.locator(card+' .edit-device-plan').click();await page.waitForSelector(card+' .device-plan-editor');
+    for(const [field,value] of Object.entries(request.changes)){
+     assert.ok(['mention','intent','quantity','purpose'].includes(field));
+     const selector=card+` .device-plan-editor [name="${field}"]`;
+     if(field==='intent')await page.select(selector,value);else await page.locator(selector).fill(value===null?'':String(value));
+    }
+    const response=page.waitForResponse(r=>r.url().endsWith('/device-references')&&r.request().method()==='POST');
+    await page.locator(card+' .save-device-plan').click();const saved=await response;assert.ok(saved.ok(),await saved.text());
+    await page.waitForFunction(selector=>!document.querySelector(selector+' .device-plan-editor'),{timeout:20000},card);
+    entry.actions.push({kind:'ui_device_edit',reference_id:ref.id,before:{mention:ref.mention,intent:ref.intent,quantity:ref.quantity,purpose:ref.purpose},changes:request.changes,payload:JSON.parse(saved.request().postData()),controls_closed:true,at:new Date().toISOString()});await save();
+   }else{
+    await page.$eval(card,e=>{const b=[...e.querySelectorAll('.device-card-footer button')].find(b=>b.textContent.includes('继续讨论'));assertButton(b);function assertButton(b){if(!b)throw Error('Device discussion button missing');b.click();}});
+    await page.waitForFunction(name=>document.querySelector('[aria-label="输入硬件需求"]')?.value.includes(name),{},ref.mention);
+    const text=await page.$eval('[aria-label="输入硬件需求"]',e=>e.value);
+    entry.actions.push({kind:'device_discussion_button',reference_id:ref.id,model:ref.mention,prefilled_text:text,customer_text:request.text,at:new Date().toISOString()});await save();
+    await send(text+(request.text?'\n\n'+request.text:''));
+   }
+  }
   else if(request.action==='discuss_module'){
    const p=await project(),m=p.convergence.modules.find(m=>m.id===request.module_id);assert.ok(m,'Unknown module');
    await page.$$eval('.canvas-tabs [role="tab"]',nodes=>nodes.find(e=>e.textContent.includes('模块方案')).click());

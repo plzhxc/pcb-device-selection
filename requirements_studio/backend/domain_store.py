@@ -226,6 +226,7 @@ class DomainStore:
     def apply_actions(self, db, project_id, doc, message_id, text, actions):
         from .store import Conflict
         if not actions: return
+        original = copy.deepcopy(doc)
         refs = {r['id']: r for r in doc.get('device_references', []) if r.get('lifecycle') == 'active'}
         changes = []
         for action in actions:
@@ -276,6 +277,9 @@ class DomainStore:
                               original,[{'id':message_id,'role':'user','content':text}],{}, {})
                 created=next(r for r in doc['device_references'] if r['mention']==action['mention'] and r['lifecycle']=='active')
                 created.update(device_key=action['device_key'],identity_decision=message_id)
+                if created['intent'] in ('must','prefer'):
+                    created['adoption_source']={'source_message_id':message_id,'operation':'add_reference'}
+                created['choice_source']={'source_message_id':message_id,'operation':'add_reference'}
                 changes.append(action['mention']+'：新增'+INTENTS[action['intent']]+'引用。')
                 continue
             ref = refs.get(action['reference_id'])
@@ -286,6 +290,23 @@ class DomainStore:
             if operation == 'set_intent':
                 if action.get('intent') not in INTENTS: raise Conflict('器件意图无效。')
                 ref['intent'] = action['intent']; changes.append(ref['mention'] + '：' + INTENTS[ref['intent']])
+                ref['intent_source']={'source_message_id':message_id,'intent':ref['intent']}
+                if ref['intent'] in ('must','prefer'):
+                    ref['adoption_source']={'source_message_id':message_id,'operation':'set_intent'}
+            elif operation == 'revise_reference':
+                edited=set(action['edited_fields'])
+                old_name=ref['mention']
+                if 'mention' in edited and action['mention']!=old_name:
+                    ref.update(mention=action['mention'],identity_scope='exact_part',device_key=None,identity_decision=None)
+                    for key in ('reference_supplier_part','reference_quantity_source','mention_source'):
+                        ref.pop(key,None)
+                for key in ('intent','quantity','purpose'):
+                    if key in edited:ref[key]=action.get(key)
+                if 'intent' in edited:ref['intent_source']={'source_message_id':message_id,'intent':ref['intent']}
+                if 'quantity' in edited:ref.pop('reference_quantity_source',None)
+                if ref['intent'] in ('must','prefer'):
+                    ref['adoption_source']={'source_message_id':message_id,'operation':'revise_reference'}
+                changes.append('修改器件方案：'+old_name+(' → '+ref['mention'] if old_name!=ref['mention'] else '（采用条件或用量更新）'))
             elif operation == 'select_identity':
                 if not re_key(action.get('device_key', '')): raise Conflict('器件身份格式无效。')
                 ref.update(device_key=action['device_key'], identity_scope='exact_part', identity_decision=message_id)
@@ -294,7 +315,10 @@ class DomainStore:
                 ref['lifecycle'] = 'removed'; changes.append('撤销器件引用：' + ref['mention'])
             else: raise Conflict('不支持的器件操作。')
             ref.update(source_message_id=message_id, source_quote=text)
+            ref['choice_source']={'source_message_id':message_id,'operation':operation}
         reconcile_selection_items(doc)
+        from .canvas_sync import record
+        record(doc, original, message_id, origin='canvas')
         doc.update(changes=changes, changed_ids=[], domain_impacts=[{'reference_id': a.get('reference_id',''), 'reason': '用户修改器件意图、参考方案或身份，相关核对按当前版本重算。'} for a in actions])
         self._save(db, project_id, doc, doc['version'] + 1)
 

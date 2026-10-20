@@ -171,6 +171,8 @@ class Store(DomainStore):
         project['domain']=domain
         project['reference_submissions']=reference_submissions
         project['domain_revision']=domain['revision']
+        from .canvas_sync import view as canvas_sync_view
+        project['canvas_sync']=canvas_sync_view(doc)
         from .decision_map import decision_map
         project['decision_map']=decision_map(doc,domain,snapshots,project['question_submissions'])
         project['run_activity']=sorted(activity+domain['activity'],key=lambda r:r['created_at'])

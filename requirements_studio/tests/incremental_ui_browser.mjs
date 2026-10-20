@@ -4,7 +4,7 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 const base=process.argv[2]??'http://[::1]:8896',root=process.cwd();
-const out=path.join(root,'.runtime/ux-optimization-20261019',base.includes('8878')?'browser-published':'browser-final');await fs.mkdir(out,{recursive:true});
+const out=process.env.STUDIO_BROWSER_REPORT_DIR?path.resolve(root,process.env.STUDIO_BROWSER_REPORT_DIR):path.join(root,'.runtime/ux-optimization-20261019',base.includes('8878')?'browser-published':'browser-final');await fs.mkdir(out,{recursive:true});
 const allEntries=JSON.parse(await fs.readFile('.runtime/customer-acceptance/incremental-ref-20261019/index.json','utf8')).cases;
 const keys=process.argv.slice(3),entries=keys.length?allEntries.filter(e=>keys.includes(e.key)):allEntries;
 assert.equal(entries.length,keys.length||allEntries.length,'Unknown or duplicate customer-journey key');
@@ -35,7 +35,8 @@ try{
   await tab(page,'收敛路径');await page.waitForSelector('.decision-map');assert.ok(await page.$('.delivery-status'));assert.equal(await page.$$eval('.decision-turn,.decision-analysis,.decision-input',ns=>ns.length),0);assert.ok(await page.$('.decision-update'));checks.push('completion_and_real_revision_history');
   if(p.delivery.bom.core_count>p.delivery.bom.core_adopted){const summary=await page.$eval('.delivery-status',e=>e.textContent);assert.ok(summary.includes('仅作参考'));assert.ok(!summary.includes(`${p.delivery.bom.core_adopted}/${p.delivery.bom.core_count}`));checks.push('unused_reference_parts_are_not_unfinished_work');}
   await shot(page,entry.key+'-decisions');
-  await tab(page,'模块方案');await page.waitForSelector('.reference-bom');
+  await tab(page,'模块方案');await page.waitForSelector('.bom-view-switch');
+  await page.$$eval('.bom-view-switch button',nodes=>nodes.find(n=>n.textContent.includes('参考对照')).click());await page.waitForSelector('.reference-bom');
   assert.equal(await page.$$eval('.reference-bom tbody tr',ns=>ns.length),p.delivery.bom.core_count);
   assert.equal(await page.$$eval('.module-instance',ns=>ns.length),p.convergence.modules.filter(m=>m.state!=='not_applicable').length);assert.ok(await page.$('.interactive-diagram'));checks.push('core_bom_and_only_applicable_modules');
   const graph=await page.$('.interactive-diagram');const oldScale=await graph.$eval('.diagram-scale',e=>e.textContent);

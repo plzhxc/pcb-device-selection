@@ -1,0 +1,3247 @@
+{
+  "checked_at": "2026-10-15T16:11:50.746483+00:00",
+  "mode": "read_only_research",
+  "target": {
+    "session": {
+      "rows": [
+        {
+          "read_only": 1,
+          "server_version": "8.0.42"
+        }
+      ],
+      "elapsed_ms": 1
+    },
+    "dsearch_v_device_search_published_incremental_columns": {
+      "rows": [
+        {
+          "Field": "overlay_release_id",
+          "Type": "bigint",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "document_id",
+          "Type": "decimal(20,0)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "0",
+          "Extra": ""
+        },
+        {
+          "Field": "build_id",
+          "Type": "bigint unsigned",
+          "Null": "NO",
+          "Key": "",
+          "Default": "0",
+          "Extra": ""
+        },
+        {
+          "Field": "device_id",
+          "Type": "bigint",
+          "Null": "NO",
+          "Key": "",
+          "Default": "0",
+          "Extra": ""
+        },
+        {
+          "Field": "part_number_raw",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "part_number_normalized",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "manufacturer_raw",
+          "Type": "varchar(255)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "manufacturer_normalized",
+          "Type": "varchar(255)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "legacy_level1",
+          "Type": "varchar(100)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "legacy_level2",
+          "Type": "varchar(100)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "domain_code",
+          "Type": "varchar(32)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "domain_name_zh",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "family_code",
+          "Type": "varchar(32)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "family_name_zh",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "leaf_code",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "leaf_name_zh",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "leaf_name_en",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "taxonomy_path",
+          "Type": "text",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "assignment_status",
+          "Type": "varchar(64)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "device_form",
+          "Type": "varchar(64)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "component_role",
+          "Type": "varchar(64)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "description_text",
+          "Type": "mediumtext",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "parameter_search_text",
+          "Type": "longtext",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "evidence_summary",
+          "Type": "mediumtext",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "source_record_locator",
+          "Type": "text",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "parameter_source_locator",
+          "Type": "text",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "pin_source_locator",
+          "Type": "text",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "milvus_source_locator",
+          "Type": "text",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "search_text",
+          "Type": "longtext",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "document_checksum",
+          "Type": "char(64)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        }
+      ],
+      "elapsed_ms": 35
+    },
+    "dsearch_v_device_search_published_incremental_count": {
+      "rows": [
+        {
+          "row_count": 9010
+        }
+      ],
+      "elapsed_ms": 1925
+    },
+    "dsearch_v_device_search_profiled_incremental_columns": {
+      "rows": [
+        {
+          "Field": "overlay_release_id",
+          "Type": "bigint",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "document_id",
+          "Type": "decimal(20,0)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "0",
+          "Extra": ""
+        },
+        {
+          "Field": "build_id",
+          "Type": "bigint unsigned",
+          "Null": "NO",
+          "Key": "",
+          "Default": "0",
+          "Extra": ""
+        },
+        {
+          "Field": "device_id",
+          "Type": "bigint",
+          "Null": "NO",
+          "Key": "",
+          "Default": "0",
+          "Extra": ""
+        },
+        {
+          "Field": "part_number_raw",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "part_number_normalized",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "manufacturer_raw",
+          "Type": "varchar(255)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "manufacturer_normalized",
+          "Type": "varchar(255)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "legacy_level1",
+          "Type": "varchar(100)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "legacy_level2",
+          "Type": "varchar(100)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "domain_code",
+          "Type": "varchar(32)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "domain_name_zh",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "family_code",
+          "Type": "varchar(32)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "family_name_zh",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "leaf_code",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "leaf_name_zh",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "leaf_name_en",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "taxonomy_path",
+          "Type": "text",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "assignment_status",
+          "Type": "varchar(64)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "device_form",
+          "Type": "varchar(64)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "component_role",
+          "Type": "varchar(64)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "description_text",
+          "Type": "mediumtext",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "parameter_search_text",
+          "Type": "longtext",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "evidence_summary",
+          "Type": "mediumtext",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "source_record_locator",
+          "Type": "text",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "parameter_source_locator",
+          "Type": "text",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "pin_source_locator",
+          "Type": "text",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "milvus_source_locator",
+          "Type": "text",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "search_text",
+          "Type": "longtext",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "document_checksum",
+          "Type": "char(64)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "phase2_is_core_component",
+          "Type": "int",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "phase2_core_level",
+          "Type": "varchar(32)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "phase2_datasheet_need_level",
+          "Type": "varchar(32)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "phase2_decision_status",
+          "Type": "varchar(64)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "phase2_decision_source",
+          "Type": "varchar(64)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "phase2_confidence",
+          "Type": "varchar(32)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "phase2_needs_policy_review",
+          "Type": "int",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "phase2_matched_rule_code",
+          "Type": "varchar(128)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "phase2_decision_reason",
+          "Type": "mediumtext",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        }
+      ],
+      "elapsed_ms": 2
+    },
+    "dsearch_v_device_search_profiled_incremental_count": {
+      "rows": [
+        {
+          "row_count": 9010
+        }
+      ],
+      "elapsed_ms": 172
+    },
+    "dsearch_v_device_attribute_priority_incremental_columns": {
+      "rows": [
+        {
+          "Field": "attr_record_id",
+          "Type": "bigint",
+          "Null": "NO",
+          "Key": "",
+          "Default": "0",
+          "Extra": ""
+        },
+        {
+          "Field": "release_id",
+          "Type": "bigint",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "build_id",
+          "Type": "bigint unsigned",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "taxonomy_version_id",
+          "Type": "bigint unsigned",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "device_id",
+          "Type": "bigint",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "part_number_raw",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "domain_code",
+          "Type": "varchar(32)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "family_code",
+          "Type": "varchar(32)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "leaf_code",
+          "Type": "varchar(255)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "field_key",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "field_name_zh",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "field_value_text",
+          "Type": "mediumtext",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "field_value_num",
+          "Type": "decimal(30,10)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "field_unit",
+          "Type": "varchar(64)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "value_origin",
+          "Type": "varchar(64)",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "source_table",
+          "Type": "varchar(255)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "source_column",
+          "Type": "varchar(255)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "raw_field_key",
+          "Type": "varchar(255)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "alias_rule_code",
+          "Type": "varchar(255)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "source_locator",
+          "Type": "varchar(1024)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "source_checksum",
+          "Type": "varchar(128)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "priority_rank",
+          "Type": "int",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "importance_score",
+          "Type": "int",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "is_required",
+          "Type": "tinyint",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "field_group",
+          "Type": "varchar(64)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "missing_policy",
+          "Type": "varchar(64)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "evidence_basis",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "evidence_status",
+          "Type": "varchar(64)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "effective_priority_source_type",
+          "Type": "varchar(32)",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "template_code",
+          "Type": "varchar(128)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "priority_extension_version",
+          "Type": "varchar(128)",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "needs_engineer_review",
+          "Type": "tinyint",
+          "Null": "NO",
+          "Key": "",
+          "Default": "0",
+          "Extra": ""
+        },
+        {
+          "Field": "is_existing_db_value",
+          "Type": "tinyint",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "is_derived_value",
+          "Type": "tinyint",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "is_missing",
+          "Type": "tinyint",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "created_at",
+          "Type": "datetime",
+          "Null": "NO",
+          "Key": "",
+          "Default": "CURRENT_TIMESTAMP",
+          "Extra": "DEFAULT_GENERATED"
+        }
+      ],
+      "elapsed_ms": 3
+    },
+    "dsearch_v_device_attribute_priority_incremental_count": {
+      "rows": [
+        {
+          "row_count": 377194
+        }
+      ],
+      "elapsed_ms": 72
+    },
+    "dsearch_v_effective_field_priority_columns": {
+      "rows": [
+        {
+          "Field": "taxonomy_version_id",
+          "Type": "bigint unsigned",
+          "Null": "NO",
+          "Key": "",
+          "Default": "0",
+          "Extra": ""
+        },
+        {
+          "Field": "leaf_code",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "leaf_name_zh",
+          "Type": "varchar(255)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "family_code",
+          "Type": "varchar(255)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "domain_code",
+          "Type": "varchar(255)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "priority_source_type",
+          "Type": "varchar(13)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "template_code",
+          "Type": "varchar(128)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "field_key",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "field_name_zh",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "priority_rank",
+          "Type": "int",
+          "Null": "NO",
+          "Key": "",
+          "Default": "0",
+          "Extra": ""
+        },
+        {
+          "Field": "importance_score",
+          "Type": "int",
+          "Null": "NO",
+          "Key": "",
+          "Default": "0",
+          "Extra": ""
+        },
+        {
+          "Field": "is_required",
+          "Type": "tinyint",
+          "Null": "NO",
+          "Key": "",
+          "Default": "0",
+          "Extra": ""
+        },
+        {
+          "Field": "field_group",
+          "Type": "varchar(64)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "missing_policy",
+          "Type": "varchar(64)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "evidence_basis",
+          "Type": "mediumtext",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "evidence_source",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "confidence",
+          "Type": "varchar(32)",
+          "Null": "NO",
+          "Key": "",
+          "Default": "",
+          "Extra": ""
+        },
+        {
+          "Field": "needs_engineer_review",
+          "Type": "bigint",
+          "Null": "NO",
+          "Key": "",
+          "Default": "0",
+          "Extra": ""
+        }
+      ],
+      "elapsed_ms": 2
+    },
+    "dsearch_v_effective_field_priority_count": {
+      "rows": [
+        {
+          "row_count": 7511
+        }
+      ],
+      "elapsed_ms": 28
+    },
+    "published_release": {
+      "rows": [
+        {
+          "release_id": 2,
+          "release_code": "incremental_overlay_9010_9808808c25029374",
+          "release_status": "PUBLISHED",
+          "published_at": "2026-09-02 13:33:04"
+        },
+        {
+          "release_id": 1,
+          "release_code": "incremental_overlay_8967_9f86efc56b374fbc",
+          "release_status": "PUBLISHED",
+          "published_at": "2026-07-27 23:53:16"
+        }
+      ],
+      "elapsed_ms": 1
+    },
+    "taxonomy_tables": {
+      "rows": [
+        {
+          "Tables_in_device_parameters_dev (dtax%)": "dtax_category_alias"
+        },
+        {
+          "Tables_in_device_parameters_dev (dtax%)": "dtax_category_node"
+        },
+        {
+          "Tables_in_device_parameters_dev (dtax%)": "dtax_device_assignment"
+        },
+        {
+          "Tables_in_device_parameters_dev (dtax%)": "dtax_device_classification_rule"
+        },
+        {
+          "Tables_in_device_parameters_dev (dtax%)": "dtax_device_classification_trace"
+        },
+        {
+          "Tables_in_device_parameters_dev (dtax%)": "dtax_legacy_category_mapping"
+        },
+        {
+          "Tables_in_device_parameters_dev (dtax%)": "dtax_mapping_evidence"
+        },
+        {
+          "Tables_in_device_parameters_dev (dtax%)": "dtax_mapping_rule"
+        },
+        {
+          "Tables_in_device_parameters_dev (dtax%)": "dtax_migration_run"
+        },
+        {
+          "Tables_in_device_parameters_dev (dtax%)": "dtax_source_snapshot"
+        },
+        {
+          "Tables_in_device_parameters_dev (dtax%)": "dtax_taxonomy_version"
+        },
+        {
+          "Tables_in_device_parameters_dev (dtax%)": "dtax_unresolved_category_group"
+        },
+        {
+          "Tables_in_device_parameters_dev (dtax%)": "dtax_v_device_classification"
+        },
+        {
+          "Tables_in_device_parameters_dev (dtax%)": "dtax_v_resolved_device_classification"
+        }
+      ],
+      "elapsed_ms": 2
+    },
+    "taxonomy_node_columns": {
+      "rows": [
+        {
+          "Field": "category_id",
+          "Type": "bigint unsigned",
+          "Null": "NO",
+          "Key": "PRI",
+          "Default": null,
+          "Extra": "auto_increment"
+        },
+        {
+          "Field": "taxonomy_version_id",
+          "Type": "bigint unsigned",
+          "Null": "NO",
+          "Key": "MUL",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "parent_id",
+          "Type": "bigint unsigned",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "category_code",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "display_name_zh",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "display_name_en",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "depth",
+          "Type": "tinyint unsigned",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "node_type",
+          "Type": "enum('DOMAIN','FAMILY','LEAF')",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "definition",
+          "Type": "text",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "inclusion_rule",
+          "Type": "text",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "exclusion_rule",
+          "Type": "text",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "device_form",
+          "Type": "enum('IC','DISCRETE','MODULE','ACCESSORY','ELECTROMECHANICAL','PASSIVE','OPTOELECTRONIC','DISPLAY','MEMS','LEGACY_DEFINED')",
+          "Null": "NO",
+          "Key": "",
+          "Default": "LEGACY_DEFINED",
+          "Extra": ""
+        },
+        {
+          "Field": "node_status",
+          "Type": "enum('CONFIRMED','TRANSITIONAL','DEPRECATED','UNRESOLVED')",
+          "Null": "NO",
+          "Key": "",
+          "Default": "CONFIRMED",
+          "Extra": ""
+        },
+        {
+          "Field": "sort_order",
+          "Type": "int",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "created_at",
+          "Type": "datetime",
+          "Null": "NO",
+          "Key": "",
+          "Default": "CURRENT_TIMESTAMP",
+          "Extra": "DEFAULT_GENERATED"
+        }
+      ],
+      "elapsed_ms": 2
+    },
+    "taxonomy_nodes": {
+      "rows": [
+        {
+          "taxonomy_version_id": 1,
+          "node_status": "CONFIRMED",
+          "depth": 1,
+          "node_type": "DOMAIN",
+          "count": 8
+        },
+        {
+          "taxonomy_version_id": 1,
+          "node_status": "CONFIRMED",
+          "depth": 2,
+          "node_type": "FAMILY",
+          "count": 32
+        },
+        {
+          "taxonomy_version_id": 1,
+          "node_status": "CONFIRMED",
+          "depth": 3,
+          "node_type": "LEAF",
+          "count": 360
+        },
+        {
+          "taxonomy_version_id": 1,
+          "node_status": "TRANSITIONAL",
+          "depth": 3,
+          "node_type": "LEAF",
+          "count": 9
+        },
+        {
+          "taxonomy_version_id": 36,
+          "node_status": "CONFIRMED",
+          "depth": 1,
+          "node_type": "DOMAIN",
+          "count": 8
+        },
+        {
+          "taxonomy_version_id": 36,
+          "node_status": "CONFIRMED",
+          "depth": 2,
+          "node_type": "FAMILY",
+          "count": 32
+        },
+        {
+          "taxonomy_version_id": 36,
+          "node_status": "CONFIRMED",
+          "depth": 3,
+          "node_type": "LEAF",
+          "count": 371
+        },
+        {
+          "taxonomy_version_id": 36,
+          "node_status": "TRANSITIONAL",
+          "depth": 3,
+          "node_type": "LEAF",
+          "count": 9
+        },
+        {
+          "taxonomy_version_id": 37,
+          "node_status": "CONFIRMED",
+          "depth": 1,
+          "node_type": "DOMAIN",
+          "count": 8
+        },
+        {
+          "taxonomy_version_id": 37,
+          "node_status": "CONFIRMED",
+          "depth": 2,
+          "node_type": "FAMILY",
+          "count": 32
+        },
+        {
+          "taxonomy_version_id": 37,
+          "node_status": "CONFIRMED",
+          "depth": 3,
+          "node_type": "LEAF",
+          "count": 396
+        },
+        {
+          "taxonomy_version_id": 37,
+          "node_status": "TRANSITIONAL",
+          "depth": 3,
+          "node_type": "LEAF",
+          "count": 9
+        },
+        {
+          "taxonomy_version_id": 39,
+          "node_status": "CONFIRMED",
+          "depth": 1,
+          "node_type": "DOMAIN",
+          "count": 8
+        },
+        {
+          "taxonomy_version_id": 39,
+          "node_status": "CONFIRMED",
+          "depth": 2,
+          "node_type": "FAMILY",
+          "count": 32
+        },
+        {
+          "taxonomy_version_id": 39,
+          "node_status": "CONFIRMED",
+          "depth": 3,
+          "node_type": "LEAF",
+          "count": 399
+        },
+        {
+          "taxonomy_version_id": 39,
+          "node_status": "TRANSITIONAL",
+          "depth": 3,
+          "node_type": "LEAF",
+          "count": 9
+        },
+        {
+          "taxonomy_version_id": 41,
+          "node_status": "CONFIRMED",
+          "depth": 1,
+          "node_type": "DOMAIN",
+          "count": 8
+        },
+        {
+          "taxonomy_version_id": 41,
+          "node_status": "CONFIRMED",
+          "depth": 2,
+          "node_type": "FAMILY",
+          "count": 32
+        },
+        {
+          "taxonomy_version_id": 41,
+          "node_status": "CONFIRMED",
+          "depth": 3,
+          "node_type": "LEAF",
+          "count": 399
+        },
+        {
+          "taxonomy_version_id": 41,
+          "node_status": "TRANSITIONAL",
+          "depth": 3,
+          "node_type": "LEAF",
+          "count": 9
+        },
+        {
+          "taxonomy_version_id": 50,
+          "node_status": "CONFIRMED",
+          "depth": 1,
+          "node_type": "DOMAIN",
+          "count": 8
+        },
+        {
+          "taxonomy_version_id": 50,
+          "node_status": "CONFIRMED",
+          "depth": 2,
+          "node_type": "FAMILY",
+          "count": 33
+        },
+        {
+          "taxonomy_version_id": 50,
+          "node_status": "CONFIRMED",
+          "depth": 3,
+          "node_type": "LEAF",
+          "count": 402
+        },
+        {
+          "taxonomy_version_id": 50,
+          "node_status": "TRANSITIONAL",
+          "depth": 3,
+          "node_type": "LEAF",
+          "count": 9
+        },
+        {
+          "taxonomy_version_id": 51,
+          "node_status": "CONFIRMED",
+          "depth": 1,
+          "node_type": "DOMAIN",
+          "count": 8
+        },
+        {
+          "taxonomy_version_id": 51,
+          "node_status": "CONFIRMED",
+          "depth": 2,
+          "node_type": "FAMILY",
+          "count": 33
+        },
+        {
+          "taxonomy_version_id": 51,
+          "node_status": "CONFIRMED",
+          "depth": 3,
+          "node_type": "LEAF",
+          "count": 403
+        },
+        {
+          "taxonomy_version_id": 51,
+          "node_status": "TRANSITIONAL",
+          "depth": 3,
+          "node_type": "LEAF",
+          "count": 9
+        }
+      ],
+      "elapsed_ms": 47
+    },
+    "manual_status": {
+      "rows": [
+        {
+          "record_status": "PUBLISHED",
+          "count": 115
+        },
+        {
+          "record_status": "ROLLED_BACK",
+          "count": 1
+        }
+      ],
+      "elapsed_ms": 113
+    },
+    "identity_summary": {
+      "rows": [
+        {
+          "total": 9010,
+          "distinct_models": 8828,
+          "domains": 8,
+          "families": 32,
+          "occupied_leaves": 408,
+          "negative_ids": "0"
+        }
+      ],
+      "elapsed_ms": 147
+    },
+    "model_duplicates": {
+      "rows": [
+        {
+          "part_number_normalized": "B0505S-1WR3",
+          "count": 5
+        },
+        {
+          "part_number_normalized": "RSM232",
+          "count": 5
+        },
+        {
+          "part_number_normalized": "TL431",
+          "count": 5
+        },
+        {
+          "part_number_normalized": "AMS1117-3.3",
+          "count": 4
+        },
+        {
+          "part_number_normalized": "DTC143ZE",
+          "count": 4
+        },
+        {
+          "part_number_normalized": "K7805-500R3",
+          "count": 4
+        },
+        {
+          "part_number_normalized": "TD301D232H",
+          "count": 4
+        },
+        {
+          "part_number_normalized": "ULN2803",
+          "count": 4
+        }
+      ],
+      "elapsed_ms": 118
+    },
+    "domain_distribution": {
+      "rows": [
+        {
+          "domain_code": "D01",
+          "domain_name_zh": "控制、计算与存储",
+          "devices": 964,
+          "families": 3,
+          "leaves": 42
+        },
+        {
+          "domain_code": "D02",
+          "domain_name_zh": "模拟、转换与时序",
+          "devices": 1114,
+          "families": 3,
+          "leaves": 40
+        },
+        {
+          "domain_code": "D03",
+          "domain_name_zh": "电源、驱动与隔离",
+          "devices": 1664,
+          "families": 6,
+          "leaves": 71
+        },
+        {
+          "domain_code": "D04",
+          "domain_name_zh": "通信、射频与模块",
+          "devices": 1501,
+          "families": 4,
+          "leaves": 64
+        },
+        {
+          "domain_code": "D05",
+          "domain_name_zh": "传感、光电与人机输出",
+          "devices": 1061,
+          "families": 5,
+          "leaves": 58
+        },
+        {
+          "domain_code": "D06",
+          "domain_name_zh": "分立半导体与电路保护",
+          "devices": 694,
+          "families": 5,
+          "leaves": 31
+        },
+        {
+          "domain_code": "D07",
+          "domain_name_zh": "磁性、频率与滤波",
+          "devices": 688,
+          "families": 3,
+          "leaves": 34
+        },
+        {
+          "domain_code": "D08",
+          "domain_name_zh": "互连与机电器件",
+          "devices": 1324,
+          "families": 3,
+          "leaves": 68
+        }
+      ],
+      "elapsed_ms": 204
+    },
+    "priority_coverage": {
+      "rows": [
+        {
+          "priority_source_type": "TEMPLATE_LEAF",
+          "template_code": "TPL_GLOBAL_DEFAULT",
+          "needs_engineer_review": 1,
+          "leaf_count": 76,
+          "field_count": 1368
+        },
+        {
+          "priority_source_type": "TEMPLATE_LEAF",
+          "template_code": "TPL_RF_MODULE",
+          "needs_engineer_review": 0,
+          "leaf_count": 45,
+          "field_count": 810
+        },
+        {
+          "priority_source_type": "TEMPLATE_LEAF",
+          "template_code": "TPL_LOGIC_INTERFACE_IC",
+          "needs_engineer_review": 0,
+          "leaf_count": 41,
+          "field_count": 738
+        },
+        {
+          "priority_source_type": "TEMPLATE_LEAF",
+          "template_code": "TPL_CONNECTOR",
+          "needs_engineer_review": 0,
+          "leaf_count": 32,
+          "field_count": 576
+        },
+        {
+          "priority_source_type": "TEMPLATE_LEAF",
+          "template_code": "TPL_SENSOR_IC_MODULE",
+          "needs_engineer_review": 0,
+          "leaf_count": 28,
+          "field_count": 504
+        },
+        {
+          "priority_source_type": "TEMPLATE_LEAF",
+          "template_code": "TPL_SWITCH_RELAY",
+          "needs_engineer_review": 0,
+          "leaf_count": 27,
+          "field_count": 486
+        },
+        {
+          "priority_source_type": "EXPLICIT_LEAF",
+          "template_code": null,
+          "needs_engineer_review": 0,
+          "leaf_count": 22,
+          "field_count": 474
+        },
+        {
+          "priority_source_type": "TEMPLATE_LEAF",
+          "template_code": "TPL_AMPLIFIER_COMPARATOR",
+          "needs_engineer_review": 0,
+          "leaf_count": 20,
+          "field_count": 420
+        },
+        {
+          "priority_source_type": "TEMPLATE_LEAF",
+          "template_code": "TPL_DRIVER_IC",
+          "needs_engineer_review": 0,
+          "leaf_count": 19,
+          "field_count": 342
+        },
+        {
+          "priority_source_type": "TEMPLATE_LEAF",
+          "template_code": "TPL_MEMORY_IC",
+          "needs_engineer_review": 0,
+          "leaf_count": 18,
+          "field_count": 324
+        },
+        {
+          "priority_source_type": "TEMPLATE_LEAF",
+          "template_code": "TPL_CRYSTAL_RESONATOR",
+          "needs_engineer_review": 0,
+          "leaf_count": 13,
+          "field_count": 234
+        },
+        {
+          "priority_source_type": "TEMPLATE_LEAF",
+          "template_code": "TPL_POWER_CONVERTER_IC",
+          "needs_engineer_review": 0,
+          "leaf_count": 12,
+          "field_count": 216
+        },
+        {
+          "priority_source_type": "TEMPLATE_LEAF",
+          "template_code": "TPL_DIODE_RECTIFIER",
+          "needs_engineer_review": 0,
+          "leaf_count": 11,
+          "field_count": 198
+        },
+        {
+          "priority_source_type": "TEMPLATE_LEAF",
+          "template_code": "TPL_INDUCTOR",
+          "needs_engineer_review": 0,
+          "leaf_count": 8,
+          "field_count": 115
+        },
+        {
+          "priority_source_type": "TEMPLATE_LEAF",
+          "template_code": "TPL_MOSFET_POWER_SEMI",
+          "needs_engineer_review": 0,
+          "leaf_count": 8,
+          "field_count": 144
+        },
+        {
+          "priority_source_type": "TEMPLATE_LEAF",
+          "template_code": "TPL_TVS_ESD_PROTECTION",
+          "needs_engineer_review": 0,
+          "leaf_count": 7,
+          "field_count": 126
+        },
+        {
+          "priority_source_type": "TEMPLATE_LEAF",
+          "template_code": "TPL_BATTERY_CHARGER_IC",
+          "needs_engineer_review": 0,
+          "leaf_count": 6,
+          "field_count": 108
+        },
+        {
+          "priority_source_type": "TEMPLATE_LEAF",
+          "template_code": "TPL_MCU_PROCESSOR_SOC",
+          "needs_engineer_review": 0,
+          "leaf_count": 5,
+          "field_count": 105
+        },
+        {
+          "priority_source_type": "TEMPLATE_LEAF",
+          "template_code": "TPL_SECURITY_CRYPTO_IC",
+          "needs_engineer_review": 0,
+          "leaf_count": 4,
+          "field_count": 72
+        },
+        {
+          "priority_source_type": "TEMPLATE_LEAF",
+          "template_code": "TPL_ADC_DAC_AFE_CODEC",
+          "needs_engineer_review": 0,
+          "leaf_count": 3,
+          "field_count": 63
+        }
+      ],
+      "elapsed_ms": 31
+    },
+    "attribute_evidence_distribution": {
+      "rows": [
+        {
+          "evidence_status": "PROVEN",
+          "value_origin": "DB_PARAMETER",
+          "is_derived_value": 0,
+          "count": 238569
+        },
+        {
+          "evidence_status": "PROVEN",
+          "value_origin": "DB_DEVICE",
+          "is_derived_value": 0,
+          "count": 51410
+        },
+        {
+          "evidence_status": "EXPECTED_BUT_MISSING",
+          "value_origin": "EXPECTED_MISSING",
+          "is_derived_value": 0,
+          "count": 36157
+        },
+        {
+          "evidence_status": "PROVEN",
+          "value_origin": "DB_TAXONOMY",
+          "is_derived_value": 1,
+          "count": 27030
+        },
+        {
+          "evidence_status": "PROVEN",
+          "value_origin": "DB_PIN",
+          "is_derived_value": 0,
+          "count": 17916
+        },
+        {
+          "evidence_status": "PROVEN",
+          "value_origin": "DB_DOCUMENT",
+          "is_derived_value": 0,
+          "count": 5854
+        },
+        {
+          "evidence_status": "PARTIAL",
+          "value_origin": "EXPECTED_MISSING",
+          "is_derived_value": 0,
+          "count": 257
+        },
+        {
+          "evidence_status": "PARTIAL",
+          "value_origin": "DB_TAXONOMY",
+          "is_derived_value": 1,
+          "count": 1
+        }
+      ],
+      "elapsed_ms": 2176
+    },
+    "attribute_missing_units": {
+      "rows": [
+        {
+          "missing": "36414",
+          "required_missing": "22382",
+          "non_missing_without_unit": "333205",
+          "indexed_devices": 9010
+        }
+      ],
+      "elapsed_ms": 1791
+    },
+    "exact_TPS5450DDAR": {
+      "rows": [
+        {
+          "device_id": 8883,
+          "part_number_raw": "TPS5450DDAR",
+          "manufacturer_raw": "TI(德州仪器)",
+          "leaf_code": "l_step_down_dc_dc_converter",
+          "leaf_name_zh": "降压型DC-DC转换器",
+          "document_checksum": "1f8b8a4aae534fc0706fd59718d2a665153d5f49be296aac256fda389335f074"
+        }
+      ],
+      "elapsed_ms": 89
+    },
+    "exact_STM32F103C8T6": {
+      "rows": [
+        {
+          "device_id": 2305,
+          "part_number_raw": "STM32F103C8T6",
+          "manufacturer_raw": "",
+          "leaf_code": "l_microcontroller_mcu_mpu_soc",
+          "leaf_name_zh": "微控制器、微处理器与SoC",
+          "document_checksum": "9e6e19062b0ab40ddd369213963c217efdcb105fb47300603ca8a0899e3b1bd7"
+        }
+      ],
+      "elapsed_ms": 27
+    },
+    "exact_LM358": {
+      "rows": [
+        {
+          "device_id": 6639,
+          "part_number_raw": "LM358",
+          "manufacturer_raw": "MSKSEMI",
+          "leaf_code": "l_operational_amplifier",
+          "leaf_name_zh": "运算放大器",
+          "document_checksum": "50f6270e184dea1ca3889361a2ebefbaa9ea3681beb920d06721fc6777be7ce9"
+        },
+        {
+          "device_id": 6641,
+          "part_number_raw": "LM358",
+          "manufacturer_raw": "National Semiconductor",
+          "leaf_code": "l_operational_amplifier",
+          "leaf_name_zh": "运算放大器",
+          "document_checksum": "4ef9911f573c356b541e6b3519e6bcf126f068f0fadbe4ef2362154497ba1a20"
+        },
+        {
+          "device_id": 8973,
+          "part_number_raw": "LM358",
+          "manufacturer_raw": "IDCHIP(英锐芯)",
+          "leaf_code": "l_operational_amplifier",
+          "leaf_name_zh": "运算放大器",
+          "document_checksum": "70ecb6536c347e47b37ed08a25bef5afdf88ba8759ad99acfd2803a640ee64d0"
+        }
+      ],
+      "elapsed_ms": 18
+    },
+    "exact_ESP32-S3": {
+      "rows": [
+        {
+          "device_id": 3311,
+          "part_number_raw": "ESP32-S3",
+          "manufacturer_raw": "Espressif",
+          "leaf_code": "l_wireless_transceiver_chip",
+          "leaf_name_zh": "无线收发器芯片",
+          "document_checksum": "342b0e8c1819cd8a559346fdf4917bf66a8afa0c6dd8d197b8af0adbc6d6a0a8"
+        }
+      ],
+      "elapsed_ms": 12
+    },
+    "exact_INA219AIDCNR": {
+      "rows": [
+        {
+          "device_id": 6546,
+          "part_number_raw": "INA219AIDCNR",
+          "manufacturer_raw": "Texas Instruments",
+          "leaf_code": "l_current_sensing_amplifier",
+          "leaf_name_zh": "电流检测放大器",
+          "document_checksum": "1a09cc6f4b0f605d2aee0973791e4537e6e96bafccac71aae9a1010881a4c7b8"
+        }
+      ],
+      "elapsed_ms": 1
+    },
+    "prefix_stm32": {
+      "rows": [
+        {
+          "device_id": 2305,
+          "part_number_raw": "STM32F103C8T6",
+          "manufacturer_raw": "",
+          "leaf_code": "l_microcontroller_mcu_mpu_soc"
+        },
+        {
+          "device_id": 8843,
+          "part_number_raw": "STM32F103CBT6",
+          "manufacturer_raw": "",
+          "leaf_code": "l_microcontroller_mcu_mpu_soc"
+        },
+        {
+          "device_id": 2323,
+          "part_number_raw": "STM32F103RBT6",
+          "manufacturer_raw": "",
+          "leaf_code": "l_microcontroller_mcu_mpu_soc"
+        },
+        {
+          "device_id": 2308,
+          "part_number_raw": "STM32F103RCT6",
+          "manufacturer_raw": "",
+          "leaf_code": "l_microcontroller_mcu_mpu_soc"
+        },
+        {
+          "device_id": 2326,
+          "part_number_raw": "STM32F103VBT6",
+          "manufacturer_raw": "",
+          "leaf_code": "l_microcontroller_mcu_mpu_soc"
+        },
+        {
+          "device_id": 2318,
+          "part_number_raw": "STM32F103VCT6",
+          "manufacturer_raw": "",
+          "leaf_code": "l_microcontroller_mcu_mpu_soc"
+        },
+        {
+          "device_id": 2310,
+          "part_number_raw": "STM32F103VET6",
+          "manufacturer_raw": "",
+          "leaf_code": "l_microcontroller_mcu_mpu_soc"
+        }
+      ],
+      "elapsed_ms": 185
+    },
+    "sample_identity_trace": {
+      "rows": [
+        {
+          "device_id": 8883,
+          "part_number_raw": "TPS5450DDAR",
+          "manufacturer_raw": "TI(德州仪器)",
+          "taxonomy_path": "D03 电源、驱动与隔离 > F07 电源管理芯片 > l_step_down_dc_dc_converter 降压型DC-DC转换器",
+          "description_text": "",
+          "source_record_locator": "device_parameters.devices:8883",
+          "parameter_source_locator": "device_parameters.params_dc_dc_power_converter_chip:8883",
+          "pin_source_locator": "device_parameters.pins:device_id=8883;count=9",
+          "milvus_source_locator": "DataSheetBase.DataSheet:lichuang_id=C114425",
+          "overlay_release_id": null,
+          "build_id": 9,
+          "document_checksum": "1f8b8a4aae534fc0706fd59718d2a665153d5f49be296aac256fda389335f074"
+        }
+      ],
+      "elapsed_ms": 2
+    },
+    "sample_priority_attributes": {
+      "rows": [
+        {
+          "device_id": 8883,
+          "field_key": "input_voltage_range",
+          "field_name_zh": "输入电压范围",
+          "field_value_text": "5.5V~36V",
+          "field_value_num": null,
+          "field_unit": "V",
+          "source_table": "dsearch_device_raw_snapshot",
+          "source_column": "parameter_payload_raw.operating_voltage_vin",
+          "source_locator": "device_parameters.params_dc_dc_power_converter_chip:8883",
+          "source_checksum": "6335e33787d6d968566671b38eb0bf4987aa2edad6cc5730453682d0e5b88112",
+          "evidence_status": "PROVEN",
+          "value_origin": "DB_PARAMETER",
+          "priority_rank": 1,
+          "is_required": 1,
+          "is_missing": 0,
+          "is_derived_value": 0
+        },
+        {
+          "device_id": 8883,
+          "field_key": "output_current",
+          "field_name_zh": "输出电流",
+          "field_value_text": "5A",
+          "field_value_num": "5.0000000000",
+          "field_unit": "A",
+          "source_table": "dsearch_device_raw_snapshot",
+          "source_column": "parameter_payload_raw.output_current_maximum_value",
+          "source_locator": "device_parameters.params_dc_dc_power_converter_chip:8883",
+          "source_checksum": "6335e33787d6d968566671b38eb0bf4987aa2edad6cc5730453682d0e5b88112",
+          "evidence_status": "PROVEN",
+          "value_origin": "DB_PARAMETER",
+          "priority_rank": 2,
+          "is_required": 1,
+          "is_missing": 0,
+          "is_derived_value": 0
+        },
+        {
+          "device_id": 8883,
+          "field_key": "topology",
+          "field_name_zh": "拓扑类型",
+          "field_value_text": "Buck (降压)",
+          "field_value_num": null,
+          "field_unit": null,
+          "source_table": "dsearch_device_raw_snapshot",
+          "source_column": "parameter_payload_raw.topology_structure",
+          "source_locator": "device_parameters.params_dc_dc_power_converter_chip:8883",
+          "source_checksum": "6335e33787d6d968566671b38eb0bf4987aa2edad6cc5730453682d0e5b88112",
+          "evidence_status": "PROVEN",
+          "value_origin": "DB_PARAMETER",
+          "priority_rank": 3,
+          "is_required": 1,
+          "is_missing": 0,
+          "is_derived_value": 0
+        },
+        {
+          "device_id": 8883,
+          "field_key": "switching_frequency",
+          "field_name_zh": "开关频率",
+          "field_value_text": "500kHz",
+          "field_value_num": "500.0000000000",
+          "field_unit": "Hz",
+          "source_table": "dsearch_device_raw_snapshot",
+          "source_column": "parameter_payload_raw.switching_frequency",
+          "source_locator": "device_parameters.params_dc_dc_power_converter_chip:8883",
+          "source_checksum": "6335e33787d6d968566671b38eb0bf4987aa2edad6cc5730453682d0e5b88112",
+          "evidence_status": "PROVEN",
+          "value_origin": "DB_PARAMETER",
+          "priority_rank": 4,
+          "is_required": 0,
+          "is_missing": 0,
+          "is_derived_value": 0
+        },
+        {
+          "device_id": 8883,
+          "field_key": "package",
+          "field_name_zh": "封装",
+          "field_value_text": "SOP-8-EP-150mil",
+          "field_value_num": null,
+          "field_unit": null,
+          "source_table": "dsearch_device_raw_snapshot",
+          "source_column": "parameter_payload_raw.encapsulation_specification",
+          "source_locator": "device_parameters.params_dc_dc_power_converter_chip:8883",
+          "source_checksum": "6335e33787d6d968566671b38eb0bf4987aa2edad6cc5730453682d0e5b88112",
+          "evidence_status": "PROVEN",
+          "value_origin": "DB_PARAMETER",
+          "priority_rank": 5,
+          "is_required": 1,
+          "is_missing": 0,
+          "is_derived_value": 0
+        },
+        {
+          "device_id": 8883,
+          "field_key": "pin_functions",
+          "field_name_zh": "引脚功能",
+          "field_value_text": "[{\"pin_description\": \"高侧 FET 栅极驱动器的升压电容器。从 BOOT 引脚至 PH 引脚连接一个 0.01μF、低 ESR 电容器。\", \"pin_index\": 1, \"pin_name\": \"BOOT\", \"pin_number\": \"1\", \"pin_type\": \"Output\"}, {\"pin_description\": \"内部未连接。\", \"pin_index\": 2, \"pin_name\": \"NC\", \"pin_number\": \"2\", \"pin_type\": \"-\"}, {\"pin_description\": \"内部未连接。\", \"pin_index\": 3, \"pin_name\": \"NC\", \"pin_number\": \"3\", \"pin_type\": \"-\"}, {\"pin_description\": \"稳压器的反馈电压。连接到输出电压分压器。\", \"pin_index\": 4, \"pin_name\": \"VSENSE\", \"pin_number\": \"4\", \"pin_type\": \"Input\"}, {\"pin_description\": \"导通和关闭控制。低于 0.5V，器件停止切换。悬空引脚即可启用。\", \"pin_index\": 5, \"pin_name\": \"ENA\", \"pin_number\": \"5\", \"pin_type\": \"Input\"}, {\"pin_description\": \"接地。连接到 PowerPAD。\", \"pin_index\": 6, \"pin_name\": \"GND\", \"pin_number\": \"6\", \"pin_type\": \"-\"}, {\"pin_description\": \"输入电源电压。采用高质量、低 ESR 陶瓷电容器将 VIN 引脚旁路至靠近器件封装的 GND 引脚。\", \"pin_index\": 7, \"pin_name\": \"VIN\", \"pin_number\": \"7\", \"pin_type\": \"Input\"}, {\"pin_description\": \"高侧功率 MOSFET 的源极。连接至外部电感器和二极管。\", \"pin_index\": 8, \"pin_name\": \"PH\", \"pin_number\": \"8\", \"pin_type\": \"Output\"}, {\"pin_description\": \"必须将 GND 引脚连接到外露焊盘才能正常工作。\", \"pin_index\": 9, \"pin_name\": \"PowerPAD\", \"pin_number\": \"9\", \"pin_type\": \"-\"}]",
+          "field_value_num": null,
+          "field_unit": null,
+          "source_table": "dstore_pin_record",
+          "source_column": "pin_number,pin_name,pin_type,pin_description",
+          "source_locator": "device_parameters.pins:device_id=8883;count=9",
+          "source_checksum": "ac7ea39736c5caef074c78e865b96a8ee0b62b81ff5c532739a1efb911a5c068",
+          "evidence_status": "PROVEN",
+          "value_origin": "DB_PIN",
+          "priority_rank": 6,
+          "is_required": 1,
+          "is_missing": 0,
+          "is_derived_value": 0
+        },
+        {
+          "device_id": 8883,
+          "field_key": "datasheet",
+          "field_name_zh": "数据手册",
+          "field_value_text": "DataSheetBase.DataSheet:lichuang_id=C114425",
+          "field_value_num": null,
+          "field_unit": null,
+          "source_table": "dsearch_v_device_search_active",
+          "source_column": "milvus_source_locator",
+          "source_locator": "DataSheetBase.DataSheet:lichuang_id=C114425",
+          "source_checksum": "1f8b8a4aae534fc0706fd59718d2a665153d5f49be296aac256fda389335f074",
+          "evidence_status": "PROVEN",
+          "value_origin": "DB_DOCUMENT",
+          "priority_rank": 7,
+          "is_required": 0,
+          "is_missing": 0,
+          "is_derived_value": 0
+        },
+        {
+          "device_id": 8883,
+          "field_key": "brand",
+          "field_name_zh": "brand",
+          "field_value_text": "TI(德州仪器)",
+          "field_value_num": null,
+          "field_unit": null,
+          "source_table": "dsearch_device_raw_snapshot",
+          "source_column": "parameter_payload_raw.brand",
+          "source_locator": "device_parameters.params_dc_dc_power_converter_chip:8883",
+          "source_checksum": "6335e33787d6d968566671b38eb0bf4987aa2edad6cc5730453682d0e5b88112",
+          "evidence_status": "PROVEN",
+          "value_origin": "DB_PARAMETER",
+          "priority_rank": 9999,
+          "is_required": 0,
+          "is_missing": 0,
+          "is_derived_value": 0
+        },
+        {
+          "device_id": 8883,
+          "field_key": "brand_origin",
+          "field_name_zh": "brand_origin",
+          "field_value_text": "美国",
+          "field_value_num": null,
+          "field_unit": null,
+          "source_table": "dsearch_device_raw_snapshot",
+          "source_column": "parameter_payload_raw.brand_origin",
+          "source_locator": "device_parameters.params_dc_dc_power_converter_chip:8883",
+          "source_checksum": "6335e33787d6d968566671b38eb0bf4987aa2edad6cc5730453682d0e5b88112",
+          "evidence_status": "PROVEN",
+          "value_origin": "DB_PARAMETER",
+          "priority_rank": 9999,
+          "is_required": 0,
+          "is_missing": 0,
+          "is_derived_value": 0
+        },
+        {
+          "device_id": 8883,
+          "field_key": "component_role",
+          "field_name_zh": "component_role",
+          "field_value_text": "PRIMARY_COMPONENT",
+          "field_value_num": null,
+          "field_unit": null,
+          "source_table": "dsearch_v_device_search_active",
+          "source_column": "component_role",
+          "source_locator": "device_parameters.devices:8883",
+          "source_checksum": "1f8b8a4aae534fc0706fd59718d2a665153d5f49be296aac256fda389335f074",
+          "evidence_status": "PROVEN",
+          "value_origin": "DB_DEVICE",
+          "priority_rank": 9999,
+          "is_required": 0,
+          "is_missing": 0,
+          "is_derived_value": 0
+        },
+        {
+          "device_id": 8883,
+          "field_key": "device_form",
+          "field_name_zh": "device_form",
+          "field_value_text": "IC",
+          "field_value_num": null,
+          "field_unit": null,
+          "source_table": "dsearch_v_device_search_active",
+          "source_column": "device_form",
+          "source_locator": "device_parameters.devices:8883",
+          "source_checksum": "1f8b8a4aae534fc0706fd59718d2a665153d5f49be296aac256fda389335f074",
+          "evidence_status": "PROVEN",
+          "value_origin": "DB_DEVICE",
+          "priority_rank": 9999,
+          "is_required": 0,
+          "is_missing": 0,
+          "is_derived_value": 0
+        },
+        {
+          "device_id": 8883,
+          "field_key": "device_id",
+          "field_name_zh": "device_id",
+          "field_value_text": "8883",
+          "field_value_num": "8883.0000000000",
+          "field_unit": null,
+          "source_table": "dsearch_device_raw_snapshot",
+          "source_column": "parameter_payload_raw.device_id",
+          "source_locator": "device_parameters.params_dc_dc_power_converter_chip:8883",
+          "source_checksum": "6335e33787d6d968566671b38eb0bf4987aa2edad6cc5730453682d0e5b88112",
+          "evidence_status": "PROVEN",
+          "value_origin": "DB_PARAMETER",
+          "priority_rank": 9999,
+          "is_required": 0,
+          "is_missing": 0,
+          "is_derived_value": 0
+        },
+        {
+          "device_id": 8883,
+          "field_key": "domain_code",
+          "field_name_zh": "domain_code",
+          "field_value_text": "D03",
+          "field_value_num": null,
+          "field_unit": null,
+          "source_table": "dsearch_v_device_search_active",
+          "source_column": "domain_code",
+          "source_locator": "taxonomy:build=4;device_id=8883",
+          "source_checksum": "1f8b8a4aae534fc0706fd59718d2a665153d5f49be296aac256fda389335f074",
+          "evidence_status": "PROVEN",
+          "value_origin": "DB_TAXONOMY",
+          "priority_rank": 9999,
+          "is_required": 0,
+          "is_missing": 0,
+          "is_derived_value": 1
+        },
+        {
+          "device_id": 8883,
+          "field_key": "family_code",
+          "field_name_zh": "family_code",
+          "field_value_text": "F07",
+          "field_value_num": null,
+          "field_unit": null,
+          "source_table": "dsearch_v_device_search_active",
+          "source_column": "family_code",
+          "source_locator": "taxonomy:build=4;device_id=8883",
+          "source_checksum": "1f8b8a4aae534fc0706fd59718d2a665153d5f49be296aac256fda389335f074",
+          "evidence_status": "PROVEN",
+          "value_origin": "DB_TAXONOMY",
+          "priority_rank": 9999,
+          "is_required": 0,
+          "is_missing": 0,
+          "is_derived_value": 1
+        }
+      ],
+      "elapsed_ms": 3
+    },
+    "exact_explain": {
+      "rows": [
+        {
+          "id": 1,
+          "select_type": "PRIMARY",
+          "table": "<derived2>",
+          "partitions": null,
+          "type": "ALL",
+          "possible_keys": null,
+          "key": null,
+          "key_len": null,
+          "ref": null,
+          "rows": 4,
+          "filtered": 100.0,
+          "Extra": null
+        },
+        {
+          "id": 2,
+          "select_type": "DERIVED",
+          "table": "b",
+          "partitions": null,
+          "type": "ALL",
+          "possible_keys": "PRIMARY",
+          "key": null,
+          "key_len": null,
+          "ref": null,
+          "rows": 4,
+          "filtered": 25.0,
+          "Extra": "Using where"
+        },
+        {
+          "id": 2,
+          "select_type": "DERIVED",
+          "table": "d",
+          "partitions": null,
+          "type": "ref",
+          "possible_keys": "uq_dsearch_document,ix_dsearch_part_raw,ix_dsearch_part_norm,ix_dsearch_manufacturer,ix_dsearch_legacy,ix_dsearch_domain,ix_dsearch_family,ix_dsearch_leaf,ix_dsearch_status,ix_dsearch_core_filter",
+          "key": "ix_dsearch_part_norm",
+          "key_len": "1030",
+          "ref": "device_parameters_dev.b.build_id,const",
+          "rows": 1,
+          "filtered": 100.0,
+          "Extra": null
+        },
+        {
+          "id": 3,
+          "select_type": "UNION",
+          "table": "r",
+          "partitions": null,
+          "type": "ref",
+          "possible_keys": "PRIMARY,ix_drelease_release_status",
+          "key": "ix_drelease_release_status",
+          "key_len": "258",
+          "ref": "const",
+          "rows": 2,
+          "filtered": 100.0,
+          "Extra": "Using index"
+        },
+        {
+          "id": 3,
+          "select_type": "UNION",
+          "table": "s",
+          "partitions": null,
+          "type": "ref",
+          "possible_keys": "uq_drelease_search,ix_drelease_search_part",
+          "key": "ix_drelease_search_part",
+          "key_len": "1030",
+          "ref": "device_parameters_dev.r.release_id,const",
+          "rows": 1,
+          "filtered": 10.0,
+          "Extra": "Using where"
+        }
+      ],
+      "elapsed_ms": 2
+    },
+    "priority_versions": {
+      "rows": [
+        {
+          "taxonomy_version_id": 41,
+          "fields": 2492
+        },
+        {
+          "taxonomy_version_id": 50,
+          "fields": 2507
+        },
+        {
+          "taxonomy_version_id": 51,
+          "fields": 2512
+        }
+      ]
+    },
+    "attribute_versions": {
+      "rows": [
+        {
+          "taxonomy_version_id": 51,
+          "release_id": 2,
+          "build_id": 9,
+          "fields": 29
+        }
+      ]
+    },
+    "manual_samples": {
+      "rows": [
+        {
+          "record_id": 116,
+          "part_number": "TP4057-42-SOT26-R",
+          "manufacturer": "TOPPOWER(南京拓微)",
+          "leaf_code": "l_battery_management",
+          "supplier_part": "C12044"
+        },
+        {
+          "record_id": 115,
+          "part_number": "SGM2209-ADJXN5G/TR",
+          "manufacturer": "SGMICRO",
+          "leaf_code": "l_linear_regulator_ldo",
+          "supplier_part": "C5152788"
+        },
+        {
+          "record_id": 114,
+          "part_number": "BL1551B",
+          "manufacturer": "BL",
+          "leaf_code": "l_signal_switch_codec_multiplexer",
+          "supplier_part": "C2944066"
+        },
+        {
+          "record_id": 113,
+          "part_number": "WJ500V-5.08-2P",
+          "manufacturer": "KANGNEX",
+          "leaf_code": "l_screw_terminal_block",
+          "supplier_part": "C8465"
+        },
+        {
+          "record_id": 112,
+          "part_number": "HT97226SQER",
+          "manufacturer": "嘉兴禾润",
+          "leaf_code": "l_capacitor",
+          "supplier_part": "C22470699"
+        },
+        {
+          "record_id": 111,
+          "part_number": "PT10LH01-103A2020-S",
+          "manufacturer": "Amphenol",
+          "leaf_code": "l_resistor",
+          "supplier_part": "C5710481"
+        }
+      ]
+    },
+    "snapshot_columns": {
+      "rows": [
+        {
+          "Field": "snapshot_id",
+          "Type": "bigint unsigned",
+          "Null": "NO",
+          "Key": "PRI",
+          "Default": null,
+          "Extra": "auto_increment"
+        },
+        {
+          "Field": "build_id",
+          "Type": "bigint unsigned",
+          "Null": "NO",
+          "Key": "MUL",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "device_id",
+          "Type": "bigint",
+          "Null": "NO",
+          "Key": "MUL",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "source_table",
+          "Type": "varchar(128)",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "source_primary_key",
+          "Type": "varchar(128)",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "part_number_raw",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "manufacturer_raw",
+          "Type": "varchar(255)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "legacy_level1_raw",
+          "Type": "varchar(100)",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "legacy_level2_raw",
+          "Type": "varchar(100)",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "description_raw",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "parameter_payload_raw",
+          "Type": "mediumtext",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "raw_checksum",
+          "Type": "char(64)",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "copied_at",
+          "Type": "datetime",
+          "Null": "NO",
+          "Key": "",
+          "Default": "CURRENT_TIMESTAMP",
+          "Extra": "DEFAULT_GENERATED"
+        }
+      ]
+    },
+    "document_tables": {
+      "rows": []
+    },
+    "current_priority_coverage": {
+      "rows": [
+        {
+          "taxonomy_version_id": 51,
+          "leaves": 412,
+          "fields": 2512,
+          "default_template_leaves": 76
+        }
+      ]
+    },
+    "attribute_versions_all": {
+      "rows": [
+        {
+          "taxonomy_version_id": 51,
+          "priority_extension_version": "incremental_overlay_9010_9808808c25029374"
+        },
+        {
+          "taxonomy_version_id": 41,
+          "priority_extension_version": "incremental_overlay_9010_9808808c25029374"
+        }
+      ]
+    },
+    "changed_identity_target": {
+      "rows": [
+        {
+          "device_id": 604,
+          "part_number_raw": "MMBT3904(RANGE:100-300)",
+          "source_record_locator": "device_parameters.devices:604"
+        }
+      ]
+    },
+    "manual_attribute_sample": {
+      "rows": [
+        {
+          "record_id": 116,
+          "artifact_type": "ATTRIBUTE_INDEX",
+          "artifact_status": "PUBLISHED",
+          "payload_chars": 6069
+        },
+        {
+          "record_id": 116,
+          "artifact_type": "BACKFILL_QUEUE",
+          "artifact_status": "PUBLISHED",
+          "payload_chars": 3993
+        },
+        {
+          "record_id": 116,
+          "artifact_type": "CORE_PROFILE",
+          "artifact_status": "PUBLISHED",
+          "payload_chars": 209
+        },
+        {
+          "record_id": 116,
+          "artifact_type": "SOURCE_LINK",
+          "artifact_status": "PUBLISHED",
+          "payload_chars": 194
+        },
+        {
+          "record_id": 116,
+          "artifact_type": "TAXONOMY",
+          "artifact_status": "PUBLISHED",
+          "payload_chars": 300
+        }
+      ]
+    },
+    "manual_model_overlap_probe": {
+      "manual_records": 115,
+      "same_model_records_in_published": 16,
+      "different_model_records": 99,
+      "note": "Research-only model-name overlap, not deduplicated physical/supplier identity; SQL correlated-view attempt replaced with bounded client comparison."
+    }
+  },
+  "source": {
+    "session": {
+      "rows": [
+        {
+          "read_only": 1,
+          "server_version": "8.0.45"
+        }
+      ],
+      "elapsed_ms": 0
+    },
+    "devices_count": {
+      "rows": [
+        {
+          "row_count": 9058
+        }
+      ],
+      "elapsed_ms": 4
+    },
+    "device_columns": {
+      "rows": [
+        {
+          "Field": "device_id",
+          "Type": "int",
+          "Null": "NO",
+          "Key": "PRI",
+          "Default": null,
+          "Extra": "auto_increment"
+        },
+        {
+          "Field": "device_name",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "supplier_part",
+          "Type": "varchar(50)",
+          "Null": "NO",
+          "Key": "UNI",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "category_level_1",
+          "Type": "varchar(100)",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "category_level_2",
+          "Type": "varchar(100)",
+          "Null": "NO",
+          "Key": "MUL",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "pin_count",
+          "Type": "int",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "price",
+          "Type": "decimal(10,2)",
+          "Null": "YES",
+          "Key": "MUL",
+          "Default": null,
+          "Extra": ""
+        }
+      ],
+      "elapsed_ms": 3
+    },
+    "pin_columns": {
+      "rows": [
+        {
+          "Field": "pin_id",
+          "Type": "int",
+          "Null": "NO",
+          "Key": "PRI",
+          "Default": null,
+          "Extra": "auto_increment"
+        },
+        {
+          "Field": "device_id",
+          "Type": "int",
+          "Null": "NO",
+          "Key": "MUL",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "pin_index",
+          "Type": "int",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "pin_query_name",
+          "Type": "varchar(255)",
+          "Null": "NO",
+          "Key": "UNI",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "pin_number",
+          "Type": "varchar(50)",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "pin_name",
+          "Type": "varchar(100)",
+          "Null": "NO",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "pin_type",
+          "Type": "varchar(100)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "pin_description",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "pin_connection_notes",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "pin_impedance",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "pin_frequency",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        }
+      ],
+      "elapsed_ms": 2
+    },
+    "sample_device": {
+      "rows": [
+        {
+          "device_id": 8883,
+          "device_name": "TPS5450DDAR",
+          "supplier_part": "C114425",
+          "category_level_1": "power_management",
+          "category_level_2": "dc_dc_power_converter_chip",
+          "pin_count": 9,
+          "price": null
+        }
+      ],
+      "elapsed_ms": 12
+    },
+    "sample_parameter_columns": {
+      "rows": [
+        {
+          "Field": "device_id",
+          "Type": "int",
+          "Null": "NO",
+          "Key": "PRI",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "output_voltage_vout",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "output_voltage_accuracy",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "jialichuang_smt",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "number_of_output_channels",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "quiescent_current_iq",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "output_current_maximum_value",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "certification_information",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "product_tag",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "packaging_method",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "brand_origin",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "brand",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "width",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "functional_description",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "ripple_noise",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "conversion_efficiency",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "length",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "height",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "maximum_capacitive_load",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "output_power",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "characteristic",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "encapsulation_specification",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "function_type",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "operating_voltage_vin",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "operating_temperature",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "switching_frequency",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "conversion_efficiency_min",
+          "Type": "float",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "conversion_efficiency_max",
+          "Type": "float",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "conversion_efficiency_unit",
+          "Type": "varchar(16)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "maximum_capacitive_load_min",
+          "Type": "float",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "maximum_capacitive_load_max",
+          "Type": "float",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "maximum_capacitive_load_unit",
+          "Type": "varchar(16)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "number_of_output_channels_min",
+          "Type": "float",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "number_of_output_channels_max",
+          "Type": "float",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "number_of_output_channels_unit",
+          "Type": "varchar(16)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "operating_voltage_vin_min",
+          "Type": "float",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "operating_voltage_vin_max",
+          "Type": "float",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "operating_voltage_vin_unit",
+          "Type": "varchar(16)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "output_current_maximum_value_min",
+          "Type": "float",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "output_current_maximum_value_max",
+          "Type": "float",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "output_current_maximum_value_unit",
+          "Type": "varchar(16)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "output_power_min",
+          "Type": "float",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "output_power_max",
+          "Type": "float",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "output_power_unit",
+          "Type": "varchar(16)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "output_voltage_vout_min",
+          "Type": "float",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "output_voltage_vout_max",
+          "Type": "float",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "output_voltage_vout_unit",
+          "Type": "varchar(16)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "quiescent_current_iq_min",
+          "Type": "float",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "quiescent_current_iq_max",
+          "Type": "float",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "quiescent_current_iq_unit",
+          "Type": "varchar(16)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "switching_frequency_min",
+          "Type": "float",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "switching_frequency_max",
+          "Type": "float",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "switching_frequency_unit",
+          "Type": "varchar(16)",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "output_type",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "switch_tube_built_in_external",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "synchronous_rectification",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        },
+        {
+          "Field": "topology_structure",
+          "Type": "text",
+          "Null": "YES",
+          "Key": "",
+          "Default": null,
+          "Extra": ""
+        }
+      ],
+      "elapsed_ms": 33
+    },
+    "sample_frequency_source": {
+      "rows": [
+        {
+          "device_id": 8883,
+          "switching_frequency": "500kHz",
+          "operating_voltage_vin": "5.5V~36V",
+          "output_current_maximum_value": "5A"
+        }
+      ],
+      "elapsed_ms": 1
+    },
+    "changed_identity_source": {
+      "rows": [
+        {
+          "device_id": 604,
+          "device_name": "MMBT3904",
+          "supplier_part": "C20526"
+        }
+      ]
+    }
+  },
+  "errors": [],
+  "freshness": {
+    "checked_at": "2026-10-15T16:11:58.704148+00:00",
+    "source_device_count": 9058,
+    "target_published_count": 9010,
+    "new_device_count": 48,
+    "changed_identity_count": 1,
+    "missing_device_count": 0,
+    "backlog_count": 49,
+    "freshness_status": "STALE_SOURCE_HAS_DELTA",
+    "new_device_ids": [
+      9015,
+      9016,
+      9017,
+      9018,
+      9019,
+      9020,
+      9021,
+      9022,
+      9023,
+      9024,
+      9025,
+      9026,
+      9027,
+      9028,
+      9029,
+      9030,
+      9031,
+      9032,
+      9033,
+      9034,
+      9035,
+      9036,
+      9037,
+      9038,
+      9039,
+      9040,
+      9041,
+      9042,
+      9043,
+      9044,
+      9045,
+      9046,
+      9047,
+      9048,
+      9049,
+      9050,
+      9051,
+      9052,
+      9053,
+      9054,
+      9055,
+      9056,
+      9057,
+      9058,
+      9059,
+      9060,
+      9061,
+      9062
+    ],
+    "changed_device_ids": [
+      604
+    ],
+    "missing_device_ids": [],
+    "current_release": {
+      "release_code": "incremental_overlay_9010_9808808c25029374",
+      "release_status": "PUBLISHED",
+      "published_at": "2026-09-02 13:33:04"
+    },
+    "comparison_note": "Identity delta is checked here; release builder performs raw/pin/parameter checksum comparison."
+  },
+  "freshness_elapsed_ms": 571
+}

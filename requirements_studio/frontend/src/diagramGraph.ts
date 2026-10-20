@@ -4,6 +4,7 @@ import { categories, type Category, type Convergence, type Document } from './ty
 export interface DiagramNode {
   id: string; title: string; detail?: string; badge?: string; preview?: string;
   requirementIds?: string[]; tone?: string; compact?: boolean; toggleId?: string;
+  actionId?: string; actionLabel?: string;
 }
 export interface DiagramEdge { id: string; source: string; target: string; label?: string; kind?: string; arrow?: boolean }
 export interface DiagramGraph { nodes: DiagramNode[]; edges: DiagramEdge[]; layout: 'mindmap' | 'directed' | 'sequence'; direction?: 'LR' | 'TB'; }

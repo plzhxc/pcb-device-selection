@@ -40,7 +40,7 @@ function ModuleEditor({project,catalog,type,module,onClose,onSaved}:{project:Pro
   </form></dialog>;
 }
 
-export function ModuleBoard({project,busy,onSaved,onDiscuss,onEvidence,onRequirement,onSource,onAdopt}:{project:Project;busy:boolean;onSaved:(p:Project)=>void;onDiscuss:(text:string)=>void;onEvidence?:(moduleId:string)=>void;onRequirement?:(id:string)=>void;onSource?:(id:string)=>void;onAdopt?:(text:string)=>Promise<boolean>}) {
+export function ModuleBoard({project,busy,onSaved,onDiscuss,onEvidence,onDevice,onRequirement,onSource,onAdopt}:{project:Project;busy:boolean;onSaved:(p:Project)=>void;onDiscuss:(text:string)=>void;onEvidence?:(moduleId:string)=>void;onDevice?:(referenceId:string)=>void;onRequirement?:(id:string)=>void;onSource?:(id:string)=>void;onAdopt?:(text:string)=>Promise<boolean>}) {
   const detailRef=useRef<HTMLElement>(null);
   const [catalog,setCatalog]=useState<Catalog|null>(null),[error,setError]=useState(''),[category,setCategory]=useState('all'),[query,setQuery]=useState('');
   const [selected,setSelected]=useState(''),[detail,setDetail]=useState<ModuleDetail|null>(null),[detailLoading,setDetailLoading]=useState(false);
@@ -55,7 +55,7 @@ export function ModuleBoard({project,busy,onSaved,onDiscuss,onEvidence,onRequire
   const parents=catalog?.types.filter(t=>t.level==='parent'&&(category==='all'||category===t.category_id)&&(matches(t)||catalog.types.some(child=>child.parent_id===t.id&&matches(child))))??[];
   function edit(m:ModuleInstance){const type=catalog?.types.find(t=>t.id===m.type_id);if(type)setEditor({type,module:m});setSelected(m.type_id);}
   async function remove(m:ModuleInstance){setSaving(true);setError('');try{onSaved(await api<Project>(`/projects/${project.id}/modules/${m.id}?base_version=${project.document.version}`,{method:'DELETE'}));}catch(e){setError((e as Error).message);}finally{setSaving(false);}}
-  return <div className="module-board"><div className="eyebrow">HARDWARE BUILDING BLOCKS</div><h1>产品功能，怎样由模块承接</h1><p className="phase-intro">先看每个模块为什么需要、承接什么功能，再核对规范类别。AI 建议与你已确认的方案分别标明。</p>{onAdopt&&<ModulePlanReview compact project={project} busy={busy} disabled={saving} onConfirm={onAdopt} onInspect={()=>document.querySelector('.module-instance-list')?.scrollIntoView({behavior:'smooth',block:'start'})}/>}<ReferencePlan project={project} onSaved={onSaved}/><InterfaceTable project={project} onSaved={onSaved}/>
+  return <div className="module-board"><div className="eyebrow">HARDWARE BUILDING BLOCKS</div><h1>产品功能，怎样由模块承接</h1><p className="phase-intro">先看每个模块为什么需要、承接什么功能，再核对规范类别。AI 建议与你已确认的方案分别标明。</p>{onAdopt&&<ModulePlanReview compact project={project} busy={busy} disabled={saving} onConfirm={onAdopt} onInspect={()=>document.querySelector('.module-instance-list')?.scrollIntoView({behavior:'smooth',block:'start'})}/>}<ReferencePlan project={project} onSaved={onSaved} onEdit={onDevice}/><InterfaceTable project={project} onSaved={onSaved}/>
     {error&&<p role="alert" className="inline-error">{error}</p>}
     <div className="section-heading"><h2><GitBranch size={15}/>本版模块方案</h2><span>{c.modules.filter(m=>m.state!=='not_applicable').length} 项</span></div>
     <ModuleMap project={project} onSelect={id=>{const r=project.document.requirements.find(r=>r.id===id);if(r)onDiscuss(`我想讨论模块承接的“${r.name}”要求，请沿用已经明确的决定，说明需要调整什么。`);}}/>

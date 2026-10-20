@@ -166,6 +166,7 @@ current_document.reference_designs来自用户真实上传的文件，core_parts
 参考的signal_connections是实际共享信号网络，pins保留位号归属；同型号连接器的电池、扬声器等不同位置不能混成同一接口。逐项解释核心器件保留或暂不采用的理由。不要把基本运行前提误判为“客户没有提出额外功能”：固件启动存储不同于录音存储，主控时钟、供电路径和充电状态控制也要有承接；充电芯片不自动等于完整负载供电/切换方案。依据真实网络与资料整理必要辅助方案，电气能力不明时明确核验任务，不要求客户自行查芯片。额外扩展接口则解释用途，请客户决定是否需要。
 参考的passive_connections保留电容、电阻、电感等两端连接，音频/传感器常经过耦合和滤波支路。先结合这些实际支路和核心引脚核对，不能只比较核心器件两端网名便声称参考没连。电容不是直流短路，不据拓扑推导电气验证通过；资料截断或仍不明时明确这是核验边界。不要把参考无源参数新增成用户硬性性能要求。
 采用参考核心器件方案只改变已展示器件的意图与用量，功能与既定器件仍保留。参考中不需要的器件仍可仅作参考，不强塞模块；对核心功能未落实的器件/资料缺口主动整理。核心BOM尚待客户采用时无需重复问同一长串型号，告知在模块方案看这套方案即可；此时core_parts设needs_user，等待操作。
+current_document.canvas_changes 中 pending 是客户已经提交的器件修改，不是新的问卷。以最新 after 为当前方案，before 仅供辨别旧描述。逐项处理其 remaining、requirement_ids、module_ids、link_ids 和 field_ids：修改过时正文、模块名称/用途/边界、接口与供电说明、流程、条款和四项delivery_checks；未变化的目标返回 reviewed_requirement_ids。不能仅在reply说“已同步”，不能把旧芯片能力直接继承给替代型号，也不能把换器件当作取消产品功能。原参考文件保持原样，本版清单按当前引用更新。仅讨论比较未作更换决定时保持当前器件意图。
 没有参考时同样给实际架构建议。可以在问题选项中明确推荐某种器件方案及取舍，客户采用后才登记为其选择并查真实目录；不能要求不懂硬件的客户自行查芯片。数据库未命中可保留参考型号、职责和可替代范围，不能伪造采购身份。
 external_interfaces增量维护本版外部接口表：实际连接位置、用途、外接对象、协议、信号、电平/供电、shared_link共用关系。不要把连接位置数当独立控制器路数。用户仅修正一行时只更新该行。附件引脚/信号是参考，未采用时用proposed；明确采用的接口要求可confirmed，待工程电平等说明design_stage。
 物理频率区分rf_frequency（NFC/射频）、clock_frequency（时钟）、switching_frequency（开关电源）。数值和unit同步保存，13.56 MHz不能写成没有单位的13.56。
@@ -493,6 +494,8 @@ class Runner:
                 if not result.pause_questions and not doc.get('questions_paused'):
                     review=review_document(doc);tasks=[]
                     if review['internal_rechecks']:
+                        if review.get('device_changes'):
+                            tasks.append('完成器件修改的全画布同步：'+ '；'.join(c['reason'] for c in review['device_changes'])+'。逐项处理canvas_changes.remaining及关联REQ/MOD/接口/条款/摘要/流程/交接；保留产品目标，已有效的需求返回reviewed_requirement_ids，过时内容实际更新。新器件资料未知写工程任务，不沿用旧型号能力，不重写参考原图')
                         if review.get('reference_audit_pending'):
                             tasks.append('最终参考能力复审：逐项对照真实参考网络、目录和本版功能。检查主控固件启动存储、时钟、音频/通信链路、充电与负载供电路径、接口位置和全部核心器件用途；不能把基本运行前提错当可选用户功能。返回四项delivery_checks明确结论；缺失内容给出方案，必要产品取舍才提问；不为填满BOM强塞无关模块，不宣称电路已验证')
                         if review.get('delivery',{}).get('rechecks'):

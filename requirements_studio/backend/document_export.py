@@ -83,6 +83,20 @@ def render_project_document(doc,domain=None,*,structured=False):
         for row in doc['external_interfaces']:
             lines.append('| '+' | '.join(cell(x) for x in [row['name'],row['purpose']+'；'+row.get('external_object',''),row.get('protocol','')+'；'+'、'.join(row.get('signals',[])),row.get('voltage','')+'；'+row.get('shared_link',''),row['state']])+' |')
         lines+=['']
+    from .reference_design import bom_view
+    current_bom=bom_view(doc,domain)['current_rows']
+    if current_bom:
+        lines+=['## 本版器件方案','','当前采用与待采用的器件方案；资料和电气适用性分别核验。','',
+                '| 器件 | 本版数量 | 使用意图 | 用途 | 方案依据 |','| --- | --- | --- | --- | --- |']
+        for row in current_bom:
+            lines.append('| '+' | '.join(cell(x) for x in (row['model'],row['quantity'] if row['quantity'] is not None else '待核定',
+                         {'must':'必须使用','prefer':'优先考虑','reference':'建议待采用'}[row['intent']],row['purpose'],row['source_label']))+' |')
+        lines+=['']
+    from .canvas_sync import view as sync_view
+    sync=sync_view(doc)
+    if sync['latest']:
+        change=sync['latest']
+        lines+=['## 最近器件调整','','- '+change['reason']+'；'+('关联内容仍在同步，完成后需重新整体审阅。' if sync['pending_count'] else '关联内容已同步至本版。'),'']
     if doc.get('reference_designs'):
         from .reference_design import bom_view
         bom=bom_view(doc,domain)

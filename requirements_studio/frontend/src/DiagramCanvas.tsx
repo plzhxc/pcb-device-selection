@@ -48,8 +48,8 @@ function connection(a: PlacedNode, b: PlacedNode, horizontalOnly = false) {
   return { path: `M${start.x},${start.y} C${start.x},${start.y + sign * bend} ${end.x},${end.y - sign * bend} ${end.x},${end.y}`, label: { x: (start.x + end.x) / 2, y: (start.y + end.y) / 2 } };
 }
 
-export function DiagramCanvas({ graph, title, storageKey, tabs, onDiscuss, onToggle }: {
-  graph: DiagramGraph; title: string; storageKey: string; tabs?: ReactNode; onDiscuss?: (id: string) => void; onToggle?: (id: string) => void;
+export function DiagramCanvas({ graph, title, storageKey, tabs, onDiscuss, onToggle, overview=false }: {
+  graph: DiagramGraph; title: string; storageKey: string; tabs?: ReactNode; onDiscuss?: (id: string) => void; onToggle?: (id: string) => void; overview?: boolean;
 }) {
   const [size, setSize] = useState({ width: 640, height: 460 });
   const compactLayout=graph.layout==='directed'&&!graph.direction&&graph.nodes.length<=8;
@@ -93,7 +93,7 @@ export function DiagramCanvas({ graph, title, storageKey, tabs, onDiscuss, onTog
   useLayoutEffect(() => {
     // Polling the same document must not reset a user's camera or node layout.
     const signature = serialized + ':' + fontsReady + ':' + expanded + ':' + size.width + ':' + size.height;
-    if (initialized.current !== signature && size.width > 0 && size.height > 0) { initialized.current = signature; fit(false, nodes.length>8); }
+    if (initialized.current !== signature && size.width > 0 && size.height > 0) { initialized.current = signature; fit(false, !overview&&nodes.length>8); }
   }, [serialized, fontsReady, expanded, size.width, size.height]);
   useEffect(() => {
     if (!expanded) return;
@@ -246,7 +246,7 @@ export function DiagramCanvas({ graph, title, storageKey, tabs, onDiscuss, onTog
     </div>
     {selected && <aside className="diagram-inspector" aria-label="图形节点详情"><header><strong>{selected.title}</strong><button type="button" aria-label="关闭节点详情" onClick={() => setSelectedId(null)}><X size={15}/></button></header>
       <p>{selected.detail || selected.preview || selected.badge || '当前项目的需求节点。'}</p>
-      {onDiscuss && selected.requirementIds?.[0] && <button type="button" className="diagram-discuss" onClick={() => onDiscuss(selected.requirementIds![0])}>在对话中讨论<ArrowUpRight size={13}/></button>}
+      {onDiscuss && (selected.actionId||selected.requirementIds?.[0]) && <button type="button" className="diagram-discuss" onClick={() => onDiscuss(selected.actionId||selected.requirementIds![0])}>{selected.actionLabel||'在对话中讨论'}<ArrowUpRight size={13}/></button>}
     </aside>}
   </div>;
   return <section className="diagram-card interactive-diagram" aria-label={title + '图形'}>

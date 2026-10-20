@@ -57,7 +57,7 @@ def review(doc):
     internal=[c for c in checks if c['state'] in ('missing','review')]
     gaps=[c for c in checks if c['state'] in ('needs_user','conflict')]
     bom=bom_view(doc)
-    proposed=[p for p in bom['rows'] if p['core'] and p['status']=='proposed']
+    proposed=[p for p in bom['current_rows'] if p['status']=='proposed']
     if enabled and proposed:gaps.append({'key':'reference_adoption','label':'参考核心器件方案','state':'needs_user','conclusion':f'{len(proposed)} 项参考核心器件已关联功能，等待你采用或调整。','next_action':'在模块方案中查看核心器件方案，采用适用部分或说明需要修改的地方。'})
     return {'enabled':enabled,'checks':checks,'rechecks':internal,'gaps':gaps,'reference_adoption_pending':len(proposed)}
 

@@ -1,0 +1,46 @@
+{
+  "checked_at": "2026-10-15T16:28:56.247888+00:00",
+  "mode": "documentation_and_read_only_research_validation",
+  "documents": [
+    {
+      "path": "docs/需求分析工作台_第三阶段现状与数据源调研.md",
+      "lines": 196,
+      "utf8_bytes": 22134,
+      "balanced_fences": true,
+      "missing_local_links": []
+    },
+    {
+      "path": "docs/需求分析工作台_第三阶段领域能力补齐实施方案.md",
+      "lines": 672,
+      "utf8_bytes": 59813,
+      "balanced_fences": true,
+      "missing_local_links": []
+    },
+    {
+      "path": "docs/需求分析工作台_调研与目标总览.md",
+      "lines": 109,
+      "utf8_bytes": 10299,
+      "balanced_fences": true,
+      "missing_local_links": []
+    },
+    {
+      "path": "requirements_studio/README.md",
+      "lines": 212,
+      "utf8_bytes": 15910,
+      "balanced_fences": true,
+      "missing_local_links": []
+    }
+  ],
+  "module_source_hash_matches": true,
+  "application_release_hashes_unchanged": true,
+  "data_source_probe_errors": [],
+  "published_devices": 9010,
+  "source_devices": 9058,
+  "freshness": "STALE_SOURCE_HAS_DELTA",
+  "freshness_backlog": 49,
+  "ui_views_inspected": 5,
+  "browser_errors": [],
+  "browser_mutating_requests": [],
+  "production_health_ok": true,
+  "sample_versions_and_reviews_unchanged": true
+}

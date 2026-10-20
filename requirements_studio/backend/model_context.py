@@ -32,6 +32,7 @@ def compact(context):
     result['coverage_review']={k:v for k,v in result['coverage_review'].items()
                                if k not in ('topics','gaps','engineering_gaps')}
     document=result['current_document']
+    document['canvas_changes']=[c for c in document.get('canvas_changes',[]) if c['status']=='pending']
     from .reference_design import prompt_reference
     document['reference_designs']=[prompt_reference(s) for s in document.get('reference_designs',[])]
     for key in ('selection_items','convergence_history','domain_impacts','changed_ids','updated_at','created_at',

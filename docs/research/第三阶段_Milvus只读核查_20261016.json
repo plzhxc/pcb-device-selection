@@ -1,0 +1,637 @@
+{
+  "checked_at": "2026-10-15T16:12:01.803276+00:00",
+  "mode": "read_only_research",
+  "databases": [
+    {
+      "database": "DataSheetBase",
+      "server_version": "pkg/v2.6.13",
+      "has_collection": true,
+      "schema": {
+        "auto_id": true,
+        "enable_dynamic_field": false,
+        "fields": [
+          {
+            "field_id": 100,
+            "name": "id",
+            "description": "",
+            "type": 5,
+            "params": {},
+            "auto_id": true,
+            "is_primary": true
+          },
+          {
+            "field_id": 101,
+            "name": "lichuang_id",
+            "description": "",
+            "type": 21,
+            "params": {
+              "max_length": 64
+            }
+          },
+          {
+            "field_id": 102,
+            "name": "content_type",
+            "description": "",
+            "type": 21,
+            "params": {
+              "max_length": 256
+            }
+          },
+          {
+            "field_id": 103,
+            "name": "title",
+            "description": "",
+            "type": 21,
+            "params": {
+              "max_length": 20480,
+              "enable_analyzer": "true"
+            }
+          },
+          {
+            "field_id": 104,
+            "name": "title_dense_vector",
+            "description": "",
+            "type": 101,
+            "params": {
+              "dim": 1024
+            }
+          },
+          {
+            "field_id": 105,
+            "name": "title_sparse_vector",
+            "description": "",
+            "type": 104,
+            "params": {},
+            "is_function_output": true
+          },
+          {
+            "field_id": 106,
+            "name": "content",
+            "description": "",
+            "type": 21,
+            "params": {
+              "max_length": 20480,
+              "enable_analyzer": "true"
+            }
+          },
+          {
+            "field_id": 107,
+            "name": "content_dense_vector",
+            "description": "",
+            "type": 101,
+            "params": {
+              "dim": 1024
+            }
+          },
+          {
+            "field_id": 108,
+            "name": "content_sparse_vector",
+            "description": "",
+            "type": 104,
+            "params": {},
+            "is_function_output": true
+          },
+          {
+            "field_id": 109,
+            "name": "img_path",
+            "description": "",
+            "type": 21,
+            "params": {
+              "max_length": 1024
+            },
+            "nullable": true
+          },
+          {
+            "field_id": 110,
+            "name": "absolute_img_path",
+            "description": "",
+            "type": 21,
+            "params": {
+              "max_length": 1024
+            },
+            "nullable": true
+          },
+          {
+            "field_id": 111,
+            "name": "parent_entry_idx",
+            "description": "",
+            "type": 5,
+            "params": {},
+            "nullable": true
+          },
+          {
+            "field_id": 112,
+            "name": "chunk_idx",
+            "description": "",
+            "type": 5,
+            "params": {},
+            "nullable": true
+          },
+          {
+            "field_id": 113,
+            "name": "chunk_total",
+            "description": "",
+            "type": 5,
+            "params": {},
+            "nullable": true
+          },
+          {
+            "field_id": 114,
+            "name": "section_path",
+            "description": "",
+            "type": 21,
+            "params": {
+              "max_length": 2048
+            },
+            "nullable": true
+          }
+        ],
+        "functions": [
+          {
+            "name": "title_bm25_function",
+            "id": 100,
+            "description": "",
+            "type": 1,
+            "params": {},
+            "input_field_names": "['title']",
+            "input_field_ids": "[103]",
+            "output_field_names": "['title_sparse_vector']",
+            "output_field_ids": "[105]"
+          },
+          {
+            "name": "text_bm25_emb",
+            "id": 101,
+            "description": "",
+            "type": 1,
+            "params": {},
+            "input_field_names": "['content']",
+            "input_field_ids": "[106]",
+            "output_field_names": "['content_sparse_vector']",
+            "output_field_ids": "[108]"
+          }
+        ]
+      },
+      "indexes": [
+        "lichuang_id_index",
+        "title_dense_vector_index",
+        "title_sparse_inverted_index",
+        "content_dense_vector_index",
+        "content_sparse_inverted_index"
+      ],
+      "load_state": "{'state': <LoadState: Loaded>}",
+      "scalar_query": {
+        "count": 3,
+        "samples": [
+          {
+            "id": 467031026884122231,
+            "lichuang_id": "C114425",
+            "content_type": "text",
+            "title": "TPS5450 5A 宽输入范围降压转换器 1 特性 • 宽输入电压范围为：5.5V 至 36V • 高达 5A 的持续（峰值为 6A）输出电流 • 通过 110mΩ 集成 M... [truncated 377 chars]",
+            "chunk_idx": 0,
+            "chunk_total": 4,
+            "section_path": "TPS5450 5A 宽输入范围降压转换器 1 特性 • 宽输入电压范围为：5.5V 至 36V • 高达 5A 的持续（峰值为 6A）输出电流 • 通过 110mΩ 集成 M... [truncated 377 chars]",
+            "content_chars": 492,
+            "content_sha256": "ff2e60d3c213c8397246a3eddc9b8a64fd91f0ef96a613e6113c183bd22f06ad"
+          },
+          {
+            "id": 467031026884122232,
+            "lichuang_id": "C114425",
+            "content_type": "text",
+            "title": "TPS5450 是一款高输出电流的 PWM 转换器，集成了",
+            "chunk_idx": 1,
+            "chunk_total": 4,
+            "section_path": "TPS5450 是一款高输出电流的 PWM 转换器，集成了",
+            "content_chars": 460,
+            "content_sha256": "815a9324a50a9111566638acda7ab2429f26a150e30bd92be6baf285f4d8946e"
+          },
+          {
+            "id": 467031026884122233,
+            "lichuang_id": "C114425",
+            "content_type": "text",
+            "title": "BOOT PH",
+            "chunk_idx": 2,
+            "chunk_total": 4,
+            "section_path": "BOOT PH",
+            "content_chars": 3674,
+            "content_sha256": "c33781bcae6b4880c5f815f3627d8c3a80c4dde81a17ca45fe26b0e14927312d"
+          }
+        ]
+      },
+      "bm25_query": {
+        "count": 3,
+        "samples": [
+          {
+            "id": 467031026884122266,
+            "score": 6.761382102966309,
+            "entity": {
+              "section_path": "CATCH",
+              "lichuang_id": "C114425",
+              "content_type": "text",
+              "title": "CATCH",
+              "id": 467031026884122266
+            },
+            "content_chars": 245
+          },
+          {
+            "id": 467031026884122241,
+            "score": 2.3143651485443115,
+            "entity": {
+              "section_path": "启动阈值电压，ENA 1.3 V",
+              "lichuang_id": "C114425",
+              "content_type": "text",
+              "title": "启动阈值电压，ENA 1.3 V",
+              "id": 467031026884122241
+            },
+            "content_chars": 2146
+          },
+          {
+            "id": 467031026884122262,
+            "score": 1.4264247417449951,
+            "entity": {
+              "section_path": "• VINMAX = 最大输入电压",
+              "lichuang_id": "C114425",
+              "content_type": "text",
+              "title": "• VINMAX = 最大输入电压",
+              "id": 467031026884122262
+            },
+            "content_chars": 2180
+          }
+        ]
+      },
+      "elapsed_ms": 462
+    },
+    {
+      "database": "DataSheetBaseV2",
+      "server_version": "pkg/v2.6.13",
+      "has_collection": true,
+      "schema": {
+        "auto_id": true,
+        "enable_dynamic_field": false,
+        "fields": [
+          {
+            "field_id": 100,
+            "name": "id",
+            "description": "",
+            "type": 5,
+            "params": {},
+            "auto_id": true,
+            "is_primary": true
+          },
+          {
+            "field_id": 101,
+            "name": "lichuang_id",
+            "description": "",
+            "type": 21,
+            "params": {
+              "max_length": 64
+            }
+          },
+          {
+            "field_id": 102,
+            "name": "product_name",
+            "description": "",
+            "type": 21,
+            "params": {
+              "max_length": 256
+            }
+          },
+          {
+            "field_id": 103,
+            "name": "content_type",
+            "description": "",
+            "type": 21,
+            "params": {
+              "max_length": 32
+            }
+          },
+          {
+            "field_id": 104,
+            "name": "category",
+            "description": "",
+            "type": 21,
+            "params": {
+              "max_length": 64
+            }
+          },
+          {
+            "field_id": 105,
+            "name": "title",
+            "description": "",
+            "type": 21,
+            "params": {
+              "max_length": 2048
+            }
+          },
+          {
+            "field_id": 106,
+            "name": "content",
+            "description": "",
+            "type": 21,
+            "params": {
+              "max_length": 20000,
+              "enable_analyzer": "true",
+              "analyzer_params": "{\"type\":\"chinese\"}"
+            }
+          },
+          {
+            "field_id": 107,
+            "name": "content_sparse_vector",
+            "description": "",
+            "type": 104,
+            "params": {},
+            "is_function_output": true
+          },
+          {
+            "field_id": 108,
+            "name": "section_path",
+            "description": "",
+            "type": 21,
+            "params": {
+              "max_length": 2048
+            }
+          },
+          {
+            "field_id": 109,
+            "name": "page_idx",
+            "description": "",
+            "type": 4,
+            "params": {}
+          },
+          {
+            "field_id": 110,
+            "name": "parent_entry_idx",
+            "description": "",
+            "type": 4,
+            "params": {}
+          },
+          {
+            "field_id": 111,
+            "name": "chunk_idx",
+            "description": "",
+            "type": 4,
+            "params": {}
+          },
+          {
+            "field_id": 112,
+            "name": "chunk_total",
+            "description": "",
+            "type": 4,
+            "params": {}
+          },
+          {
+            "field_id": 113,
+            "name": "image_id",
+            "description": "",
+            "type": 21,
+            "params": {
+              "max_length": 64
+            }
+          },
+          {
+            "field_id": 114,
+            "name": "img_path",
+            "description": "",
+            "type": 21,
+            "params": {
+              "max_length": 512
+            }
+          },
+          {
+            "field_id": 115,
+            "name": "source_run",
+            "description": "",
+            "type": 21,
+            "params": {
+              "max_length": 512
+            }
+          },
+          {
+            "field_id": 116,
+            "name": "ingested_at",
+            "description": "",
+            "type": 21,
+            "params": {
+              "max_length": 32
+            }
+          }
+        ],
+        "functions": [
+          {
+            "name": "content_bm25",
+            "id": 100,
+            "description": "",
+            "type": 1,
+            "params": {},
+            "input_field_names": "['content']",
+            "input_field_ids": "[106]",
+            "output_field_names": "['content_sparse_vector']",
+            "output_field_ids": "[107]"
+          }
+        ]
+      },
+      "indexes": [
+        "content_sparse_vector",
+        "lichuang_id",
+        "content_type"
+      ],
+      "load_state": "{'state': <LoadState: Loaded>}",
+      "scalar_query": {
+        "count": 3,
+        "samples": [
+          {
+            "lichuang_id": "C114425",
+            "content_type": "text",
+            "title": "TPS5450DDAR: PDF page 1",
+            "chunk_idx": 0,
+            "chunk_total": 1,
+            "section_path": "TPS5450DDAR: PDF page 1",
+            "id": 469187396438325949,
+            "content_chars": 1414,
+            "content_sha256": "3f8d38cb06ed29f52c452fa24360f9c28b260337ac5b18614f19fba0d92daa6c"
+          },
+          {
+            "lichuang_id": "C114425",
+            "content_type": "text",
+            "title": "TPS5450DDAR: PDF page 2",
+            "chunk_idx": 0,
+            "chunk_total": 1,
+            "section_path": "TPS5450DDAR: PDF page 2",
+            "id": 469187396438325950,
+            "content_chars": 3299,
+            "content_sha256": "06e8a25e277645397d0a54034c014c8a4a57ef0e7e7fc15410f20715555884b8"
+          },
+          {
+            "lichuang_id": "C114425",
+            "content_type": "text",
+            "title": "TPS5450DDAR: PDF page 3",
+            "chunk_idx": 0,
+            "chunk_total": 1,
+            "section_path": "TPS5450DDAR: PDF page 3",
+            "id": 469187396438325951,
+            "content_chars": 736,
+            "content_sha256": "9f49b0be9477deb8791b1a3703e03178db51ccc8fa95eab443125e6527e326e9"
+          }
+        ]
+      },
+      "bm25_query": {
+        "count": 0,
+        "samples": []
+      },
+      "elapsed_ms": 210,
+      "page_metadata_samples": [
+        {
+          "chunk_total": 1,
+          "id": "469187396438325949",
+          "lichuang_id": "C114425",
+          "page_idx": 0,
+          "source_run": "/share/home/lishance/Worklib/07_TEMP/case-semantic-validation/knowledge/runs/C114425",
+          "ingested_at": "2026-09-20T12:42:20Z",
+          "title": "TPS5450DDAR: PDF page 1",
+          "chunk_idx": 0
+        },
+        {
+          "chunk_total": 1,
+          "id": "469187396438325950",
+          "lichuang_id": "C114425",
+          "page_idx": 1,
+          "source_run": "/share/home/lishance/Worklib/07_TEMP/case-semantic-validation/knowledge/runs/C114425",
+          "ingested_at": "2026-09-20T12:42:20Z",
+          "title": "TPS5450DDAR: PDF page 2",
+          "chunk_idx": 0
+        },
+        {
+          "chunk_total": 1,
+          "id": "469187396438325951",
+          "lichuang_id": "C114425",
+          "page_idx": 2,
+          "source_run": "/share/home/lishance/Worklib/07_TEMP/case-semantic-validation/knowledge/runs/C114425",
+          "ingested_at": "2026-09-20T12:42:20Z",
+          "title": "TPS5450DDAR: PDF page 3",
+          "chunk_idx": 0
+        }
+      ],
+      "bilingual_queries": [
+        {
+          "query": "输入电压",
+          "count": 3,
+          "items": [
+            {
+              "id": "469187396438325961",
+              "entity": {
+                "page_idx": 12,
+                "title": "TPS5450DDAR: PDF page 13",
+                "id": "469187396438325961"
+              }
+            },
+            {
+              "id": "469187396438325959",
+              "entity": {
+                "page_idx": 10,
+                "title": "TPS5450DDAR: PDF page 11",
+                "id": "469187396438325959"
+              }
+            },
+            {
+              "id": "469187396438325958",
+              "entity": {
+                "page_idx": 9,
+                "title": "TPS5450DDAR: PDF page 10",
+                "id": "469187396438325958"
+              }
+            }
+          ]
+        },
+        {
+          "query": "开关频率",
+          "count": 3,
+          "items": [
+            {
+              "id": "469187396438325960",
+              "entity": {
+                "page_idx": 11,
+                "title": "TPS5450DDAR: PDF page 12",
+                "id": "469187396438325960"
+              }
+            },
+            {
+              "id": "469187396438325957",
+              "entity": {
+                "page_idx": 8,
+                "title": "TPS5450DDAR: PDF page 9",
+                "id": "469187396438325957"
+              }
+            },
+            {
+              "id": "469187396438325962",
+              "entity": {
+                "page_idx": 13,
+                "title": "TPS5450DDAR: PDF page 14",
+                "id": "469187396438325962"
+              }
+            }
+          ]
+        },
+        {
+          "query": "VIN",
+          "count": 3,
+          "items": [
+            {
+              "id": "469187396438325968",
+              "entity": {
+                "page_idx": 19,
+                "title": "TPS5450DDAR: PDF page 20",
+                "id": "469187396438325968"
+              }
+            },
+            {
+              "id": "469187396438325951",
+              "entity": {
+                "page_idx": 2,
+                "title": "TPS5450DDAR: PDF page 3",
+                "id": "469187396438325951"
+              }
+            },
+            {
+              "id": "469187396438325954",
+              "entity": {
+                "page_idx": 5,
+                "title": "TPS5450DDAR: PDF page 6",
+                "id": "469187396438325954"
+              }
+            }
+          ]
+        },
+        {
+          "query": "5.5V",
+          "count": 3,
+          "items": [
+            {
+              "id": "469187396438325954",
+              "entity": {
+                "title": "TPS5450DDAR: PDF page 6",
+                "page_idx": 5,
+                "id": "469187396438325954"
+              }
+            },
+            {
+              "id": "469187396438325949",
+              "entity": {
+                "title": "TPS5450DDAR: PDF page 1",
+                "page_idx": 0,
+                "id": "469187396438325949"
+              }
+            },
+            {
+              "id": "469187396438325959",
+              "entity": {
+                "title": "TPS5450DDAR: PDF page 11",
+                "page_idx": 10,
+                "id": "469187396438325959"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

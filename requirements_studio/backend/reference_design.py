@@ -130,13 +130,37 @@ def bom_view(doc,domain=None):
             matches=[r for r in refs if model_name(r['mention']).casefold()==part['model'].casefold()]
             ref=next((r for r in matches if r.get('module_ids')),matches[0] if matches else {})
             used=bool(ref.get('module_ids') and ref.get('intent') in ('must','prefer'))
+            proposed=bool(ref.get('module_ids') and not (ref.get('intent')=='reference' and ref.get('intent_source')))
             rows.append({**part,'source_id':source['id'],'source_filename':source['filename'],'reference_id':ref.get('id',''),'module_ids':ref.get('module_ids',[]),
-                         'status':'adopted' if used else 'proposed' if ref.get('module_ids') else 'reference',
+                         'status':'adopted' if used else 'proposed' if proposed else 'reference',
                          'quantity':ref.get('quantity') if used else None,'resolution_status':ref.get('resolution_status','unresolved'),
                          'identity':ref.get('identity'),'purpose':ref.get('purpose',''),'quantity_basis':'已采用的参考方案' if ref.get('reference_quantity_source') else '用户给定' if used and ref.get('quantity') else '待本版实现核定'})
+    current=[]
+    for ref in refs:
+        identity=ref.get('identity') or {}
+        exact=ref.get('resolution_status')=='matched' or bool(ref.get('device_key'))
+        reference=next((p for p in rows if p['reference_id']==ref['id'] and model_name(ref['mention']).casefold()==p['model'].casefold()),{})
+        if not ref.get('module_ids') or ref['intent']=='undecided':continue
+        if ref['intent']=='reference' and reference.get('status')!='proposed':continue
+        current.append({'reference_id':ref['id'],'model':ref['mention'],'quantity':ref.get('quantity'),
+                        'intent':ref['intent'],'status':'adopted' if ref['intent'] in ('must','prefer') else 'proposed',
+                        'purpose':ref.get('purpose',''),'module_ids':ref['module_ids'],
+                        'supplier_part':identity.get('supplier_part','') if exact else reference.get('supplier_part',''),
+                        'package':identity.get('package','') if exact else reference.get('package',''),
+                        'resolution_status':ref.get('resolution_status','unresolved'),
+                        'source_label':'采用的参考方案' if ref.get('reference_quantity_source') else '用户当前决定' if ref.get('adoption_source') or ref['intent']=='must' else '已有方案，适用性待核验',
+                        'reference_source_id':reference.get('source_id',''),
+                        'reference_observed_quantity':reference.get('observed_quantity')})
     return {'sources':[{k:s.get(k) for k in ('id','filename','sha256','kind','instance_count','warnings','quantity_basis')} for s in doc.get('reference_designs',[])],
             'rows':rows,'core_count':sum(p['core'] for p in rows),'core_adopted':sum(p['core'] and p['status']=='adopted' for p in rows),
-            'proposed_count':sum(p['core'] and p['status']=='proposed' for p in rows)}
+            'proposed_count':sum(p['core'] and p['status']=='proposed' for p in rows),'current_rows':current}
+
+def current_bom_csv(rows):
+    out=io.StringIO();writer=csv.writer(out)
+    writer.writerow(['本版型号','本版数量','使用意图','当前状态','用途','采购号','封装','数量与方案来源'])
+    labels={'must':'必须使用','prefer':'优先考虑','reference':'仅作参考'}
+    for r in rows:writer.writerow([r['model'],r['quantity'] if r['quantity'] is not None else '待核定',labels.get(r['intent'],r['intent']),'已采用' if r['status']=='adopted' else '建议待采用',r['purpose'],r['supplier_part'],r['package'],r['source_label']])
+    return ('\ufeff'+out.getvalue()).encode()
 
 def bom_csv(rows):
     out=io.StringIO();writer=csv.writer(out);writer.writerow(['参考文件','位号','型号','采购号','封装','参考观测数量','本版数量','状态','本版用途','数量依据'])

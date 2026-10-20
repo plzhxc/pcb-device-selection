@@ -54,7 +54,7 @@ class AdoptReference(Body):
 
 
 class DomainAction(Body):
-    operation: Literal['set_intent','select_identity','remove_reference','add_reference']
+    operation: Literal['set_intent','select_identity','remove_reference','add_reference','revise_reference']
     reference_id: str = Field(default='',max_length=64)
     intent: Literal['must','prefer','reference','undecided'] | None = None
     device_key: str | None = Field(default=None,max_length=100)
@@ -271,6 +271,13 @@ def create_app(data_dir: Path | None = None, knowledge_provider=None):
         from .reference_design import bom_view,bom_csv
         return Response(bom_csv(bom_view(store.get_project(project_id)['document'])['rows']),media_type='text/csv; charset=utf-8',headers={'Content-Disposition':'attachment; filename="reference-and-current-bom.csv"'})
 
+    @app.get('/api/projects/{project_id}/current-bom.csv')
+    async def download_current_bom(project_id:str):
+        from .reference_design import bom_view,current_bom_csv
+        p=store.get_project(project_id)
+        return Response(current_bom_csv(bom_view(p['document'],p['domain'])['current_rows']),media_type='text/csv; charset=utf-8',
+                        headers={'Content-Disposition':'attachment; filename="current-device-plan.csv"'})
+
     @app.get('/api/projects/{project_id}/reference-designs/{source_id}')
     async def download_reference_source(project_id:str,source_id:str):
         import base64
@@ -384,6 +391,17 @@ def create_app(data_dir: Path | None = None, knowledge_provider=None):
         ref=refs.get(action['reference_id'])
         if action['operation']!='add_reference' and not ref:raise Missing('器件引用不存在或已撤销。')
         if ref:action['expected_identity_hash']=identity_input(ref)
+        if action['operation']=='revise_reference':
+            edited=body.action.model_fields_set-{'operation','reference_id','expected_identity_hash'}
+            if not edited or edited-{'mention','intent','quantity','purpose'}:
+                raise HTTPException(422,'请选择要修改的型号、用量、使用意图或用途。')
+            if 'mention' in edited:
+                action['mention']=body.action.mention.strip()
+                if not action['mention']:raise HTTPException(422,'器件型号不能为空。')
+            if 'intent' in edited and body.action.intent is None:raise HTTPException(422,'请选择新的使用意图。')
+            if 'quantity' in edited:action['quantity']=body.action.quantity
+            if all(ref.get(k)==action.get(k) for k in edited):raise Conflict('这项器件方案没有变化，无需重复提交。')
+            action['edited_fields']=sorted(edited)
         if action['operation'] in ('select_identity','add_reference'):
             if not action.get('device_key'):raise HTTPException(422,'请选择真实目录身份。')
             async with search_limit:detail=await asyncio.to_thread(catalog.device,action['device_key'])
@@ -401,6 +419,15 @@ def create_app(data_dir: Path | None = None, knowledge_provider=None):
         elif action['operation']=='set_intent':
             if action.get('intent') not in INTENTS:raise HTTPException(422,'请明确新的使用意图。')
             text=f"将{ref['id']}「{ref['mention']}」的使用意图改为{INTENTS[action['intent']]}。保留其他产品要求，按这项修改重新核对相关约束。"
+        elif action['operation']=='revise_reference':
+            labels={'mention':'型号','intent':'使用意图','quantity':'本版实际用量','purpose':'用途'}
+            def changed_value(key):
+                value=action.get(key)
+                if key=='intent':return INTENTS[value]
+                if key=='quantity':return str(value)+' 个' if value is not None else '暂不锁定，按方案核定'
+                return value or '结合已有功能重新整理'
+            text='修改器件方案「'+ref['mention']+'」：\n'+'\n'.join(labels[k]+'：'+changed_value(k) for k in ('mention','intent','quantity','purpose') if k in action['edited_fields'])
+            text+='\n请据此同步核对需求说明书、功能模块、接口供电、工作流程、本版器件清单与交接内容；原产品目标继续有效，新器件适用性须重新核验。'
         else:text=f"撤销{ref['id']}「{ref['mention']}」的器件引用；保留其他需求，重新核对相关选型约束。"
         run,created,item=store.submit_message(project_id,text,body.request_id,actions=[action])
         if run:runner.start(run['id'])

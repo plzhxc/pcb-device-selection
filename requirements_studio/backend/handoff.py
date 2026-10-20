@@ -295,7 +295,7 @@ def generation_adapter(spec):
     modules = []; pending = [];owners={};shared=[]
     for item in spec['selection_items']:
         devices = []
-        adopted=[rid for rid in item['preferred_references'] if refs[rid].get('reference_quantity_source')]
+        adopted=[rid for rid in item['preferred_references'] if refs[rid].get('reference_quantity_source') or refs[rid].get('adoption_source')]
         for rid in dict.fromkeys(item['specified_references']+adopted):
             r = refs[rid]
             if r['identity_scope'] not in ('exact_part', 'assembly'):

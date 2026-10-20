@@ -310,6 +310,9 @@ def apply_analysis(document: dict, result: AnalysisResult, messages: list[dict],
     apply_checks(doc,original_document,result,messages,aliases,semantic_changes)
     from .delivery import apply as apply_delivery
     apply_delivery(doc,result,messages,aliases,semantic_changes)
+    from .canvas_sync import record as record_canvas_changes, update as update_canvas_changes
+    record_canvas_changes(doc,original_document,message_id,result=result)
+    update_canvas_changes(doc)
     review = review_document(doc)
     user_gaps=review['decision_gaps'] if doc.get('convergence_version')==2 else [gap for gap in review["gaps"] if gap["id"] not in set(doc.get('recheck_topics',[]))]
     if not doc["questions"] and not paused and doc["requirements"] and (user_gaps or review["unsettled_requirements"]):

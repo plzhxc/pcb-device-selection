@@ -132,7 +132,8 @@ def _module_plan_adoption(text):
     """Recognize our existing button command, not arbitrary design delegation."""
     text = text.strip()
     return (text.startswith('确认本版功能模块方案：\n')
-            and '\n我采用上述功能类别、用途和数量。' in text
+            and any(s in text for s in ('\n我采用上述功能类别、用途和数量。',
+                                        '\n我采用上述功能类别、用途、数量及已展示的适用条件；'))
             and text.endswith('这不是电路已验证。'))
 
 
@@ -171,6 +172,10 @@ def apply_updates(doc, result, original, messages, req_aliases, module_aliases):
             changed_part = (prior_part['mention'].casefold() != row['mention'].casefold()
                             or any(prior_part.get(field) != row.get(field)
                                    for field in ('intent', 'identity_scope', 'quantity')))
+            authority=prior_part.get('choice_source',{}).get('source_message_id')
+            source_position=positions.get(row['source_message_id'],-1)
+            if authority in positions and (changed_part and source_position<positions[authority] or prior_part.get('lifecycle')=='removed' and source_position<=positions[authority]):
+                raise ValueError('器件已由后续用户决定修改；不能用更早的原话恢复旧型号、意图、数量或已撤销引用，请沿用当前选择。')
             prior_source = prior_part.get('source_message_id')
             independent_decision = (not module_source and prior_source in positions
                                     and positions.get(row['source_message_id'], -1) > positions[prior_source])
@@ -249,8 +254,16 @@ def apply_updates(doc, result, original, messages, req_aliases, module_aliases):
         prior = refs.get(row['id'], {})
         if prior.get('mention_source') and prior.get('mention')==row['mention']:
             row.setdefault('mention_source',prior['mention_source'])
-        if prior.get('reference_quantity_source') and prior.get('quantity')==row.get('quantity'):
+        if prior.get('reference_quantity_source') and prior.get('quantity')==row.get('quantity') and prior.get('mention')==row['mention']:
             row['reference_quantity_source']=copy.deepcopy(prior['reference_quantity_source'])
+        if prior.get('adoption_source') and prior.get('mention')==row['mention'] and prior.get('intent')==row['intent']:
+            row['adoption_source']=copy.deepcopy(prior['adoption_source'])
+        if prior.get('choice_source'):
+            row['choice_source']=copy.deepcopy(prior['choice_source'])
+            if any(prior.get(k)!=row.get(k) for k in ('mention','intent','identity_scope','quantity')):
+                row['choice_source']={'source_message_id':row['source_message_id'],'operation':'conversation'}
+        if prior.get('intent_source') and prior.get('intent')==row['intent']:
+            row['intent_source']=copy.deepcopy(prior['intent_source'])
         if prior.get('reference_supplier_part') and prior.get('mention')==row['mention']:
             row['reference_supplier_part']=prior['reference_supplier_part']
         row.update(requirement_ids=rid, module_ids=mids, lifecycle='active',

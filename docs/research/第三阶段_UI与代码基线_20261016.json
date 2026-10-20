@@ -1,0 +1,55 @@
+{
+  "checked_at": "2026-10-15T16:16:30.066380+00:00",
+  "inspection": "source_hashes_saved_test_evidence_read_only_live_api",
+  "source_hashes_match_release": true,
+  "historical_validation": {
+    "tests": 99,
+    "browser_rounds": 2,
+    "browser_checks_per_round": 35,
+    "rerun_this_research": false
+  },
+  "catalog": {
+    "categories": 10,
+    "parent_types": 60,
+    "child_types": 197,
+    "v3_fields": 247,
+    "v3_topics": 50,
+    "module_source_sha256": "1c81bb02c9da497202cf117eb39e0cd7be180caf2d73a56d40b0443183e78508"
+  },
+  "live_projects": [
+    {
+      "id": "c885fb0b6c2e4a28aeb35da8dfea6b32",
+      "title": "体验实测A｜桌面温度显示器",
+      "version": 10,
+      "review_status": "approved",
+      "requirements": 7,
+      "modules": 4,
+      "open_questions": 0,
+      "pending_inputs": 0,
+      "product_decisions": 12,
+      "engineering_pending": 29,
+      "latest_run_status": "completed"
+    },
+    {
+      "id": "04e07088725d4ce8926b7f440f80f218",
+      "title": "体验实测B｜桌面番茄钟",
+      "version": 8,
+      "review_status": "approved",
+      "requirements": 5,
+      "modules": 4,
+      "open_questions": 0,
+      "pending_inputs": 0,
+      "product_decisions": 7,
+      "engineering_pending": 60,
+      "latest_run_status": "completed"
+    }
+  ],
+  "health": {
+    "ok": true,
+    "app": "requirements-studio",
+    "model": "gpt-6-luna",
+    "effort": "xhigh",
+    "model_label": "gpt6-luna-xhigh",
+    "cli_available": true
+  }
+}

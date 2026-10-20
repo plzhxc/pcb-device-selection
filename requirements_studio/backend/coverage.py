@@ -37,6 +37,9 @@ def review_document(doc):
     from .delivery import review as delivery_review
     delivery=delivery_review(doc)
     if delivery['gaps'] or delivery['rechecks']:ready=False
+    from .canvas_sync import pending as pending_device_changes
+    device_changes=pending_device_changes(doc)
+    if device_changes:ready=False
     from .reference_audit import pending as reference_review_pending
     reference_pending=bool(ready and reference_review_pending(doc))
     if reference_pending:ready=False
@@ -54,4 +57,6 @@ def review_document(doc):
     result['internal_rechecks']+=len(delivery['rechecks'])
     result['reference_audit_pending']=reference_pending
     result['internal_rechecks']+=int(reference_pending)
+    result['device_changes']=device_changes
+    result['internal_rechecks']+=len(device_changes)
     return result
